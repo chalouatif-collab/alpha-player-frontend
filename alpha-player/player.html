@@ -684,17 +684,22 @@
   }
 </style>
 
-<div class="w-full bg-[#0a0f24] border-y border-teal-800/30 overflow-hidden py-2 relative flex items-center mb-4">
-    <div class="flex animate-marquee whitespace-nowrap gap-12 text-sm px-4">
-        <div class="flex items-center gap-2 text-slate-300">
-            <span class="text-teal-400">🎉 ahmed***</span> a gagné <span class="text-yellow-400 font-bold">+352.73 TND</span> sur Aviator 🚀
-        </div>
-        <div class="flex items-center gap-2 text-slate-300">
-            <span class="text-teal-400">🎉 sami***</span> a gagné <span class="text-yellow-400 font-bold">+120.00 TND</span> sur Gates of Olympus ⚡
-        </div>
-        <div class="flex items-center gap-2 text-slate-300">
-            <span class="text-teal-400">🎉 fathi***</span> a gagné <span class="text-yellow-400 font-bold">+850.50 TND</span> sur Live Roulette 🎰
-        </div>
+<style>
+  @keyframes scroll-left {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+  .animate-marquee {
+    animation: scroll-left 25s linear infinite;
+    display: inline-block;
+  }
+</style>
+
+<div class="w-full bg-[#0a0f24] border-y border-teal-800/30 overflow-hidden py-2 mb-4 flex items-center">
+    <div class="animate-marquee whitespace-nowrap text-sm px-4 w-full">
+        <span class="mx-6 text-slate-300"><span class="text-teal-400">🎉 ahmed***</span> a gagné <span class="text-yellow-400 font-bold">+352.73 TND</span> sur Aviator 🚀</span>
+        <span class="mx-6 text-slate-300"><span class="text-teal-400">🎉 sami***</span> a gagné <span class="text-yellow-400 font-bold">+120.00 TND</span> sur Gates of Olympus ⚡</span>
+        <span class="mx-6 text-slate-300"><span class="text-teal-400">🎉 fathi***</span> a gagné <span class="text-yellow-400 font-bold">+850.50 TND</span> sur Live Roulette 🎰</span>
     </div>
 </div>
                     <div id="casino-controls" class="flex flex-col md:flex-row gap-4 justify-between items-center bg-[#0f172a] p-4 rounded-xl border border-slate-800 shadow-md w-full">
