@@ -2407,9 +2407,17 @@ async function openSportsbook() {
         console.error("Error fetching sports URL:", error);
     }
 }
-
-
-
+// دالة إغلاق قسم الرياضة (توضع أسفل دالة الفتح مباشرة)
+window.closeSportsbook = function() {
+    try {
+        // إخفاء الشاشة الفخمة
+        document.getElementById('sportsbook-overlay').classList.add('hidden');
+        // تفريغ الرابط بأمان
+        document.getElementById('sportsbook-iframe').src = "about:blank"; 
+    } catch (error) {
+        console.error("حدث خطأ أثناء الإغلاق:", error);
+    }
+};
 
 
     </script>
