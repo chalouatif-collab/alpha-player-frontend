@@ -286,54 +286,47 @@
                 <button onclick="toggleMobileSidebar()"
                     class="text-slate-400 hover:text-white text-2xl font-bold">&times;</button>
             </div>
-            <nav class="flex flex-col mt-4 space-y-1 overflow-y-auto no-scrollbar pb-20">
+           <nav class="flex flex-col mt-2 space-y-1.5 overflow-y-auto no-scrollbar pb-20 px-2">
     
-    <!-- Accueil -->
-    <button onclick="switchSection('accueil'); toggleMobileSidebar();" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-800/60 text-slate-300 hover:text-white transition-all duration-300 group cursor-pointer w-full text-left border border-transparent hover:border-slate-700">
-        <span class="text-xl drop-shadow-md group-hover:scale-110 transition-transform w-6 text-center">🏠</span>
-        <span class="font-bold text-[13px] uppercase tracking-wider">Accueil</span>
+    <button onclick="switchSection('accueil'); toggleMobileSidebar();" class="flex items-center gap-3 px-3 py-2 rounded-md bg-[#050814]/80 border border-cyan-400/80 shadow-[0_0_8px_rgba(34,211,238,0.5)] hover:shadow-[0_0_15px_rgba(34,211,238,0.9)] hover:bg-cyan-900/30 text-white transition-all duration-300 w-full text-left">
+        <span class="text-lg w-6 text-center drop-shadow-md">🏠</span>
+        <span class="font-bold text-[11px] uppercase tracking-wider">Accueil</span>
     </button>
 
-    <!-- Sport -->
-    <button onclick="openLiveGame('SPORTSBOOK', true); toggleMobileSidebar();" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-800/60 text-slate-300 hover:text-white transition-all duration-300 group cursor-pointer w-full text-left border border-transparent hover:border-slate-700">
-        <span class="text-xl drop-shadow-md group-hover:scale-110 transition-transform w-6 text-center">⚽</span>
-        <span class="font-bold text-[13px] uppercase tracking-wider">Sport</span>
+    <button onclick="openLiveGame('SPORTSBOOK', true); toggleMobileSidebar();" class="flex items-center gap-3 px-3 py-2 rounded-md bg-[#050814]/80 border border-cyan-400/80 shadow-[0_0_8px_rgba(34,211,238,0.5)] hover:shadow-[0_0_15px_rgba(34,211,238,0.9)] hover:bg-cyan-900/30 text-white transition-all duration-300 w-full text-left">
+        <span class="text-lg w-6 text-center drop-shadow-md">⚽</span>
+        <span class="font-bold text-[11px] uppercase tracking-wider">Sport</span>
     </button>
 
-    <!-- Live Sport -->
-    <button onclick="openLiveGame('SPORTSBOOK', true); toggleMobileSidebar();" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-800/60 text-slate-300 hover:text-white transition-all duration-300 group cursor-pointer w-full text-left border border-transparent hover:border-slate-700">
-        <span class="relative text-xl drop-shadow-md group-hover:scale-110 transition-transform w-6 text-center text-amber-400">
+    <button onclick="openLiveGame('SPORTSBOOK', true); toggleMobileSidebar();" class="flex items-center gap-3 px-3 py-2 rounded-md bg-[#050814]/80 border border-cyan-400/80 shadow-[0_0_8px_rgba(34,211,238,0.5)] hover:shadow-[0_0_15px_rgba(34,211,238,0.9)] hover:bg-cyan-900/30 text-white transition-all duration-300 w-full text-left">
+        <span class="relative text-lg w-6 text-center drop-shadow-md text-amber-400">
             ⚡
             <span class="absolute -top-1 -right-1 flex h-2.5 w-2.5">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
             </span>
         </span>
-        <span class="font-bold text-[13px] uppercase tracking-wider">Live Sport</span>
+        <span class="font-bold text-[11px] uppercase tracking-wider">Live Sport</span>
     </button>
 
-    <!-- E-Sport -->
-    <button onclick="switchSection('esport'); toggleMobileSidebar();" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-800/60 text-slate-300 hover:text-white transition-all duration-300 group cursor-pointer w-full text-left border border-transparent hover:border-slate-700">
-        <span class="text-xl drop-shadow-md group-hover:scale-110 transition-transform w-6 text-center">🎮</span>
-        <span class="font-bold text-[13px] uppercase tracking-wider">E-Sport</span>
+    <button onclick="switchSection('esport'); toggleMobileSidebar();" class="flex items-center gap-3 px-3 py-2 rounded-md bg-[#050814]/80 border border-cyan-400/80 shadow-[0_0_8px_rgba(34,211,238,0.5)] hover:shadow-[0_0_15px_rgba(34,211,238,0.9)] hover:bg-cyan-900/30 text-white transition-all duration-300 w-full text-left">
+        <span class="text-lg w-6 text-center drop-shadow-md">🎮</span>
+        <span class="font-bold text-[11px] uppercase tracking-wider">E-Sport</span>
     </button>
 
-    <!-- Casino -->
-    <button onclick="switchSection('casino'); toggleMobileSidebar(); initCasinoLobby();" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-800/60 text-slate-300 hover:text-white transition-all duration-300 group cursor-pointer w-full text-left border border-transparent hover:border-slate-700">
-        <span class="text-xl drop-shadow-md group-hover:scale-110 transition-transform w-6 text-center">🎰</span>
-        <span class="font-bold text-[13px] uppercase tracking-wider">Casino</span>
+    <button onclick="switchSection('casino'); toggleMobileSidebar(); initCasinoLobby();" class="flex items-center gap-3 px-3 py-2 rounded-md bg-[#050814]/80 border border-cyan-400/80 shadow-[0_0_8px_rgba(34,211,238,0.5)] hover:shadow-[0_0_15px_rgba(34,211,238,0.9)] hover:bg-cyan-900/30 text-white transition-all duration-300 w-full text-left">
+        <span class="text-lg w-6 text-center drop-shadow-md">🎰</span>
+        <span class="font-bold text-[11px] uppercase tracking-wider">Casino</span>
     </button>
 
-    <!-- Aviator -->
-    <button onclick="switchSection('crash'); toggleMobileSidebar();" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-800/60 text-slate-300 hover:text-teal-400 transition-all duration-300 group cursor-pointer w-full text-left border border-transparent hover:border-slate-700">
-        <span class="text-xl drop-shadow-md group-hover:scale-110 transition-transform w-6 text-center">🚀</span>
-        <span class="font-bold text-[13px] uppercase tracking-wider">Aviator</span>
+    <button onclick="switchSection('crash'); toggleMobileSidebar();" class="flex items-center gap-3 px-3 py-2 rounded-md bg-[#050814]/80 border border-cyan-400/80 shadow-[0_0_8px_rgba(34,211,238,0.5)] hover:shadow-[0_0_15px_rgba(34,211,238,0.9)] hover:bg-cyan-900/30 text-white transition-all duration-300 w-full text-left">
+        <span class="text-lg w-6 text-center drop-shadow-md">🚀</span>
+        <span class="font-bold text-[11px] uppercase tracking-wider">Aviator</span>
     </button>
 
-    <!-- عجلة الحظ -->
-    <button onclick="toggleWheelModal(); toggleMobileSidebar();" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-slate-800/60 text-slate-300 hover:text-amber-400 transition-all duration-300 group cursor-pointer w-full text-left border border-transparent hover:border-slate-700">
-        <span class="text-xl drop-shadow-md group-hover:scale-110 transition-transform w-6 text-center">🎡</span>
-        <span class="font-bold text-[13px] uppercase tracking-wider">عجلة الحظ</span>
+    <button onclick="toggleWheelModal(); toggleMobileSidebar();" class="flex items-center gap-3 px-3 py-2 rounded-md bg-[#050814]/80 border border-cyan-400/80 shadow-[0_0_8px_rgba(34,211,238,0.5)] hover:shadow-[0_0_15px_rgba(34,211,238,0.9)] hover:bg-cyan-900/30 text-white transition-all duration-300 w-full text-left">
+        <span class="text-lg w-6 text-center drop-shadow-md">🎡</span>
+        <span class="font-bold text-[11px] uppercase tracking-wider">عجلة الحظ</span>
     </button>
 
 </nav>
