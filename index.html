@@ -33,13 +33,24 @@
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
         
         html, body { 
+    /* ضبط حجم الصفحة ومنع التسرب الجانبي نهائياً */
+html, body { 
     font-family: 'Montserrat', sans-serif; 
     background-color: #0B001A; 
     color: #ffffff; 
     -webkit-tap-highlight-color: transparent; 
     overflow-x: hidden; 
     width: 100%; 
-    max-width: 100vw;
+    max-width: 100%; /* استخدمنا 100% بدلاً من 100vw لتجنب مشكلة شريط التمرير */
+}
+
+/* إخفاء شريط التمرير الجانبي (Scrollbar) بالكامل للمتصفحات */
+body::-webkit-scrollbar {
+    display: none; /* لمتصفحات كروم وسفاري */
+}
+body {
+    -ms-overflow-style: none;  /* لمتصفح إيدج */
+    scrollbar-width: none;  /* لمتصفح فايرفوكس */
 }
         /* أزرار Asbet السحرية */
         .btn-gradient { background: linear-gradient(90deg, #E8006F 0%, #91167B 100%); box-shadow: 0 4px 15px rgba(232, 0, 111, 0.4); }
