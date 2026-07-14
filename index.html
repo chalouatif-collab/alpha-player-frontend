@@ -241,41 +241,59 @@ body {
     </div>
 </div>
 
-            <!-- ==================== 1. قسم الرئيسية (Accueil) ==================== -->
-           <!-- شريط الألعاب الاحترافي -->
-     <div class="flex flex-nowrap overflow-x-auto gap-2 py-4 px-2 w-full justify-start md:justify-between items-center no-scrollbar scroll-smooth mb-2">
-    <!-- زر الكازينو -->
-    <div onclick="switchSection('casino'); initCasinoLobby();" class="flex flex-col items-center gap-2 cursor-pointer shrink-0">
-       <!-- مثال لزر الكازينو مع إضاءة النيون -->
-<div class="w-[70px] h-[70px] bg-asbet-card rounded-2xl flex items-center justify-center text-3xl border border-white/10 shadow-[0_0_10px_rgba(0,0,0,0.5)] hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:border-white transition-all duration-300">🎰</div>
-        <span class="text-[9px] font-bold text-white text-center leading-tight uppercase">Casino</span>
+<!-- ================== شبكة الأقسام السريعة (Grid Menu) ================== -->
+<div class="grid grid-cols-4 gap-2 md:gap-3 mb-6 w-full">
+    
+    <!-- الزر 1: عجلة الحظ -->
+    <div onclick="switchSection('wheel')" class="flex flex-col items-center justify-center bg-[#130822] h-[80px] rounded-xl border border-white/5 shadow-md hover:border-[#E8006F] transition-all cursor-pointer group">
+        <div class="text-[#E8006F] text-2xl mb-1 group-hover:scale-110 transition-transform">🎡</div>
+        <span class="text-[9px] font-bold text-gray-300 text-center leading-tight uppercase">Roue de<br>Fortune</span>
     </div>
-    <!-- زر لايف كازينو -->
-    <div onclick="switchSection('casino')" class="flex flex-col items-center gap-2 cursor-pointer shrink-0">
-        <div class="w-[70px] h-[70px] bg-asbet-card rounded-2xl flex items-center justify-center text-3xl border border-white/5 shadow-lg hover:border-asbet-primary transition-all">🎡</div>
-        <span class="text-[9px] font-bold text-gray-400 text-center leading-tight uppercase">Live Casino</span>
+
+    <!-- الزر 2: كأس العالم / بطولات -->
+    <div onclick="switchSection('tournaments')" class="flex flex-col items-center justify-center bg-[#130822] h-[80px] rounded-xl border border-white/5 shadow-md hover:border-[#E8006F] transition-all cursor-pointer group">
+        <div class="text-[#E8006F] text-2xl mb-1 group-hover:scale-110 transition-transform">🏆</div>
+        <span class="text-[9px] font-bold text-gray-300 text-center leading-tight uppercase">Tournois</span>
     </div>
-    <!-- زر الرياضة -->
-    <div onclick="openSportsbook()" class="flex flex-col items-center gap-2 cursor-pointer shrink-0">
-        <div class="w-[70px] h-[70px] bg-asbet-card rounded-2xl flex items-center justify-center text-3xl border border-white/5 shadow-lg hover:border-asbet-primary transition-all">⚽</div>
-        <span class="text-[9px] font-bold text-gray-400 text-center leading-tight uppercase">Sport</span>
+
+    <!-- الزر 3: العروض الترويجية -->
+    <div onclick="switchSection('promotions')" class="flex flex-col items-center justify-center bg-[#130822] h-[80px] rounded-xl border border-white/5 shadow-md hover:border-[#E8006F] transition-all cursor-pointer group">
+        <div class="text-[#E8006F] text-2xl mb-1 group-hover:scale-110 transition-transform">💎</div>
+        <span class="text-[9px] font-bold text-gray-300 text-center leading-tight uppercase">Promotions</span>
     </div>
-    <!-- زر لايف سبورت -->
-    <div onclick="openSportsbook()" class="flex flex-col items-center gap-2 cursor-pointer shrink-0">
-        <div class="w-[70px] h-[70px] bg-asbet-card rounded-2xl flex items-center justify-center text-3xl border border-white/5 shadow-lg hover:border-asbet-primary transition-all">⚡</div>
-        <span class="text-[9px] font-bold text-gray-400 text-center leading-tight uppercase">Live Sport</span>
+
+    <!-- الزر 4: لوتو -->
+    <div onclick="switchSection('lotto')" class="flex flex-col items-center justify-center bg-[#130822] h-[80px] rounded-xl border border-white/5 shadow-md hover:border-[#E8006F] transition-all cursor-pointer group">
+        <div class="text-[#E8006F] text-2xl mb-1 group-hover:scale-110 transition-transform">🎱</div>
+        <span class="text-[9px] font-bold text-gray-300 text-center leading-tight uppercase">Lotto</span>
     </div>
-    <!-- زر كراش -->
-    <div onclick="switchSection('crash')" class="flex flex-col items-center gap-2 cursor-pointer shrink-0">
-        <div class="w-[70px] h-[70px] bg-asbet-card rounded-2xl flex items-center justify-center text-3xl border border-white/5 shadow-lg hover:border-asbet-primary transition-all">🚀</div>
-        <span class="text-[9px] font-bold text-gray-400 text-center leading-tight uppercase">Crash</span>
+
+    <!-- الزر 5: مباريات مباشرة -->
+    <div onclick="openSportsbook('live')" class="flex flex-col items-center justify-center bg-[#130822] h-[80px] rounded-xl border border-white/5 shadow-md hover:border-[#E8006F] transition-all cursor-pointer group">
+        <div class="text-[#E8006F] text-2xl mb-1 group-hover:scale-110 transition-transform">⏱️</div>
+        <span class="text-[9px] font-bold text-gray-300 text-center leading-tight uppercase">Live<br>Matches</span>
     </div>
-    <!-- زر أفييتور -->
-    <div onclick="switchSection('crash')" class="flex flex-col items-center gap-2 cursor-pointer shrink-0">
-        <div class="w-[70px] h-[70px] bg-asbet-card rounded-2xl flex items-center justify-center text-3xl border border-white/5 shadow-lg hover:border-asbet-primary transition-all">✈️</div>
-        <span class="text-[9px] font-bold text-gray-400 text-center leading-tight uppercase">Aviator</span>
+
+    <!-- الزر 6: رياضة -->
+    <div onclick="openSportsbook('prematch')" class="flex flex-col items-center justify-center bg-[#130822] h-[80px] rounded-xl border border-white/5 shadow-md hover:border-[#E8006F] transition-all cursor-pointer group">
+        <div class="text-[#E8006F] text-2xl mb-1 group-hover:scale-110 transition-transform">⚽</div>
+        <span class="text-[9px] font-bold text-gray-300 text-center leading-tight uppercase">Sports</span>
     </div>
+
+    <!-- الزر 7: كازينو مباشر -->
+    <div onclick="switchSection('live-casino')" class="flex flex-col items-center justify-center bg-[#130822] h-[80px] rounded-xl border border-white/5 shadow-md hover:border-[#E8006F] transition-all cursor-pointer group">
+        <div class="text-[#E8006F] text-2xl mb-1 group-hover:scale-110 transition-transform">🃏</div>
+        <span class="text-[9px] font-bold text-gray-300 text-center leading-tight uppercase">Live<br>Casino</span>
+    </div>
+
+    <!-- الزر 8: كازينو -->
+    <div onclick="switchSection('casino'); initCasinoLobby();" class="flex flex-col items-center justify-center bg-[#130822] h-[80px] rounded-xl border border-white/5 shadow-md hover:border-[#E8006F] transition-all cursor-pointer group">
+        <div class="text-[#E8006F] text-2xl mb-1 group-hover:scale-110 transition-transform">🎰</div>
+        <span class="text-[9px] font-bold text-gray-300 text-center leading-tight uppercase">Casino</span>
+    </div>
+
 </div>
+<!-- ============================================================================== -->>
             <div id="pane-accueil" class="player-view-section w-full max-w-full space-y-6">
                 
                 <!-- سلايدر العروض (متوافق مع دوال JS القديمة) -->
