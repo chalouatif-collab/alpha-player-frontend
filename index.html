@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr" dir="ltr">
 <head>
@@ -33,16 +32,18 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
         
-        html, body { 
-    /* ضبط حجم الصفحة ومنع التسرب الجانبي نهائياً */
+      
+  /* ضبط حجم الصفحة ومنع التسرب الجانبي نهائياً */
 html, body { 
     font-family: 'Montserrat', sans-serif; 
     background-color: #0B001A; 
     color: #ffffff; 
     -webkit-tap-highlight-color: transparent; 
-    overflow-x: hidden; 
     width: 100%; 
-    max-width: 100%; /* استخدمنا 100% بدلاً من 100vw لتجنب مشكلة شريط التمرير */
+    max-width: 100vw;
+    overflow-x: hidden !important; 
+    overscroll-behavior-x: none; /* تمنع تأثير السحب في الهواتف */
+    position: relative;
 }
 
 /* إخفاء شريط التمرير الجانبي (Scrollbar) بالكامل للمتصفحات */
@@ -74,6 +75,8 @@ body {
 </head>
 <body class="pb-24 flex flex-col relative min-h-screen">
 
+    <!-- هذا السطر هو الصندوق المغلق الذي يمنع السباحة -->
+    <div class="w-full max-w-[100vw] overflow-x-hidden relative flex flex-col min-h-screen overscroll-none">
     <!-- حاوية الإشعارات -->
     <div id="toast-container" class="fixed top-5 right-5 z-[100] flex flex-col gap-2 w-full max-w-sm px-4"></div>
 
@@ -229,6 +232,7 @@ body {
         </aside>
 
         <main id="main-content-area" class="flex-1 w-full overflow-y-auto p-4 md:p-6 no-scrollbar relative">
+           <div id="home-section" class="app-section block w-full"></div> 
             <!-- إضاءة خلفية مشعة (Ambient Glow) -->
 <div class="absolute top-[-10%] left-1/2 transform -translate-x-1/2 w-[80%] h-[400px] bg-pink-600/15 blur-[120px] rounded-full pointer-events-none z-0"></div>
 <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[300px] bg-purple-600/15 blur-[100px] rounded-full pointer-events-none z-0"></div>
@@ -322,7 +326,7 @@ body {
         <div class="swiper-pagination"></div>
     </div>
 </div>
-            <div id="pane-accueil" class="player-view-section w-full max-w-full space-y-6">
+            <div id="pane-accueil" class="player-view-section block w-full">
                 
                 <!-- سلايدر العروض (متوافق مع دوال JS القديمة) -->
                 <div class="relative w-full h-[200px] md:h-[300px] rounded-3xl overflow-hidden mb-4 border border-white/5 shadow-2xl group">
@@ -492,7 +496,7 @@ body {
             </div>
 
             <!-- ==================== 5. قسم الكازينو (Le Casino) ==================== -->
-            <div id="pane-casino" class="player-view-section w-full max-w-full flex flex-col space-y-4 hidden">
+            <div id="pane-casino" class="player-view-section hidden w-full">
                 <div id="casino-controls" class="flex flex-col md:flex-row gap-4 justify-between items-center bg-asbet-card p-4 rounded-xl border border-white/5 shadow-md w-full">
                     <div class="relative w-full md:w-1/2">
                         <input type="text" id="game-search-input" onkeyup="filterGames()" placeholder="Chercher un jeu..." class="w-full bg-asbet-dark text-white border border-white/10 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:border-asbet-primary transition-colors text-sm font-bold">
@@ -526,9 +530,14 @@ body {
                     <p class="text-xs text-gray-500 font-bold uppercase">Aucun historique disponible.</p>
                 </div>
             </div>
-            </main>
+            </div> <!-- نهاية صندوق home-section (الصفحة الرئيسية) -->
 
+    <!-- ================== قسم الكازينو (مخفي افتراضياً) ================== -->
+    <div id="casino-section" class="app-section hidden w-full">
+        <h2 class="text-white text-2xl font-bold text-center mt-10">مرحباً بك في الكازينو 🎰</h2>
+        <!-- سننقل ألعاب الكازينو الحقيقية إلى هنا لاحقاً -->
     </div>
+   </div>
     </main>
     </div> <!-- نهاية تقسيم الشاشة (Sidebar + Main) -->
 
@@ -1662,5 +1671,6 @@ body {
         });
     });
             </script>
+   </div>         
 </body>
 </html>
