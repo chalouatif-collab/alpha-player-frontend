@@ -145,7 +145,7 @@
             <h2 class="text-lg font-black text-white mb-6 flex items-center gap-2">💳 Caisse</h2>
             <div class="flex gap-2 mb-6 bg-asbet-card p-1 rounded-xl border border-white/5">
                 <button onclick="switchCashierTab('deposit')" id="tab-deposit" class="flex-1 bg-asbet-primary text-white font-bold py-2 rounded-lg text-xs transition-all shadow-md cursor-pointer">Dépôt</button>
-                <button onclick="switchCashierTab('withdraw')" id="tab-withdraw" class="flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all cursor-pointer">Retrait</button>
+                <button onclick="switchCashierTab('withdraw'); syncBalance();" id="tab-withdraw" class="flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all cursor-pointer">Retrait</button>
             </div>
             <div id="deposit-section" class="space-y-4">
                 <label class="text-xs text-gray-400 font-bold">Choisissez la méthode:</label>
@@ -1180,6 +1180,14 @@ function backToMethods() {
     document.getElementById('form-usdt').classList.add('hidden');
     document.getElementById('form-ooredoo').classList.add('hidden');
     document.getElementById('form-orange').classList.add('hidden');
+}
+
+function syncBalance() {
+    // 1. قراءة الرصيد من أعلى الصفحة
+    let mainBalanceText = document.getElementById('main-balance').innerText;
+    
+    // 2. وضع الرصيد داخل نافذة السحب
+    document.getElementById('modal-balance').innerText = mainBalanceText;
 }
 </script>
 
