@@ -496,22 +496,30 @@
             closeProfileMenu();
         }
 
-        // ================= دوال قائمة البروفيل =================
-        function closeProfileMenu() {
-            const menu = document.getElementById('profileMenu');
-            if (menu) menu.classList.remove('show');
-        }
-        function toggleProfileMenu(event) {
+       function toggleProfileMenu(event) {
             event.stopPropagation(); 
             const menu = document.getElementById('profileMenu');
+
+            // التحقق: هل اللاعب مسجل الدخول أم لا؟
+            if (!playerSession) {
+                // محتوى القائمة للزوار (بالفرنسية)
+                menu.innerHTML = `
+                    <a href="javascript:void(0)" onclick="closeProfileMenu(); openLoginModal();" class="menu-item highlight"><i class="fas fa-sign-in-alt"></i> Se Connecter</a>
+                    <a href="javascript:void(0)" onclick="closeProfileMenu(); openRegisterModal();" class="menu-item"><i class="fas fa-user-plus"></i> S'inscrire</a>
+                `;
+            } else {
+                // محتوى القائمة للاعبين المسجلين
+                menu.innerHTML = `
+                    <a href="javascript:void(0)" onclick="closeProfileMenu(); switchSection('account');" class="menu-item"><i class="fas fa-user-circle"></i> Mon Compte</a>
+                    <a href="javascript:void(0)" onclick="closeProfileMenu(); toggleCashier(); switchCashierTab('deposit');" class="menu-item highlight"><i class="fas fa-wallet"></i> Dépôt Rapide</a>
+                    <a href="javascript:void(0)" onclick="closeProfileMenu(); toggleCashier(); switchCashierTab('withdraw');" class="menu-item"><i class="fas fa-money-bill-wave"></i> Retrait</a>
+                    <a href="javascript:void(0)" onclick="closeProfileMenu(); switchSection('paris');" class="menu-item"><i class="fas fa-history"></i> Historique</a>
+                    <a href="javascript:void(0)" onclick="closeProfileMenu(); logoutPlayer();" class="menu-item" style="color: #ff4444;"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+                `;
+            }
+
             menu.classList.toggle('show');
         }
-        document.addEventListener('click', function(event) {
-            const menu = document.getElementById('profileMenu');
-            if (menu && menu.classList.contains('show') && !menu.contains(event.target)) {
-                menu.classList.remove('show');
-            }
-        });
 
         // ================= وظائف التذكرة =================
         let isTicketOpen = false;
