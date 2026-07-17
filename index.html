@@ -36,19 +36,21 @@
       
   /* ضبط حجم الصفحة ومنع التسرب الجانبي نهائياً */
 html, body {
-    font-family: 'Montserrat', sans-serif;
-    background-color: #0B001A;
-    color: #ffffff;
-    -webkit-tap-highlight-color: transparent;
-    width: 100%;
-    max-width: 100vw;
-    overflow-x: hidden !important; 
-    
-    /* هذا هو السر: نمنع السباحة أفقياً، ونسمح بها عمودياً */
-    overscroll-behavior-x: none; 
-    overscroll-behavior-y: auto; 
-    
-    position: relative;
+  font-family: 'Montserrat', sans-serif;
+  background-color: #0B001A;
+  color: #ffffff;
+  -webkit-tap-highlight-color: transparent;
+  width: 100%;
+  max-width: 100vw;
+  min-height: 100vh; /* أضفنا هذا السطر لإعطاء الصفحة طولاً يسمح بالسحب */
+  overflow-x: hidden !important;
+  overflow-y: auto !important; /* هذا السطر الإضافي هو الذي سيسمح بالسحب للأعلى والأسفل */
+
+  /* هذا هو السر: نمنع السباحة أفقياً، ونمنع ارتداد الشاشة المزعج عمودياً */
+  overscroll-behavior-x: none;
+  overscroll-behavior-y: none;
+  
+  position: relative;
 }
 
 /* إخفاء شريط التمرير (العمود الجانبي) من كل عناصر الصفحة */
