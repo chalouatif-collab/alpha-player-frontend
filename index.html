@@ -371,41 +371,132 @@
         <iframe id="sportsbook-iframe" src="" frameborder="0" class="w-full h-full"></iframe>
     </div>
 
-    <!-- السكريبتات -->
+   <!-- ==================== السكريبتات الحقيقية والكاملة ==================== -->
     <script>
-        const BACKEND_URL = "https://alpha-backend-server.onrender.com";
-        let playerSession = null;
-        let currentActiveProviderCode = '';
-        let currentProviderGames = [];
-        let filteredProviderGames = [];
-        let currentlyDisplayedCount = 0;
+        function toggleMobileSidebar() {
+            const drawer = document.getElementById('mobile-drawer-menu');
+            if (drawer) { drawer.classList.toggle('hidden'); }
+        }
 
         function getAuthHeaders() {
             const token = localStorage.getItem('token');
             return { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
         }
 
+        const BACKEND_URL = "https://alpha-backend-server.onrender.com";
+        let playerSession = null;
+        let balanceInterval = null;
+        let currentLangCode = "fr";
+        let currentBetsSubTab = "encours";
+
+        let comboTicketMatchesList = [];
+        let myActiveBetsList = [];
+        let currentGlobalMatches = []; 
+
+        let crashLoopInterval = null;
+        let crashMultiplier = 1.00;
+        let isCrashRoundRunning = false;
+        let currentCrashStakeAmount = 0;
+        let hasPlayerCashedOutFromCrash = false;
+
+        const dictionary_translations = {
+            fr: { ticket_empty: "Aucun match sélectionné", ticket_success: "Pari combos validé avec succès !", cashout_success: "Cash Out effectué avec succès !" },
+            ar: { ticket_empty: "Vous n'avez encore sélectionné aucun match.", ticket_success: "accepté avec succès ", cashout_success: "تم سحب كاش أوت وإغلاق الكوبون بنجاح !" },
+            en: { ticket_empty: "No match selected yet", ticket_success: "Combo ticket submitted successfully!", cashout_success: "Cash Out processed successfully!" }
+        };
+
+        function getBonusRate(matchCount) {
+            if (matchCount >= 8) return 0.20;
+            if (matchCount >= 5) return 0.10;
+            if (matchCount >= 3) return 0.05;
+            return 0;
+        }
+
+        // ================= دوال التحكم في النوافذ (Modals & Menus) =================
+        function openLoginModal() { 
+            const modal = document.getElementById('player-login-modal');
+            if(modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+            closeProfileMenu();
+        }
+        function closeLoginModal() { 
+            const modal = document.getElementById('player-login-modal');
+            if(modal) { modal.classList.remove('flex'); modal.classList.add('hidden'); }
+        }
+        function openRegisterModal() {
+            const modal = document.getElementById('register-modal');
+            if(modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+            closeLoginModal();
+        }
+        function closeRegisterModal() {
+            const modal = document.getElementById('register-modal');
+            if(modal) { modal.classList.remove('flex'); modal.classList.add('hidden'); }
+        }
+        function toggleCashier() {
+            const modal = document.getElementById('cashier-modal');
+            if (modal.classList.contains('hidden')) { modal.classList.remove('hidden'); modal.classList.add('flex'); } 
+            else { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+            closeProfileMenu();
+        }
+        function switchCashierTab(tab) {
+            document.getElementById('deposit-section').classList.add('hidden');
+            document.getElementById('withdraw-section').classList.add('hidden');
+            document.getElementById(`${tab}-section`).classList.remove('hidden');
+            
+            document.getElementById('tab-deposit').classList.remove('bg-asbet-primary', 'text-white');
+            document.getElementById('tab-deposit').classList.add('text-gray-400');
+            document.getElementById('tab-withdraw').classList.remove('bg-asbet-primary', 'text-white');
+            document.getElementById('tab-withdraw').classList.add('text-gray-400');
+            
+            document.getElementById(`tab-${tab}`).classList.remove('text-gray-400');
+            document.getElementById(`tab-${tab}`).classList.add('bg-asbet-primary', 'text-white');
+        }
+
         function showNotification(message, type = 'success') {
             const container = document.getElementById('toast-container');
+            if (!container) return;
             const toast = document.createElement('div');
-            toast.className = `p-3 rounded-xl shadow-2xl border text-xs font-bold text-white ${type === 'success' ? 'bg-green-600 border-green-500' : 'bg-asbet-primary border-asbet-primary'}`;
+            toast.className = `p-3 rounded-xl shadow-2xl border text-xs font-bold text-white flex items-center gap-2 ${type === 'success' ? 'bg-green-600 border-green-500' : 'bg-asbet-primary border-asbet-primary'}`;
             toast.innerHTML = type === 'success' ? `✅ ${message}` : `❌ ${message}`;
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 2500);
         }
 
         function switchSection(sectionId) {
-            document.querySelectorAll('.player-view-section').forEach(el => { el.classList.add('hidden'); el.classList.remove('block'); });
+            localStorage.setItem('active_section', sectionId);
+            document.querySelectorAll('.player-view-section').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
             const panelElement = document.getElementById(`pane-${sectionId}`);
-            if (panelElement) { panelElement.classList.remove('hidden'); if(sectionId === 'accueil') panelElement.classList.add('block'); }
-            
+            if (panelElement) {
+                panelElement.classList.remove('hidden');
+                if(sectionId === 'accueil') panelElement.classList.add('block');
+            }
+
+            document.querySelectorAll('#main-sidebar nav button').forEach(btn => {
+                btn.classList.remove('bg-asbet-card', 'text-white');
+                btn.classList.add('text-gray-400');
+            });
+            const targetBtn = document.getElementById(`btn-menu-${sectionId === 'paris' ? 'paris-view' : sectionId}`);
+            if (targetBtn) {
+                targetBtn.classList.add('bg-asbet-card', 'text-white');
+                targetBtn.classList.remove('text-gray-400');
+            }
+
             document.querySelectorAll('.bottom-nav .nav-item').forEach(btn => btn.classList.remove('active', 'text-asbet-primary'));
             
-            // لضمان التمرير لأعلى الصفحة عند التبديل
+            if (sectionId === 'sport' || sectionId === 'accueil') {
+                if (currentGlobalMatches.length > 0) renderMatchesList(currentGlobalMatches);
+            }
+            if (sectionId === 'paris') {
+                if(typeof renderMyBetsHistoryPane === 'function') renderMyBetsHistoryPane();
+            }
+            
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            closeProfileMenu();
         }
 
-        // إغلاق البروفيل ونافذة الدفع
+        // ================= دوال قائمة البروفيل =================
         function closeProfileMenu() {
             const menu = document.getElementById('profileMenu');
             if (menu) menu.classList.remove('show');
@@ -422,160 +513,497 @@
             }
         });
 
-        function toggleCashier() {
-            const modal = document.getElementById('cashier-modal');
-            if (modal.classList.contains('hidden')) { modal.classList.remove('hidden'); } 
-            else { modal.classList.add('hidden'); }
+        // ================= وظائف التذكرة =================
+        let isTicketOpen = false;
+        function toggleTicketSize() {
+            const body = document.getElementById('ticket-full-body');
+            const label = document.getElementById('minimized-bar-label');
+
+            if (isTicketOpen) {
+                body.classList.add('max-h-0');
+                body.classList.remove('max-h-[400px]');
+                label.innerText = "👀 Ouvrir";
+                isTicketOpen = false;
+            } else {
+                body.classList.remove('max-h-0');
+                body.classList.add('max-h-[400px]');
+                label.innerText = "🔽 Réduire";
+                isTicketOpen = true;
+                setTimeout(() => document.getElementById('main-ticket-container').scrollIntoView({ behavior: 'smooth', block: 'end' }), 300);
+            }
         }
-        function switchCashierTab(tab) {
-            document.getElementById('deposit-section').classList.add('hidden');
-            document.getElementById('withdraw-section').classList.add('hidden');
-            document.getElementById(`${tab}-section`).classList.remove('hidden');
+        function closeTicketComplete() {
+            document.getElementById('main-ticket-container').classList.add('hidden');
+            isTicketOpen = false;
+            document.getElementById('ticket-full-body').classList.add('max-h-0');
+            document.getElementById('ticket-full-body').classList.remove('max-h-[400px]');
+            document.getElementById('minimized-bar-label').innerText = "👀 Ouvrir";
+        }
+        function clearTicket() {
+            comboTicketMatchesList = [];
+            renderComboTicketUI();
+            closeTicketComplete();
+            if (currentGlobalMatches.length > 0) renderMatchesList(currentGlobalMatches);
+        }
+        function selectBetOutcome(outcome, odds, matchName, matchId) {
+            const existing = comboTicketMatchesList.find(item => item.matchId === matchId);
+            if (existing && existing.outcome === outcome) {
+                removeMatchFromCombo(matchId);
+                return;
+            }
+            comboTicketMatchesList = comboTicketMatchesList.filter(item => item.matchId !== matchId);
+            comboTicketMatchesList.push({ matchId, matchName, outcome, odds });
+            renderComboTicketUI();
+            if (currentGlobalMatches.length > 0) renderMatchesList(currentGlobalMatches);
+            document.getElementById('main-ticket-container').classList.remove('hidden');
+            if (!isTicketOpen && comboTicketMatchesList.length === 1) toggleTicketSize();
+        }
+        function removeMatchFromCombo(matchId) {
+            comboTicketMatchesList = comboTicketMatchesList.filter(item => item.matchId !== matchId);
+            renderComboTicketUI();
+            if (currentGlobalMatches.length > 0) renderMatchesList(currentGlobalMatches);
+            if (comboTicketMatchesList.length === 0) closeTicketComplete();
+        }
+        function renderComboTicketUI() {
+            const box = document.getElementById('ticket-odds-box');
+            const matchCount = comboTicketMatchesList.length;
+            const bonusRate = getBonusRate(matchCount);
+
+            document.getElementById('ticket-count-badge').innerText = matchCount;
+            if (matchCount === 0) {
+                box.innerHTML = `<div class="text-center text-gray-500 py-4">${dictionary_translations[currentLangCode].ticket_empty}</div>`;
+                document.getElementById('ticket-total-odds').innerText = "1.00";
+                calculatePotentialGain();
+                return;
+            }
+
+            let totalCoteCalculated = 1.00;
+            box.innerHTML = comboTicketMatchesList.map(item => {
+                totalCoteCalculated *= item.odds;
+                return `
+                    <div class="bg-asbet-card border border-white/5 p-2 rounded-xl relative text-left font-sans mb-2">
+                        <button onclick="removeMatchFromCombo('${item.matchId}')" class="absolute top-1 right-2 text-red-400 hover:text-red-500 font-bold text-xs cursor-pointer">&times;</button>
+                        <div class="text-gray-400 text-[10px] truncate max-w-[90%]">${item.matchName}</div>
+                        <div class="text-white text-[11px] font-bold">Option: <span class="text-asbet-primary">${item.outcome}</span></div>
+                        <div class="text-right text-blue-400 font-mono font-black text-[11px]">Cote: ${item.odds.toFixed(2)}</div>
+                    </div>
+                `;
+            }).join('');
+            if (bonusRate > 0) box.innerHTML += `<div class="text-asbet-accent text-[10px] font-bold text-center mt-1 p-1 border-t border-white/10 bg-asbet-accent/10 rounded">🎁 Bonus: +${(bonusRate * 100)}%</div>`;
+            document.getElementById('ticket-total-odds').innerText = totalCoteCalculated.toFixed(2);
+            calculatePotentialGain();
+        }
+        function calculatePotentialGain() {
+            const stake = parseFloat(document.getElementById('ticket-stake-input').value) || 0;
+            const totalOdds = parseFloat(document.getElementById('ticket-total-odds').innerText) || 1.00;
+            const matchCount = comboTicketMatchesList.length;
+            const bonusRate = getBonusRate(matchCount);
+            const totalGain = (stake * totalOdds) * (1 + bonusRate);
+            const displayElement = document.getElementById('ticket-potential-gain');
+            if (displayElement) displayElement.innerText = `${totalGain.toFixed(2)} TND`;
         }
 
-        // الكازينو والألعاب
+        // ================= الألعاب والكازينو =================
+        let casinoProviders = [];
+        let currentProviderGames = [];
+        let filteredProviderGames = []; 
+        let currentlyDisplayedCount = 0;
+        let currentActiveProviderCode = '';
+
         async function fetchAndRenderProviders() {
             const bar = document.getElementById('providers-bar');
-            bar.innerHTML = '<div class="text-teal-400 text-sm">Chargement...</div>';
+            if (!bar) return;
+            bar.innerHTML = '<div class="text-teal-400 text-sm animate-pulse">جاري التحميل...</div>';
+
             try {
                 const response = await fetch(`${BACKEND_URL}/api/get-providers`);
                 const data = await response.json();
-                if (data.providers || data.data) {
-                    const providers = data.providers || data.data;
-                    bar.innerHTML = providers.map(p => `
-                        <button onclick="loadProviderGames('${p.code}')" id="btn-prov-${p.code}" class="prov-tab-btn px-4 py-1.5 bg-[#090f24] border border-white/20 rounded-full text-xs font-bold text-white whitespace-nowrap">
-                            ${p.name}
+                
+                if (data && (data.providers || data.data)) {
+                    casinoProviders = data.providers || data.data; 
+                    bar.innerHTML = casinoProviders.map(p => `  
+                    <button onclick="loadProviderGames('${p.code}')" id="btn-prov-${p.code}"
+                        class="prov-tab-btn flex items-center shrink-0 gap-2 px-4 py-1.5 mt-1 bg-[#090f24] border border-slate-800 hover:border-cyan-500/50 rounded-full text-xs font-bold text-slate-300 hover:text-white transition-all duration-300 cursor-pointer whitespace-nowrap shadow-md">
+                            <span>${p.name}</span>
                         </button>
                     `).join('');
-                    if (providers.length > 0) loadProviderGames(providers[0].code);
+
+                    if (casinoProviders.length > 0) loadProviderGames(casinoProviders[0].code);
+                } else {
+                    bar.innerHTML = '<div class="text-rose-500 text-xs">تنسيق البيانات غير متوافق!</div>';
                 }
-            } catch (error) {}
+            } catch (error) {
+                bar.innerHTML = '<div class="text-rose-500 text-xs">حدث خطأ في الاتصال</div>';
+            }
+        }
+
+        function filterGames() {
+            const searchTerm = document.getElementById('game-search-input')?.value.toLowerCase() || "";
+            const sortType = document.getElementById('game-sort-select')?.value || "default";
+
+            filteredProviderGames = currentProviderGames.filter(game => {
+                const title = game.game_name || game.name || game.title || "";
+                return title.toLowerCase().includes(searchTerm);
+            });
+
+            if (sortType === 'az') filteredProviderGames.sort((a, b) => (a.game_name || "").localeCompare(b.game_name || ""));
+            else if (sortType === 'za') filteredProviderGames.sort((a, b) => (b.game_name || "").localeCompare(a.game_name || ""));
+
+            currentlyDisplayedCount = 0;
+            const container = document.getElementById('games-grid');
+            if (container) {
+                container.innerHTML = '';
+                if (filteredProviderGames.length === 0) {
+                    container.innerHTML = `<div class="col-span-full text-center text-gray-500 py-10 font-bold">Aucun jeu trouvé</div>`;
+                    return;
+                }
+                loadMoreGames(); 
+            }
         }
 
         async function loadProviderGames(providerCode) {
+            document.querySelectorAll('.prov-tab-btn').forEach(btn => {
+                btn.className = "prov-tab-btn flex items-center shrink-0 gap-2 px-4 py-2 mt-1 bg-asbet-card border border-white/5 hover:border-asbet-primary rounded-full text-xs font-bold text-gray-400 hover:text-white transition-all duration-300 cursor-pointer whitespace-nowrap shadow-md";
+            });
+
+            const activeBtn = document.getElementById(`btn-prov-${providerCode}`);
+            if (activeBtn) {
+                activeBtn.className = "prov-tab-btn flex items-center shrink-0 gap-2 px-4 py-2 mt-1 btn-gradient border-none text-white rounded-full text-xs font-black transition-all duration-300 cursor-pointer whitespace-nowrap shadow-lg transform scale-105";
+            }
+
+            const container = document.getElementById('games-grid');
+            if (!container) return;
+
+            const cacheKey = 'alpha_games_' + providerCode;
+            const cachedGames = localStorage.getItem(cacheKey);
+
             currentActiveProviderCode = providerCode;
-            document.getElementById('games-grid').innerHTML = '<div class="col-span-full text-center text-white">Chargement...</div>';
+            
+            const renderGames = (gamesList) => {
+                currentProviderGames = gamesList;
+                filteredProviderGames = [...gamesList];
+                currentlyDisplayedCount = 0;
+                container.innerHTML = '';
+                loadMoreGames();
+            };
+
+            if (cachedGames) {
+                renderGames(JSON.parse(cachedGames));
+            } else {
+                container.innerHTML = '<div class="col-span-full text-center text-asbet-primary py-10 font-bold animate-pulse">Chargement... ⏳</div>';
+            }
+
             try {
                 const response = await fetch(`${BACKEND_URL}/api/get-providers`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ provider_code: providerCode })
                 });
-                const data = await response.json();
-                if (data.games) {
-                    currentProviderGames = data.games;
-                    filteredProviderGames = data.games;
-                    currentlyDisplayedCount = 0;
-                    document.getElementById('games-grid').innerHTML = '';
-                    loadMoreGames();
+                const rawText = await response.text();
+                if (rawText) {
+                    const data = JSON.parse(rawText);
+                    if (data && data.games && data.games.length > 0) {
+                        localStorage.setItem(cacheKey, JSON.stringify(data.games));
+                        if (!cachedGames) renderGames(data.games);
+                        renderTrendingGames();
+                    }
                 }
             } catch (error) {}
         }
 
-        // 3. إصلاح عرض الألعاب (زيادة العدد لـ 200)
         function loadMoreGames() {
             if (currentlyDisplayedCount >= filteredProviderGames.length) return;
             const container = document.getElementById('games-grid');
-            
-            // رفعنا عدد الألعاب التي تظهر في الدفعة الواحدة لكي تمتلىء الشاشة ولا تنتظر السحب
-            const nextBatch = filteredProviderGames.slice(currentlyDisplayedCount, currentlyDisplayedCount + 200);
-            
-            let htmlChunk = nextBatch.map(game => `
-                <div onclick="playCasinoGame('${currentActiveProviderCode}', '${game.game_code || game.id}')" class="bg-asbet-card rounded-xl overflow-hidden relative border border-white/5 cursor-pointer">
-                    <img src="${game.banner || game.image}" class="w-full h-24 object-cover opacity-80">
-                    <div class="absolute bottom-0 w-full bg-black/60 p-1 text-center">
-                        <span class="text-white text-[9px] font-bold truncate">${game.game_name || game.name}</span>
+            if (!container) return;
+
+            // زيادة العدد إلى 100 لتفادي مشكلة المساحة الفارغة
+            const nextBatch = filteredProviderGames.slice(currentlyDisplayedCount, currentlyDisplayedCount + 100);
+            let htmlChunk = '';
+
+            nextBatch.forEach(game => {
+                const title = game.game_name || game.name || game.title || "Game";
+                const img = game.banner || game.image || game.thumb || "https://placehold.co/400x300/180A2B/FFF?text=Game";
+                const code = game.game_code || game.id;
+
+                htmlChunk += `
+                   <div onclick="playCasinoGame('${currentActiveProviderCode}', '${code}')" class="bg-asbet-card rounded-xl overflow-hidden relative border border-white/5 group cursor-pointer shadow-lg hover:border-asbet-primary transition-all">
+                        <img src="${img}" alt="${title}" loading="lazy" class="w-full h-24 md:h-32 object-cover opacity-80 group-hover:scale-110 group-hover:opacity-100 transition-all duration-500">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 backdrop-blur-[1px]">
+                            <span class="btn-gradient text-white text-[10px] font-bold px-4 py-2 rounded-full shadow-[0_0_10px_rgba(232,0,111,0.5)]">JOUER</span>
+                        </div>
+                        <div class="p-2 absolute bottom-0 w-full bg-gradient-to-t from-asbet-dark to-transparent pt-6">
+                            <span class="text-white text-[10px] font-bold truncate block text-center drop-shadow-md group-hover:text-asbet-primary transition-colors">${title}</span>
+                        </div>
                     </div>
-                </div>
-            `).join('');
-            
+                `;
+            });
+
             container.insertAdjacentHTML('beforeend', htmlChunk);
             currentlyDisplayedCount += nextBatch.length;
         }
 
-        function filterGames() {
-            const term = document.getElementById('game-search-input').value.toLowerCase();
-            filteredProviderGames = currentProviderGames.filter(g => (g.game_name || g.name || "").toLowerCase().includes(term));
-            currentlyDisplayedCount = 0;
-            document.getElementById('games-grid').innerHTML = '';
-            loadMoreGames();
-        }
-
-        // التمرير اللانهائي المربوط بنافذة المتصفح الحقيقية (بسبب إزالة overflow-hidden)
+        // ================= الانفينت سكرول الحقيقي المربوط بالنافذة =================
         window.addEventListener('scroll', () => {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
+            // نتحقق مما إذا كان المستخدم قد وصل تقريباً لأسفل الصفحة (Window)
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 800) {
                 loadMoreGames();
             }
         });
 
+        // ================= الألعاب المباشرة والرياضة والجاكبوت =================
+        function startJackpots() {
+            setInterval(() => {
+                const now = new Date();
+                let miniProgress = (now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds()) / 86400;
+                const m = document.getElementById('jackpot-mega');
+                if(m) m.innerText = (((now.getDate() - 1) * 86400 + (now.getHours() * 3600)) / 2592000 * 1000).toFixed(2);
+                const maj = document.getElementById('jackpot-major');
+                if(maj) maj.innerText = ((((now.getDay() === 0 ? 7 : now.getDay()) - 1) * 86400 + (now.getHours() * 3600 + now.getMinutes() * 60)) / 604800 * 350).toFixed(2);
+                const min = document.getElementById('jackpot-mini');
+                if(min) min.innerText = (miniProgress * 120).toFixed(2);
+            }, 1000);
+        }
+
+        function generateLiveWinnersTicker() {
+            const track = document.getElementById('winners-ticker-track');
+            if (!track) return;
+            const fakeNames = ["fethi", "ahmed", "samir", "karim", "yassine", "mohamed", "ali"];
+            const gamesList = ["Aviator 🚀", "Gates of Olympus ⚡", "Sport ⚽", "Roulette 🎡"];
+            let tickerHTML = '';
+            for (let i = 0; i < 10; i++) {
+                const name = fakeNames[Math.floor(Math.random() * fakeNames.length)] + "***";
+                tickerHTML += `<div class="flex items-center gap-2 bg-asbet-dark border border-white/5 px-4 py-1 rounded-full text-xs font-mono whitespace-nowrap"><span class="text-asbet-primary">🎉 ${name}</span><span class="text-gray-400">gagné sur ${gamesList[Math.floor(Math.random() * gamesList.length)]}</span><span class="text-asbet-accent font-black">+${(Math.random() * 800 + 15).toFixed(2)} TND</span></div>`;
+            }
+            track.innerHTML = tickerHTML;
+        }
+
+        function renderTrendingGames() {
+            const container = document.getElementById('trending-games-container');
+            if (!container || currentProviderGames.length === 0) return;
+            const trending = currentProviderGames.slice(0, 4);
+
+            container.innerHTML = trending.map(game => `
+                <div onclick="playCasinoGame('${currentActiveProviderCode}', '${game.game_code}')" class="bg-asbet-card rounded-xl overflow-hidden relative border border-white/5 group cursor-pointer shadow-lg">
+                    <img src="${game.banner}" loading="lazy" class="w-full h-24 md:h-32 object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
+                    <div class="absolute top-2 right-2 bg-asbet-primary text-white text-[8px] font-black px-1.5 py-0.5 rounded z-10 shadow-lg">HOT 🔥</div>
+                    <div class="absolute bottom-0 w-full bg-gradient-to-t from-asbet-dark to-transparent p-2 pt-8">
+                        <h4 class="text-[10px] font-bold text-white truncate text-center group-hover:text-asbet-primary">${game.game_name}</h4>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ================= دوال المصادقة الحقيقية (Authentication) =================
+        async function handlePlayerAuth() {
+            const username = document.getElementById('p-auth-username').value.trim().toLowerCase();
+            const password = document.getElementById('p-auth-password').value;
+            if (!username || !password) return showNotification('الرجاء ملء جميع الحقول', 'error');
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/login`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password })
+                });
+                const responseText = await res.text();
+                let data;
+                try { data = JSON.parse(responseText); } catch (e) { return showNotification('Erreur Serveur', 'error'); }
+
+                if (res.ok) {
+                    if (data.role === 'owner' || data.role === 'admin' || data.role === 'shop') {
+                        return showNotification('Accès refusé. Vous n\'êtes pas un joueur !', 'error');
+                    }
+                    playerSession = data;
+                    localStorage.setItem('alpha_player_session', JSON.stringify(data));
+                    localStorage.setItem('token', data.access_token);
+                    setupLoggedInUI();
+                    
+                    if (typeof fetchPlayerTicketsFromServer === 'function') {
+                        await fetchPlayerTicketsFromServer();
+                    }
+                    showNotification('Connexion réussie 🟢', 'success');
+                } else {
+                    showNotification(typeof data === 'object' ? JSON.stringify(data.detail || data.message || data) : data, 'error');
+                }
+            } catch (e) { showNotification('Erreur réseau', 'error'); }
+        }
+
+        async function registerPlayer() {
+            const username = document.getElementById('reg-username').value.trim().toLowerCase();
+            const password = document.getElementById('reg-password').value;
+            
+            if (!username || !password) return showNotification('الرجاء ملء جميع الحقول', 'error');
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: username, password: password, role: 'player', created_by: 'Self-Register' })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showNotification('Compte créé! Connexion en cours...', 'success');
+                    closeRegisterModal();
+                    
+                    document.getElementById('p-auth-username').value = username;
+                    document.getElementById('p-auth-password').value = password;
+                    await handlePlayerAuth();
+                } else {
+                    let errorMsg = data.detail || data.message || 'Erreur lors de l\'inscription';
+                    showNotification(errorMsg, 'error');
+                }
+            } catch (error) {
+                showNotification('Erreur réseau', 'error');
+            }
+        }
+
+        function setupLoggedInUI() {
+            closeLoginModal();
+            const authContainer = document.getElementById('auth-buttons-container');
+            if(authContainer) authContainer.classList.add('hidden');
+            
+            const topProfile = document.getElementById('top-user-profile');
+            if (topProfile) { topProfile.classList.remove('hidden'); topProfile.classList.add('flex'); }
+
+            const playerDisplay = document.getElementById('player-name-display');
+            if (playerDisplay) { playerDisplay.innerText = `${playerSession.username}`; playerDisplay.classList.remove('hidden'); }
+
+            const balanceDisplay = document.getElementById('player-balance-val');
+            if(balanceDisplay) balanceDisplay.innerText = `${parseFloat(playerSession.balance).toFixed(2)}`;
+            
+            if (!balanceInterval) balanceInterval = setInterval(refreshPlayerBalance, 4000);
+        }
+
+        function logoutPlayer() {
+            if (balanceInterval) clearInterval(balanceInterval);
+            if (typeof crashLoopInterval !== 'undefined' && crashLoopInterval) clearInterval(crashLoopInterval);
+            
+            localStorage.removeItem('token'); 
+            localStorage.removeItem('alpha_player_session');
+            playerSession = null; 
+            if (typeof myActiveBetsList !== 'undefined') myActiveBetsList = [];
+            
+            const badge = document.getElementById('my-bets-badge-count');
+            if(badge) badge.innerText = "0";
+            
+            const playerDisplay = document.getElementById('player-name-display');
+            if (playerDisplay) { playerDisplay.innerText = "Visitor"; }
+            
+            const balVal = document.getElementById('player-balance-val');
+            if(balVal) balVal.innerText = "0.00";
+            
+            document.getElementById('top-user-profile')?.classList.add('hidden');
+            document.getElementById('top-user-profile')?.classList.remove('flex');
+            
+            document.getElementById('auth-buttons-container')?.classList.remove('hidden');
+            document.getElementById('auth-buttons-container')?.classList.add('flex');
+            
+            switchSection('accueil');
+            showNotification('Déconnexion réussie', 'success');
+            closeProfileMenu();
+        }
+
+        async function refreshPlayerBalance() {
+            if (!playerSession || !playerSession.username) return;
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/admin/users?timestamp=${new Date().getTime()}`, { method: 'GET', headers: getAuthHeaders() });
+                if (res.ok) {
+                    const users = await res.json();
+                    const currentMe = users.find(u => u.username === playerSession.username);
+
+                    if (currentMe) {
+                        playerSession.balance = currentMe.balance;
+                        localStorage.setItem('alpha_player_session', JSON.stringify(playerSession));
+                        const balVal = document.getElementById('player-balance-val');
+                        if(balVal) balVal.innerText = `${parseFloat(playerSession.balance).toFixed(2)}`;
+                    }
+                }
+            } catch (e) {}
+        }
+        
+        // ================= تشغيل الكازينو والرياضة =================
         async function playCasinoGame(providerCode, gameCode) {
-            if (!playerSession) return showNotification("Veuillez vous connecter", "error");
-            document.getElementById('casino-iframe-container').classList.remove('hidden');
-            document.getElementById('casino-iframe-container').classList.add('flex');
+            if (!playerSession) return openLoginModal();
+            const container = document.getElementById('casino-iframe-container');
+            const iframe = document.getElementById('casino-iframe');
+            const loader = document.getElementById('casino-loader');
+
+            if (!container || !iframe) return;
+
+            container.classList.remove('hidden'); container.classList.add('flex');
+            if (loader) loader.style.display = 'flex';
+            iframe.style.opacity = '0';
+            
             try {
                 const res = await fetch(`${BACKEND_URL}/api/provider/launch-casino`, {
                     method: 'POST', headers: getAuthHeaders(),
                     body: JSON.stringify({ game_code: gameCode, provider_code: providerCode })
                 });
                 const data = await res.json();
-                if (data.launch_url) document.getElementById('casino-iframe').src = data.launch_url;
-            } catch (e) { closeCasinoGame(); }
-        }
-        function closeCasinoGame() {
-            document.getElementById('casino-iframe-container').classList.add('hidden');
-            document.getElementById('casino-iframe').src = "";
+                if (data.launch_url) {
+                    iframe.src = data.launch_url;
+                    iframe.onload = () => { if (loader) loader.style.display = 'none'; iframe.style.opacity = '1'; };
+                } else { showNotification("Jeu non disponible", "error"); closeCasinoGame(); }
+            } catch (error) { showNotification("Erreur de connexion", "error"); closeCasinoGame(); }
         }
 
-        async function openSportsbook() {
-            if (!playerSession) return showNotification("Veuillez vous connecter", "error");
-            document.getElementById('sportsbook-overlay').classList.remove('hidden');
-            document.getElementById('sportsbook-overlay').classList.add('flex');
-            try {
-                const res = await fetch(`${BACKEND_URL}/api/provider/launch-sportsbook`, {
-                    method: 'POST', headers: getAuthHeaders(), body: JSON.stringify({ game_name: 'Sports' })
-                });
-                const data = await res.json();
-                if (data.launch_url) document.getElementById('sportsbook-iframe').src = data.launch_url;
-            } catch(e){}
+        function closeCasinoGame() {
+            const container = document.getElementById('casino-iframe-container');
+            const iframe = document.getElementById('casino-iframe');
+            if (!container || !iframe) return;
+            container.classList.add('hidden'); container.classList.remove('flex');
+            iframe.src = ""; 
+            refreshPlayerBalance();
         }
+
+        async function openSportsbook(type = 'prematch') {
+            if (!playerSession) return openLoginModal();
+            try {
+                document.getElementById('sportsbook-overlay').classList.remove('hidden');
+                document.getElementById('sportsbook-overlay').classList.add('flex');
+                
+                const response = await fetch(`${BACKEND_URL}/api/provider/launch-sportsbook`, {
+                    method: 'POST', headers: getAuthHeaders(),
+                    body: JSON.stringify({ game_name: 'Alphabet Sportsbook', player_id: playerSession.username })
+                });
+                const data = await response.json();
+                
+                if (data.launch_url) {
+                    document.getElementById('sportsbook-iframe').src = data.launch_url;
+                }
+            } catch (error) {}
+        }
+
         function closeSportsbook() {
             document.getElementById('sportsbook-overlay').classList.add('hidden');
-            document.getElementById('sportsbook-iframe').src = "";
+            document.getElementById('sportsbook-overlay').classList.remove('flex');
+            document.getElementById('sportsbook-iframe').src = "about:blank"; 
         }
 
-        // دوال تسجيل الدخول الوهمية (تستبدلها بدوالك الحقيقية من كودك السابق)
-        function openLoginModal() { document.getElementById('player-login-modal').classList.remove('hidden'); document.getElementById('player-login-modal').classList.add('flex'); }
-        function closeLoginModal() { document.getElementById('player-login-modal').classList.add('hidden'); }
-        function openRegisterModal() { closeLoginModal(); document.getElementById('register-modal').classList.remove('hidden'); document.getElementById('register-modal').classList.add('flex'); }
-        function closeRegisterModal() { document.getElementById('register-modal').classList.add('hidden'); }
-        
-        async function handlePlayerAuth() {
-            const username = document.getElementById('p-auth-username').value;
-            playerSession = { username: username, balance: 1500.00 }; // محاكاة للدخول
-            localStorage.setItem('token', 'fake_token');
-            closeLoginModal();
-            document.getElementById('auth-buttons-container').classList.add('hidden');
-            document.getElementById('top-user-profile').classList.remove('hidden');
-            document.getElementById('top-user-profile').classList.add('flex');
-            document.getElementById('player-balance-val').innerText = '1500.00';
-            showNotification('Connexion réussie', 'success');
-        }
-        function logoutPlayer() {
-            playerSession = null; localStorage.removeItem('token');
-            document.getElementById('top-user-profile').classList.add('hidden');
-            document.getElementById('auth-buttons-container').classList.remove('hidden');
-            document.getElementById('auth-buttons-container').classList.add('flex');
-            switchSection('accueil');
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            new Swiper('.myBannersSwiper', { loop: true, autoplay: { delay: 3500 } });
-            switchSection('accueil');
-            
-            // توليد بعض الرابحين العشوائيين
-            const track = document.getElementById('winners-ticker-track');
-            for(let i=0; i<8; i++) {
-                track.innerHTML += `<div class="bg-asbet-dark px-3 py-1 rounded-full text-[10px] text-white">🎉 joueur*** a gagné <span class="text-asbet-primary">+150 TND</span></div>`;
+        function initCasinoLobby() {
+            if(casinoProviders.length === 0) {
+                fetchAndRenderProviders(); 
             }
+        }
+
+        // ================= الإعدادات عند تحميل الصفحة =================
+        document.addEventListener('DOMContentLoaded', () => {
+            // التحقق من وجود جلسة محفوظة
+            const savedSession = localStorage.getItem('alpha_player_session');
+            if (savedSession) {
+                playerSession = JSON.parse(savedSession);
+                setupLoggedInUI();
+            }
+
+            // تشغيل اللافتات
+            new Swiper('.myBannersSwiper', {
+                loop: true, 
+                autoplay: { delay: 3500, disableOnInteraction: false },
+                pagination: { el: '.swiper-pagination', clickable: true },
+                spaceBetween: 10,
+            });
+
+            const savedSection = localStorage.getItem('active_section') || 'accueil';
+            switchSection(savedSection);
+            startJackpots();
+            generateLiveWinnersTicker();
         });
     </script>
 </body>
