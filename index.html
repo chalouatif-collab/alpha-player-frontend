@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Alphabet216 - Premium Casino</title>
     
-    <!-- المكتبات الأساسية -->
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-    <!-- إعداد ألوان Asbet الفخمة -->
+   
     <script>
         tailwind.config = {
             theme: {
@@ -34,7 +34,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
         
-        /* 1. إصلاح التمرير والريفرش: جعلنا الـ Body هو المسؤول عن السحب */
+      
         html, body {
           font-family: 'Montserrat', sans-serif;
           background-color: #0B001A;
@@ -42,7 +42,7 @@
           -webkit-tap-highlight-color: transparent;
           width: 100%;
           overflow-x: hidden !important; 
-          overflow-y: auto !important; /* هذا يعيد تفعيل الريفرش Pull-to-refresh */
+          overflow-y: auto !important; 
           margin: 0;
           padding: 0;
           position: relative;
@@ -63,7 +63,7 @@
         .nav-item.active { color: #E8006F; }
         .center-menu-btn { background: #180A2B; border: 2px solid #E8006F; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; transform: translateY(-15px); box-shadow: 0 5px 15px rgba(232, 0, 111, 0.3); }
         
-        /* تصميم قائمة الملف الشخصي */
+        
         .profile-popup-menu {
             position: fixed;
             bottom: 80px; 
@@ -112,7 +112,7 @@
         </div>
     </header>
 
-    <!-- المودالز -->
+    
     <div id="player-login-modal" class="fixed inset-0 z-[110] bg-black/80 hidden items-center justify-center p-4 backdrop-blur-sm">
         <div class="w-full max-w-md bg-asbet-dark border border-asbet-secondary/50 rounded-3xl p-8 shadow-2xl relative">
             <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl cursor-pointer">&times;</button>
@@ -149,26 +149,34 @@
             </div>
             <div id="deposit-section" class="space-y-4">
                 <label class="text-xs text-gray-400 font-bold">Choisissez la méthode:</label>
-                <div id="payment-methods-grid" class="grid grid-cols-2 gap-3">
-                    <button onclick="selectPaymentMethod('d17')" class="bg-asbet-card border border-white/10 hover:border-asbet-primary p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
-                        <span class="text-2xl">📱</span><span class="text-[10px] font-bold text-white">D17 / Flouci</span>
-                    </button>
-                    <button onclick="selectPaymentMethod('usdt')" class="bg-asbet-card border border-white/10 hover:border-asbet-primary p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
-                        <span class="text-2xl">🪙</span><span class="text-[10px] font-bold text-white">USDT (Binance)</span>
-                    </button>
-                    <!-- زر Ooredoo -->
-        <button onclick="selectPaymentMethod('ooredoo')" class="bg-asbet-card border border-white/10 hover:border-[#ED0000] p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
-            <span class="text-2xl text-[#ED0000] font-black">Ooredoo</span>
-            <span class="text-[10px] font-bold text-white">Recharge</span>
-        </button>
+              <div id="payment-methods-grid" class="grid grid-cols-2 gap-3">
+    
+    <!-- زر D17 -->
+    <button onclick="showForm('form-d17')" class="bg-asbet-card border border-white/10 hover:border-asbet-primary p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
+        <span class="text-2xl">📱</span>
+        <span class="text-[10px] font-bold text-white">D17 / Flouci</span>
+    </button>
 
-        <!-- زر Orange -->
-        <button onclick="selectPaymentMethod('orange')" class="bg-asbet-card border border-white/10 hover:border-[#FF7900] p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
-            <span class="text-2xl text-[#FF7900] font-black">Orange</span>
-            <span class="text-[10px] font-bold text-white">Recharge</span>
-        </button>
-                </div>
-                <!-- نموذج إدخال D17 (مخفي افتراضياً) -->
+    <!-- زر USDT -->
+    <button onclick="showForm('form-usdt')" class="bg-asbet-card border border-white/10 hover:border-asbet-primary p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
+        <span class="text-2xl">💎</span>
+        <span class="text-[10px] font-bold text-white">USDT (Binance)</span>
+    </button>
+
+    <!-- زر Ooredoo -->
+    <button onclick="showForm('form-ooredoo')" class="bg-asbet-card border border-white/10 hover:border-[#ED0000] p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
+        <span class="text-2xl text-[#ED0000] font-black">Ooredoo</span>
+        <span class="text-[10px] font-bold text-white">Recharge</span>
+    </button>
+
+    <!-- زر Orange -->
+    <button onclick="showForm('form-orange')" class="bg-asbet-card border border-white/10 hover:border-[#FF7900] p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
+        <span class="text-2xl text-[#FF7900] font-black">Orange</span>
+        <span class="text-[10px] font-bold text-white">Recharge</span>
+    </button>
+
+</div>
+               
         <div id="form-d17" class="hidden space-y-3 mt-4">
             <input type="number" placeholder="Montant (TND)" class="w-full bg-asbet-card border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-asbet-primary">
             <input type="tel" placeholder="Numéro de téléphone" class="w-full bg-asbet-card border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-asbet-primary">
@@ -178,7 +186,7 @@
             </div>
         </div>
 
-        <!-- نموذج إدخال USDT (مخفي افتراضياً) -->
+        
         <div id="form-usdt" class="hidden space-y-3 mt-4">
             <input type="number" placeholder="Montant (USDT)" class="w-full bg-asbet-card border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-asbet-primary">
             <input type="text" placeholder="Adresse du portefeuille" class="w-full bg-asbet-card border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-asbet-primary">
@@ -199,7 +207,7 @@
         </div>
     </div>
 
-    <!-- شريط التنقل السفلي -->
+   
     <nav class="bottom-nav fixed md:hidden bottom-0 left-0 right-0 h-[65px] flex justify-around items-center px-2 z-[100]">
         <button onclick="switchSection('accueil')" class="nav-item active flex flex-col items-center justify-center w-[20%] text-gray-500 transition-colors cursor-pointer">
             <span class="text-xl mb-1">🏠</span>
@@ -1078,6 +1086,30 @@ function backToMethods() {
     // إعادة إظهار الأزرار الأساسية
     document.getElementById('payment-methods-grid').style.display = 'grid';
 }
+
+function showForm(formId) {
+    // إخفاء شبكة الأزرار
+    document.getElementById('payment-methods-grid').classList.add('hidden');
+    
+    // إظهار النموذج المطلوب
+    document.getElementById(formId).classList.remove('hidden');
+}
+
+function backToMethods() {
+    // إظهار شبكة الأزرار من جديد
+    document.getElementById('payment-methods-grid').classList.remove('hidden');
+    
+    // إخفاء جميع النماذج
+    document.getElementById('form-d17').classList.add('hidden');
+    document.getElementById('form-usdt').classList.add('hidden');
+    
+    // أضف هذه الأسطر إذا قمت بإنشاء نماذج لأوريدو وأورانج في الأسفل
+    if(document.getElementById('form-ooredoo')) document.getElementById('form-ooredoo').classList.add('hidden');
+    if(document.getElementById('form-orange')) document.getElementById('form-orange').classList.add('hidden');
+}
+</script>
+
+ 
 </script>
 </body>
 </html>
