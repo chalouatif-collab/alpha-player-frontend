@@ -413,72 +413,54 @@
                 </div>
                 <div class="mt-6">
     <div onclick="window.location.href='casino.html';" class="flex justify-between items-center px-4 mb-3 cursor-pointer group">
-        <h3 class="text-white font-bold text-base group-hover:text-[#E8006F] transition-colors">🎰 Pragmatic Play</h3>
-        <span class="text-white text-base group-hover:text-[#E8006F] transition-colors">›</span>
+        <h3 class="text-white font-bold text-base group-hover:text-asbet-primary transition-colors">🎰 Pragmatic Play</h3>
+        <span class="text-white text-base group-hover:text-asbet-primary transition-colors">›</span>
     </div>
-    <div id="slider-pragmatic" class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar">
-        </div>
+    <div id="slider-pragmatic" class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar"></div>
 </div>
 
 <div class="mt-6">
     <div onclick="window.location.href='casino.html';" class="flex justify-between items-center px-4 mb-3 cursor-pointer group">
-        <h3 class="text-white font-bold text-base group-hover:text-[#E8006F] transition-colors">🦈 Hacksaw Gaming</h3>
-        <span class="text-white text-base group-hover:text-[#E8006F] transition-colors">›</span>
+        <h3 class="text-white font-bold text-base group-hover:text-asbet-primary transition-colors">🦈 Hacksaw Gaming</h3>
+        <span class="text-white text-base group-hover:text-asbet-primary transition-colors">›</span>
     </div>
-    <div id="slider-hacksaw" class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar">
-        </div>
+    <div id="slider-hacksaw" class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar"></div>
 </div>
 
 <div class="mt-6 mb-8">
     <div onclick="window.location.href='casino.html';" class="flex justify-between items-center px-4 mb-3 cursor-pointer group">
-        <h3 class="text-white font-bold text-base group-hover:text-[#E8006F] transition-colors">🍒 Playson</h3>
-        <span class="text-white text-base group-hover:text-[#E8006F] transition-colors">›</span>
+        <h3 class="text-white font-bold text-base group-hover:text-asbet-primary transition-colors">🍒 Playson</h3>
+        <span class="text-white text-base group-hover:text-asbet-primary transition-colors">›</span>
     </div>
-    <div id="slider-playson" class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar">
-        </div>
+    <div id="slider-playson" class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar"></div>
 </div>
 
 <script>
-    // دالة لتوليد الأشرطة تلقائياً
-    function renderSlider(providerName, containerId, allGamesArray) {
+    function renderSlider(providerCode, containerId, gamesArray) {
         const container = document.getElementById(containerId);
-        if (!container || !allGamesArray) return;
+        if (!container || !gamesArray || gamesArray.length === 0) return;
         
-        container.innerHTML = ''; // تنظيف الصندوق
+        container.innerHTML = ''; // تنظيف الصندوق قبل التعبئة
 
-        // تصفية الألعاب حسب المزود (جلب 10 ألعاب كحد أقصى للشريط)
-        const providerGames = allGamesArray.filter(game => game.provider === providerName).slice(0, 10);
+        // أخذ أول 10 ألعاب فقط لعدم إثقال الشريط
+        const sliderGames = gamesArray.slice(0, 10);
 
-        // رسم البطاقات
-        providerGames.forEach(game => {
+        // رسم البطاقات بالبيانات الحقيقية (الصورة + كود التشغيل)
+        sliderGames.forEach(game => {
             const gameCard = `
                 <div class="w-36 h-24 flex-none snap-center relative group rounded-xl overflow-hidden shadow-lg border border-white/5">
-                    <img src="${game.image_url}" alt="${game.name}" class="w-full h-full object-cover">
+                    <img src="${game.banner}" loading="lazy" alt="Game" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button onclick="${game.play_function}" class="bg-[#E8006F] text-white px-5 py-1 rounded-md font-bold text-xs shadow-md">Jouer</button>
+                        <button onclick="playCasinoGame('${providerCode}', '${game.game_code}')" class="bg-asbet-primary text-white px-6 py-1.5 rounded-md font-bold text-sm shadow-md hover:opacity-90 transition-all">
+                            Jouer
+                        </button>
                     </div>
                 </div>
             `;
             container.innerHTML += gameCard;
         });
     }
-
-    // تشغيل المحرك بمجرد تحميل الصفحة
-    document.addEventListener('DOMContentLoaded', () => {
-        
-        // ⚠️ مهم جداً ⚠️
-        // استبدل كلمة 'casinoGamesArray' بالاسم الحقيقي للمتغير الذي يحمل ألعاب الكازينو في موقعك
-        const myGames = typeof casinoGamesArray !== 'undefined' ? casinoGamesArray : []; 
-        
-        // إذا تم العثور على الألعاب، سيتم تعبئة الأشرطة فوراً
-        if(myGames.length > 0) {
-            renderSlider('Pragmatic Play', 'slider-pragmatic', myGames);
-            renderSlider('Hacksaw Gaming', 'slider-hacksaw', myGames);
-            renderSlider('Playson', 'slider-playson', myGames);
-        }
-    });
-</script>
-            
+</script>            
 
             <!-- قسم الرياضة -->
             <div id="pane-sport" class="player-view-section space-y-4 hidden px-2"></div>
