@@ -225,21 +225,15 @@
         <button class="flex-1 bg-asbet-primary text-white font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button>
     </div>
 </div>
-       <!-- نموذج إدخال Ooredoo (مخفي افتراضياً) -->
+ <!-- نموذج إدخال Ooredoo (مخفي افتراضياً) -->
 <div id="form-ooredoo" class="hidden space-y-3 mt-4">
-    <!-- معلومات الدفع الخاصة بك -->
-    <div class="bg-black/50 p-3 rounded-lg border border-white/10 text-center">
-        <p class="text-xs text-gray-400 mb-1">Veuillez transférer le solde Ooredoo à ce numéro :</p>
-        <!-- ضع رقم أوريدو الخاص بك هنا -->
-        <p class="text-xl font-bold text-[#ED0000]">22 123 456</p> 
-    </div>
-
-    <!-- إدخال المبلغ -->
-    <input type="number" placeholder="Montant transféré (TND)" class="w-full bg-asbet-card border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#ED0000]">
+    
+    <!-- إدخال رقم بطاقة الشحن -->
+    <input type="number" placeholder="Code de recharge Ooredoo (ex: 14 chiffres)" class="w-full bg-asbet-card border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#ED0000]">
     
     <!-- زر رفع لقطة الشاشة -->
     <label class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-[#ED0000] transition-all">
-        <span class="text-sm text-gray-300">📸 Importer la confirmation (Capture d'écran)</span>
+        <span class="text-sm text-gray-300">📸 Importer la capture d'écran</span>
         <input type="file" accept="image/*" class="hidden">
     </label>
 
@@ -252,13 +246,22 @@
 
 <!-- نموذج إدخال Orange (مخفي افتراضياً) -->
 <div id="form-orange" class="hidden space-y-3 mt-4">
-    <!-- معلومات الدفع الخاصة بك -->
-    <div class="bg-black/50 p-3 rounded-lg border border-white/10 text-center">
-        <p class="text-xs text-gray-400 mb-1">Veuillez transférer le solde Orange à ce numéro :</p>
-        <!-- ضع رقم أورانج الخاص بك هنا -->
-        <p class="text-xl font-bold text-[#FF7900]">55 123 456</p> 
-    </div>
+    
+    <!-- إدخال رقم بطاقة الشحن -->
+    <input type="number" placeholder="Code de recharge Orange (ex: 14 chiffres)" class="w-full bg-asbet-card border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#FF7900]">
+    
+    <!-- زر رفع لقطة الشاشة -->
+    <label class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-[#FF7900] transition-all">
+        <span class="text-sm text-gray-300">📸 Importer la capture d'écran</span>
+        <input type="file" accept="image/*" class="hidden">
+    </label>
 
+    <!-- أزرار التأكيد والرجوع -->
+    <div class="flex gap-2 mt-2">
+        <button onclick="backToMethods()" class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button>
+        <button class="flex-1 bg-[#FF7900] text-white font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button>
+    </div>
+</div>
     <!-- إدخال المبلغ -->
     <input type="number" placeholder="Montant transféré (TND)" class="w-full bg-asbet-card border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#FF7900]">
     
