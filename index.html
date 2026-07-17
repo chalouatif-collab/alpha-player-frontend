@@ -150,34 +150,22 @@
             <div id="deposit-section" class="space-y-4">
                 <label class="text-xs text-gray-400 font-bold">Choisissez la méthode:</label>
                 <div id="payment-methods-grid" class="grid grid-cols-2 gap-3">
-                  <!-- قسم الأزرار (تأكد أن هذا الـ ID هو المربوط بالـ CSS) -->
-<div id="payment-methods-grid" class="grid grid-cols-2 gap-3">
-    
-    <!-- زر D17 -->
-    <button onclick="showForm('form-d17')" class="bg-asbet-card border border-white/10 hover:border-asbet-primary p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
-        <span class="text-2xl">📱</span>
-        <span class="text-[10px] font-bold text-white">D17 / Flouci</span>
-    </button>
+                    <button onclick="selectPaymentMethod('d17')" class="bg-asbet-card border border-white/10 hover:border-asbet-primary p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
+                        <span class="text-2xl">📱</span><span class="text-[10px] font-bold text-white">D17 / Flouci</span>
+                    </button>
+                    <button onclick="selectPaymentMethod('usdt')" class="bg-asbet-card border border-white/10 hover:border-asbet-primary p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
+                        <span class="text-2xl">🪙</span><span class="text-[10px] font-bold text-white">USDT (Binance)</span>
+                    </button>
+                    <!-- زر Ooredoo -->
+        <button onclick="selectPaymentMethod('ooredoo')" class="bg-asbet-card border border-white/10 hover:border-[#ED0000] p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
+            <span class="text-2xl text-[#ED0000] font-black">Ooredoo</span>
+            <span class="text-[10px] font-bold text-white">Recharge</span>
+        </button>
 
-    <!-- زر USDT -->
-    <button onclick="showForm('form-usdt')" class="bg-asbet-card border border-white/10 hover:border-asbet-primary p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
-        <span class="text-2xl">💎</span>
-        <span class="text-[10px] font-bold text-white">USDT (Binance)</span>
-    </button>
-
-    <!-- زر Ooredoo -->
-    <button onclick="showForm('form-ooredoo')" class="bg-asbet-card border border-white/10 hover:border-asbet-primary p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
-        <span class="text-2xl">⚡</span>
-        <span class="text-[10px] font-bold text-white">Ooredoo Recharge</span>
-    </button>
-
-    <!-- زر Orange -->
-    <button onclick="showForm('form-orange')" class="bg-asbet-card border border-white/10 hover:border-asbet-primary p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
-        <span class="text-2xl">🟠</span>
-        <span class="text-[10px] font-bold text-white">Orange Recharge</span>
-    </button>
-
-</div>
+        <!-- زر Orange -->
+        <button onclick="selectPaymentMethod('orange')" class="bg-asbet-card border border-white/10 hover:border-[#FF7900] p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
+            <span class="text-2xl text-[#FF7900] font-black">Orange</span>
+            <span class="text-[10px] font-bold text-white">Recharge</span>
         </button>
                 </div>
                 <!-- نموذج إدخال D17 (مخفي افتراضياً) -->
@@ -1081,11 +1069,14 @@ function selectPaymentMethod(method) {
 
 // 2. وظيفة زر الرجوع (Retour)
 function backToMethods() {
-    document.getElementById('payment-methods-grid').classList.remove('hidden');
+    // إخفاء كل النماذج
     document.getElementById('form-d17').classList.add('hidden');
     document.getElementById('form-usdt').classList.add('hidden');
     document.getElementById('form-ooredoo').classList.add('hidden');
     document.getElementById('form-orange').classList.add('hidden');
+
+    // إعادة إظهار الأزرار الأساسية
+    document.getElementById('payment-methods-grid').style.display = 'grid';
 }
 </script>
 </body>
