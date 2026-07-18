@@ -398,7 +398,8 @@ html, body {
                     </div>
                 </div>
                 <!-- ================= بطاقة لعبة اليوم (Game of the Day) ================= -->
-<div class="mb-6 relative rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(232,0,111,0.2)] border border-asbet-primary/50 group cursor-pointer transition-transform hover:-translate-y-1" onclick="playCasinoGame('PRAGMATIC', 'vs20olympgate')">
+<!-- صورة اللعبة (الخلفية المربوطة بالسيرفر) -->
+        <img id="game-of-day-img" src="https://placehold.co/800x400/180A2B/FFF?text=Chargement..." class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity duration-500 group-hover:scale-105" alt="Jeu du Jour">
     
     <!-- تأثير النبض اللوني في الخلفية (Glow) -->
     <div class="absolute inset-0 bg-gradient-to-r from-asbet-primary via-purple-600 to-asbet-accent animate-pulse opacity-30"></div>
@@ -1437,6 +1438,40 @@ function syncBalance() {
 
     // 3. تشغيل المحرك تلقائياً 
     setTimeout(loadHomeSliders, 500);
+    // ================= جلب صورة لعبة اليوم من المزود =================
+async function fetchGameOfDayImage() {
+    const bannerImg = document.getElementById('game-of-day-img');
+    if (!bannerImg) return;
+
+    try {
+        let response = await fetch('https://alpha-backend-server.onrender.com/api/get-providers', {
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ provider_code: 'PRAGMATIC' }) // نبحث داخل براغماتيك
+        });
+        
+        let data = await response.json();
+        let gamesArray = data.games || data.data || [];
+        
+        // البحث عن لعبة بوابات أوليمبوس عبر الكود الخاص بها
+        let olympusGame = gamesArray.find(game => game.game_code === 'vs20olympgate' || game.id === 'vs20olympgate');
+        
+        if (olympusGame) {
+            // سحب الصورة الرسمية ووضعها في البانر
+            let officialImg = olympusGame.banner || olympusGame.image || olympusGame.thumb;
+            if (officialImg) {
+                bannerImg.src = officialImg;
+                console.log("✅ تم جلب صورة لعبة اليوم بنجاح!");
+            }
+        }
+    } catch (error) {
+        console.error("❌ خطأ في جلب صورة لعبة اليوم:", error);
+    }
+}
+
+// تشغيل الدالة فوراً عند فتح الصفحة
+fetchGameOfDayImage();
+// =================================================================
 </script>
 </body>
 </html>
