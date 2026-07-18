@@ -357,11 +357,16 @@
             <div id="pane-accueil" class="player-view-section block w-full"> 
                 <div class="absolute top-[-10%] left-1/2 transform -translate-x-1/2 w-[80%] h-[400px] bg-pink-600/15 blur-[120px] rounded-full pointer-events-none z-0"></div>
                 
-                <div class="w-full bg-asbet-card border border-white/10 shadow-[0_0_15px_rgba(255,215,0,0.1)] py-2 mb-4 rounded-xl relative mt-2 overflow-hidden">
-                    <div class="flex relative w-full">
-                        <div id="winners-ticker-track" class="flex gap-6 whitespace-nowrap px-4 w-max" style="animation: scroll-ticker 30s linear infinite;"></div>
-                    </div>
-                </div>
+                <!-- ================= شريط الفائزين المضيء (الجديد) ================= -->
+<div class="w-full bg-gradient-to-r from-[#180A2B] via-[#2A0845] to-[#180A2B] border border-asbet-accent/40 shadow-[0_0_20px_rgba(250,204,21,0.2)] py-2.5 mb-4 rounded-xl relative mt-2 overflow-hidden">
+    <!-- إضاءة خلفية متحركة -->
+    <div class="absolute inset-0 bg-asbet-accent/5 animate-pulse"></div>
+    
+    <div class="flex relative w-full z-10">
+        <div id="winners-ticker-track" class="flex gap-6 whitespace-nowrap px-4 w-max" style="animation: scroll-ticker 30s linear infinite;"></div>
+    </div>
+</div>
+<!-- ================================================================ -->
 
                 <!-- الأقسام السريعة -->
                 <div class="grid grid-cols-4 gap-2 md:gap-3 mb-6 w-full">
@@ -1053,17 +1058,29 @@ function closeProfileMenu() {
         }
 
         function generateLiveWinnersTicker() {
-            const track = document.getElementById('winners-ticker-track');
-            if (!track) return;
-            const fakeNames = ["fethi", "ahmed", "samir", "karim", "yassine", "mohamed", "ali"];
-            const gamesList = ["Aviator 🚀", "Gates of Olympus ⚡", "Sport ⚽", "Roulette 🎡"];
-            let tickerHTML = '';
-            for (let i = 0; i < 10; i++) {
-                const name = fakeNames[Math.floor(Math.random() * fakeNames.length)] + "***";
-                tickerHTML += `<div class="flex items-center gap-2 bg-asbet-dark border border-white/5 px-4 py-1 rounded-full text-xs font-mono whitespace-nowrap"><span class="text-asbet-primary">🎉 ${name}</span><span class="text-gray-400">gagné sur ${gamesList[Math.floor(Math.random() * gamesList.length)]}</span><span class="text-asbet-accent font-black">+${(Math.random() * 800 + 15).toFixed(2)} TND</span></div>`;
-            }
-            track.innerHTML = tickerHTML;
-        }
+    const track = document.getElementById('winners-ticker-track');
+    if (!track) return;
+    
+    const fakeNames = ["fethi", "ahmed", "samir", "karim", "yassine", "mohamed", "ali", "baya"];
+    const gamesList = ["Aviator 🚀", "Gates of Olympus ⚡", "Sport ⚽", "Roulette 🎡", "Sweet Bonanza 🍬"];
+    let tickerHTML = '';
+    
+    for (let i = 0; i < 15; i++) {
+        const name = fakeNames[Math.floor(Math.random() * fakeNames.length)] + "***";
+        const game = gamesList[Math.floor(Math.random() * gamesList.length)];
+        const amount = (Math.random() * 800 + 50).toFixed(2);
+        
+        // تصميم البطاقة الصغيرة لكل فائز مع تأثيرات نيون
+        tickerHTML += `
+            <div class="flex items-center gap-2 bg-black/40 backdrop-blur-sm border border-asbet-accent/30 px-4 py-1.5 rounded-full text-xs font-mono whitespace-nowrap shadow-[0_0_10px_rgba(250,204,21,0.1)]">
+                <span class="text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]">🎉 ${name}</span>
+                <span class="text-gray-400">gagné sur <span class="text-asbet-primary font-bold">${game}</span></span>
+                <span class="text-asbet-accent font-black drop-shadow-[0_0_8px_rgba(250,204,21,0.9)] animate-pulse">+${amount} TND</span>
+            </div>
+        `;
+    }
+    track.innerHTML = tickerHTML;
+}
 
         function renderTrendingGames() {
             const container = document.getElementById('trending-games-container');
