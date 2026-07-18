@@ -476,6 +476,51 @@
     }
 </script>
 <!-- ============================================================================== -->
+ <!-- ================= كود التشغيل التلقائي للأشرطة ================= -->
+<script>
+    // هذه الدالة تجلب الألعاب في الخلفية وتضعها في الأشرطة
+    async function loadSliderGames(providerCode, containerId) {
+        // 1. فحص الذاكرة (Cache) أولاً لسرعة فائقة لتجنب إرهاق السيرفر
+        const cacheKey = 'alpha_games_' + providerCode;
+        const cachedGames = localStorage.getItem(cacheKey);
+
+        if (cachedGames) {
+            // إذا كانت الألعاب محفوظة مسبقاً، اعرضها فوراً
+            renderSlider(providerCode, containerId, JSON.parse(cachedGames));
+            return;
+        }
+
+        // 2. إذا لم تكن موجودة في الذاكرة، اطلبها من السيرفر بصمت
+        try {
+            const response = await fetch(`${BACKEND_URL}/api/get-providers`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ provider_code: providerCode })
+            });
+            const rawText = await response.text();
+            const data = JSON.parse(rawText);
+
+            if (data && data.games && data.games.length > 0) {
+                // احفظها في الذاكرة للمرة القادمة
+                localStorage.setItem(cacheKey, JSON.stringify(data.games));
+                // ارسم المربعات في الشريط
+                renderSlider(providerCode, containerId, data.games);
+            }
+        } catch (error) {
+            console.error("تعذر جلب ألعاب المزود: " + providerCode, error);
+        }
+    }
+
+    // تشغيل المحرك بمجرد أن يفتح اللاعب الموقع
+    document.addEventListener('DOMContentLoaded', () => {
+        // ⚠️ ملاحظة: يجب أن تكون هذه الأكواد مطابقة لما تستخدمونه في السيرفر
+        // إذا كان السيرفر يستخدم حروفاً كبيرة (مثل PRAGMATIC)، قم بتغييرها هنا
+        loadSliderGames('pragmatic', 'slider-pragmatic');
+        loadSliderGames('hacksaw', 'slider-hacksaw');
+        loadSliderGames('playson', 'slider-playson');
+    });
+</script>
+<!-- ============================================================================== -->
             </div>
 
             <!-- قسم الرياضة -->
@@ -1327,7 +1372,7 @@ function syncBalance() {
         fetchSliderGames('playson', 'slider-playson');
     });
 </script>
-<!-- ============================================================================== -->
+
 </script>
 
  
