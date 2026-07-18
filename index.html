@@ -446,6 +446,64 @@
         <span class="text-white text-base group-hover:text-asbet-primary transition-colors">›</span>
     </div>
     <div id="slider-playson" class="flex overflow-x-auto gap-3 px-4 pb-3 snap-x hide-scrollbar"></div>
+    <!-- ================= كبسولة المحرك المستقلة (تعمل بقوة إجبارية) ================= -->
+<script>
+    console.log("🚀 كبسولة الأشرطة الذكية بدأت العمل!");
+
+    (async function forceLoadSliders() {
+        const API_URL = "https://alpha-backend-server.onrender.com"; // رابط مباشر لضمان عدم الاعتماد على أي كود آخر
+        
+        const providers = [
+            { code: 'pragmatic', boxId: 'slider-pragmatic' },
+            { code: 'hacksaw', boxId: 'slider-hacksaw' },
+            { code: 'playson', boxId: 'slider-playson' }
+        ];
+
+        for (let prov of providers) {
+            let container = document.getElementById(prov.boxId);
+            
+            if (container) {
+                // طباعة رسالة التحميل فوراً
+                container.innerHTML = `<div class="text-[#E8006F] text-xs px-4 py-2 font-bold animate-pulse">⏳ Chargement des jeux...</div>`;
+                
+                try {
+                    let response = await fetch(`${API_URL}/api/get-providers`, {
+                        method: 'POST', 
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ provider_code: prov.code })
+                    });
+                    
+                    let data = await response.json();
+                    
+                    if (data && data.games && data.games.length > 0) {
+                        container.innerHTML = ''; // تنظيف الصندوق
+                        let topGames = data.games.slice(0, 10); // أخذ 10 ألعاب
+                        
+                        topGames.forEach(game => {
+                            let img = game.banner || game.image || game.thumb || "https://placehold.co/400x300/180A2B/FFF?text=Casino";
+                            let code = game.game_code || game.id;
+                            
+                            container.innerHTML += `
+                                <div onclick="playCasinoGame('${prov.code}', '${code}')" class="w-36 h-24 flex-none snap-center relative group rounded-xl overflow-hidden shadow-lg border border-white/5 cursor-pointer">
+                                    <img src="${img}" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <button class="bg-[#E8006F] text-white px-5 py-1.5 rounded-md font-bold text-sm shadow-md">Jouer</button>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    } else {
+                        container.innerHTML = `<div class="text-gray-500 text-xs px-4 py-2">⚠️ Aucun jeu trouvé</div>`;
+                    }
+                } catch (error) {
+                    console.error("خطأ في جلب", prov.code, error);
+                    container.innerHTML = `<div class="text-red-500 text-xs px-4 py-2">❌ Erreur de connexion</div>`;
+                }
+            }
+        }
+    })();
+</script>
+<!-- =================================================================================== -->
 </div>
 
 <!-- ================= المحرك الذكي لجلب الألعاب ================= -->
