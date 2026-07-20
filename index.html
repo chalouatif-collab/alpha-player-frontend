@@ -572,7 +572,7 @@ html, body {
         // رسم البطاقات بالبيانات الحقيقية (الصورة + كود التشغيل)
         sliderGames.forEach(game => {
             const gameCard = `
-                <div class="w-36 h-24 flex-none snap-center relative group rounded-xl overflow-hidden shadow-lg border border-white/5">
+                <div class="w-28 h-40 flex-none snap-center relative group rounded-xl overflow-hidden shadow-lg border border-white/5">
                     <img src="${game.banner}" loading="lazy" alt="Game" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <button onclick="playCasinoGame('${providerCode}', '${game.game_code}')" class="bg-asbet-primary text-white px-6 py-1.5 rounded-md font-bold text-sm shadow-md hover:opacity-90 transition-all">
@@ -1029,7 +1029,7 @@ function closeProfileMenu() {
 
                 htmlChunk += `
                    <div onclick="playCasinoGame('${currentActiveProviderCode}', '${code}')" class="bg-asbet-card rounded-xl overflow-hidden relative border border-white/5 group cursor-pointer shadow-lg hover:border-asbet-primary transition-all">
-                        <img src="${img}" alt="${title}" loading="lazy" class="w-full h-24 md:h-32 object-cover opacity-80 group-hover:scale-110 group-hover:opacity-100 transition-all duration-500">
+                        <img src="${img}" alt="${title}" loading="lazy" class="w-full aspect-[3/4] object-cover opacity-80 group-hover:scale-110 group-hover:opacity-100 transition-all duration-500">
                         <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 backdrop-blur-[1px]">
                             <span class="btn-gradient text-white text-[10px] font-bold px-4 py-2 rounded-full shadow-[0_0_10px_rgba(232,0,111,0.5)]">JOUER</span>
                         </div>
@@ -1392,7 +1392,7 @@ function syncBalance() {
 
         sliderGames.forEach(game => {
             const gameCard = `
-                <div class="w-36 h-24 flex-none snap-center relative group rounded-xl overflow-hidden shadow-lg border border-white/5">
+                <div class="w-28 h-40 flex-none snap-center relative group rounded-xl overflow-hidden shadow-lg border border-white/5">
                     <img src="${game.banner}" loading="lazy" alt="Game" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <button onclick="playCasinoGame('${providerCode}', '${game.game_code}')" class="bg-asbet-primary text-white px-6 py-1.5 rounded-md font-bold text-sm shadow-md hover:opacity-90 transition-all">
