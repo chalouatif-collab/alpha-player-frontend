@@ -1111,7 +1111,7 @@ function closeProfileMenu() {
             
             // هنا نحدد عدد الألعاب (تم تغييره من 4 إلى 6 ألعاب)
             // يمكنك تغييره إلى 10 أو 12 كما تشاء
-            const trending = currentProviderGames.slice(0,8);
+            const trending = currentProviderGames.slice(0,9);
 
             container.innerHTML = trending.map(game => {
                 const title = game.game_name || game.name || game.title || "Game";
