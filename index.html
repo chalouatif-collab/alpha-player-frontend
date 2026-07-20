@@ -572,14 +572,15 @@ html, body {
         // رسم البطاقات بالبيانات الحقيقية (الصورة + كود التشغيل)
         sliderGames.forEach(game => {
             const gameCard = `
-                <div class="w-28 h-40 flex-none snap-center relative group rounded-xl overflow-hidden shadow-lg border border-white/5">
-                    <img src="${game.banner}" loading="lazy" alt="Game" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button onclick="playCasinoGame('${providerCode}', '${game.game_code}')" class="bg-asbet-primary text-white px-6 py-1.5 rounded-md font-bold text-sm shadow-md hover:opacity-90 transition-all">
-                            Jouer
-                        </button>
-                    </div>
-                </div>
+                
+<div class="h-32 w-auto flex-none snap-center relative group rounded-xl overflow-hidden shadow-lg border border-white/5">   
+    <img src="${game.banner}" loading="lazy" alt="Game" class="h-full w-auto max-w-[220px] object-contain">  
+    <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <button onclick="playCasinoGame('${providerCode}', '${game.game_code}')" class="bg-asbet-primary text-white px-6 py-1.5 rounded-md font-bold text-sm shadow-md hover:opacity-90 transition-all">
+            Jouer
+        </button>
+    </div>
+</div>
             `;
             container.innerHTML += gameCard;
         });
