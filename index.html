@@ -782,7 +782,7 @@ html, body {
             setTimeout(() => toast.remove(), 2500);
         }
 
-        function switchSection(sectionId) {
+        function switchSection(sectionId, isHistoryUpdate = false) {
             localStorage.setItem('active_section', sectionId);
             document.querySelectorAll('.player-view-section').forEach(el => {
                 el.classList.add('hidden');
@@ -815,6 +815,10 @@ html, body {
             
             window.scrollTo({ top: 0, behavior: 'smooth' });
             closeProfileMenu();
+            // إضافة القسم الحالي إلى سجل المتصفح لتفعيل زر الرجوع
+    if (!isHistoryUpdate) {
+        window.history.pushState({ section: sectionId }, "", "#" + sectionId);
+    }
         }
         // هذه هي الدالة المفقودة التي سببت المشكلة
 function closeProfileMenu() {
@@ -1605,6 +1609,33 @@ document.addEventListener('DOMContentLoaded', () => {
         enableMouseDragScroll('slider-playson');
     }, 1000);
 });
+
+// ================= التعامل مع زر الرجوع في المتصفح =================
+window.addEventListener('popstate', function(event) {
+    if (event.state && event.state.section) {
+        // إذا ضغط اللاعب على رجوع، نفتح القسم السابق بدون تسجيله مرة أخرى في السجل
+        switchSection(event.state.section, true);
+    } else {
+        // إذا لم يكن هناك سجل سابق، نرجعه لصفحة الاستقبال
+        switchSection('accueil', true);
+    }
+});
+
+// ================= تسجيل الصفحة عند أول دخول للموقع =================
+document.addEventListener('DOMContentLoaded', () => {
+    // ننتظر قليلاً لضمان تحميل باقي الدوال
+    setTimeout(() => {
+        if (!window.location.hash) {
+            // تسجيل صفحة الاستقبال كأول صفحة
+            window.history.replaceState({ section: 'accueil' }, "", "#accueil");
+        } else {
+            // إذا قام اللاعب بنسخ رابط قسم معين (مثل #casino) ودخل إليه مباشرة
+            const hashSection = window.location.hash.replace('#', '');
+            switchSection(hashSection, true);
+        }
+    }, 100);
+});
+
 </script>
 </body>
 </html>
