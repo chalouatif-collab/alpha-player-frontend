@@ -1131,13 +1131,18 @@
             if (sectionId === 'paris') {
                 if (typeof renderMyBetsHistoryPane === 'function') renderMyBetsHistoryPane();
             }
+
+            // 👇 أضفنا هذا الشرط خصيصاً لقسم الكازينو ليجلب الألعاب تلقائياً 👇
             if (sectionId === 'casino') {
-                initCasinoLobby();
+                if (typeof initCasinoLobby === 'function') {
+                    initCasinoLobby();
+                }
             }
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // ⚡ الحل هنا: إجبار الصفحة على الصعود لأعلى الشاشة فوراً عند تغيير أي قسم ⚡
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            
             closeProfileMenu();
-            // إضافة القسم الحالي إلى سجل المتصفح لتفعيل زر الرجوع
             if (!isHistoryUpdate) {
                 window.history.pushState({ section: sectionId }, "", "#" + sectionId);
             }
