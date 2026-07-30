@@ -1814,10 +1814,11 @@
             });
         }
 
-        // تشغيل ميزة السحب على الأشرطة الثلاثة بعد تحميل الصفحة
+        // تشغيل ميزة السحب على الأشرطة بعد تحميل الصفحة
         document.addEventListener('DOMContentLoaded', () => {
             // نعطي المتصفح وقتاً صغيراً جداً ليرسم الأشرطة ثم نطبق عليها السحب
             setTimeout(() => {
+                enableMouseDragScroll('providers-bar'); // 👈 أضفنا شريط المزودين هنا
                 enableMouseDragScroll('slider-pragmatic');
                 enableMouseDragScroll('slider-hacksaw');
                 enableMouseDragScroll('slider-playson');
