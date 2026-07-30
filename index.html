@@ -1103,16 +1103,21 @@
 
         function switchSection(sectionId, isHistoryUpdate = false) {
             localStorage.setItem('active_section', sectionId);
+            
+            // إخفاء جميع الأقسام
             document.querySelectorAll('.player-view-section').forEach(el => {
                 el.classList.add('hidden');
                 el.classList.remove('block');
             });
+            
+            // إظهار القسم المطلوبة
             const panelElement = document.getElementById(`pane-${sectionId}`);
             if (panelElement) {
                 panelElement.classList.remove('hidden');
                 if (sectionId === 'accueil') panelElement.classList.add('block');
             }
 
+            // تحديث الأزرار النشطة في القائمة الجانبية
             document.querySelectorAll('#main-sidebar nav button').forEach(btn => {
                 btn.classList.remove('bg-asbet-card', 'text-white');
                 btn.classList.add('text-gray-400');
@@ -1132,16 +1137,23 @@
                 if (typeof renderMyBetsHistoryPane === 'function') renderMyBetsHistoryPane();
             }
 
-            // 👇 أضفنا هذا الشرط خصيصاً لقسم الكازينو ليجلب الألعاب تلقائياً 👇
+            // تشغيل كازينو اللوبي تلقائياً
             if (sectionId === 'casino') {
                 if (typeof initCasinoLobby === 'function') {
                     initCasinoLobby();
                 }
             }
 
-            // ⚡ الحل هنا: إجبار الصفحة على الصعود لأعلى الشاشة فوراً عند تغيير أي قسم ⚡
-            window.scrollTo({ top: 0, behavior: 'instant' });
+            // ⚡ الحل الجذري والنهائي لإجبار الصفحة والصعود لرأس الصفحة فوراً ⚡
+            window.scrollTo(0, 0);
+            document.body.scrollTop = 0; // لمتصفحات الجوال المختلفة
+            document.documentElement.scrollTop = 0; // لمتصفحات المتصفح الحديثة
             
+            // محاولة إضافية لأجل الهواتف الضعيفة أو المتصفحات المعقدة
+            setTimeout(() => {
+                window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+            }, 10);
+
             closeProfileMenu();
             if (!isHistoryUpdate) {
                 window.history.pushState({ section: sectionId }, "", "#" + sectionId);
