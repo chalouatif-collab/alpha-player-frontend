@@ -778,42 +778,42 @@
 
                 </div>
 
-                <!-- الأقسام السريعة (5 أزرار مع توهج ونبض وردي متوهج) -->
-                <div class="grid grid-cols-3 md:grid-cols-5 gap-2 md:gap-3 mb-6 w-full">
+                <!-- الأقسام السريعة (5 أزرار صغيرة في سطر واحد ثابت بدون تمرير) -->
+                <div class="grid grid-cols-5 gap-1.5 md:gap-3 mb-6 w-full">
                     
                     <!-- زر الكازينو -->
                     <div onclick="switchSection('casino'); initCasinoLobby();"
-                        class="flex flex-col lg:flex-row items-center justify-center bg-[#130822] h-[80px] lg:h-[60px] rounded-xl border border-asbet-primary btn-pink-glow transition-all cursor-pointer group gap-2">
-                        <div class="text-[#E8006F] text-2xl lg:text-xl group-hover:scale-110 transition-transform">🎰</div>
-                        <span class="text-[9px] lg:text-xs font-bold text-white text-center leading-tight uppercase">Casino</span>
+                        class="flex flex-col items-center justify-center bg-[#130822] h-[55px] rounded-xl border border-white/20 btn-pink-glow transition-all cursor-pointer group p-1">
+                        <div class="text-[#E8006F] text-lg md:text-xl group-hover:scale-110 transition-transform">🎰</div>
+                        <span class="text-[7px] md:text-[9px] font-bold text-white text-center leading-tight uppercase mt-1">Casino</span>
                     </div>
 
                     <!-- زر اللايف كازينو -->
                     <div onclick="openLiveCasino()"
-                        class="flex flex-col lg:flex-row items-center justify-center bg-[#130822] h-[80px] lg:h-[60px] rounded-xl border border-asbet-primary btn-pink-glow transition-all cursor-pointer group gap-2">
-                        <div class="text-asbet-primary text-2xl lg:text-xl group-hover:scale-110 transition-transform animate-pulse">🔴</div>
-                        <span class="text-[9px] lg:text-xs font-bold text-white text-center leading-tight uppercase">Live Casino</span>
+                        class="flex flex-col items-center justify-center bg-[#130822] h-[55px] rounded-xl border border-white/20 btn-pink-glow transition-all cursor-pointer group p-1">
+                        <div class="text-asbet-primary text-lg md:text-xl group-hover:scale-110 transition-transform animate-pulse">🔴</div>
+                        <span class="text-[7px] md:text-[9px] font-bold text-white text-center leading-tight uppercase mt-1">Live</span>
                     </div>
                     
                     <!-- زر الألعاب الافتراضية -->
                     <div onclick="launchVirtualGames()"
-                        class="flex flex-col lg:flex-row items-center justify-center bg-[#130822] h-[80px] lg:h-[60px] rounded-xl border border-asbet-primary btn-pink-glow transition-all cursor-pointer group gap-2">
-                        <div class="text-[#E8006F] text-2xl lg:text-xl group-hover:scale-110 transition-transform">🎮</div>
-                        <span class="text-[9px] lg:text-xs font-bold text-white text-center leading-tight uppercase">Jeux Virtuels</span>
+                        class="flex flex-col items-center justify-center bg-[#130822] h-[55px] rounded-xl border border-white/20 btn-pink-glow transition-all cursor-pointer group p-1">
+                        <div class="text-[#E8006F] text-lg md:text-xl group-hover:scale-110 transition-transform">🎮</div>
+                        <span class="text-[7px] md:text-[9px] font-bold text-white text-center leading-tight uppercase mt-1">Virtuels</span>
                     </div>
                     
                     <!-- زر الرياضة -->
                     <div onclick="openSportsbook('prematch')"
-                        class="flex flex-col lg:flex-row items-center justify-center bg-[#130822] h-[80px] lg:h-[60px] rounded-xl border border-asbet-primary btn-pink-glow transition-all cursor-pointer group gap-2">
-                        <div class="text-[#E8006F] text-2xl lg:text-xl group-hover:scale-110 transition-transform">⚽</div>
-                        <span class="text-[9px] lg:text-xs font-bold text-white text-center leading-tight uppercase">Sports</span>
+                        class="flex flex-col items-center justify-center bg-[#130822] h-[55px] rounded-xl border border-white/20 btn-pink-glow transition-all cursor-pointer group p-1">
+                        <div class="text-[#E8006F] text-lg md:text-xl group-hover:scale-110 transition-transform">⚽</div>
+                        <span class="text-[7px] md:text-[9px] font-bold text-white text-center leading-tight uppercase mt-1">Sports</span>
                     </div>
                     
-                    <!-- زر اللايف -->
+                    <!-- زر اللايف سبورت -->
                     <div onclick="openSportsbook('live')"
-                        class="flex flex-col lg:flex-row items-center justify-center bg-[#130822] h-[80px] lg:h-[60px] rounded-xl border border-asbet-primary btn-pink-glow transition-all cursor-pointer group gap-2">
-                        <div class="text-[#E8006F] text-2xl lg:text-xl group-hover:scale-110 transition-transform">⏱️</div>
-                        <span class="text-[9px] lg:text-xs font-bold text-white text-center leading-tight uppercase">Live Sport</span>
+                        class="flex flex-col items-center justify-center bg-[#130822] h-[55px] rounded-xl border border-white/20 btn-pink-glow transition-all cursor-pointer group p-1">
+                        <div class="text-[#E8006F] text-lg md:text-xl group-hover:scale-110 transition-transform">⏱️</div>
+                        <span class="text-[7px] md:text-[9px] font-bold text-white text-center leading-tight uppercase mt-1 leading-none">Live Sp.</span>
                     </div>
 
                 </div>
