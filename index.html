@@ -1213,6 +1213,9 @@
                     if(casinoProviders.length > 0) {
                         bar.innerHTML = casinoProviders.map(p => `<button onclick="loadProviderGames('${p.code}')" class="btn-glass px-4 py-2 rounded-full text-xs font-bold text-gray-300 hover:text-white shrink-0">${p.name || p.code}</button>`).join('');
                         loadProviderGames(casinoProviders[0].code);
+                        
+                        // 👈 تفعيل السحب بالفأرة هنا فوراً بعد رسم الأزرار
+                        setTimeout(() => enableMouseDragScroll('providers-bar'), 200);
                     }
                 } catch (e) { bar.innerHTML = '<span class="text-q-magenta text-xs">Erreur</span>'; }
             }
@@ -1569,6 +1572,40 @@
                 </div>
                 `;
             }).join('');
+        }
+
+        function enableMouseDragScroll(sliderId) {
+            const slider = document.getElementById(sliderId);
+            if (!slider) return;
+
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true;
+                slider.style.cursor = 'grabbing';
+                startX = e.pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+            });
+
+            slider.addEventListener('mouseleave', () => {
+                isDown = false;
+                slider.style.cursor = 'default';
+            });
+
+            slider.addEventListener('mouseup', () => {
+                isDown = false;
+                slider.style.cursor = 'default';
+            });
+
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - slider.offsetLeft;
+                const walk = (x - startX) * 2; // سرعة السحب
+                slider.scrollLeft = scrollLeft - walk;
+            });
         }
     </script>
 </body>
