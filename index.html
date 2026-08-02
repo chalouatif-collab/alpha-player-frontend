@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Alphabet216- Premium Casino</title>
+    <title>Alphabet216 - Premium Casino</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -116,13 +116,13 @@
         .swiper-slide-content { position: relative; z-index: 10; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; }
         @media (min-width: 768px) { .swiper-slide { width: 300px; height: 400px; } }
 
-        /* Modals & Menus (Original Integration) */
-        .profile-popup-menu { position: fixed; bottom: 80px; right: 15px; background-color: #090518; border: 1px solid rgba(0,242,254,0.5); border-radius: 15px; padding: 15px; display: flex; flex-direction: column; gap: 12px; width: 200px; opacity: 0; visibility: hidden; transform: translateY(20px); transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 99999; box-shadow: 0px 5px 20px rgba(0,242,254,0.4); backdrop-filter: blur(15px); }
-        .profile-popup-menu.show { transform: translateY(0); opacity: 1; visibility: visible; }
-        .profile-popup-menu .menu-item { color: #ffffff; text-decoration: none; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 8px; background: rgba(255, 255, 255, 0.05); transition: 0.2s; cursor: pointer; }
-        .profile-popup-menu .menu-item:hover { background: rgba(0,242,254, 0.2); }
-        .profile-popup-menu .menu-item.highlight { background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%); color: black; }
-        
+        /* Profile Tabs */
+        .prof-tab-btn.active {
+            background: rgba(0, 242, 254, 0.15);
+            border-color: rgba(0, 242, 254, 0.5);
+            color: #00f2fe;
+        }
+
         .sidebar-btn { width: 56px; white-space: nowrap; overflow: hidden; transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; align-items: center; }
         .sidebar-btn:hover { width: 220px; padding-right: 1rem; z-index: 50; background: rgba(0, 242, 254, 0.1); border-color: rgba(0, 242, 254, 0.5); }
         .sidebar-text { opacity: 0; transform: translateX(-10px); transition: all 0.3s ease; transition-delay: 0.1s; }
@@ -280,9 +280,6 @@
         </div>
     </div>
 
-    <!-- Profile Menu Popup -->
-    <div id="profileMenu" class="profile-popup-menu"></div>
-
     <!-- Iframes Containers -->
     <div id="casino-iframe-container" class="fixed inset-0 z-[200] bg-black hidden flex-col">
         <button onclick="closeCasinoGame()" class="absolute top-4 right-4 z-[210] bg-q-magenta text-white w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold shadow-[0_0_15px_rgba(254,9,121,0.8)] cursor-pointer">✖</button>
@@ -347,7 +344,8 @@
                     <button onclick="toggleCashier()" class="btn-liquid px-4 md:px-6 py-2 md:py-2.5 rounded-full text-white font-bold text-[10px] md:text-xs uppercase tracking-widest shadow-lg flex items-center gap-2 cursor-pointer">
                         <span class="hidden sm:inline">Dépôt</span> <i class="fas fa-bolt animate-bounce"></i>
                     </button>
-                    <div onclick="toggleProfileMenu(event)" class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 flex items-center justify-center ml-1 md:ml-2 cursor-pointer border border-white/20 hover:border-q-cyan transition-all overflow-hidden group">
+                    <!-- 💡 تعديل هام: فتح البروفايل عند الضغط بدلاً من القائمة القديمة -->
+                    <div onclick="openProfile()" class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 flex items-center justify-center ml-1 md:ml-2 cursor-pointer border border-white/20 hover:border-q-cyan transition-all overflow-hidden group">
                         <img src="https://api.dicebear.com/7.x/bottts/svg?seed=QuantumUser" class="w-6 h-6 md:w-8 md:h-8 group-hover:scale-125 transition-transform">
                     </div>
                 </div>
@@ -358,7 +356,6 @@
     <!-- ================= Live Winners Ticker ================= -->
     <div class="fixed top-[70px] md:top-[90px] left-0 w-full bg-q-panel/60 border-y border-q-cyan/20 py-1.5 overflow-hidden z-40 backdrop-blur-md hidden sm:block shadow-[0_0_20px_rgba(0,242,254,0.1)]">
         <div id="winners-ticker-track" class="animate-marquee whitespace-nowrap flex gap-12 md:gap-16 text-[9px] md:text-[10px] font-bold font-display tracking-widest text-white/80">
-            <!-- Will be populated by JS generateLiveWinnersTicker() -->
             <span>🔥 <span class="text-q-cyan">ANIS_99</span> a gagné <span class="text-q-gold">15,000 TND</span> sur Aviator</span>
             <span>💎 <span class="text-q-magenta">VIP_SAMI</span> vient de retirer <span class="text-green-400">3,200 USDT</span></span>
         </div>
@@ -398,7 +395,8 @@
                     <span class="text-gradient text-glow glitch scramble-target" data-text="" data-final="Alphabet216"></span>
                 </h2>
                 <p class="text-gray-400 font-light mt-3 md:mt-4 max-w-lg text-[11px] md:text-sm mx-auto md:mx-0 border-l-2 border-q-cyan pl-3 md:pl-4 bg-gradient-to-r from-q-cyan/10 to-transparent py-1.5 md:py-2">
-                    
+                    Le casino le plus avancé en Tunisie. Des retraits instantanés et des jeux certifiés.
+                </p>
             </div>
 
             <!-- Vouchers (Mobile: Horizontal Swipe / Desktop: Grid) -->
@@ -457,7 +455,6 @@
             <!-- ================= DYNAMIC 3D SWIPER ================= -->
             <div class="swiper mySwiper swiper-3d-container">
                 <div class="swiper-wrapper" id="dynamic-swiper-wrapper">
-                    <!-- Placeholder Games (will be replaced by JS) -->
                     <div class="swiper-slide relative group shadow-[0_0_20px_rgba(0,0,0,0.8)] border border-white/10 rounded-2xl overflow-hidden flex items-center justify-center bg-q-panel">
                         <span class="text-q-cyan animate-pulse font-display tracking-widest">LOADING GAMES...</span>
                     </div>
@@ -466,6 +463,48 @@
             </div>
 
         </div> <!-- END PANE ACCUEIL -->
+
+        <!-- ================= PANE: PROFIL (The New Dashboard!) ================= -->
+        <div id="pane-profile" class="player-view-section hidden w-full">
+            <div class="flex flex-col md:flex-row gap-6">
+                <!-- User Card Sidebar -->
+                <div class="w-full md:w-1/3 space-y-4">
+                    <div class="glass-card rounded-2xl p-6 text-center border border-white/10 shadow-[0_0_20px_rgba(0,242,254,0.1)] relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-q-cyan/10 blur-3xl rounded-full"></div>
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=QuantumUser" class="w-24 h-24 mx-auto rounded-full bg-black/50 p-2 mb-4 border border-q-cyan/50 relative z-10">
+                        <h2 class="text-2xl font-display font-bold text-white relative z-10" id="profile-page-username">User</h2>
+                        <p class="text-q-cyan font-mono text-xl mt-1 font-bold relative z-10"><span id="profile-page-balance">0.00</span> TND</p>
+                        
+                        <div class="flex gap-2 mt-6 relative z-10">
+                            <button onclick="toggleCashier(); switchCashierTab('deposit');" class="flex-1 btn-liquid text-white text-xs font-bold py-2.5 rounded-xl uppercase tracking-wider">Dépôt</button>
+                            <button onclick="toggleCashier(); switchCashierTab('withdraw');" class="flex-1 bg-black/50 border border-white/20 hover:border-q-magenta hover:bg-q-magenta/10 text-white text-xs font-bold py-2.5 rounded-xl transition-colors uppercase tracking-wider">Retrait</button>
+                        </div>
+                        <button onclick="logoutPlayer()" class="w-full mt-3 bg-red-600/10 border border-red-600/30 text-red-500 text-xs font-bold py-2.5 rounded-xl hover:bg-red-600 hover:text-white transition-colors uppercase tracking-wider relative z-10"><i class="fas fa-sign-out-alt mr-2"></i> Déconnexion</button>
+                    </div>
+
+                    <!-- Tabs Menu -->
+                    <div class="glass-card rounded-2xl p-4 border border-white/10 flex flex-col gap-2">
+                        <button onclick="loadProfileHistory('bets', this)" class="prof-tab-btn active text-left px-4 py-3.5 rounded-xl text-sm font-bold bg-q-cyan/10 text-q-cyan border border-q-cyan/50 transition-colors shadow-inner"><i class="fas fa-ticket-alt w-6"></i> Mes Paris Sportifs</button>
+                        <button onclick="loadProfileHistory('casino', this)" class="prof-tab-btn text-left px-4 py-3.5 rounded-xl text-sm font-bold text-gray-400 border border-transparent hover:border-white/10 hover:bg-white/5 transition-colors"><i class="fas fa-dice w-6"></i> Historique Casino</button>
+                        <button onclick="loadProfileHistory('transactions', this)" class="prof-tab-btn text-left px-4 py-3.5 rounded-xl text-sm font-bold text-gray-400 border border-transparent hover:border-white/10 hover:bg-white/5 transition-colors"><i class="fas fa-exchange-alt w-6"></i> Dépôts & Retraits</button>
+                    </div>
+                </div>
+
+                <!-- Main Content Area -->
+                <div class="w-full md:w-2/3 glass-card rounded-2xl p-6 border border-white/10 min-h-[500px] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+                        <h3 class="text-xl md:text-2xl font-display font-bold text-white flex items-center gap-2" id="profile-history-title">
+                            <i class="fas fa-ticket-alt text-q-cyan"></i> Mes Paris Sportifs
+                        </h3>
+                        <button onclick="loadProfileHistory(currentProfileTab)" class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-sync-alt"></i></button>
+                    </div>
+                    
+                    <div id="profile-history-content" class="space-y-3">
+                        <div class="text-center py-10 text-gray-500 animate-pulse font-display">Chargement des données...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- PANE: CASINO (Standard Grid) -->
         <div id="pane-casino" class="player-view-section hidden w-full">
@@ -501,16 +540,11 @@
             <div id="virtuals-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 w-full pb-10"></div>
         </div>
 
-        <!-- PANE: SPORTS (For iFrame loading if needed as fallback, though overlay is used) -->
+        <!-- PANE: SPORTS -->
         <div id="pane-sport" class="player-view-section hidden w-full min-h-[800px]">
             <div class="text-center text-q-cyan py-10 font-display animate-pulse">Ouverture des sports en cours...</div>
         </div>
         
-        <!-- PANE: HISTORIQUE -->
-        <div id="pane-paris" class="player-view-section hidden w-full">
-            <div class="text-center text-gray-400 py-10 font-display">Historique des transactions... (En cours de développement)</div>
-        </div>
-
     </main>
 
     <!-- Radar Mobile Bottom Bar -->
@@ -537,7 +571,9 @@
             <i class="fas fa-wallet text-lg md:text-xl"></i>
             <span class="text-[8px] md:text-[9px] font-bold tracking-widest uppercase mt-0.5">Dépôt</span>
         </button>
-        <button onclick="toggleProfileMenu(event)" class="flex flex-col items-center gap-1 w-[20%] text-gray-500 hover:text-white hover:-translate-y-1 transition-transform cursor-pointer">
+        
+        <!-- 💡 تعديل هام: فتح صفحة البروفايل عند الضغط في الهاتف -->
+        <button onclick="openProfile()" class="flex flex-col items-center gap-1 w-[20%] text-gray-500 hover:text-white hover:-translate-y-1 transition-transform cursor-pointer">
             <i class="fas fa-user-circle text-lg md:text-xl"></i>
             <span class="text-[8px] md:text-[9px] font-bold tracking-widest uppercase mt-0.5">Profil</span>
         </button>
@@ -548,6 +584,7 @@
         const BACKEND_URL = "https://alpha-backend-server.onrender.com"; // Adjust if needed
         let playerSession = null;
         let balanceInterval = null;
+        let currentProfileTab = 'bets';
 
         // --- 1. UI Initialization & Quantum Effects ---
         window.addEventListener('load', () => {
@@ -559,21 +596,16 @@
                 }
             }, 800);
             
-            // Check Session
             const savedSession = localStorage.getItem('alpha_player_session');
             if (savedSession) {
                 playerSession = JSON.parse(savedSession);
                 setupLoggedInUI();
             }
 
-            // Restore Section
             const savedSection = localStorage.getItem('active_section') || 'accueil';
             switchSection(savedSection);
             
-            // Generate Ticker
             generateLiveWinnersTicker();
-
-            // Load Dynamic Swiper Games
             loadDynamicSwiper();
         });
 
@@ -641,24 +673,21 @@
         // --- 2. Swiper & Dynamic Games (Magic!) ---
         async function loadDynamicSwiper() {
             try {
-                // Fetch PRAGMATIC games to fill the 3D Swiper beautifully
                 const response = await fetch(`${BACKEND_URL}/api/get-providers`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ provider_code: 'PRAGMATIC' })
                 });
                 const data = await response.json();
                 let gamesArray = data.games || data.data || [];
                 
                 if (gamesArray.length > 0) {
-                    const topGames = gamesArray.slice(0, 8); // Take 8 games
+                    const topGames = gamesArray.slice(0, 8);
                     const wrapper = document.getElementById('dynamic-swiper-wrapper');
                     
                     wrapper.innerHTML = topGames.map(g => {
                         const title = g.game_name || g.name || "Game";
                         const img = g.banner || g.image || g.thumb || "https://placehold.co/400x600/180A2B/FFF?text=Game";
                         const code = g.game_code || g.id;
-                        
                         return `
                         <div class="swiper-slide relative group shadow-[0_0_20px_rgba(0,0,0,0.8)] border border-white/10 rounded-2xl overflow-hidden cursor-pointer" onclick="playCasinoGame('PRAGMATIC', '${code}')">
                             <div class="absolute inset-0 bg-cover bg-center animate-bg-pan" style="background-image: url('${img}');"></div>
@@ -670,11 +699,9 @@
                                     <i class="fas fa-play"></i> Jouer
                                 </button>
                             </div>
-                        </div>
-                        `;
+                        </div>`;
                     }).join('');
 
-                    // Initialize Swiper after injecting slides
                     window.swiperInstance = new Swiper(".mySwiper", {
                         effect: "coverflow", grabCursor: true, centeredSlides: true, slidesPerView: "auto", loop: true,
                         autoplay: { delay: 3500, disableOnInteraction: false },
@@ -682,9 +709,7 @@
                         pagination: { el: ".swiper-pagination", clickable: true },
                     });
                 }
-            } catch (error) {
-                console.error("Swiper Loading Error:", error);
-            }
+            } catch (error) { console.error("Swiper Error:", error); }
         }
 
         // --- 3. Core Routing ---
@@ -699,40 +724,149 @@
                 panelElement.classList.add('block');
             }
             
-            // Buttons logic desktop
             document.querySelectorAll('.btn-glass').forEach(btn => btn.classList.remove('active'));
             const targetBtn = document.getElementById(`btn-menu-${sectionId}`);
             if(targetBtn) targetBtn.classList.add('active');
 
             window.scrollTo(0, 0);
-            closeProfileMenu();
+        }
+
+        // ================= PROFILE DASHBOARD LOGIC =================
+        function openProfile() {
+            if (!playerSession) {
+                openLoginModal();
+                return;
+            }
+            switchSection('profile');
+            
+            // Set User Info
+            document.getElementById('profile-page-username').innerText = playerSession.username;
+            document.getElementById('profile-page-balance').innerText = parseFloat(playerSession.balance || 0).toFixed(2);
+            
+            // Load default tab
+            loadProfileHistory('bets');
+        }
+
+        function loadProfileHistory(type, btnElement = null) {
+            currentProfileTab = type;
+            
+            // Update Buttons Styling
+            document.querySelectorAll('.prof-tab-btn').forEach(btn => {
+                btn.className = "prof-tab-btn text-left px-4 py-3.5 rounded-xl text-sm font-bold text-gray-400 border border-transparent hover:border-white/10 hover:bg-white/5 transition-colors cursor-pointer";
+            });
+            
+            if (btnElement) {
+                btnElement.className = "prof-tab-btn active text-left px-4 py-3.5 rounded-xl text-sm font-bold bg-q-cyan/10 text-q-cyan border border-q-cyan/50 transition-colors shadow-inner cursor-pointer";
+            } else {
+                // Find button by type if called programmatically
+                const buttons = document.querySelectorAll('.prof-tab-btn');
+                for (let btn of buttons) {
+                    if (btn.innerText.toLowerCase().includes(type === 'bets' ? 'paris' : type === 'casino' ? 'casino' : 'dépôts')) {
+                        btn.className = "prof-tab-btn active text-left px-4 py-3.5 rounded-xl text-sm font-bold bg-q-cyan/10 text-q-cyan border border-q-cyan/50 transition-colors shadow-inner cursor-pointer";
+                    }
+                }
+            }
+
+            const titleEl = document.getElementById('profile-history-title');
+            const contentEl = document.getElementById('profile-history-content');
+            
+            contentEl.innerHTML = '<div class="text-center py-10 text-q-cyan font-display animate-pulse">Chargement en cours...</div>';
+
+            if (type === 'bets') {
+                titleEl.innerHTML = '<i class="fas fa-ticket-alt text-q-cyan"></i> Mes Paris Sportifs';
+                fetchAndRenderBetsHistory(contentEl);
+            } else if (type === 'casino') {
+                titleEl.innerHTML = '<i class="fas fa-dice text-q-magenta"></i> Historique Casino';
+                contentEl.innerHTML = '<div class="text-center py-10 text-gray-500 border border-white/5 rounded-xl bg-black/30"><i class="fas fa-tools text-3xl mb-3 block"></i>Historique Casino en cours de synchronisation avec les fournisseurs.</div>';
+            } else if (type === 'transactions') {
+                titleEl.innerHTML = '<i class="fas fa-exchange-alt text-q-gold"></i> Dépôts & Retraits';
+                fetchAndRenderTransactionsHistory(contentEl);
+            }
+        }
+
+        async function fetchAndRenderTransactionsHistory(contentEl) {
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/admin/transactions-history?username=${playerSession.username}`, {
+                    headers: getAuthHeaders()
+                });
+                if(res.ok) {
+                    const txs = await res.json();
+                    if(txs.length === 0) {
+                        contentEl.innerHTML = '<div class="text-center py-8 text-gray-500 bg-black/30 rounded-xl border border-white/5">Aucune transaction trouvée.</div>';
+                        return;
+                    }
+                    contentEl.innerHTML = txs.map(tx => `
+                        <div class="flex items-center justify-between p-4 bg-black/30 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
+                            <div class="flex items-center gap-3 md:gap-4">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center ${tx.action === 'deposit_request' || tx.action === 'charge' ? 'bg-green-500/10 text-green-400 border border-green-500/30' : 'bg-red-500/10 text-red-400 border border-red-500/30'}">
+                                    <i class="fas ${tx.action === 'deposit_request' || tx.action === 'charge' ? 'fa-arrow-down' : 'fa-arrow-up'}"></i>
+                                </div>
+                                <div>
+                                    <p class="text-white text-sm md:text-base font-bold">${tx.action === 'deposit_request' || tx.action === 'charge' ? 'Dépôt' : 'Retrait'}</p>
+                                    <p class="text-gray-500 text-[10px] md:text-xs font-mono">${tx.date || 'N/A'}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm md:text-lg font-bold font-mono ${tx.action === 'deposit_request' || tx.action === 'charge' ? 'text-green-400' : 'text-red-400'}">${tx.action === 'deposit_request' || tx.action === 'charge' ? '+' : '-'}${parseFloat(tx.amount).toFixed(2)} TND</p>
+                                <p class="text-[9px] md:text-[10px] font-bold uppercase tracking-wider ${tx.admin_username === 'PENDING' ? 'text-q-gold' : 'text-q-cyan'}">${tx.admin_username === 'PENDING' ? 'En attente' : 'Approuvé'}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch(e) {
+                contentEl.innerHTML = '<div class="text-center py-8 text-red-500">Erreur de chargement.</div>';
+            }
+        }
+
+        async function fetchAndRenderBetsHistory(contentEl) {
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/admin/get-player-tickets?username=${playerSession.username}`, {
+                    headers: getAuthHeaders()
+                });
+                if(res.ok) {
+                    const tickets = await res.json();
+                    const bets = tickets.filter(t => t.type !== 'deposit'); // exclude deposits
+                    
+                    if(bets.length === 0) {
+                        contentEl.innerHTML = '<div class="text-center py-8 text-gray-500 bg-black/30 rounded-xl border border-white/5">Aucun pari sportif trouvé.</div>';
+                        return;
+                    }
+                    contentEl.innerHTML = bets.map(b => {
+                        let statusColor = b.status === 'gagne' ? 'bg-green-500/20 text-green-400 border-green-500/50' : 
+                                          b.status === 'perdu' ? 'bg-red-500/20 text-red-400 border-red-500/50' : 
+                                          'bg-q-gold/20 text-q-gold border-q-gold/50';
+                        return `
+                        <div class="p-4 bg-black/30 rounded-xl border border-white/5 mb-3 hover:border-white/10 transition-colors">
+                            <div class="flex justify-between items-center border-b border-white/10 pb-3 mb-3">
+                                <div class="flex flex-col">
+                                    <span class="text-[10px] text-gray-500 uppercase tracking-widest">ID Ticket</span>
+                                    <span class="text-xs font-mono text-gray-300">${b.ticket_id}</span>
+                                </div>
+                                <span class="text-[10px] font-bold px-3 py-1 rounded-full border ${statusColor} uppercase tracking-wider shadow-inner">${b.status === 'encours' ? 'En cours' : b.status}</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-[10px] text-gray-500 uppercase tracking-widest">Mise Totale</p>
+                                    <p class="text-sm md:text-base font-bold text-white">${parseFloat(b.mise||0).toFixed(2)} TND</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[10px] text-gray-500 uppercase tracking-widest">Gain Potentiel</p>
+                                    <p class="text-sm md:text-base font-bold text-q-cyan drop-shadow-[0_0_5px_rgba(0,242,254,0.5)]">${parseFloat(b.gain||0).toFixed(2)} TND</p>
+                                </div>
+                            </div>
+                        </div>
+                    `}).join('');
+                }
+            } catch(e) {
+                contentEl.innerHTML = '<div class="text-center py-8 text-gray-500 bg-black/30 rounded-xl border border-white/5">Historique des paris non disponible.</div>';
+            }
         }
 
         // --- 4. Modals Logic ---
-        function openLoginModal() { document.getElementById('player-login-modal').classList.remove('hidden'); document.getElementById('player-login-modal').classList.add('flex'); closeProfileMenu(); }
+        function openLoginModal() { document.getElementById('player-login-modal').classList.remove('hidden'); document.getElementById('player-login-modal').classList.add('flex'); }
         function closeLoginModal() { document.getElementById('player-login-modal').classList.add('hidden'); document.getElementById('player-login-modal').classList.remove('flex'); }
         function openRegisterModal() { document.getElementById('register-modal').classList.remove('hidden'); document.getElementById('register-modal').classList.add('flex'); closeLoginModal(); }
         function closeRegisterModal() { document.getElementById('register-modal').classList.add('hidden'); document.getElementById('register-modal').classList.remove('flex'); }
-
-        function toggleProfileMenu(event) {
-            event.stopPropagation();
-            const menu = document.getElementById('profileMenu');
-            if (!playerSession) {
-                menu.innerHTML = `
-                    <a href="javascript:void(0)" onclick="closeProfileMenu(); openLoginModal();" class="menu-item highlight"><i class="fas fa-sign-in-alt"></i> Se Connecter</a>
-                    <a href="javascript:void(0)" onclick="closeProfileMenu(); openRegisterModal();" class="menu-item"><i class="fas fa-user-plus"></i> S'inscrire</a>
-                `;
-            } else {
-                menu.innerHTML = `
-                    <a href="javascript:void(0)" onclick="closeProfileMenu(); toggleCashier(); switchCashierTab('deposit');" class="menu-item highlight"><i class="fas fa-wallet"></i> Dépôt Rapide</a>
-                    <a href="javascript:void(0)" onclick="closeProfileMenu(); toggleCashier(); switchCashierTab('withdraw');" class="menu-item"><i class="fas fa-money-bill-wave"></i> Retrait</a>
-                    <a href="javascript:void(0)" onclick="closeProfileMenu(); switchSection('paris');" class="menu-item"><i class="fas fa-history"></i> Historique</a>
-                    <a href="javascript:void(0)" onclick="closeProfileMenu(); logoutPlayer();" class="menu-item" style="color: #fe0979;"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
-                `;
-            }
-            menu.classList.toggle('show');
-        }
-        function closeProfileMenu() { document.getElementById('profileMenu').classList.remove('show'); }
 
         function showNotification(message, type = 'success') {
             const container = document.getElementById('toast-container');
@@ -815,6 +949,12 @@
             if (balanceDisplay) balanceDisplay.innerText = `${parseFloat(playerSession.balance || 0).toFixed(2)}`;
 
             if (!balanceInterval) balanceInterval = setInterval(refreshPlayerBalance, 4000);
+            
+            // If viewing profile page, update names there too
+            const profilePageName = document.getElementById('profile-page-username');
+            if(profilePageName) profilePageName.innerText = playerSession.username;
+            const profilePageBalance = document.getElementById('profile-page-balance');
+            if(profilePageBalance) profilePageBalance.innerText = parseFloat(playerSession.balance || 0).toFixed(2);
         }
 
         function logoutPlayer() {
@@ -828,7 +968,6 @@
             document.getElementById('auth-buttons-container')?.classList.add('flex');
             switchSection('accueil');
             showNotification('Déconnexion réussie', 'success');
-            closeProfileMenu();
         }
 
         async function refreshPlayerBalance() {
@@ -841,8 +980,14 @@
                     if (currentMe) {
                         playerSession.balance = currentMe.balance;
                         localStorage.setItem('alpha_player_session', JSON.stringify(playerSession));
+                        
+                        // Update Top Header
                         const balVal = document.getElementById('player-balance-val');
                         if (balVal) balVal.innerText = `${parseFloat(playerSession.balance).toFixed(2)}`;
+                        
+                        // Update Profile Page Balance
+                        const profBal = document.getElementById('profile-page-balance');
+                        if (profBal) profBal.innerText = `${parseFloat(playerSession.balance).toFixed(2)}`;
                     }
                 }
             } catch (e) { }
@@ -853,7 +998,6 @@
             const modal = document.getElementById('cashier-modal');
             if (modal.classList.contains('hidden')) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
             else { modal.classList.add('hidden'); modal.classList.remove('flex'); }
-            closeProfileMenu();
         }
         function switchCashierTab(tabName) {
             document.getElementById('deposit-section').classList.add('hidden');
@@ -1033,6 +1177,7 @@
 
         // Live Casino
         async function openLiveCasino() {
+            switchSection('live-casino');
             const container = document.getElementById('live-games-grid');
             container.innerHTML = '<div class="col-span-full text-center text-q-purple py-10 animate-pulse">Chargement Live... ⏳</div>';
             try {
