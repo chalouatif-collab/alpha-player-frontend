@@ -66,7 +66,6 @@
         .hide-scroll::-webkit-scrollbar { display: none; }
         .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* 3D Cyber Grid Background */
         .cyber-grid {
             position: fixed; bottom: 0; left: -50%; width: 200%; height: 60vh;
             background-image: linear-gradient(rgba(0, 242, 254, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(254, 9, 121, 0.15) 1px, transparent 1px);
@@ -78,12 +77,10 @@
 
         #tsparticles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
 
-        /* Custom Cursor */
         .cursor-dot, .cursor-outline { position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 9999; pointer-events: none; }
         .cursor-dot { width: 8px; height: 8px; background-color: #00f2fe; box-shadow: 0 0 10px #00f2fe; }
         .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(0, 242, 254, 0.5); transition: width 0.2s, height 0.2s; }
         
-        /* Text Scramble / Glitch */
         .scramble-text { font-variant-numeric: tabular-nums; }
         .glitch { position: relative; color: white; display: inline-block; }
         .glitch::before, .glitch::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent; }
@@ -92,7 +89,6 @@
         @keyframes glitch-anim { 0% { clip: rect(10px, 9999px, 83px, 0); } 100% { clip: rect(52px, 9999px, 14px, 0); } }
         @keyframes glitch-anim2 { 0% { clip: rect(65px, 9999px, 100px, 0); } 100% { clip: rect(15px, 9999px, 76px, 0); } }
 
-        /* Buttons & Cards */
         .btn-liquid { background: linear-gradient(45deg, #fe0979, #ff7b00); background-size: 200% 200%; animation: liquid-bg 3s ease infinite; box-shadow: 0 0 15px rgba(254, 9, 121, 0.5); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .btn-liquid:hover { box-shadow: 0 0 30px rgba(254, 9, 121, 0.8), inset 0 0 10px rgba(255,255,255,0.5); transform: translateY(-3px) scale(1.05); }
         .btn-glass { background: rgba(255, 255, 255, 0.05); box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 4px 15px rgba(0,0,0,0.5); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; }
@@ -100,7 +96,6 @@
         .btn-glass.active { background: rgba(0, 242, 254, 0.15); border-color: rgba(0, 242, 254, 0.5); color: white; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
         @keyframes liquid-bg { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        /* Vouchers */
         .voucher-card { position: relative; overflow: hidden; transition: all 0.5s ease; transform-style: preserve-3d; }
         .voucher-card img { transition: transform 0.7s ease; }
         .voucher-card:hover img { transform: scale(1.1) translateZ(-20px); filter: brightness(1.2); }
@@ -110,7 +105,6 @@
         .text-gradient { background: linear-gradient(to right, #00f2fe, #4facfe, #00f2fe); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 3s linear infinite; }
         @keyframes shine { to { background-position: 200% center; } }
         
-        /* Swiper Fixes */
         .swiper-3d-container { width: 100%; padding-top: 20px; padding-bottom: 60px; }
         .swiper-slide { width: 240px; height: 320px; border-radius: 20px; overflow: hidden; }
         .swiper-slide-content { position: relative; z-index: 10; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; }
@@ -131,7 +125,6 @@
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <!-- Toast Notifications Container -->
     <div id="toast-container" class="fixed top-5 right-5 z-[100] flex flex-col gap-2 w-full max-w-sm px-4"></div>
 
     <!-- Preloader -->
@@ -144,15 +137,13 @@
         <p class="font-display tracking-[0.5em] text-q-cyan text-xs md:text-sm animate-pulse">SYSTEM INITIALIZING...</p>
     </div>
 
-    <!-- Custom Cursor -->
     <div class="cursor-dot hidden lg:block"></div>
     <div class="cursor-outline hidden lg:block"></div>
 
-    <!-- 3D Grid & Particles -->
     <div class="cyber-grid"></div>
     <div id="tsparticles"></div>
 
-    <!-- ================= Modals (Login, Register, Cashier, Terms) ================= -->
+    <!-- ================= Modals ================= -->
     <div id="player-login-modal" class="fixed inset-0 z-[200] bg-black/80 hidden items-center justify-center p-4 backdrop-blur-md">
         <div class="w-full max-w-md bg-q-panel border border-q-cyan/50 rounded-3xl p-8 shadow-[0_0_30px_rgba(0,242,254,0.3)] relative">
             <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl cursor-pointer">&times;</button>
@@ -179,7 +170,6 @@
         </div>
     </div>
 
-    <!-- Cashier Modal (Dépôt / Retrait) -->
     <div id="cashier-modal" class="fixed inset-0 z-[200] hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-q-panel border border-q-gold/50 rounded-3xl w-full max-w-md p-6 relative shadow-[0_0_30px_rgba(249,212,35,0.2)]">
             <button onclick="toggleCashier()" class="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-3xl cursor-pointer">&times;</button>
@@ -189,7 +179,6 @@
                 <button onclick="switchCashierTab('withdraw'); syncBalance();" id="tab-withdraw" class="flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all cursor-pointer">Retrait</button>
             </div>
             
-            <!-- Deposit Section -->
             <div id="deposit-section" class="space-y-4">
                 <label class="text-xs text-gray-400 font-bold">Choisissez la méthode:</label>
                 <div id="payment-methods-grid" class="grid grid-cols-2 gap-3">
@@ -207,7 +196,6 @@
                     </button>
                 </div>
                 
-                <!-- Forms (D17) -->
                 <div id="form-d17" class="hidden space-y-3 mt-4">
                     <div class="bg-black/50 p-3 rounded-lg border border-q-cyan/30 text-center">
                         <p class="text-xs text-gray-400 mb-1">Veuillez envoyer l'argent à ce numéro :</p>
@@ -224,7 +212,6 @@
                     </div>
                 </div>
                 
-                <!-- Forms (USDT) -->
                 <div id="form-usdt" class="hidden space-y-3 mt-4">
                     <div class="bg-black/50 p-3 rounded-lg border border-q-gold/30 text-center">
                         <p class="text-xs text-gray-400 mb-1">Adresse USDT (TRC20) :</p>
@@ -241,7 +228,6 @@
                     </div>
                 </div>
 
-                <!-- Forms (Ooredoo) -->
                 <div id="form-ooredoo" class="hidden space-y-3 mt-4">
                     <input type="number" id="ooredoo-code" placeholder="Code de recharge Ooredoo" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#ED0000]">
                     <label class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-[#ED0000] transition-all">
@@ -254,7 +240,6 @@
                     </div>
                 </div>
 
-                <!-- Forms (Orange) -->
                 <div id="form-orange" class="hidden space-y-3 mt-4">
                     <input type="number" id="orange-code" placeholder="Code de recharge Orange" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#FF7900]">
                     <label class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-[#FF7900] transition-all">
@@ -268,7 +253,6 @@
                 </div>
             </div>
 
-            <!-- Withdraw Section -->
             <div id="withdraw-section" class="hidden space-y-4">
                 <div class="bg-q-magenta/10 border border-q-magenta/30 p-3 rounded-xl text-xs text-q-magenta font-bold mb-4 text-center">
                     Solde disponible: <span id="modal-balance">0.00</span> TND
@@ -305,7 +289,6 @@
         <iframe id="virtual-games-iframe" class="w-full h-full border-0 relative z-10" allow="autoplay; fullscreen; encrypted-media; geolocation" allowfullscreen></iframe>
     </div>
 
-
     <!-- ================= Header (Dynamic Island) ================= -->
     <div class="fixed top-4 md:top-6 left-1/2 transform -translate-x-1/2 z-[100] w-[95%] md:w-auto transition-all duration-500">
         <div class="glass-card rounded-full px-3 md:px-8 py-2 md:py-3 flex items-center justify-between gap-3 md:gap-10 mx-auto shadow-[0_10px_30px_rgba(0,0,0,0.8)] border border-white/10">
@@ -329,13 +312,11 @@
 
             <!-- Auth / Profile -->
             <div class="flex items-center gap-2 md:gap-3">
-                <!-- Logged Out State -->
                 <div id="auth-buttons-container" class="flex items-center gap-1.5">
                     <button onclick="openLoginModal()" class="btn-glass px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wide cursor-pointer text-q-cyan border-q-cyan/50 hover:bg-q-cyan/20">Login</button>
                     <button onclick="openRegisterModal()" class="btn-liquid px-3 py-1.5 rounded-full text-[10px] font-bold text-white uppercase tracking-wide cursor-pointer">S'inscrire</button>
                 </div>
                 
-                <!-- Logged In State -->
                 <div id="top-user-profile" class="hidden items-center gap-2">
                     <div class="flex flex-col items-end mr-1 hidden sm:flex">
                         <span id="player-name-display" class="text-[10px] md:text-xs text-q-cyan font-display tracking-widest uppercase font-bold">User</span>
@@ -344,7 +325,6 @@
                     <button onclick="toggleCashier()" class="btn-liquid px-4 md:px-6 py-2 md:py-2.5 rounded-full text-white font-bold text-[10px] md:text-xs uppercase tracking-widest shadow-lg flex items-center gap-2 cursor-pointer">
                         <span class="hidden sm:inline">Dépôt</span> <i class="fas fa-bolt animate-bounce"></i>
                     </button>
-                    <!-- 💡 تعديل هام: فتح البروفايل عند الضغط بدلاً من القائمة القديمة -->
                     <div onclick="openProfile()" class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 flex items-center justify-center ml-1 md:ml-2 cursor-pointer border border-white/20 hover:border-q-cyan transition-all overflow-hidden group">
                         <img src="https://api.dicebear.com/7.x/bottts/svg?seed=QuantumUser" class="w-6 h-6 md:w-8 md:h-8 group-hover:scale-125 transition-transform">
                     </div>
@@ -356,8 +336,7 @@
     <!-- ================= Live Winners Ticker ================= -->
     <div class="fixed top-[70px] md:top-[90px] left-0 w-full bg-q-panel/60 border-y border-q-cyan/20 py-1.5 overflow-hidden z-40 backdrop-blur-md hidden sm:block shadow-[0_0_20px_rgba(0,242,254,0.1)]">
         <div id="winners-ticker-track" class="animate-marquee whitespace-nowrap flex gap-12 md:gap-16 text-[9px] md:text-[10px] font-bold font-display tracking-widest text-white/80">
-            <span>🔥 <span class="text-q-cyan">ANIS_99</span> a gagné <span class="text-q-gold">15,000 TND</span> sur Aviator</span>
-            <span>💎 <span class="text-q-magenta">VIP_SAMI</span> vient de retirer <span class="text-green-400">3,200 USDT</span></span>
+            <!-- Populated via JS -->
         </div>
     </div>
 
@@ -572,7 +551,6 @@
             <span class="text-[8px] md:text-[9px] font-bold tracking-widest uppercase mt-0.5">Dépôt</span>
         </button>
         
-        <!-- 💡 تعديل هام: فتح صفحة البروفايل عند الضغط في الهاتف -->
         <button onclick="openProfile()" class="flex flex-col items-center gap-1 w-[20%] text-gray-500 hover:text-white hover:-translate-y-1 transition-transform cursor-pointer">
             <i class="fas fa-user-circle text-lg md:text-xl"></i>
             <span class="text-[8px] md:text-[9px] font-bold tracking-widest uppercase mt-0.5">Profil</span>
@@ -581,7 +559,7 @@
 
     <!-- ================= JAVASCRIPT ================= -->
     <script>
-        const BACKEND_URL = "https://alpha-backend-server.onrender.com"; // Adjust if needed
+        const BACKEND_URL = "https://alpha-backend-server.onrender.com"; 
         let playerSession = null;
         let balanceInterval = null;
         let currentProfileTab = 'bets';
@@ -670,24 +648,49 @@
             track.innerHTML = tickerHTML;
         }
 
-        // --- 2. Swiper & Dynamic Games (Magic!) ---
+        // --- 2. Swiper & Dynamic Games (Magic with Sniper Algorithm!) ---
         async function loadDynamicSwiper() {
             try {
                 const response = await fetch(`${BACKEND_URL}/api/get-providers`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ provider_code: 'PRAGMATIC' })
                 });
                 const data = await response.json();
                 let gamesArray = data.games || data.data || [];
                 
                 if (gamesArray.length > 0) {
-                    const topGames = gamesArray.slice(0, 8);
+                    // قائمة الألعاب الذهبية المطلوبة بدقة
+                    const targetGames = [
+                        "Gates of Olympus", "Sweet Bonanza", "Sugar Rush", 
+                        "The Dog House Megaways", "Big Bass Bonanza", 
+                        "Starlight Princess", "Madame Destiny Megaways", "5 Lions Megaways"
+                    ];
+
+                    let topGames = [];
+                    
+                    // البحث في المصفوفة الأصلية عن الأسماء المحددة
+                    targetGames.forEach(target => {
+                        const found = gamesArray.find(g => {
+                            const name = (g.game_name || g.name || "").toLowerCase();
+                            return name.includes(target.toLowerCase());
+                        });
+                        if(found) topGames.push(found);
+                    });
+
+                    // إذا لم نجد كل الألعاب (لأي سبب)، نكمل القائمة لتصل إلى 8
+                    if(topGames.length < 8) {
+                        const remaining = gamesArray.filter(g => !topGames.includes(g));
+                        topGames = [...topGames, ...remaining].slice(0, 8);
+                    }
+                    
                     const wrapper = document.getElementById('dynamic-swiper-wrapper');
                     
                     wrapper.innerHTML = topGames.map(g => {
                         const title = g.game_name || g.name || "Game";
                         const img = g.banner || g.image || g.thumb || "https://placehold.co/400x600/180A2B/FFF?text=Game";
                         const code = g.game_code || g.id;
+                        
                         return `
                         <div class="swiper-slide relative group shadow-[0_0_20px_rgba(0,0,0,0.8)] border border-white/10 rounded-2xl overflow-hidden cursor-pointer" onclick="playCasinoGame('PRAGMATIC', '${code}')">
                             <div class="absolute inset-0 bg-cover bg-center animate-bg-pan" style="background-image: url('${img}');"></div>
@@ -699,7 +702,8 @@
                                     <i class="fas fa-play"></i> Jouer
                                 </button>
                             </div>
-                        </div>`;
+                        </div>
+                        `;
                     }).join('');
 
                     window.swiperInstance = new Swiper(".mySwiper", {
@@ -709,7 +713,9 @@
                         pagination: { el: ".swiper-pagination", clickable: true },
                     });
                 }
-            } catch (error) { console.error("Swiper Error:", error); }
+            } catch (error) {
+                console.error("Swiper Loading Error:", error);
+            }
         }
 
         // --- 3. Core Routing ---
@@ -739,18 +745,15 @@
             }
             switchSection('profile');
             
-            // Set User Info
             document.getElementById('profile-page-username').innerText = playerSession.username;
             document.getElementById('profile-page-balance').innerText = parseFloat(playerSession.balance || 0).toFixed(2);
             
-            // Load default tab
             loadProfileHistory('bets');
         }
 
         function loadProfileHistory(type, btnElement = null) {
             currentProfileTab = type;
             
-            // Update Buttons Styling
             document.querySelectorAll('.prof-tab-btn').forEach(btn => {
                 btn.className = "prof-tab-btn text-left px-4 py-3.5 rounded-xl text-sm font-bold text-gray-400 border border-transparent hover:border-white/10 hover:bg-white/5 transition-colors cursor-pointer";
             });
@@ -758,7 +761,6 @@
             if (btnElement) {
                 btnElement.className = "prof-tab-btn active text-left px-4 py-3.5 rounded-xl text-sm font-bold bg-q-cyan/10 text-q-cyan border border-q-cyan/50 transition-colors shadow-inner cursor-pointer";
             } else {
-                // Find button by type if called programmatically
                 const buttons = document.querySelectorAll('.prof-tab-btn');
                 for (let btn of buttons) {
                     if (btn.innerText.toLowerCase().includes(type === 'bets' ? 'paris' : type === 'casino' ? 'casino' : 'dépôts')) {
@@ -825,7 +827,7 @@
                 });
                 if(res.ok) {
                     const tickets = await res.json();
-                    const bets = tickets.filter(t => t.type !== 'deposit'); // exclude deposits
+                    const bets = tickets.filter(t => t.type !== 'deposit');
                     
                     if(bets.length === 0) {
                         contentEl.innerHTML = '<div class="text-center py-8 text-gray-500 bg-black/30 rounded-xl border border-white/5">Aucun pari sportif trouvé.</div>';
@@ -950,7 +952,6 @@
 
             if (!balanceInterval) balanceInterval = setInterval(refreshPlayerBalance, 4000);
             
-            // If viewing profile page, update names there too
             const profilePageName = document.getElementById('profile-page-username');
             if(profilePageName) profilePageName.innerText = playerSession.username;
             const profilePageBalance = document.getElementById('profile-page-balance');
@@ -981,11 +982,9 @@
                         playerSession.balance = currentMe.balance;
                         localStorage.setItem('alpha_player_session', JSON.stringify(playerSession));
                         
-                        // Update Top Header
                         const balVal = document.getElementById('player-balance-val');
                         if (balVal) balVal.innerText = `${parseFloat(playerSession.balance).toFixed(2)}`;
                         
-                        // Update Profile Page Balance
                         const profBal = document.getElementById('profile-page-balance');
                         if (profBal) profBal.innerText = `${parseFloat(playerSession.balance).toFixed(2)}`;
                     }
@@ -1062,6 +1061,45 @@
                     if (codeInput) codeInput.value = "";
                 } else showNotification("Erreur serveur", "error");
             } catch (error) { showNotification("Erreur de connexion", "error"); }
+        }
+        async function submitWithdraw() {
+            if (!playerSession) return showNotification("Veuillez vous connecter d'abord", "error");
+            
+            const amountInput = document.getElementById('withdraw-amount');
+            const accountInput = document.getElementById('withdraw-account');
+            const amount = parseFloat(amountInput.value);
+            const accountInfo = accountInput.value.strip();
+            
+            if (isNaN(amount) || amount <= 0) return showNotification("Montant invalide", "error");
+            if (!accountInfo) return showNotification("Entrez votre numéro D17 ou adresse USDT", "error");
+            
+            if (amount > parseFloat(playerSession.balance || 0)) {
+                return showNotification("Solde insuffisant!", "error");
+            }
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/admin/request-transaction`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                    body: new URLSearchParams({
+                        target_username: playerSession.username,
+                        action: 'withdraw_request',
+                        amount: amount,
+                        tx_id: `WITHDRAW-${Date.now()}-${accountInfo}`
+                    })
+                });
+
+                if (response.ok) {
+                    showNotification("Demande de retrait envoyée!", "success");
+                    toggleCashier();
+                    amountInput.value = "";
+                    accountInput.value = "";
+                } else {
+                    showNotification("Erreur lors de la demande", "error");
+                }
+            } catch (error) {
+                showNotification("Erreur de connexion", "error");
+            }
         }
 
         // --- 7. Game Launching (Casino, Sports, Virtuals) ---
