@@ -1617,6 +1617,46 @@
                 slider.scrollLeft = scrollLeft - walk;
             });
         }
+        async function openLiveCasino() {
+            switchSection('live-casino');
+            loadLiveGamesData();
+        }
+
+        async function loadLiveGamesData() {
+            const container = document.getElementById('live-games-grid');
+            if (!container) return;
+
+            container.innerHTML = '<div class="col-span-full text-center text-q-purple py-10 animate-pulse">Chargement Live... ⏳</div>';
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ provider_code: 'PRAGMATIC_LIVE' })
+                });
+                const data = await res.json();
+                let games = data.games || data.data || [];
+                
+                if(games.length > 0) {
+                    container.innerHTML = games.slice(0, 30).map(g => {
+                        const img = g.banner || g.image || g.thumb || "https://placehold.co/400x400/180A2B/FFF";
+                        return `
+                        <div onclick="playCasinoGame('PRAGMATIC_LIVE', '${g.game_code || g.id}')" class="bg-black/50 rounded-xl overflow-hidden border border-white/5 group cursor-pointer shadow-lg hover:border-q-purple transition-all flex flex-col h-full">
+                            <div class="relative w-full aspect-square overflow-hidden">
+                                <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                <div class="absolute top-0 right-0 bg-red-600 text-white text-[8px] font-black px-2 py-0.5 rounded-bl-lg animate-pulse z-10">LIVE</div>
+                                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                                    <span class="bg-q-purple text-white text-[10px] font-bold px-4 py-2 rounded-full">REJOINDRE</span>
+                                </div>
+                            </div>
+                            <div class="p-2 flex justify-between items-center bg-q-panel border-t border-white/5 flex-grow">
+                                <span class="text-white text-[10px] font-bold truncate pr-1 group-hover:text-q-purple">${g.game_name || g.name}</span>
+                            </div>
+                        </div>`;
+                    }).join('');
+                } else {
+                    container.innerHTML = '<div class="col-span-full text-center text-gray-500 py-10">Aucune table live disponible.</div>';
+                }
+            } catch (e) { container.innerHTML = '<div class="col-span-full text-red-500 text-center">Erreur de connexion Live</div>'; }
+        }
     </script>
 </body>
 </html>
