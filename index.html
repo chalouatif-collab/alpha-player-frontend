@@ -35,7 +35,8 @@
                         body: ['Poppins', 'sans-serif'],
                     },
                     colors: {
-                        q: { bg: '#02000a', panel: '#090518', cyan: '#00f2fe', magenta: '#fe0979', gold: '#f9d423', purple: '#8a2be2' }
+                        q: { bg: '#02000a', panel: '#090518', cyan: '#00f2fe', magenta: '#fe0979', gold: '#f9d423', purple: '#8a2be2' },
+                        asbet: { dark: '#0B001A', card: '#180A2B', primary: '#00f2fe', secondary: '#fe0979', accent: '#f9d423' }
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
@@ -65,8 +66,17 @@
         .hide-scroll::-webkit-scrollbar { display: none; }
         .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .cyber-grid { position: fixed; bottom: 0; left: -50%; width: 200%; height: 60vh; background-image: linear-gradient(rgba(0, 242, 254, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(254, 9, 121, 0.15) 1px, transparent 1px); background-size: 50px 50px; transform: perspective(600px) rotateX(70deg); animation: grid-move 5s linear infinite; z-index: -2; -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%); mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%); }
+        .cyber-grid {
+            position: fixed; bottom: 0; left: -50%; width: 200%; height: 60vh;
+            background-image: linear-gradient(rgba(0, 242, 254, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(254, 9, 121, 0.15) 1px, transparent 1px);
+            background-size: 50px 50px; transform: perspective(600px) rotateX(70deg);
+            animation: grid-move 5s linear infinite; z-index: -2;
+            -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
+            mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
+        }
+
         #tsparticles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+
         .cursor-dot, .cursor-outline { position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 9999; pointer-events: none; }
         .cursor-dot { width: 8px; height: 8px; background-color: #00f2fe; box-shadow: 0 0 10px #00f2fe; }
         .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(0, 242, 254, 0.5); transition: width 0.2s, height 0.2s; }
@@ -100,16 +110,52 @@
         .swiper-slide-content { position: relative; z-index: 10; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; }
         @media (min-width: 768px) { .swiper-slide { width: 300px; height: 400px; } }
 
-        .prof-tab-btn.active { background: rgba(0, 242, 254, 0.15); border-color: rgba(0, 242, 254, 0.5); color: #00f2fe; }
+        /* Profile Tabs */
+        .prof-tab-btn.active {
+            background: rgba(0, 242, 254, 0.15);
+            border-color: rgba(0, 242, 254, 0.5);
+            color: #00f2fe;
+        }
 
-        /* Jackpot Glow Styles */
-        @keyframes border-glow-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .about-to-drop { animation: pulse-glow 0.4s infinite ease-in-out !important; border-color: #ff0000 !important; }
+        /* القائمة الجانبية الذكية (المحدثة والمصغرة) */
+        .sidebar-btn { 
+            width: 48px; /* عرض ثابت ليكون دائرة */
+            height: 48px; /* طول ثابت */
+            border-radius: 24px;
+            white-space: nowrap; 
+            overflow: hidden; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            display: flex; 
+            align-items: center; 
+            justify-content: flex-start;
+            padding-left: 12px; /* مسافة لضبط الأيقونة في المنتصف */
+        }
+        .sidebar-btn:hover { 
+            width: 180px; /* يتمدد عند مرور الفأرة فقط */
+            z-index: 50; 
+            background: rgba(0, 242, 254, 0.1); 
+            border-color: rgba(0, 242, 254, 0.5); 
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+        }
+        .sidebar-icon {
+            width: 24px; /* تثبيت حجم الأيقونة كي لا يتحرك النص */
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .sidebar-text { 
+            opacity: 0; 
+            transform: translateX(-15px); 
+            transition: all 0.3s ease; 
+            margin-left: 12px;
+        }
+        .sidebar-btn:hover .sidebar-text { 
+            opacity: 1; 
+            transform: translateX(0); 
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <!-- Toast Notifications -->
     <div id="toast-container" class="fixed top-5 right-5 z-[100] flex flex-col gap-2 w-full max-w-sm px-4"></div>
 
     <!-- Preloader -->
@@ -124,11 +170,11 @@
 
     <div class="cursor-dot hidden lg:block"></div>
     <div class="cursor-outline hidden lg:block"></div>
+
     <div class="cyber-grid"></div>
     <div id="tsparticles"></div>
 
     <!-- ================= Modals ================= -->
-    <!-- Login Modal -->
     <div id="player-login-modal" class="fixed inset-0 z-[200] bg-black/80 hidden items-center justify-center p-4 backdrop-blur-md">
         <div class="w-full max-w-md bg-q-panel border border-q-cyan/50 rounded-3xl p-8 shadow-[0_0_30px_rgba(0,242,254,0.3)] relative">
             <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl cursor-pointer">&times;</button>
@@ -143,7 +189,6 @@
         </div>
     </div>
 
-    <!-- Register Modal -->
     <div id="register-modal" class="fixed inset-0 z-[200] bg-black/80 hidden items-center justify-center p-4 backdrop-blur-md">
         <div class="w-full max-w-md bg-q-panel border border-q-magenta/50 rounded-3xl p-8 shadow-[0_0_30px_rgba(254,9,121,0.3)] relative">
             <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl cursor-pointer">&times;</button>
@@ -156,11 +201,10 @@
         </div>
     </div>
 
-    <!-- Cashier Modal -->
     <div id="cashier-modal" class="fixed inset-0 z-[200] hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-q-panel border border-q-gold/50 rounded-3xl w-full max-w-md p-6 relative shadow-[0_0_30px_rgba(249,212,35,0.2)]">
             <button onclick="toggleCashier()" class="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-3xl cursor-pointer">&times;</button>
-            <h2 class="text-xl font-display font-black text-white mb-6 flex items-center gap-2">💳 Caisse</h2>
+            <h2 class="text-xl font-display font-black text-white mb-6 flex items-center gap-2">💳 Caisse Quantum</h2>
             <div class="flex gap-2 mb-6 bg-black/50 p-1 rounded-xl border border-white/5">
                 <button onclick="switchCashierTab('deposit')" id="tab-deposit" class="flex-1 bg-q-cyan text-black font-bold py-2 rounded-lg text-xs transition-all shadow-md cursor-pointer">Dépôt</button>
                 <button onclick="switchCashierTab('withdraw'); syncBalance();" id="tab-withdraw" class="flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all cursor-pointer">Retrait</button>
@@ -169,10 +213,18 @@
             <div id="deposit-section" class="space-y-4">
                 <label class="text-xs text-gray-400 font-bold">Choisissez la méthode:</label>
                 <div id="payment-methods-grid" class="grid grid-cols-2 gap-3">
-                    <button onclick="showForm('form-d17')" class="bg-black/50 border border-white/10 hover:border-q-cyan p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer"><span class="text-2xl">📱</span><span class="text-[10px] font-bold text-white">D17 / Flouci</span></button>
-                    <button onclick="showForm('form-usdt')" class="bg-black/50 border border-white/10 hover:border-q-gold p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer"><span class="text-2xl text-q-gold">💎</span><span class="text-[10px] font-bold text-white">USDT</span></button>
-                    <button onclick="showForm('form-ooredoo')" class="bg-black/50 border border-white/10 hover:border-[#ED0000] p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer"><span class="text-2xl text-[#ED0000] font-black">Ooredoo</span><span class="text-[10px] font-bold text-white">Recharge</span></button>
-                    <button onclick="showForm('form-orange')" class="bg-black/50 border border-white/10 hover:border-[#FF7900] p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer"><span class="text-2xl text-[#FF7900] font-black">Orange</span><span class="text-[10px] font-bold text-white">Recharge</span></button>
+                    <button onclick="showForm('form-d17')" class="bg-black/50 border border-white/10 hover:border-q-cyan p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
+                        <span class="text-2xl">📱</span><span class="text-[10px] font-bold text-white">D17 / Flouci</span>
+                    </button>
+                    <button onclick="showForm('form-usdt')" class="bg-black/50 border border-white/10 hover:border-q-gold p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
+                        <span class="text-2xl text-q-gold">💎</span><span class="text-[10px] font-bold text-white">USDT</span>
+                    </button>
+                    <button onclick="showForm('form-ooredoo')" class="bg-black/50 border border-white/10 hover:border-[#ED0000] p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
+                        <span class="text-2xl text-[#ED0000] font-black">Ooredoo</span><span class="text-[10px] font-bold text-white">Recharge</span>
+                    </button>
+                    <button onclick="showForm('form-orange')" class="bg-black/50 border border-white/10 hover:border-[#FF7900] p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
+                        <span class="text-2xl text-[#FF7900] font-black">Orange</span><span class="text-[10px] font-bold text-white">Recharge</span>
+                    </button>
                 </div>
                 
                 <div id="form-d17" class="hidden space-y-3 mt-4">
@@ -243,37 +295,6 @@
         </div>
     </div>
 
-    <!-- Terms Modal -->
-    <div id="terms-modal" class="fixed inset-0 z-[200] bg-black/80 hidden items-center justify-center p-4 backdrop-blur-md">
-        <div class="w-full max-w-2xl bg-q-panel border border-white/20 rounded-3xl p-6 md:p-8 shadow-2xl relative flex flex-col max-h-[80vh]">
-            <button onclick="closeTermsModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl cursor-pointer">&times;</button>
-            <h2 class="text-white text-xl md:text-2xl font-black mb-4">📜 Termes et Conditions</h2>
-            <div class="overflow-y-auto pr-2 space-y-4 text-gray-300 text-xs md:text-sm leading-relaxed hide-scroll">
-                <p><strong>1. Acceptation des conditions :</strong> En utilisant Alphabet216, vous acceptez d'être lié par ces termes et conditions générales.</p>
-                <p><strong>2. Âge légal :</strong> Vous devez avoir au moins 18 ans pour ouvrir un compte et participer à nos jeux.</p>
-                <p><strong>3. Responsabilité du compte :</strong> Vous êtes seul responsable de la sécurité de vos identifiants.</p>
-                <p><strong>4. Limites de gain :</strong> Le gain mensuel maximum autorisé sur la plateforme est fixé à 30 000 TND.</p>
-                <p><strong>5. Dépôts et Retraits :</strong> Les transactions doivent être effectuées via les méthodes approuvées.</p>
-            </div>
-            <button onclick="closeTermsModal()" class="w-full btn-glass active text-white font-black py-3 rounded-xl uppercase mt-6 cursor-pointer">J'ai compris</button>
-        </div>
-    </div>
-
-    <!-- Responsible Gaming Modal -->
-    <div id="responsible-modal" class="fixed inset-0 z-[200] bg-black/80 hidden items-center justify-center p-4 backdrop-blur-md">
-        <div class="w-full max-w-2xl bg-q-panel border border-green-500/50 rounded-3xl p-6 md:p-8 shadow-2xl relative flex flex-col max-h-[80vh]">
-            <button onclick="closeResponsibleModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl cursor-pointer">&times;</button>
-            <h2 class="text-green-400 text-xl md:text-2xl font-black mb-4">🛡️ Jeu Responsable</h2>
-            <div class="overflow-y-auto pr-2 space-y-4 text-gray-300 text-xs md:text-sm leading-relaxed hide-scroll">
-                <p>Chez Alphabet216, nous voulons que votre expérience de jeu reste un divertissement amusant, sûr et maîtrisé.</p>
-                <p><strong>1. Jouez pour le plaisir :</strong> Le jeu doit rester un loisir.</p>
-                <p><strong>2. Fixez des limites :</strong> Ne jouez qu'avec l'argent que vous pouvez vous permettre de perdre.</p>
-                <p><strong>3. Ne poursuivez pas vos pertes :</strong> N'essayez pas de récupérer votre argent de manière impulsive.</p>
-            </div>
-            <button onclick="closeResponsibleModal()" class="w-full bg-green-600 hover:bg-green-500 text-white font-black py-3 rounded-xl uppercase mt-6 cursor-pointer">D'accord</button>
-        </div>
-    </div>
-
     <!-- Iframes Containers -->
     <div id="casino-iframe-container" class="fixed inset-0 z-[200] bg-black hidden flex-col">
         <button onclick="closeCasinoGame()" class="absolute top-4 right-4 z-[210] bg-q-magenta text-white w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold shadow-[0_0_15px_rgba(254,9,121,0.8)] cursor-pointer">✖</button>
@@ -302,6 +323,7 @@
     <!-- ================= Header (Dynamic Island) ================= -->
     <div class="fixed top-4 md:top-6 left-1/2 transform -translate-x-1/2 z-[100] w-[95%] md:w-auto transition-all duration-500">
         <div class="glass-card rounded-full px-3 md:px-8 py-2 md:py-3 flex items-center justify-between gap-3 md:gap-10 mx-auto shadow-[0_10px_30px_rgba(0,0,0,0.8)] border border-white/10">
+            <!-- Logo -->
             <div class="flex items-center gap-2 md:gap-3 cursor-pointer group" onclick="switchSection('accueil')">
                 <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-q-cyan/20 border border-q-cyan/50 flex items-center justify-center animate-pulse group-hover:bg-q-cyan/40 group-hover:rotate-180 transition-all duration-700">
                     <i class="fas fa-atom text-q-cyan text-sm md:text-lg"></i>
@@ -311,6 +333,7 @@
                 </h1>
             </div>
 
+            <!-- Desktop Menu -->
             <div class="hidden lg:flex items-center gap-2">
                 <button onclick="switchSection('accueil')" id="btn-menu-accueil" class="btn-glass active px-5 py-2 rounded-full text-xs font-semibold tracking-wider cursor-pointer"><i class="fas fa-home mr-2 text-q-cyan"></i>Accueil</button>
                 <button onclick="openSportsbook()" id="btn-menu-sport" class="btn-glass px-5 py-2 rounded-full text-xs font-semibold tracking-wider text-gray-300 hover:text-white cursor-pointer"><i class="fas fa-futbol mr-2 text-green-400"></i>Sports</button>
@@ -318,6 +341,7 @@
                 <button onclick="switchSection('virtuals'); initVirtualsLobby();" id="btn-menu-virtuals" class="btn-glass px-5 py-2 rounded-full text-xs font-semibold tracking-wider text-gray-300 hover:text-white cursor-pointer"><i class="fas fa-gamepad mr-2 text-q-gold"></i>Virtuels</button>
             </div>
 
+            <!-- Auth / Profile -->
             <div class="flex items-center gap-2 md:gap-3">
                 <div id="auth-buttons-container" class="flex items-center gap-1.5">
                     <button onclick="openLoginModal()" class="btn-glass px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wide cursor-pointer text-q-cyan border-q-cyan/50 hover:bg-q-cyan/20">Login</button>
@@ -347,24 +371,29 @@
         </div>
     </div>
 
-    <!-- Expandable Sidebar (Desktop) -->
-    <aside class="fixed left-6 top-1/2 transform -translate-y-1/2 z-40 hidden xl:flex flex-col gap-3">
-        <button onclick="switchSection('casino'); initCasinoLobby();" class="sidebar-btn btn-glass h-12 rounded-full text-gray-400 group pl-3.5 cursor-pointer">
-            <i class="fas fa-gamepad text-lg group-hover:text-q-cyan transition-all min-w-[24px]"></i>
-            <span class="sidebar-text font-display font-bold text-sm tracking-widest ml-3 uppercase text-white">Casino</span>
+   <!-- Expandable Sidebar (Desktop) -->
+    <aside class="fixed left-4 top-1/2 transform -translate-y-1/2 z-50 hidden xl:flex flex-col gap-4">
+        
+        <button onclick="switchSection('casino'); initCasinoLobby();" class="sidebar-btn btn-glass text-gray-400 group cursor-pointer">
+            <div class="sidebar-icon"><i class="fas fa-gamepad text-lg group-hover:text-q-cyan transition-colors"></i></div>
+            <span class="sidebar-text font-display font-bold text-sm tracking-widest uppercase text-white">Casino</span>
         </button>
-        <button onclick="switchSection('live-casino'); openLiveCasino();" class="sidebar-btn btn-glass h-12 rounded-full text-gray-400 group pl-3.5 cursor-pointer">
-            <i class="fas fa-video text-lg group-hover:text-q-purple transition-all min-w-[24px]"></i>
-            <span class="sidebar-text font-display font-bold text-sm tracking-widest ml-3 uppercase text-white">Live Casino</span>
+        
+        <button onclick="switchSection('live-casino'); openLiveCasino();" class="sidebar-btn btn-glass text-gray-400 group cursor-pointer">
+            <div class="sidebar-icon"><i class="fas fa-video text-lg group-hover:text-q-purple transition-colors"></i></div>
+            <span class="sidebar-text font-display font-bold text-sm tracking-widest uppercase text-white">Live Casino</span>
         </button>
-        <button onclick="openSportsbook()" class="sidebar-btn btn-glass h-12 rounded-full text-gray-400 group pl-3.5 cursor-pointer">
-            <i class="fas fa-futbol text-lg group-hover:text-green-400 transition-all min-w-[24px]"></i>
-            <span class="sidebar-text font-display font-bold text-sm tracking-widest ml-3 uppercase text-white">Sports</span>
+        
+        <button onclick="openSportsbook()" class="sidebar-btn btn-glass text-gray-400 group cursor-pointer">
+            <div class="sidebar-icon"><i class="fas fa-futbol text-lg group-hover:text-green-400 transition-colors"></i></div>
+            <span class="sidebar-text font-display font-bold text-sm tracking-widest uppercase text-white">Sports</span>
         </button>
-        <button onclick="switchSection('virtuals'); initVirtualsLobby();" class="sidebar-btn btn-glass h-12 rounded-full text-gray-400 group pl-3.5 cursor-pointer">
-            <i class="fas fa-rocket text-lg group-hover:text-q-gold transition-all min-w-[24px]"></i>
-            <span class="sidebar-text font-display font-bold text-sm tracking-widest ml-3 uppercase text-white">Virtuels</span>
+        
+        <button onclick="switchSection('virtuals'); initVirtualsLobby();" class="sidebar-btn btn-glass text-gray-400 group cursor-pointer">
+            <div class="sidebar-icon"><i class="fas fa-rocket text-lg group-hover:text-q-gold transition-colors"></i></div>
+            <span class="sidebar-text font-display font-bold text-sm tracking-widest uppercase text-white">Virtuels</span>
         </button>
+
     </aside>
 
     <!-- ================= Main Content Area ================= -->
@@ -383,25 +412,6 @@
                 <p class="text-gray-400 font-light mt-3 md:mt-4 max-w-lg text-[11px] md:text-sm mx-auto md:mx-0 border-l-2 border-q-cyan pl-3 md:pl-4 bg-gradient-to-r from-q-cyan/10 to-transparent py-1.5 md:py-2">
                     Le casino le plus avancé en Tunisie. Des retraits instantanés et des jeux certifiés.
                 </p>
-            </div>
-
-            <!-- ================= LIVE JACKPOTS (Added from Source) ================= -->
-            <div class="grid grid-cols-3 gap-2 md:gap-4 mb-8">
-                <!-- Mega -->
-                <div id="mega-wrapper" class="glass-card rounded-2xl p-4 text-center border border-q-gold/50 shadow-[0_0_15px_rgba(249,212,35,0.2)] animate-pulse">
-                    <span class="text-q-gold text-[10px] md:text-xs font-black uppercase mb-1 drop-shadow-[0_0_8px_rgba(249,212,35,0.8)]">Mega 🥇</span>
-                    <div class="text-white font-mono font-black text-sm md:text-xl tracking-wider" id="jackpot-mega">124,567.89</div>
-                </div>
-                <!-- Major -->
-                <div id="major-wrapper" class="glass-card rounded-2xl p-4 text-center border border-gray-400/50 shadow-[0_0_15px_rgba(229,231,235,0.1)]">
-                    <span class="text-gray-200 text-[10px] md:text-xs font-black uppercase mb-1 drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]">Major 🥈</span>
-                    <div class="text-white font-mono font-black text-sm md:text-xl tracking-wider" id="jackpot-major">14,230.50</div>
-                </div>
-                <!-- Mini -->
-                <div id="mini-wrapper" class="glass-card rounded-2xl p-4 text-center border border-red-500/50 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
-                    <span class="text-red-500 text-[10px] md:text-xs font-black uppercase mb-1 drop-shadow-[0_0_8px_rgba(239,68,68,0.9)]">Mini 🥉</span>
-                    <div class="text-white font-mono font-black text-sm md:text-xl tracking-wider" id="jackpot-mini">1,850.25</div>
-                </div>
             </div>
 
             <!-- Vouchers (Mobile: Horizontal Swipe / Desktop: Grid) -->
@@ -469,7 +479,7 @@
 
         </div> <!-- END PANE ACCUEIL -->
 
-        <!-- ================= PANE: PROFIL (The Dashboard) ================= -->
+        <!-- ================= PANE: PROFIL (The New Dashboard!) ================= -->
         <div id="pane-profile" class="player-view-section hidden w-full">
             <div class="flex flex-col md:flex-row gap-6">
                 <!-- User Card Sidebar -->
@@ -552,27 +562,6 @@
         
     </main>
 
-    <!-- ================= FOOTER (Added from Source) ================= -->
-    <div class="w-full mt-8 p-5 bg-q-panel rounded-t-3xl border-t border-white/5 shadow-[0_-10px_30px_rgba(0,0,0,0.5)] relative z-10">
-        <div class="mb-4">
-            <h4 class="text-gray-400 text-[10px] font-bold uppercase mb-3 text-center tracking-widest">Méthodes de Paiement</h4>
-            <div class="flex flex-wrap justify-center gap-2">
-                <div class="w-14 h-8 bg-[#000000] border border-white/20 rounded-md flex items-center justify-center text-[10px] font-bold text-white">D17</div>
-                <div class="w-14 h-8 bg-[#E3000F] rounded-md flex items-center justify-center text-[10px] font-bold text-white">Ooredoo</div>
-                <div class="w-14 h-8 bg-[#FF6600] rounded-md flex items-center justify-center text-[10px] font-bold text-white">Orange</div>
-            </div>
-        </div>
-        <div class="grid grid-cols-2 gap-4 mb-4 text-center border-t border-b border-white/5 py-4">
-            <a href="javascript:void(0)" onclick="openTermsModal()" class="text-gray-400 text-[11px] hover:text-q-cyan transition-colors">Termes et Conditions</a>
-            <a href="javascript:void(0)" onclick="openResponsibleModal()" class="text-gray-400 text-[11px] hover:text-q-cyan transition-colors">Jeu Responsable</a>
-        </div>
-        <div class="text-center text-gray-500 text-[9px] opacity-60">
-            <p>© 2026 Alphabet216. Tous droits réservés.</p>
-            <p class="mt-1 font-light tracking-wide">Gain mensuel maximum : 30 000 TND</p>
-        </div>
-    </div>
-    <div style="height: 80px; width: 100%; display: block; clear: both;"></div>
-
     <!-- Radar Mobile Bottom Bar -->
     <div class="fixed bottom-0 left-0 right-0 h-[70px] bg-q-panel/95 backdrop-blur-2xl border-t border-q-cyan/20 lg:hidden z-50 flex items-center justify-around px-2 pb-1 rounded-t-[2rem] shadow-[0_-15px_30px_rgba(0,242,254,0.1)]">
         <button onclick="switchSection('accueil')" class="flex flex-col items-center gap-1 w-[20%] text-q-cyan hover:-translate-y-1 transition-transform cursor-pointer">
@@ -584,6 +573,7 @@
             <span class="text-[8px] md:text-[9px] font-bold tracking-widest uppercase mt-0.5">Sports</span>
         </button>
         
+        <!-- Center Play Button (Casino) -->
         <div class="relative -top-6 md:-top-8 w-[20%] flex justify-center group cursor-pointer" onclick="switchSection('casino'); initCasinoLobby();">
             <div class="absolute inset-0 rounded-full border-2 border-q-magenta animate-radar pointer-events-none"></div>
             <div class="absolute inset-0 rounded-full border-2 border-q-cyan animate-radar pointer-events-none" style="animation-delay: 1s;"></div>
@@ -610,14 +600,6 @@
         let balanceInterval = null;
         let currentProfileTab = 'bets';
 
-        // Variables from Original Code
-        let currentLangCode = "fr";
-        let comboTicketMatchesList = [];
-        let currentGlobalMatches = [];
-        const dictionary_translations = {
-            fr: { ticket_empty: "Aucun match sélectionné", ticket_success: "Pari combos validé avec succès !", cashout_success: "Cash Out effectué avec succès !" }
-        };
-
         // --- 1. UI Initialization & Quantum Effects ---
         window.addEventListener('load', () => {
             setTimeout(() => {
@@ -639,54 +621,7 @@
             
             generateLiveWinnersTicker();
             loadDynamicSwiper();
-            startJackpots(); // Added from old code
         });
-
-        // Jackpot Logic (Added from Source)
-        function startJackpots() {
-            setInterval(() => {
-                const now = new Date();
-                let miniProgress = (now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds()) / 86400;
-
-                let megaVal = (((now.getDate() - 1) * 86400 + (now.getHours() * 3600)) / 2592000 * 1000);
-                let majorVal = ((((now.getDay() === 0 ? 7 : now.getDay()) - 1) * 86400 + (now.getHours() * 3600 + now.getMinutes() * 60)) / 604800 * 350);
-                let miniVal = (miniProgress * 120);
-
-                const m = document.getElementById('jackpot-mega');
-                if (m) m.innerText = megaVal.toFixed(2);
-                const maj = document.getElementById('jackpot-major');
-                if (maj) maj.innerText = majorVal.toFixed(2);
-                const min = document.getElementById('jackpot-mini');
-                if (min) min.innerText = miniVal.toFixed(2);
-
-                const megaWrapper = document.getElementById('mega-wrapper');
-                if (megaWrapper) {
-                    if (megaVal > 700) { megaWrapper.classList.add('about-to-drop'); } 
-                    else { megaWrapper.classList.remove('about-to-drop'); }
-                }
-            }, 1000);
-        }
-
-        // Ticket Functions (Added from Source - logic only as UI is via API mostly)
-        function getBonusRate(matchCount) {
-            if (matchCount >= 8) return 0.20;
-            if (matchCount >= 5) return 0.10;
-            if (matchCount >= 3) return 0.05;
-            return 0;
-        }
-        let isTicketOpen = false;
-        function toggleTicketSize() { /* Add UI logic later if Sportsbook injects here */ }
-        function closeTicketComplete() { /* Add UI logic later */ }
-        function clearTicket() { comboTicketMatchesList = []; }
-        function selectBetOutcome(outcome, odds, matchName, matchId) {
-            const existing = comboTicketMatchesList.find(item => item.matchId === matchId);
-            if (existing && existing.outcome === outcome) { removeMatchFromCombo(matchId); return; }
-            comboTicketMatchesList = comboTicketMatchesList.filter(item => item.matchId !== matchId);
-            comboTicketMatchesList.push({ matchId, matchName, outcome, odds });
-        }
-        function removeMatchFromCombo(matchId) { comboTicketMatchesList = comboTicketMatchesList.filter(item => item.matchId !== matchId); }
-        function calculatePotentialGain() { /* Ticket logic */ }
-
 
         function startScramble() {
             const targets = document.querySelectorAll('.scramble-target');
@@ -749,6 +684,7 @@
             track.innerHTML = tickerHTML;
         }
 
+        // --- 2. Swiper & Dynamic Games (Magic with Sniper Algorithm!) ---
         async function loadDynamicSwiper() {
             try {
                 const response = await fetch(`${BACKEND_URL}/api/get-providers`, {
@@ -760,6 +696,7 @@
                 let gamesArray = data.games || data.data || [];
                 
                 if (gamesArray.length > 0) {
+                    // قائمة الألعاب الذهبية المطلوبة بدقة
                     const targetGames = [
                         "Gates of Olympus", "Sweet Bonanza", "Sugar Rush", 
                         "The Dog House Megaways", "Big Bass Bonanza", 
@@ -767,6 +704,8 @@
                     ];
 
                     let topGames = [];
+                    
+                    // البحث في المصفوفة الأصلية عن الأسماء المحددة
                     targetGames.forEach(target => {
                         const found = gamesArray.find(g => {
                             const name = (g.game_name || g.name || "").toLowerCase();
@@ -775,6 +714,7 @@
                         if(found) topGames.push(found);
                     });
 
+                    // إذا لم نجد كل الألعاب (لأي سبب)، نكمل القائمة لتصل إلى 8
                     if(topGames.length < 8) {
                         const remaining = gamesArray.filter(g => !topGames.includes(g));
                         topGames = [...topGames, ...remaining].slice(0, 8);
@@ -960,12 +900,7 @@
             }
         }
 
-        // --- 4. Modals Logic (Terms, Resp, Auth) ---
-        function openTermsModal() { document.getElementById('terms-modal').classList.remove('hidden'); document.getElementById('terms-modal').classList.add('flex'); }
-        function closeTermsModal() { document.getElementById('terms-modal').classList.add('hidden'); document.getElementById('terms-modal').classList.remove('flex'); }
-        function openResponsibleModal() { document.getElementById('responsible-modal').classList.remove('hidden'); document.getElementById('responsible-modal').classList.add('flex'); }
-        function closeResponsibleModal() { document.getElementById('responsible-modal').classList.add('hidden'); document.getElementById('responsible-modal').classList.remove('flex'); }
-
+        // --- 4. Modals Logic ---
         function openLoginModal() { document.getElementById('player-login-modal').classList.remove('hidden'); document.getElementById('player-login-modal').classList.add('flex'); }
         function closeLoginModal() { document.getElementById('player-login-modal').classList.add('hidden'); document.getElementById('player-login-modal').classList.remove('flex'); }
         function openRegisterModal() { document.getElementById('register-modal').classList.remove('hidden'); document.getElementById('register-modal').classList.add('flex'); closeLoginModal(); }
@@ -1169,7 +1104,7 @@
             const amountInput = document.getElementById('withdraw-amount');
             const accountInput = document.getElementById('withdraw-account');
             const amount = parseFloat(amountInput.value);
-            const accountInfo = accountInput.value.trim();
+            const accountInfo = accountInput.value.strip();
             
             if (isNaN(amount) || amount <= 0) return showNotification("Montant invalide", "error");
             if (!accountInfo) return showNotification("Entrez votre numéro D17 ou adresse USDT", "error");
