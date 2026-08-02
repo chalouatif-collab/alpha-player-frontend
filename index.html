@@ -777,8 +777,18 @@
             const targetBtn = document.getElementById(`btn-menu-${sectionId}`);
             if(targetBtn) targetBtn.classList.add('active');
 
+            // ⚡ التعديل الذكي: إعادة تحميل بيانات القسم تلقائياً عند فتحة أو عند عمل Refresh
+            if (sectionId === 'casino' && typeof initCasinoLobby === 'function') {
+                initCasinoLobby();
+            } else if (sectionId === 'live-casino' && typeof loadLiveGamesData === 'function') {
+                loadLiveGamesData();
+            } else if (sectionId === 'virtuals' && typeof initVirtualsLobby === 'function') {
+                initVirtualsLobby();
+            }
+
             window.scrollTo(0, 0);
         }
+        
 
         // ================= PROFILE DASHBOARD LOGIC =================
         function openProfile() {
