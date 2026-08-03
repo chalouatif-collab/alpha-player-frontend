@@ -401,7 +401,7 @@
         <!-- PANE: ACCUEIL -->
         <div id="pane-accueil" class="player-view-section block w-full">
             <!-- ================= LIVE WINNERS TICKER (QUANTUM STYLE) ================= -->
-<style>
+            <style>
                 @keyframes scroll-left {
                     0% { transform: translateX(0) translateZ(0); }
                     100% { transform: translateX(-50%) translateZ(0); }
@@ -410,6 +410,7 @@
                     display: inline-flex;
                     white-space: nowrap;
                     animation: scroll-left 50s linear infinite;
+                    /* السحر يبدأ هنا لتسريع الحركة */
                     will-change: transform; 
                     -webkit-backface-visibility: hidden;
                     backface-visibility: hidden;
@@ -661,7 +662,76 @@
         <div id="pane-sport" class="player-view-section hidden w-full min-h-[800px]">
             <div class="text-center text-q-cyan py-10 font-display animate-pulse">Ouverture des sports en cours...</div>
         </div>
-        
+        <!-- ================= FOOTER & LEGAL (TERMS, PAYMENTS, LIMITS) ================= -->
+            <footer class="relative mt-20 bg-q-panel/40 border-t border-white/10 backdrop-blur-xl pt-10 pb-8 rounded-t-3xl shadow-[0_-10px_30px_rgba(0,0,0,0.5)] w-full">
+                <div class="max-w-7xl mx-auto px-4 md:px-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-8">
+                        
+                        <!-- 1. الشروط والأحكام والروابط -->
+                        <div>
+                            <h4 class="text-white font-display font-bold text-lg mb-4 flex items-center gap-2">
+                                <i class="fas fa-gavel text-q-cyan"></i> Légal & Conditions
+                            </h4>
+                            <ul class="space-y-2 text-[11px] md:text-xs text-gray-400">
+                                <li><a href="#" class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Termes et Conditions (T&C)</a></li>
+                                <li><a href="#" class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Politique de Confidentialité</a></li>
+                                <li><a href="#" class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Règles des Paris Sportifs</a></li>
+                                <li><a href="#" class="hover:text-q-cyan hover:pl-2 transition-all duration-300 text-q-gold">Jeu Responsable</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- 2. طرق الدفع المتاحة -->
+                        <div>
+                            <h4 class="text-white font-display font-bold text-lg mb-4 flex items-center gap-2">
+                                <i class="fas fa-wallet text-q-magenta"></i> Méthodes de Paiement
+                            </h4>
+                            <div class="flex flex-wrap gap-2 md:gap-3">
+                                <div class="bg-black/30 border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2 hover:border-gray-400 transition-colors cursor-default">
+                                    <i class="fas fa-mobile-alt text-gray-300"></i> <span class="text-[10px] md:text-xs font-bold text-gray-300">D17</span>
+                                </div>
+                                <div class="bg-black/30 border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2 hover:border-[#26A17B] transition-colors cursor-default">
+                                    <i class="fab fa-bitcoin text-[#26A17B]"></i> <span class="text-[10px] md:text-xs font-bold text-gray-300">USDT</span>
+                                </div>
+                                <div class="bg-black/30 border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2 hover:border-blue-500 transition-colors cursor-default">
+                                    <i class="fas fa-university text-blue-400"></i> <span class="text-[10px] md:text-xs font-bold text-gray-300">Banque</span>
+                                </div>
+                                <div class="bg-black/30 border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2 hover:border-q-gold transition-colors cursor-default">
+                                    <i class="fas fa-money-bill-wave text-q-gold"></i> <span class="text-[10px] md:text-xs font-bold text-gray-300">Cash</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. التنبيه القانوني (الحد الأقصى للربح) -->
+                        <div>
+                            <h4 class="text-white font-display font-bold text-lg mb-4 flex items-center gap-2">
+                                <i class="fas fa-exclamation-triangle text-red-500 animate-pulse"></i> Limite de Gain
+                            </h4>
+                            <div class="bg-red-900/10 border border-red-500/30 rounded-xl p-3 md:p-4 hover:bg-red-900/20 transition-colors">
+                                <p class="text-gray-400 text-[10px] md:text-xs leading-relaxed mb-3">
+                                    Conformément à nos conditions générales, le retrait des gains est soumis à un plafond strict pour garantir l'équité.
+                                </p>
+                                <div class="flex items-center gap-2 bg-black/40 rounded-lg p-2 border border-red-500/20">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></div>
+                                    <span class="text-white font-black text-[11px] md:text-sm">Plafond Mensuel : <span class="text-red-400 text-glow">30,000 TND</span></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <!-- الحقوق وعلامة +18 -->
+                    <div class="border-t border-white/5 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div class="text-gray-500 text-[10px] md:text-xs">
+                            &copy; 2026 Alphabet216. Tous droits réservés.
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-[10px] font-black text-gray-400 border border-gray-600 rounded px-2 py-0.5 opacity-60">18+</span>
+                            <span class="text-[10px] font-bold text-gray-500">Jeu Responsable</span>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- ================= END FOOTER ================= -->
     </main>
 
     <!-- Radar Mobile Bottom Bar -->
@@ -801,6 +871,7 @@
             
             track.innerHTML = tickerHTML;
         }
+        // تشغيل شريط الفائزين فوراً
         generateLiveWinnersTicker();
         // --- 2. Swiper & Dynamic Games (Magic with Sniper Algorithm!) ---
         async function loadDynamicSwiper() {
@@ -1868,8 +1939,32 @@
                 container.innerHTML = '<div class="col-span-full text-red-500 text-center text-sm">Erreur de connexion.</div>';
             }
         }
+
+        // ================= محرك زر العودة للأعلى =================
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+        
+        // مراقبة النزول لإظهار أو إخفاء الزر
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                // إظهار الزر
+                scrollToTopBtn.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+                scrollToTopBtn.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+            } else {
+                // إخفاء الزر
+                scrollToTopBtn.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+                scrollToTopBtn.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+            }
+        });
+
+        // دالة الصعود للأعلى بنعومة
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth' // هذا السحر الذي يجعله يصعد بنعومة وليس فجأة
+            });
+        }
     </script>
-    <!-- ================= SCROLL TO TOP BUTTON (QUANTUM STYLE) ================= -->
+    <!-- ================= SCROLL TO TOP BUTTON  ================= -->
     <button id="scrollToTopBtn" onclick="scrollToTop()" class="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[100] bg-q-panel/80 backdrop-blur-md border border-q-cyan/50 text-q-cyan w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(0,242,254,0.3)] hover:shadow-[0_0_25px_rgba(0,242,254,0.6)] hover:bg-q-cyan hover:text-black transition-all duration-500 translate-y-24 opacity-0 pointer-events-none group">
         <i class="fas fa-arrow-up text-lg md:text-xl group-hover:-translate-y-1 transition-transform duration-300"></i>
     </button>
