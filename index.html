@@ -1201,200 +1201,192 @@
                                 id="profile-page-balance">0.00</span> TND</p>
 
                         <div class="flex gap-2 mt-6 relative z-10">
-                            <div class="flex gap-2 mt-6 relative z-10">
-                                <button onclick="toggleCashier(); switchCashierTab('deposit');"
-                                    class="flex-1 btn-liquid text-white text-xs font-bold py-2.5 rounded-xl uppercase tracking-wider">Dépôt</button>
+                            <button onclick="toggleCashier(); switchCashierTab('deposit');"
+                                class="flex-1 btn-liquid text-white text-xs font-bold py-2.5 rounded-xl uppercase tracking-wider">Dépôt</button>
 
-                                <button onclick="openDirectRetrait()"
-                                    class="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-red-600/20 to-red-500/10 border border-red-500/40 text-red-400 text-xs font-bold uppercase tracking-wider hover:bg-red-500 hover:text-white transition-all duration-300 shadow-[0_0_15px_rgba(239,68,68,0.2)] hover:shadow-[0_0_25px_rgba(239,68,68,0.6)] flex items-center justify-center gap-2 group">
-                                    <i
-                                        class="fas fa-hand-holding-usd text-lg group-hover:scale-110 transition-transform"></i>
-                                    <span>Retrait</span>
-                                </button>
-                            </div>
-                            class="w-full mt-3 bg-red-600/10 border border-red-600/30 text-red-500 text-xs font-bold
-                            py-2.5 rounded-xl hover:bg-red-600 hover:text-white transition-colors uppercase
-                            tracking-wider relative z-10"><i class="fas fa-sign-out-alt mr-2"></i> Déconnexion</button>
+                            <button onclick="openDirectRetrait()"
+                                class="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-red-600/20 to-red-500/10 border border-red-500/40 text-red-400 text-xs font-bold uppercase tracking-wider hover:bg-red-500 hover:text-white transition-all duration-300 shadow-[0_0_15px_rgba(239,68,68,0.2)] hover:shadow-[0_0_25px_rgba(239,68,68,0.6)] flex items-center justify-center gap-2 group">
+                                <i
+                                    class="fas fa-hand-holding-usd text-lg group-hover:scale-110 transition-transform"></i>
+                                <span>Retrait</span>
+                            </button>
                         </div>
-
-                        <!-- Tabs Menu -->
-                        <div class="glass-card rounded-2xl p-4 border border-white/10 flex flex-col gap-2">
-                            <button onclick="loadProfileHistory('bets', this)"
-                                class="prof-tab-btn active text-left px-4 py-3.5 rounded-xl text-sm font-bold bg-q-cyan/10 text-q-cyan border border-q-cyan/50 transition-colors shadow-inner"><i
-                                    class="fas fa-ticket-alt w-6"></i> Mes Paris Sportifs</button>
-                            <button onclick="loadProfileHistory('casino', this)"
-                                class="prof-tab-btn text-left px-4 py-3.5 rounded-xl text-sm font-bold text-gray-400 border border-transparent hover:border-white/10 hover:bg-white/5 transition-colors"><i
-                                    class="fas fa-dice w-6"></i> Historique Casino</button>
-                            <button onclick="loadProfileHistory('transactions', this)"
-                                class="prof-tab-btn text-left px-4 py-3.5 rounded-xl text-sm font-bold text-gray-400 border border-transparent hover:border-white/10 hover:bg-white/5 transition-colors"><i
-                                    class="fas fa-exchange-alt w-6"></i> Dépôts & Retraits</button>
-                        </div>
+                        <button onclick="logoutPlayer()"
+                            class="w-full mt-3 bg-red-600/10 border border-red-600/30 text-red-500 text-xs font-bold py-2.5 rounded-xl hover:bg-red-600 hover:text-white transition-colors uppercase tracking-wider relative z-10"><i
+                                class="fas fa-sign-out-alt mr-2"></i> Déconnexion</button>
                     </div>
 
-                    <!-- Main Content Area -->
-                    <div
-                        class="w-full md:w-2/3 glass-card rounded-2xl p-6 border border-white/10 min-h-[500px] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-                        <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
-                            <h3 class="text-xl md:text-2xl font-display font-bold text-white flex items-center gap-2"
-                                id="profile-history-title">
-                                <i class="fas fa-ticket-alt text-q-cyan"></i> Mes Paris Sportifs
-                            </h3>
-                            <button onclick="loadProfileHistory(currentProfileTab)"
-                                class="text-gray-400 hover:text-white transition-colors"><i
-                                    class="fas fa-sync-alt"></i></button>
-                        </div>
+                    <!-- Tabs Menu -->
+                    <div class="glass-card rounded-2xl p-4 border border-white/10 flex flex-col gap-2">
+                        <button onclick="loadProfileHistory('bets', this)"
+                            class="prof-tab-btn active text-left px-4 py-3.5 rounded-xl text-sm font-bold bg-q-cyan/10 text-q-cyan border border-q-cyan/50 transition-colors shadow-inner"><i
+                                class="fas fa-ticket-alt w-6"></i> Mes Paris Sportifs</button>
+                        <button onclick="loadProfileHistory('casino', this)"
+                            class="prof-tab-btn text-left px-4 py-3.5 rounded-xl text-sm font-bold text-gray-400 border border-transparent hover:border-white/10 hover:bg-white/5 transition-colors"><i
+                                class="fas fa-dice w-6"></i> Historique Casino</button>
+                        <button onclick="loadProfileHistory('transactions', this)"
+                            class="prof-tab-btn text-left px-4 py-3.5 rounded-xl text-sm font-bold text-gray-400 border border-transparent hover:border-white/10 hover:bg-white/5 transition-colors"><i
+                                class="fas fa-exchange-alt w-6"></i> Dépôts & Retraits</button>
+                    </div>
+                </div>
 
-                        <div id="profile-history-content" class="space-y-3">
-                            <div class="text-center py-10 text-gray-500 animate-pulse font-display">Chargement des
-                                données...</div>
-                        </div>
+                <!-- Main Content Area -->
+                <div
+                    class="w-full md:w-2/3 glass-card rounded-2xl p-6 border border-white/10 min-h-[500px] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+                        <h3 class="text-xl md:text-2xl font-display font-bold text-white flex items-center gap-2"
+                            id="profile-history-title">
+                            <i class="fas fa-ticket-alt text-q-cyan"></i> Mes Paris Sportifs
+                        </h3>
+                        <button onclick="loadProfileHistory(currentProfileTab)"
+                            class="text-gray-400 hover:text-white transition-colors"><i
+                                class="fas fa-sync-alt"></i></button>
+                    </div>
+
+                    <div id="profile-history-content" class="space-y-3">
+                        <div class="text-center py-10 text-gray-500 animate-pulse font-display">Chargement des
+                            données...</div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- PANE: CASINO (Standard Grid) -->
-            <div id="pane-casino" class="player-view-section hidden w-full">
-                <div
-                    class="flex flex-col md:flex-row gap-4 bg-q-panel/80 p-4 rounded-xl border border-white/10 mb-4 backdrop-blur-md">
-                    <h2 class="text-white font-display font-black text-xl flex items-center gap-2">
-                        <span class="text-q-magenta">🎰</span> Casino
-                    </h2>
-                    <input type="text" id="game-search-input" onkeyup="filterGames()" placeholder="Chercher un jeu..."
-                        class="w-full bg-black/50 text-white border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-q-cyan transition-colors">
-                </div>
-                <div id="providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4"></div>
-                <div id="games-grid"
-                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4 w-full pb-10">
-                </div>
+        <!-- PANE: CASINO (Standard Grid) -->
+        <div id="pane-casino" class="player-view-section hidden w-full">
+            <div
+                class="flex flex-col md:flex-row gap-4 bg-q-panel/80 p-4 rounded-xl border border-white/10 mb-4 backdrop-blur-md">
+                <h2 class="text-white font-display font-black text-xl flex items-center gap-2">
+                    <span class="text-q-magenta">🎰</span> Casino
+                </h2>
+                <input type="text" id="game-search-input" onkeyup="filterGames()" placeholder="Chercher un jeu..."
+                    class="w-full bg-black/50 text-white border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-q-cyan transition-colors">
             </div>
-
-            <!-- PANE: LIVE CASINO -->
-            <div id="pane-live-casino" class="player-view-section hidden w-full">
-                <div
-                    class="flex items-center justify-between bg-q-panel/80 p-4 rounded-xl border border-white/10 mb-4 backdrop-blur-md">
-                    <h2 class="text-white font-display font-black text-xl flex items-center gap-2">
-                        <span class="animate-pulse text-red-500">🔴</span> Live Casino
-                    </h2>
-                </div>
-                <div id="live-games-grid"
-                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 w-full pb-10">
-                </div>
+            <div id="providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4"></div>
+            <div id="games-grid"
+                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4 w-full pb-10">
             </div>
+        </div>
 
-            <!-- PANE: VIRTUALS -->
-            <div id="pane-virtuals" class="player-view-section hidden w-full">
-                <div
-                    class="flex flex-col md:flex-row gap-4 bg-q-panel/80 p-4 rounded-xl border border-white/10 mb-4 backdrop-blur-md">
-                    <h2 class="text-white font-display font-black text-xl flex items-center gap-2 whitespace-nowrap">
-                        <span class="text-q-gold">🎮</span> Virtuels
-                    </h2>
-                    <input type="text" id="virtual-search-input" onkeyup="filterVirtualGames()"
-                        placeholder="Chercher un jeu virtuel..."
-                        class="w-full bg-black/50 text-white border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-q-gold transition-colors">
-                </div>
-                <div id="virtual-categories-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4"></div>
-                <div id="virtuals-games-grid"
-                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 w-full pb-10">
-                </div>
+        <!-- PANE: LIVE CASINO -->
+        <div id="pane-live-casino" class="player-view-section hidden w-full">
+            <div
+                class="flex items-center justify-between bg-q-panel/80 p-4 rounded-xl border border-white/10 mb-4 backdrop-blur-md">
+                <h2 class="text-white font-display font-black text-xl flex items-center gap-2">
+                    <span class="animate-pulse text-red-500">🔴</span> Live Casino
+                </h2>
             </div>
+            <div id="live-games-grid"
+                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 w-full pb-10"></div>
+        </div>
 
-            <!-- PANE: SPORTS -->
-            <div id="pane-sport" class="player-view-section hidden w-full min-h-[800px]">
-                <div class="text-center text-q-cyan py-10 font-display animate-pulse">Ouverture des sports en cours...
-                </div>
+        <!-- PANE: VIRTUALS -->
+        <div id="pane-virtuals" class="player-view-section hidden w-full">
+            <div
+                class="flex flex-col md:flex-row gap-4 bg-q-panel/80 p-4 rounded-xl border border-white/10 mb-4 backdrop-blur-md">
+                <h2 class="text-white font-display font-black text-xl flex items-center gap-2 whitespace-nowrap">
+                    <span class="text-q-gold">🎮</span> Virtuels
+                </h2>
+                <input type="text" id="virtual-search-input" onkeyup="filterVirtualGames()"
+                    placeholder="Chercher un jeu virtuel..."
+                    class="w-full bg-black/50 text-white border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-q-gold transition-colors">
             </div>
-            <!-- ================= FOOTER & LEGAL (TERMS, PAYMENTS, LIMITS) ================= -->
-            <footer
-                class="relative mt-20 bg-q-panel/40 border-t border-white/10 backdrop-blur-xl pt-10 pb-8 rounded-t-3xl shadow-[0_-10px_30px_rgba(0,0,0,0.5)] w-full">
-                <div class="max-w-7xl mx-auto px-4 md:px-8">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-8">
+            <div id="virtual-categories-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4"></div>
+            <div id="virtuals-games-grid"
+                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 w-full pb-10"></div>
+        </div>
 
-                        <!-- 1. الشروط والأحكام والروابط -->
-                        <div>
-                            <h4 class="text-white font-display font-bold text-lg mb-4 flex items-center gap-2">
-                                <i class="fas fa-gavel text-q-cyan"></i> Légal & Conditions
-                            </h4>
-                            <ul class="space-y-2 text-[11px] md:text-xs text-gray-400">
-                                <li><a href="javascript:void(0)" onclick="openLegalModal('modal-tc')"
-                                        class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Termes et
-                                        Conditions (T&C)</a></li>
-                                <li><a href="javascript:void(0)" onclick="openLegalModal('modal-confidentialite')"
-                                        class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Politique de
-                                        Confidentialité</a></li>
-                                <li><a href="javascript:void(0)" onclick="openLegalModal('modal-regles')"
-                                        class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Règles des
-                                        Paris
-                                        Sportifs</a></li>
-                                <li><a href="javascript:void(0)" onclick="openLegalModal('modal-responsable')"
-                                        class="hover:text-q-cyan hover:pl-2 transition-all duration-300 text-q-gold">Jeu
-                                        Responsable</a></li>
-                            </ul>
-                        </div>
+        <!-- PANE: SPORTS -->
+        <div id="pane-sport" class="player-view-section hidden w-full min-h-[800px]">
+            <div class="text-center text-q-cyan py-10 font-display animate-pulse">Ouverture des sports en cours...</div>
+        </div>
+        <!-- ================= FOOTER & LEGAL (TERMS, PAYMENTS, LIMITS) ================= -->
+        <footer
+            class="relative mt-20 bg-q-panel/40 border-t border-white/10 backdrop-blur-xl pt-10 pb-8 rounded-t-3xl shadow-[0_-10px_30px_rgba(0,0,0,0.5)] w-full">
+            <div class="max-w-7xl mx-auto px-4 md:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-8">
 
-                        <!-- طرق الدفع المتاحة -->
-                        <div>
-                            <h4 class="text-white font-display font-bold text-lg mb-4 flex items-center gap-2">
-                                <i class="fas fa-wallet text-q-magenta"></i> Méthodes de Paiement
-                            </h4>
-                            <div class="flex flex-wrap gap-2 md:gap-3">
-                                <!-- Voucher / Recharge -->
-                                <div
-                                    class="bg-black/30 border border-q-gold/40 px-3 py-1.5 rounded-lg flex items-center gap-2">
-                                    <i class="fas fa-ticket-alt text-q-gold"></i>
-                                    <span class="text-[10px] md:text-xs text-gray-200 font-bold">Coupon / Voucher</span>
-                                </div>
-                                <!-- Crypto / USDT -->
-                                <div
-                                    class="bg-black/30 border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2">
-                                    <i class="fab fa-bitcoin text-[#26A17B]"></i>
-                                    <span class="text-[10px] md:text-xs text-gray-300">USDT / Crypto</span>
-                                </div>
-                                <!-- Perfect Money / USD -->
-                                <div
-                                    class="bg-black/30 border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2">
-                                    <i class="fas fa-dollar-sign text-green-400"></i>
-                                    <span class="text-[10px] md:text-xs text-gray-300">USD Card</span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 3. التنبيه القانوني (الحد الأقصى للربح) -->
-                        <div>
-                            <h4 class="text-white font-display font-bold text-lg mb-4 flex items-center gap-2">
-                                <i class="fas fa-exclamation-triangle text-red-500 animate-pulse"></i> Limite de Gain
-                            </h4>
+                    <!-- 1. الشروط والأحكام والروابط -->
+                    <div>
+                        <h4 class="text-white font-display font-bold text-lg mb-4 flex items-center gap-2">
+                            <i class="fas fa-gavel text-q-cyan"></i> Légal & Conditions
+                        </h4>
+                        <ul class="space-y-2 text-[11px] md:text-xs text-gray-400">
+                            <li><a href="javascript:void(0)" onclick="openLegalModal('modal-tc')"
+                                    class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Termes et
+                                    Conditions (T&C)</a></li>
+                            <li><a href="javascript:void(0)" onclick="openLegalModal('modal-confidentialite')"
+                                    class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Politique de
+                                    Confidentialité</a></li>
+                            <li><a href="javascript:void(0)" onclick="openLegalModal('modal-regles')"
+                                    class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Règles des Paris
+                                    Sportifs</a></li>
+                            <li><a href="javascript:void(0)" onclick="openLegalModal('modal-responsable')"
+                                    class="hover:text-q-cyan hover:pl-2 transition-all duration-300 text-q-gold">Jeu
+                                    Responsable</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- طرق الدفع المتاحة -->
+                    <div>
+                        <h4 class="text-white font-display font-bold text-lg mb-4 flex items-center gap-2">
+                            <i class="fas fa-wallet text-q-magenta"></i> Méthodes de Paiement
+                        </h4>
+                        <div class="flex flex-wrap gap-2 md:gap-3">
+                            <!-- Voucher / Recharge -->
                             <div
-                                class="bg-red-900/10 border border-red-500/30 rounded-xl p-3 md:p-4 hover:bg-red-900/20 transition-colors">
-                                <p class="text-gray-400 text-[10px] md:text-xs leading-relaxed mb-3">
-                                    Conformément à nos conditions générales, le retrait des gains est soumis à un
-                                    plafond
-                                    strict pour garantir l'équité.
-                                </p>
-                                <div
-                                    class="flex items-center gap-2 bg-black/40 rounded-lg p-2 border border-red-500/20">
-                                    <div class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></div>
-                                    <span class="text-white font-black text-[11px] md:text-sm">Plafond Mensuel : <span
-                                            class="text-red-400 text-glow">30,000 TND</span></span>
-                                </div>
+                                class="bg-black/30 border border-q-gold/40 px-3 py-1.5 rounded-lg flex items-center gap-2">
+                                <i class="fas fa-ticket-alt text-q-gold"></i>
+                                <span class="text-[10px] md:text-xs text-gray-200 font-bold">Coupon / Voucher</span>
+                            </div>
+                            <!-- Crypto / USDT -->
+                            <div
+                                class="bg-black/30 border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2">
+                                <i class="fab fa-bitcoin text-[#26A17B]"></i>
+                                <span class="text-[10px] md:text-xs text-gray-300">USDT / Crypto</span>
+                            </div>
+                            <!-- Perfect Money / USD -->
+                            <div
+                                class="bg-black/30 border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2">
+                                <i class="fas fa-dollar-sign text-green-400"></i>
+                                <span class="text-[10px] md:text-xs text-gray-300">USD Card</span>
                             </div>
                         </div>
-
+                    </div>
+                    <!-- 3. التنبيه القانوني (الحد الأقصى للربح) -->
+                    <div>
+                        <h4 class="text-white font-display font-bold text-lg mb-4 flex items-center gap-2">
+                            <i class="fas fa-exclamation-triangle text-red-500 animate-pulse"></i> Limite de Gain
+                        </h4>
+                        <div
+                            class="bg-red-900/10 border border-red-500/30 rounded-xl p-3 md:p-4 hover:bg-red-900/20 transition-colors">
+                            <p class="text-gray-400 text-[10px] md:text-xs leading-relaxed mb-3">
+                                Conformément à nos conditions générales, le retrait des gains est soumis à un plafond
+                                strict pour garantir l'équité.
+                            </p>
+                            <div class="flex items-center gap-2 bg-black/40 rounded-lg p-2 border border-red-500/20">
+                                <div class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></div>
+                                <span class="text-white font-black text-[11px] md:text-sm">Plafond Mensuel : <span
+                                        class="text-red-400 text-glow">30,000 TND</span></span>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- الحقوق وعلامة +18 -->
-                    <div
-                        class="border-t border-white/5 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
-                        <div class="text-gray-500 text-[10px] md:text-xs">
-                            &copy; 2026 Alphabet216. Tous droits réservés.
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span
-                                class="text-[10px] font-black text-gray-400 border border-gray-600 rounded px-2 py-0.5 opacity-60">18+</span>
-                            <span class="text-[10px] font-bold text-gray-500">Jeu Responsable</span>
-                        </div>
+                </div>
+
+                <!-- الحقوق وعلامة +18 -->
+                <div class="border-t border-white/5 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="text-gray-500 text-[10px] md:text-xs">
+                        &copy; 2026 Alphabet216. Tous droits réservés.
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span
+                            class="text-[10px] font-black text-gray-400 border border-gray-600 rounded px-2 py-0.5 opacity-60">18+</span>
+                        <span class="text-[10px] font-bold text-gray-500">Jeu Responsable</span>
                     </div>
                 </div>
-            </footer>
-            <!-- ================= END FOOTER ================= -->
+            </div>
+        </footer>
+        <!-- ================= END FOOTER ================= -->
     </main>
 
     <!-- Radar Mobile Bottom Bar -->
