@@ -204,7 +204,7 @@
     <div id="cashier-modal" class="fixed inset-0 z-[200] hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-q-panel border border-q-gold/50 rounded-3xl w-full max-w-md p-6 relative shadow-[0_0_30px_rgba(249,212,35,0.2)]">
             <button onclick="toggleCashier()" class="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-3xl cursor-pointer">&times;</button>
-            <h2 class="text-xl font-display font-black text-white mb-6 flex items-center gap-2">💳 Caisse Quantum</h2>
+            <h2 class="text-xl font-display font-black text-white mb-6 flex items-center gap-2">💳 Caisse </h2>
             <div class="flex gap-2 mb-6 bg-black/50 p-1 rounded-xl border border-white/5">
                 <button onclick="switchCashierTab('deposit')" id="tab-deposit" class="flex-1 bg-q-cyan text-black font-bold py-2 rounded-lg text-xs transition-all shadow-md cursor-pointer">Dépôt</button>
                 <button onclick="switchCashierTab('withdraw'); syncBalance();" id="tab-withdraw" class="flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all cursor-pointer">Retrait</button>
@@ -299,14 +299,14 @@
     <div id="casino-iframe-container" class="fixed inset-0 z-[200] bg-black hidden flex-col">
         <button onclick="closeCasinoGame()" class="absolute top-4 right-4 z-[210] bg-q-magenta text-white w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold shadow-[0_0_15px_rgba(254,9,121,0.8)] cursor-pointer">✖</button>
         <div id="casino-loader" class="absolute inset-0 flex items-center justify-center bg-black z-[-1]">
-            <span class="text-q-cyan font-display text-2xl animate-pulse tracking-widest">QUANTUM LOADING...</span>
+            <span class="text-q-cyan font-display text-2xl animate-pulse tracking-widest">Alphabet LOADING...</span>
         </div>
         <iframe id="casino-iframe" class="w-full h-full border-0 relative z-10"></iframe>
     </div>
 
     <div id="sportsbook-overlay" class="fixed inset-0 z-[200] bg-q-bg hidden flex-col">
         <div class="h-14 w-full bg-q-panel border-b border-q-cyan/20 flex items-center justify-between px-4">
-            <h2 class="text-q-cyan font-display font-bold tracking-widest uppercase">Quantum Sports</h2>
+            <h2 class="text-q-cyan font-display font-bold tracking-widest uppercase">Alphabet Sports</h2>
             <button onclick="closeSportsbook()" class="text-gray-400 hover:text-white text-3xl cursor-pointer">&times;</button>
         </div>
         <iframe id="sportsbook-iframe" src="" frameborder="0" class="w-full h-full"></iframe>
@@ -364,12 +364,6 @@
         </div>
     </div>
 
-    <!-- ================= Live Winners Ticker ================= -->
-    <div class="fixed top-[70px] md:top-[90px] left-0 w-full bg-q-panel/60 border-y border-q-cyan/20 py-1.5 overflow-hidden z-40 backdrop-blur-md hidden sm:block shadow-[0_0_20px_rgba(0,242,254,0.1)]">
-        <div id="winners-ticker-track" class="animate-marquee whitespace-nowrap flex gap-12 md:gap-16 text-[9px] md:text-[10px] font-bold font-display tracking-widest text-white/80">
-            <!-- Populated via JS -->
-        </div>
-    </div>
 
    <!-- Expandable Sidebar (Desktop) -->
     <aside class="fixed left-4 top-1/2 transform -translate-y-1/2 z-50 hidden xl:flex flex-col gap-4">
@@ -400,13 +394,51 @@
         </button>
 
     </aside>
-
+    
     <!-- ================= Main Content Area ================= -->
     <main class="flex-1 pt-28 md:pt-44 pb-24 w-full max-w-7xl mx-auto px-4 xl:pl-32 relative z-10">
         
         <!-- PANE: ACCUEIL -->
         <div id="pane-accueil" class="player-view-section block w-full">
-            
+            <!-- ================= LIVE WINNERS TICKER (QUANTUM STYLE) ================= -->
+            <style>
+                @keyframes scroll-left {
+                    0% { transform: translateX(100%); }
+                    100% { transform: translateX(-100%); }
+                }
+                .ticker-track {
+                    display: inline-flex;
+                    white-space: nowrap;
+                    animation: scroll-left 30s linear infinite;
+                }
+                .ticker-track:hover {
+                    animation-play-state: paused; /* يتوقف الشريط عند وضع الفأرة عليه ليقرأ اللاعب الاسم */
+                }
+            </style>
+
+            <div class="relative w-full max-w-5xl mx-auto mb-8 mt-2">
+                <!-- الحاوية الزجاجية الفخمة -->
+                <div class="bg-q-panel/40 backdrop-blur-xl border border-q-cyan/30 rounded-full p-1.5 md:p-2 flex items-center shadow-[0_0_20px_rgba(0,242,254,0.15)] relative overflow-hidden">
+                    
+                    <!-- زر LIVE النابض (ثابت على اليسار) -->
+                    <div class="bg-red-500/20 border border-red-500 rounded-full px-3 py-1 flex items-center gap-2 z-20 shrink-0 backdrop-blur-md shadow-[0_0_10px_rgba(239,68,68,0.5)]">
+                        <div class="w-2 h-2 rounded-full bg-red-500 animate-ping"></div>
+                        <span class="text-red-500 text-[9px] md:text-xs font-black uppercase tracking-widest">Live</span>
+                    </div>
+
+                    <!-- التدرجات اللونية لإخفاء النص بنعومة على الأطراف (Fade Effect) -->
+                    <div class="absolute left-16 top-0 bottom-0 w-12 bg-gradient-to-r from-[#0d0518] to-transparent z-10 pointer-events-none"></div>
+                    <div class="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#0d0518] to-transparent z-10 pointer-events-none"></div>
+
+                    <!-- شريط الأسماء المتحرك -->
+                    <div class="flex-grow overflow-hidden relative h-7 md:h-9 flex items-center ml-2">
+                        <div id="winners-ticker-track" class="ticker-track gap-4 md:gap-6 px-4 items-center cursor-pointer">
+                            <!-- سيتم تعبئتها بالجافا سكريبت بلمسة سحرية -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ================= END TICKER ================= -->
             <div class="text-center md:text-left mb-8 md:mb-12">
                 <h2 class="font-display font-black text-4xl md:text-7xl uppercase tracking-tighter scramble-target" data-final="bienvenue à">
                     <span class="opacity-0">bienvenue à</span>
@@ -667,7 +699,7 @@
         let balanceInterval = null;
         let currentProfileTab = 'bets';
 
-        // --- 1. UI Initialization & Quantum Effects ---
+        // --- 1. UI Initialization &  Effects ---
         window.addEventListener('load', () => {
             loadGamesOfTheDay();
             setTimeout(() => {
@@ -737,18 +769,33 @@
             detectRetina: true
         });
 
+        // ================= محرك شريط الفائزين (Quantum Ticker) =================
         function generateLiveWinnersTicker() {
             const track = document.getElementById('winners-ticker-track');
             if (!track) return;
-            const fakeNames = ["Fethi", "Ahmed", "Samir", "Karim", "Yassine", "Baya", "Sarah", "Rayen"];
-            const gamesList = ["Aviator 🚀", "Gates of Olympus ⚡", "Sport ⚽", "Roulette 🎡", "Wanted Dead 🔥"];
+            
+            const fakeNames = ["Fethi", "Ahmed", "Samir", "Karim", "Yassine", "Baya", "Sarah", "Rayen", "Wassim", "Nizar"];
+            const gamesList = ["Aviator 🚀", "Gates of Olympus ⚡", "Sweet Bonanza 🍭", "Roulette 🎡", "Wanted Dead 🔥", "Blackjack 🃏"];
+            
             let tickerHTML = '';
-            for (let i = 0; i < 15; i++) {
+            
+            // توليد 25 فائز بشكل عشوائي ومستمر
+            for (let i = 0; i < 25; i++) {
                 const name = fakeNames[Math.floor(Math.random() * fakeNames.length)] + "***";
                 const game = gamesList[Math.floor(Math.random() * gamesList.length)];
-                const amount = (Math.random() * 800 + 50).toFixed(2);
-                tickerHTML += `<span>🔥 <span class="text-q-cyan">${name}</span> a gagné <span class="text-q-gold">${amount} TND</span> sur ${game}</span>`;
+                const amount = (Math.random() * 1500 + 50).toFixed(2);
+                
+                tickerHTML += `
+                <div class="flex items-center gap-1.5 md:gap-2 text-[9px] md:text-xs font-bold text-gray-300 bg-white/5 px-3 md:px-4 py-1 md:py-1.5 rounded-full border border-white/10 hover:bg-q-cyan/10 hover:border-q-cyan hover:scale-105 transition-all duration-300 shrink-0">
+                    <i class="fas fa-trophy text-q-gold drop-shadow-[0_0_5px_rgba(249,212,35,0.8)]"></i>
+                    <span class="text-white">${name}</span> 
+                    <span class="font-normal text-gray-400">a gagné</span> 
+                    <span class="text-q-cyan drop-shadow-[0_0_5px_rgba(0,242,254,0.5)]">${amount} TND</span> 
+                    <span class="font-normal text-gray-400">sur</span> 
+                    <span class="text-q-magenta">${game}</span>
+                </div>`;
             }
+            
             track.innerHTML = tickerHTML;
         }
 
