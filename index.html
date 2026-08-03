@@ -531,6 +531,18 @@
                 </div>
                 <div class="swiper-pagination"></div>
             </div>
+            <!-- ================= SÉLECTION DU JOUR (6 GAMES) ================= -->
+            <div class="mb-10 md:mb-14 mt-10">
+                <h3 class="font-display font-bold text-2xl md:text-3xl mb-4 md:mb-6 tracking-widest flex items-center">
+                    <i class="fas fa-star text-q-cyan mr-3 animate-pulse"></i> Sélection du Jour
+                </h3>
+                
+                <!-- شبكة الألعاب الستة -->
+                <div id="games-of-the-day-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+                    <!-- سيتم تعبئتها أوتوماتيكياً عبر الجافا سكريبت -->
+                    <div class="col-span-full text-center text-q-cyan py-10 animate-pulse font-display tracking-widest">CHARGEMENT DES JEUX... ⏳</div>
+                </div>
+            </div>
 
         </div> <!-- END PANE ACCUEIL -->
 
@@ -1742,6 +1754,69 @@
         setTimeout(() => {
             startJackpots();
         }, 500);
+
+        // ================= محرك ألعاب اليوم (6 ألعاب) =================
+        async function loadGamesOfTheDay() {
+            const container = document.getElementById('games-of-the-day-grid');
+            if (!container) return;
+
+            try {
+                // نطلب الألعاب من مزود Pragmatic أو أي مزود تفضله
+                const response = await fetch(`${BACKEND_URL}/api/get-providers`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider_code: 'PRAGMATIC' })
+                });
+                const data = await response.json();
+                let gamesArray = data.games || data.data || [];
+
+                if (gamesArray.length > 0) {
+                    // نختار أشهر 6 ألعاب (الخوارزمية ستبحث عن هذه الأسماء وتجلبها)
+                    const targetGames = ["Gates of Olympus", "Sweet Bonanza", "Sugar Rush", "Starlight Princess", "Big Bass Splash", "The Dog House"];
+                    let top6 = [];
+                    
+                    targetGames.forEach(target => {
+                        const found = gamesArray.find(g => (g.game_name || g.name || "").toLowerCase().includes(target.toLowerCase()));
+                        if(found) top6.push(found);
+                    });
+                    
+                    // إذا لم يجد بعض الألعاب المحددة، سيكمل العدد لأول 6 ألعاب في القائمة
+                    if(top6.length < 6) {
+                        const remaining = gamesArray.filter(g => !top6.includes(g));
+                        top6 = [...top6, ...remaining].slice(0, 6);
+                    }
+
+                    // رسم الألعاب الستة بتصميم Quantum الزجاجي
+                    container.innerHTML = top6.map(g => {
+                        const title = g.game_name || g.name || "Game";
+                        const img = g.banner || g.image || g.thumb || "https://placehold.co/400x400/180A2B/FFF";
+                        const code = g.game_code || g.id;
+                        
+                        return `
+                        <div onclick="playCasinoGame('PRAGMATIC', '${code}')" class="bg-q-panel/60 backdrop-blur-md rounded-xl overflow-hidden border border-white/10 group cursor-pointer shadow-[0_0_15px_rgba(0,242,254,0.05)] hover:border-q-cyan transition-all flex flex-col h-full relative" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.3">
+                            <div class="absolute top-0 right-0 bg-gradient-to-r from-q-magenta to-red-600 text-white text-[8px] font-black px-2 py-1 rounded-bl-lg z-20 shadow-md animate-pulse">HOT 🔥</div>
+                            
+                            <div class="relative w-full aspect-square overflow-hidden">
+                                <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
+                                    <span class="bg-q-cyan text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-[0_0_10px_rgba(0,242,254,0.5)]">JOUER</span>
+                                </div>
+                            </div>
+                            <div class="p-2.5 flex justify-between items-center border-t border-white/5 flex-grow">
+                                <span class="text-white text-[10px] md:text-xs font-bold truncate pr-1 group-hover:text-q-cyan transition-colors">${title}</span>
+                            </div>
+                        </div>`;
+                    }).join('');
+                    
+                    // تفعيل تأثير الـ 3D (Vanilla Tilt) على الألعاب الجديدة
+                    if(typeof VanillaTilt !== 'undefined') {
+                        VanillaTilt.init(container.querySelectorAll('[data-tilt]'));
+                    }
+                }
+            } catch (error) {
+                container.innerHTML = '<div class="col-span-full text-red-500 text-center text-sm">Erreur de connexion.</div>';
+            }
+        }
     </script>
 </body>
 </html>
