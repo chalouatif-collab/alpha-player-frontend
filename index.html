@@ -152,13 +152,15 @@
             opacity: 1; 
             transform: translateX(0); 
         }
-   /* ================= السلاح السري لرفع الإشعارات فوق كل شيء ================= */
+       
+        /* ================= السلاح السري لرفع الإشعارات فوق كل شيء ================= */
         [id*="notification"], [class*="notification"], 
         [id*="toast"], [class*="toast"], 
         [id*="alert"], [class*="alert"],
         .swal2-container {
             z-index: 999999 !important;
         }
+    
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -181,7 +183,46 @@
     <div class="cyber-grid"></div>
     <div id="tsparticles"></div>
 
-    <!-- ================= Modals ================= -->
+                    <!-- ================= Modals ================= -->
+                     <!-- نافذة الشروط والأحكام (T&C) -->
+    <div id="modal-tc" class="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-[#120a21] border border-q-cyan/30 rounded-2xl p-6 md:p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto hide-scroll shadow-[0_0_30px_rgba(0,242,254,0.15)] transform scale-95 transition-transform duration-300 relative">
+            <button onclick="closeLegalModal('modal-tc')" class="absolute top-4 right-4 text-gray-400 hover:text-q-cyan transition-colors">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <h3 class="text-q-cyan font-display font-bold text-2xl mb-4 border-b border-white/10 pb-3"><i class="fas fa-file-contract mr-2"></i> Termes et Conditions (T&C)</h3>
+            <div class="text-gray-300 text-sm leading-relaxed space-y-4 font-light">
+                <p>Bienvenue sur <strong>Alphabet216</strong>. En utilisant notre site, vous acceptez pleinement et sans réserve les présentes conditions générales.</p>
+                <p><strong>1. Éligibilité :</strong> Vous devez être âgé d'au moins 18 ans pour créer un compte et jouer. Un seul compte est autorisé par personne, adresse IP ou foyer.</p>
+                <p><strong>2. Dépôts et Retraits :</strong> Les joueurs doivent utiliser des méthodes de paiement à leur propre nom. Les retraits sont soumis à une vérification d'identité (KYC) et limités à un plafond mensuel de <strong>30,000 TND</strong> pour garantir la sécurité financière de la plateforme.</p>
+                <p><strong>3. Bonus et Promotions :</strong> Tout bonus est soumis à des exigences de mise (Wagering) avant de pouvoir être retiré. En cas d'abus de bonus, le site se réserve le droit d'annuler les gains.</p>
+                <p><strong>4. Lutte contre la fraude :</strong> Toute tentative de triche, d'utilisation de bots, de blanchiment d'argent ou de collusion entraînera la fermeture immédiate du compte et la confiscation des fonds.</p>
+            </div>
+            <div class="mt-6 text-center">
+                <button onclick="closeLegalModal('modal-tc')" class="bg-q-cyan/20 border border-q-cyan text-q-cyan px-6 py-2 rounded-full font-bold hover:bg-q-cyan hover:text-black transition-all">J'accepte</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة سياسة الخصوصية -->
+    <div id="modal-confidentialite" class="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-[#120a21] border border-q-magenta/30 rounded-2xl p-6 md:p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto hide-scroll shadow-[0_0_30px_rgba(254,9,121,0.15)] transform scale-95 transition-transform duration-300 relative">
+            <button onclick="closeLegalModal('modal-confidentialite')" class="absolute top-4 right-4 text-gray-400 hover:text-q-magenta transition-colors">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <h3 class="text-q-magenta font-display font-bold text-2xl mb-4 border-b border-white/10 pb-3"><i class="fas fa-user-shield mr-2"></i> Politique de Confidentialité</h3>
+            <div class="text-gray-300 text-sm leading-relaxed space-y-4 font-light">
+                <p>Chez <strong>Alphabet216</strong>, la protection de vos données personnelles est notre priorité absolue.</p>
+                <p><strong>1. Données collectées :</strong> Nous collectons les informations nécessaires à la création de votre compte (nom, e-mail, téléphone) ainsi que les données de transaction et d'activité sur le site pour des raisons de sécurité.</p>
+                <p><strong>2. Utilisation des données :</strong> Vos données sont utilisées exclusivement pour gérer vos paris, traiter vos paiements, améliorer notre service client et prévenir la fraude. Nous ne vendons <strong>jamais</strong> vos informations à des tiers.</p>
+                <p><strong>3. Sécurité :</strong> Toutes les transactions et données personnelles sont protégées par un cryptage SSL de pointe (Secure Socket Layer) pour empêcher tout accès non autorisé.</p>
+                <p><strong>4. Vos droits :</strong> Conformément à la réglementation sur la protection des données, vous disposez d'un droit d'accès, de rectification et de suppression de vos données personnelles. Vous pouvez exercer ce droit en contactant notre support.</p>
+            </div>
+            <div class="mt-6 text-center">
+                <button onclick="closeLegalModal('modal-confidentialite')" class="bg-q-magenta/20 border border-q-magenta text-q-magenta px-6 py-2 rounded-full font-bold hover:bg-q-magenta hover:text-black transition-all">J'ai compris</button>
+            </div>
+        </div>
+    </div>
     <div id="player-login-modal" class="fixed inset-0 z-[200] bg-black/80 hidden items-center justify-center p-4 backdrop-blur-md">
         <div class="w-full max-w-md bg-q-panel border border-q-cyan/50 rounded-3xl p-8 shadow-[0_0_30px_rgba(0,242,254,0.3)] relative">
             <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl cursor-pointer">&times;</button>
@@ -704,10 +745,10 @@
                                 <i class="fas fa-gavel text-q-cyan"></i> Légal & Conditions
                             </h4>
                             <ul class="space-y-2 text-[11px] md:text-xs text-gray-400">
-                                <li><a href="#" class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Termes et Conditions (T&C)</a></li>
-                                <li><a href="#" class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Politique de Confidentialité</a></li>
-                                <li><a href="#" class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Règles des Paris Sportifs</a></li>
-                                <li><a href="#" class="hover:text-q-cyan hover:pl-2 transition-all duration-300 text-q-gold">Jeu Responsable</a></li>
+                                <li><a href="javascript:void(0)" onclick="openLegalModal('modal-tc')" class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Termes et Conditions (T&C)</a></li>
+                                <li><a href="javascript:void(0)" onclick="openLegalModal('modal-confidentialite')" class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Politique de Confidentialité</a></li>
+                                <li><a href="javascript:void(0)" onclick="openLegalModal('modal-regles')" class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Règles des Paris Sportifs</a></li>
+                                <li><a href="javascript:void(0)" onclick="openLegalModal('modal-responsable')" class="hover:text-q-cyan hover:pl-2 transition-all duration-300 text-q-gold">Jeu Responsable</a></li>
                             </ul>
                         </div>
 
