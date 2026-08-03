@@ -152,6 +152,13 @@
             opacity: 1; 
             transform: translateX(0); 
         }
+   /* ================= السلاح السري لرفع الإشعارات فوق كل شيء ================= */
+        [id*="notification"], [class*="notification"], 
+        [id*="toast"], [class*="toast"], 
+        [id*="alert"], [class*="alert"],
+        .swal2-container {
+            z-index: 999999 !important;
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
