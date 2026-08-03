@@ -1657,6 +1657,43 @@
                 }
             } catch (e) { container.innerHTML = '<div class="col-span-full text-red-500 text-center">Erreur de connexion Live</div>'; }
         }
+        // ================= محرك الجاكبوت الحي (Live Jackpots) =================
+        function startJackpots() {
+            setInterval(() => {
+                const now = new Date();
+                
+                // حساب التقدم اليومي والأسبوعي والشهري
+                let miniProgress = (now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds()) / 86400;
+                let megaVal = (((now.getDate() - 1) * 86400 + (now.getHours() * 3600)) / 2592000 * 1000);
+                let majorVal = ((((now.getDay() === 0 ? 7 : now.getDay()) - 1) * 86400 + (now.getHours() * 3600 + now.getMinutes() * 60)) / 604800 * 350);
+                let miniVal = (miniProgress * 120);
+
+                // تحديث الأرقام في الشاشة
+                const m = document.getElementById('jackpot-mega');
+                if (m) m.innerText = megaVal.toFixed(2);
+                
+                const maj = document.getElementById('jackpot-major');
+                if (maj) maj.innerText = majorVal.toFixed(2);
+                
+                const min = document.getElementById('jackpot-mini');
+                if (min) min.innerText = miniVal.toFixed(2);
+
+                // تأثير النبض الخطر للـ Mega عندما يتجاوز 700
+                const megaWrapper = document.getElementById('mega-wrapper');
+                if (megaWrapper) {
+                    if (megaVal > 700) { 
+                        megaWrapper.classList.add('about-to-drop'); 
+                    } else { 
+                        megaWrapper.classList.remove('about-to-drop'); 
+                    }
+                }
+            }, 1000); // تحديث كل ثانية
+        }
+
+        // تشغيل الجاكبوت فوراً لضمان عمله
+        setTimeout(() => {
+            startJackpots();
+        }, 500);
     </script>
 </body>
 </html>
