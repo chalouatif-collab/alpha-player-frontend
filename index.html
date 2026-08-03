@@ -418,23 +418,57 @@
                     Le casino le plus avancé en Tunisie. Des retraits instantanés et des jeux certifiés.
                 </p>
             </div>
-            <!-- ================= LIVE JACKPOTS ================= -->
-            <div class="grid grid-cols-3 gap-2 md:gap-4 mb-8">
-                <!-- Mega -->
-                <div id="mega-wrapper" class="glass-card rounded-2xl p-4 text-center border border-q-gold/50 shadow-[0_0_15px_rgba(249,212,35,0.2)] animate-pulse">
-                    <span class="text-q-gold text-[10px] md:text-xs font-black uppercase mb-1 drop-shadow-[0_0_8px_rgba(249,212,35,0.8)]">Mega 🥇</span>
-                    <div class="text-white font-mono font-black text-sm md:text-xl tracking-wider" id="jackpot-mega">124,567.89</div>
+            <!-- ================= LIVE JACKPOTS  ================= -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8 mb-12">
+
+                <!-- MEGA JACKPOT -->
+                <div id="mega-wrapper" class="relative group cursor-pointer" data-tilt data-tilt-glare data-tilt-max-glare="0.3" data-tilt-max="10">
+                    <!-- الهالة الضوئية الخلفية -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-q-gold to-yellow-600 rounded-3xl blur-xl opacity-40 group-hover:opacity-80 transition duration-500 animate-pulse"></div>
+                    <!-- البطاقة الزجاجية -->
+                    <div class="relative h-full bg-q-panel/60 backdrop-blur-xl border-2 border-q-gold/50 rounded-3xl p-6 md:p-8 flex flex-col items-center justify-center overflow-hidden shadow-[inset_0_0_30px_rgba(249,212,35,0.15)]">
+                        <!-- لمعة الزجاج المتحركة عند المرور -->
+                        <div class="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-25deg] group-hover:left-[200%] transition-all duration-1000 ease-out"></div>
+                        
+                        <i class="fas fa-crown text-4xl md:text-5xl text-q-gold mb-3 drop-shadow-[0_0_20px_rgba(249,212,35,0.9)] group-hover:scale-125 transition-transform duration-500"></i>
+                        <span class="text-q-gold text-[10px] md:text-xs font-black uppercase tracking-[0.4em] mb-1">Mega Drop</span>
+                        
+                        <div class="text-white font-mono font-black text-3xl md:text-4xl tracking-wider text-glow mt-1 flex items-baseline gap-1">
+                            <span id="jackpot-mega">124,567.89</span> <span class="text-sm text-q-gold font-display">TND</span>
+                        </div>
+                    </div>
                 </div>
-                <!-- Major -->
-                <div id="major-wrapper" class="glass-card rounded-2xl p-4 text-center border border-gray-400/50 shadow-[0_0_15px_rgba(229,231,235,0.1)]">
-                    <span class="text-gray-200 text-[10px] md:text-xs font-black uppercase mb-1 drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]">Major 🥈</span>
-                    <div class="text-white font-mono font-black text-sm md:text-xl tracking-wider" id="jackpot-major">14,230.50</div>
+
+                <!-- MAJOR JACKPOT -->
+                <div id="major-wrapper" class="relative group cursor-pointer" data-tilt data-tilt-glare data-tilt-max-glare="0.3" data-tilt-max="10">
+                    <div class="absolute inset-0 bg-gradient-to-r from-q-cyan to-blue-600 rounded-3xl blur-xl opacity-30 group-hover:opacity-70 transition duration-500"></div>
+                    <div class="relative h-full bg-q-panel/60 backdrop-blur-xl border border-q-cyan/50 rounded-3xl p-6 md:p-8 flex flex-col items-center justify-center overflow-hidden shadow-[inset_0_0_30px_rgba(0,242,254,0.15)]">
+                        <div class="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-25deg] group-hover:left-[200%] transition-all duration-1000 ease-out"></div>
+                        
+                        <i class="fas fa-gem text-4xl md:text-5xl text-q-cyan mb-3 drop-shadow-[0_0_20px_rgba(0,242,254,0.9)] group-hover:scale-125 transition-transform duration-500"></i>
+                        <span class="text-q-cyan text-[10px] md:text-xs font-black uppercase tracking-[0.4em] mb-1">Major Drop</span>
+                        
+                        <div class="text-white font-mono font-black text-3xl md:text-4xl tracking-wider drop-shadow-[0_0_15px_rgba(0,242,254,0.6)] mt-1 flex items-baseline gap-1">
+                            <span id="jackpot-major">14,230.50</span> <span class="text-sm text-q-cyan font-display">TND</span>
+                        </div>
+                    </div>
                 </div>
-                <!-- Mini -->
-                <div id="mini-wrapper" class="glass-card rounded-2xl p-4 text-center border border-red-500/50 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
-                    <span class="text-red-500 text-[10px] md:text-xs font-black uppercase mb-1 drop-shadow-[0_0_8px_rgba(239,68,68,0.9)]">Mini 🥉</span>
-                    <div class="text-white font-mono font-black text-sm md:text-xl tracking-wider" id="jackpot-mini">1,850.25</div>
+
+                <!-- MINI JACKPOT -->
+                <div id="mini-wrapper" class="relative group cursor-pointer" data-tilt data-tilt-glare data-tilt-max-glare="0.3" data-tilt-max="10">
+                    <div class="absolute inset-0 bg-gradient-to-r from-q-magenta to-red-600 rounded-3xl blur-xl opacity-30 group-hover:opacity-70 transition duration-500"></div>
+                    <div class="relative h-full bg-q-panel/60 backdrop-blur-xl border border-q-magenta/50 rounded-3xl p-6 md:p-8 flex flex-col items-center justify-center overflow-hidden shadow-[inset_0_0_30px_rgba(254,9,121,0.15)]">
+                        <div class="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-25deg] group-hover:left-[200%] transition-all duration-1000 ease-out"></div>
+                        
+                        <i class="fas fa-fire text-4xl md:text-5xl text-q-magenta mb-3 drop-shadow-[0_0_20px_rgba(254,9,121,0.9)] group-hover:scale-125 transition-transform duration-500"></i>
+                        <span class="text-q-magenta text-[10px] md:text-xs font-black uppercase tracking-[0.4em] mb-1">Mini Drop</span>
+                        
+                        <div class="text-white font-mono font-black text-3xl md:text-4xl tracking-wider drop-shadow-[0_0_15px_rgba(254,9,121,0.6)] mt-1 flex items-baseline gap-1">
+                            <span id="jackpot-mini">1,850.25</span> <span class="text-sm text-q-magenta font-display">TND</span>
+                        </div>
+                    </div>
                 </div>
+
             </div>
             <!-- Vouchers (Mobile: Horizontal Swipe / Desktop: Grid) -->
             <div class="mb-10 md:mb-14">
