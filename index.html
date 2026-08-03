@@ -669,6 +669,7 @@
 
         // --- 1. UI Initialization & Quantum Effects ---
         window.addEventListener('load', () => {
+            loadGamesOfTheDay();
             setTimeout(() => {
                 const loader = document.getElementById('preloader');
                 if(loader) {
