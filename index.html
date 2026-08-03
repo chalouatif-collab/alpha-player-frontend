@@ -2035,6 +2035,40 @@
                 behavior: 'smooth' // هذا السحر الذي يجعله يصعد بنعومة وليس فجأة
             });
         }
+        // ================= محرك النوافذ القانونية (Legal Modals) =================
+        function openLegalModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if(modal) {
+                // إظهار العنصر أولاً
+                modal.classList.remove('hidden');
+                // إضافة حركة الدخول (Fade-in & Scale-up) بعد جزء من الثانية
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    if(modal.children[0]) {
+                        modal.children[0].classList.remove('scale-95');
+                        modal.children[0].classList.add('scale-100');
+                    }
+                }, 10);
+            } else {
+                console.error("النافذة غير موجودة:", modalId);
+            }
+        }
+
+        function closeLegalModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if(modal) {
+                // تفعيل حركة الخروج (Fade-out & Scale-down)
+                modal.classList.add('opacity-0');
+                if(modal.children[0]) {
+                    modal.children[0].classList.remove('scale-100');
+                    modal.children[0].classList.add('scale-95');
+                }
+                // إخفاء العنصر تماماً بعد انتهاء الحركة
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+        }
     </script>
     <!-- ================= SCROLL TO TOP BUTTON  ================= -->
     <button id="scrollToTopBtn" onclick="scrollToTop()" class="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[100] bg-q-panel/80 backdrop-blur-md border border-q-cyan/50 text-q-cyan w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(0,242,254,0.3)] hover:shadow-[0_0_25px_rgba(0,242,254,0.6)] hover:bg-q-cyan hover:text-black transition-all duration-500 translate-y-24 opacity-0 pointer-events-none group">
