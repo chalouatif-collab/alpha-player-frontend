@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr" dir="ltr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -14,17 +15,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles-engine@2/tsparticles.engine.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles-basic@2/tsparticles.basic.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles-interaction-particles-links@2/tsparticles.interaction.particles.links.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/tsparticles-interaction-particles-links@2/tsparticles.interaction.particles.links.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles-move-base@2/tsparticles.move.base.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles-shape-circle@2/tsparticles.shape.circle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles-updater-color@2/tsparticles.updater.color.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles-updater-opacity@2/tsparticles.updater.opacity.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles-updater-out-modes@2/tsparticles.updater.out-modes.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/tsparticles-updater-opacity@2/tsparticles.updater.opacity.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/tsparticles-updater-out-modes@2/tsparticles.updater.out-modes.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles-updater-size@2/tsparticles.updater.size.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700;900&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700;900&family=Poppins:wght@300;400;600;800&display=swap"
+        rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -60,55 +66,249 @@
     </script>
 
     <style>
-        @media (min-width: 1024px) { body { cursor: none; } }
-        body { background-color: #02000a; color: #ffffff; overflow-x: hidden; font-family: 'Poppins', sans-serif; }
-        
-        .hide-scroll::-webkit-scrollbar { display: none; }
-        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-
-        .cyber-grid {
-            position: fixed; bottom: 0; left: -50%; width: 200%; height: 60vh;
-            background-image: linear-gradient(rgba(0, 242, 254, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(254, 9, 121, 0.15) 1px, transparent 1px);
-            background-size: 50px 50px; transform: perspective(600px) rotateX(70deg);
-            animation: grid-move 5s linear infinite; z-index: -2;
-            -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
-            mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%);
+        @media (min-width: 1024px) {
+            body {
+                cursor: none;
+            }
         }
 
-        #tsparticles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        body {
+            background-color: #02000a;
+            color: #ffffff;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
 
-        .cursor-dot, .cursor-outline { position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 9999; pointer-events: none; }
-        .cursor-dot { width: 8px; height: 8px; background-color: #00f2fe; box-shadow: 0 0 10px #00f2fe; }
-        .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(0, 242, 254, 0.5); transition: width 0.2s, height 0.2s; }
-        
-        .scramble-text { font-variant-numeric: tabular-nums; }
-        .glitch { position: relative; color: white; display: inline-block; }
-        .glitch::before, .glitch::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent; }
-        .glitch::before { left: 2px; text-shadow: -2px 0 #fe0979; clip: rect(44px, 450px, 56px, 0); animation: glitch-anim 5s infinite linear alternate-reverse; }
-        .glitch::after { left: -2px; text-shadow: -2px 0 #00f2fe; clip: rect(44px, 450px, 56px, 0); animation: glitch-anim2 5s infinite linear alternate-reverse; }
-        @keyframes glitch-anim { 0% { clip: rect(10px, 9999px, 83px, 0); } 100% { clip: rect(52px, 9999px, 14px, 0); } }
-        @keyframes glitch-anim2 { 0% { clip: rect(65px, 9999px, 100px, 0); } 100% { clip: rect(15px, 9999px, 76px, 0); } }
+        .hide-scroll::-webkit-scrollbar {
+            display: none;
+        }
 
-        .btn-liquid { background: linear-gradient(45deg, #fe0979, #ff7b00); background-size: 200% 200%; animation: liquid-bg 3s ease infinite; box-shadow: 0 0 15px rgba(254, 9, 121, 0.5); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .btn-liquid:hover { box-shadow: 0 0 30px rgba(254, 9, 121, 0.8), inset 0 0 10px rgba(255,255,255,0.5); transform: translateY(-3px) scale(1.05); }
-        .btn-glass { background: rgba(255, 255, 255, 0.05); box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 4px 15px rgba(0,0,0,0.5); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; }
-        .btn-glass:hover { background: rgba(255, 255, 255, 0.15); border-color: rgba(255,255,255,0.4); }
-        .btn-glass.active { background: rgba(0, 242, 254, 0.15); border-color: rgba(0, 242, 254, 0.5); color: white; box-shadow: 0 0 15px rgba(0, 242, 254, 0.3); }
-        @keyframes liquid-bg { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .hide-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
 
-        .voucher-card { position: relative; overflow: hidden; transition: all 0.5s ease; transform-style: preserve-3d; }
-        .voucher-card img { transition: transform 0.7s ease; }
-        .voucher-card:hover img { transform: scale(1.1) translateZ(-20px); filter: brightness(1.2); }
-        .glass-card { background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%); backdrop-filter: blur(15px); border-top: 1px solid rgba(255,255,255,0.2); border-left: 1px solid rgba(255,255,255,0.1); }
-        
-        .text-glow { text-shadow: 0 0 15px rgba(0, 242, 254, 0.8), 0 0 30px rgba(0, 242, 254, 0.4); }
-        .text-gradient { background: linear-gradient(to right, #00f2fe, #4facfe, #00f2fe); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 3s linear infinite; }
-        @keyframes shine { to { background-position: 200% center; } }
-        
-        .swiper-3d-container { width: 100%; padding-top: 20px; padding-bottom: 60px; }
-        .swiper-slide { width: 240px; height: 320px; border-radius: 20px; overflow: hidden; }
-        .swiper-slide-content { position: relative; z-index: 10; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; }
-        @media (min-width: 768px) { .swiper-slide { width: 300px; height: 400px; } }
+        .cyber-grid {
+            position: fixed;
+            bottom: 0;
+            left: -50%;
+            width: 200%;
+            height: 60vh;
+            background-image: linear-gradient(rgba(0, 242, 254, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(254, 9, 121, 0.15) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(600px) rotateX(70deg);
+            animation: grid-move 5s linear infinite;
+            z-index: -2;
+            -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 80%);
+            mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 80%);
+        }
+
+        #tsparticles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #00f2fe;
+            box-shadow: 0 0 10px #00f2fe;
+        }
+
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(0, 242, 254, 0.5);
+            transition: width 0.2s, height 0.2s;
+        }
+
+        .scramble-text {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .glitch {
+            position: relative;
+            color: white;
+            display: inline-block;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 #fe0979;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 #00f2fe;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% {
+                clip: rect(10px, 9999px, 83px, 0);
+            }
+
+            100% {
+                clip: rect(52px, 9999px, 14px, 0);
+            }
+        }
+
+        @keyframes glitch-anim2 {
+            0% {
+                clip: rect(65px, 9999px, 100px, 0);
+            }
+
+            100% {
+                clip: rect(15px, 9999px, 76px, 0);
+            }
+        }
+
+        .btn-liquid {
+            background: linear-gradient(45deg, #fe0979, #ff7b00);
+            background-size: 200% 200%;
+            animation: liquid-bg 3s ease infinite;
+            box-shadow: 0 0 15px rgba(254, 9, 121, 0.5);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .btn-liquid:hover {
+            box-shadow: 0 0 30px rgba(254, 9, 121, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.5);
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 4px 15px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .btn-glass:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-glass.active {
+            background: rgba(0, 242, 254, 0.15);
+            border-color: rgba(0, 242, 254, 0.5);
+            color: white;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+        }
+
+        @keyframes liquid-bg {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .voucher-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            transform-style: preserve-3d;
+        }
+
+        .voucher-card img {
+            transition: transform 0.7s ease;
+        }
+
+        .voucher-card:hover img {
+            transform: scale(1.1) translateZ(-20px);
+            filter: brightness(1.2);
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .text-glow {
+            text-shadow: 0 0 15px rgba(0, 242, 254, 0.8), 0 0 30px rgba(0, 242, 254, 0.4);
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #00f2fe, #4facfe, #00f2fe);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        .swiper-3d-container {
+            width: 100%;
+            padding-top: 20px;
+            padding-bottom: 60px;
+        }
+
+        .swiper-slide {
+            width: 240px;
+            height: 320px;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .swiper-slide-content {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        @media (min-width: 768px) {
+            .swiper-slide {
+                width: 300px;
+                height: 400px;
+            }
+        }
 
         /* Profile Tabs */
         .prof-tab-btn.active {
@@ -118,60 +318,76 @@
         }
 
         /* القائمة الجانبية الذكية (المحدثة والمصغرة) */
-        .sidebar-btn { 
-            width: 48px; /* عرض ثابت ليكون دائرة */
-            height: 48px; /* طول ثابت */
+        .sidebar-btn {
+            width: 48px;
+            /* عرض ثابت ليكون دائرة */
+            height: 48px;
+            /* طول ثابت */
             border-radius: 24px;
-            white-space: nowrap; 
-            overflow: hidden; 
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            display: flex; 
-            align-items: center; 
+            white-space: nowrap;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
             justify-content: flex-start;
-            padding-left: 12px; /* مسافة لضبط الأيقونة في المنتصف */
+            padding-left: 12px;
+            /* مسافة لضبط الأيقونة في المنتصف */
         }
-        .sidebar-btn:hover { 
-            width: 180px; /* يتمدد عند مرور الفأرة فقط */
-            z-index: 50; 
-            background: rgba(0, 242, 254, 0.1); 
-            border-color: rgba(0, 242, 254, 0.5); 
+
+        .sidebar-btn:hover {
+            width: 180px;
+            /* يتمدد عند مرور الفأرة فقط */
+            z-index: 50;
+            background: rgba(0, 242, 254, 0.1);
+            border-color: rgba(0, 242, 254, 0.5);
             box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
         }
+
         .sidebar-icon {
-            width: 24px; /* تثبيت حجم الأيقونة كي لا يتحرك النص */
+            width: 24px;
+            /* تثبيت حجم الأيقونة كي لا يتحرك النص */
             text-align: center;
             flex-shrink: 0;
         }
-        .sidebar-text { 
-            opacity: 0; 
-            transform: translateX(-15px); 
-            transition: all 0.3s ease; 
+
+        .sidebar-text {
+            opacity: 0;
+            transform: translateX(-15px);
+            transition: all 0.3s ease;
             margin-left: 12px;
         }
-        .sidebar-btn:hover .sidebar-text { 
-            opacity: 1; 
-            transform: translateX(0); 
+
+        .sidebar-btn:hover .sidebar-text {
+            opacity: 1;
+            transform: translateX(0);
         }
-       
+
         /* ================= السلاح السري لرفع الإشعارات فوق كل شيء ================= */
-        [id*="notification"], [class*="notification"], 
-        [id*="toast"], [class*="toast"], 
-        [id*="alert"], [class*="alert"],
+        [id*="notification"],
+        [class*="notification"],
+        [id*="toast"],
+        [class*="toast"],
+        [id*="alert"],
+        [class*="alert"],
         .swal2-container {
             z-index: 999999 !important;
         }
-    
     </style>
 </head>
+
 <body class="flex flex-col min-h-screen">
 
     <div id="toast-container" class="fixed top-5 right-5 z-[100] flex flex-col gap-2 w-full max-w-sm px-4"></div>
 
     <!-- Preloader -->
-    <div id="preloader" class="fixed inset-0 bg-q-bg z-[9999] flex flex-col items-center justify-center transition-opacity duration-700 ease-out">
+    <div id="preloader"
+        class="fixed inset-0 bg-q-bg z-[9999] flex flex-col items-center justify-center transition-opacity duration-700 ease-out">
         <div class="relative w-24 h-24 md:w-32 md:h-32 flex items-center justify-center mb-4">
-            <div class="absolute inset-0 rounded-full border-t-4 border-q-cyan animate-spin shadow-[0_0_15px_#00f2fe]"></div>
-            <div class="absolute inset-2 rounded-full border-r-4 border-q-magenta animate-[spin_2s_reverse_infinite] shadow-[0_0_15px_#fe0979]"></div>
+            <div class="absolute inset-0 rounded-full border-t-4 border-q-cyan animate-spin shadow-[0_0_15px_#00f2fe]">
+            </div>
+            <div
+                class="absolute inset-2 rounded-full border-r-4 border-q-magenta animate-[spin_2s_reverse_infinite] shadow-[0_0_15px_#fe0979]">
+            </div>
             <i class="fas fa-atom text-3xl md:text-4xl text-white animate-pulse-glow"></i>
         </div>
         <p class="font-display tracking-[0.5em] text-q-cyan text-xs md:text-sm animate-pulse">SYSTEM INITIALIZING...</p>
@@ -183,169 +399,236 @@
     <div class="cyber-grid"></div>
     <div id="tsparticles"></div>
 
-                    <!-- ================= Modals ================= -->
-                     <!-- نافذة الشروط والأحكام (T&C) -->
-    <div id="modal-tc" class="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-        <div class="bg-[#120a21] border border-q-cyan/30 rounded-2xl p-6 md:p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto hide-scroll shadow-[0_0_30px_rgba(0,242,254,0.15)] transform scale-95 transition-transform duration-300 relative">
-            <button onclick="closeLegalModal('modal-tc')" class="absolute top-4 right-4 text-gray-400 hover:text-q-cyan transition-colors">
+    <!-- ================= Modals ================= -->
+    <!-- نافذة الشروط والأحكام (T&C) -->
+    <div id="modal-tc"
+        class="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div
+            class="bg-[#120a21] border border-q-cyan/30 rounded-2xl p-6 md:p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto hide-scroll shadow-[0_0_30px_rgba(0,242,254,0.15)] transform scale-95 transition-transform duration-300 relative">
+            <button onclick="closeLegalModal('modal-tc')"
+                class="absolute top-4 right-4 text-gray-400 hover:text-q-cyan transition-colors">
                 <i class="fas fa-times text-xl"></i>
             </button>
-            <h3 class="text-q-cyan font-display font-bold text-2xl mb-4 border-b border-white/10 pb-3"><i class="fas fa-file-contract mr-2"></i> Termes et Conditions (T&C)</h3>
+            <h3 class="text-q-cyan font-display font-bold text-2xl mb-4 border-b border-white/10 pb-3"><i
+                    class="fas fa-file-contract mr-2"></i> Termes et Conditions (T&C)</h3>
             <div class="text-gray-300 text-sm leading-relaxed space-y-4 font-light">
-                <p>Bienvenue sur <strong>Alphabet216</strong>. En utilisant notre site, vous acceptez pleinement et sans réserve les présentes conditions générales.</p>
-                <p><strong>1. Éligibilité :</strong> Vous devez être âgé d'au moins 18 ans pour créer un compte et jouer. Un seul compte est autorisé par personne, adresse IP ou foyer.</p>
-                <p><strong>2. Dépôts et Retraits :</strong> Les joueurs doivent utiliser des méthodes de paiement à leur propre nom. Les retraits sont soumis à une vérification d'identité (KYC) et limités à un plafond mensuel de <strong>30,000 TND</strong> pour garantir la sécurité financière de la plateforme.</p>
-                <p><strong>3. Bonus et Promotions :</strong> Tout bonus est soumis à des exigences de mise (Wagering) avant de pouvoir être retiré. En cas d'abus de bonus, le site se réserve le droit d'annuler les gains.</p>
-                <p><strong>4. Lutte contre la fraude :</strong> Toute tentative de triche, d'utilisation de bots, de blanchiment d'argent ou de collusion entraînera la fermeture immédiate du compte et la confiscation des fonds.</p>
+                <p>Bienvenue sur <strong>Alphabet216</strong>. En utilisant notre site, vous acceptez pleinement et sans
+                    réserve les présentes conditions générales.</p>
+                <p><strong>1. Éligibilité :</strong> Vous devez être âgé d'au moins 18 ans pour créer un compte et
+                    jouer. Un seul compte est autorisé par personne, adresse IP ou foyer.</p>
+                <p><strong>2. Dépôts et Retraits :</strong> Les joueurs doivent utiliser des méthodes de paiement à leur
+                    propre nom. Les retraits sont soumis à une vérification d'identité (KYC) et limités à un plafond
+                    mensuel de <strong>30,000 TND</strong> pour garantir la sécurité financière de la plateforme.</p>
+                <p><strong>3. Bonus et Promotions :</strong> Tout bonus est soumis à des exigences de mise (Wagering)
+                    avant de pouvoir être retiré. En cas d'abus de bonus, le site se réserve le droit d'annuler les
+                    gains.</p>
+                <p><strong>4. Lutte contre la fraude :</strong> Toute tentative de triche, d'utilisation de bots, de
+                    blanchiment d'argent ou de collusion entraînera la fermeture immédiate du compte et la confiscation
+                    des fonds.</p>
             </div>
             <div class="mt-6 text-center">
-                <button onclick="closeLegalModal('modal-tc')" class="bg-q-cyan/20 border border-q-cyan text-q-cyan px-6 py-2 rounded-full font-bold hover:bg-q-cyan hover:text-black transition-all">J'accepte</button>
+                <button onclick="closeLegalModal('modal-tc')"
+                    class="bg-q-cyan/20 border border-q-cyan text-q-cyan px-6 py-2 rounded-full font-bold hover:bg-q-cyan hover:text-black transition-all">J'accepte</button>
             </div>
         </div>
     </div>
 
     <!-- نافذة سياسة الخصوصية -->
-    <div id="modal-confidentialite" class="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-        <div class="bg-[#120a21] border border-q-magenta/30 rounded-2xl p-6 md:p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto hide-scroll shadow-[0_0_30px_rgba(254,9,121,0.15)] transform scale-95 transition-transform duration-300 relative">
-            <button onclick="closeLegalModal('modal-confidentialite')" class="absolute top-4 right-4 text-gray-400 hover:text-q-magenta transition-colors">
+    <div id="modal-confidentialite"
+        class="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div
+            class="bg-[#120a21] border border-q-magenta/30 rounded-2xl p-6 md:p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto hide-scroll shadow-[0_0_30px_rgba(254,9,121,0.15)] transform scale-95 transition-transform duration-300 relative">
+            <button onclick="closeLegalModal('modal-confidentialite')"
+                class="absolute top-4 right-4 text-gray-400 hover:text-q-magenta transition-colors">
                 <i class="fas fa-times text-xl"></i>
             </button>
-            <h3 class="text-q-magenta font-display font-bold text-2xl mb-4 border-b border-white/10 pb-3"><i class="fas fa-user-shield mr-2"></i> Politique de Confidentialité</h3>
+            <h3 class="text-q-magenta font-display font-bold text-2xl mb-4 border-b border-white/10 pb-3"><i
+                    class="fas fa-user-shield mr-2"></i> Politique de Confidentialité</h3>
             <div class="text-gray-300 text-sm leading-relaxed space-y-4 font-light">
-                <p>Chez <strong>Alphabet216</strong>, la protection de vos données personnelles est notre priorité absolue.</p>
-                <p><strong>1. Données collectées :</strong> Nous collectons les informations nécessaires à la création de votre compte (nom, e-mail, téléphone) ainsi que les données de transaction et d'activité sur le site pour des raisons de sécurité.</p>
-                <p><strong>2. Utilisation des données :</strong> Vos données sont utilisées exclusivement pour gérer vos paris, traiter vos paiements, améliorer notre service client et prévenir la fraude. Nous ne vendons <strong>jamais</strong> vos informations à des tiers.</p>
-                <p><strong>3. Sécurité :</strong> Toutes les transactions et données personnelles sont protégées par un cryptage SSL de pointe (Secure Socket Layer) pour empêcher tout accès non autorisé.</p>
-                <p><strong>4. Vos droits :</strong> Conformément à la réglementation sur la protection des données, vous disposez d'un droit d'accès, de rectification et de suppression de vos données personnelles. Vous pouvez exercer ce droit en contactant notre support.</p>
+                <p>Chez <strong>Alphabet216</strong>, la protection de vos données personnelles est notre priorité
+                    absolue.</p>
+                <p><strong>1. Données collectées :</strong> Nous collectons les informations nécessaires à la création
+                    de votre compte (nom, e-mail, téléphone) ainsi que les données de transaction et d'activité sur le
+                    site pour des raisons de sécurité.</p>
+                <p><strong>2. Utilisation des données :</strong> Vos données sont utilisées exclusivement pour gérer vos
+                    paris, traiter vos paiements, améliorer notre service client et prévenir la fraude. Nous ne vendons
+                    <strong>jamais</strong> vos informations à des tiers.
+                </p>
+                <p><strong>3. Sécurité :</strong> Toutes les transactions et données personnelles sont protégées par un
+                    cryptage SSL de pointe (Secure Socket Layer) pour empêcher tout accès non autorisé.</p>
+                <p><strong>4. Vos droits :</strong> Conformément à la réglementation sur la protection des données, vous
+                    disposez d'un droit d'accès, de rectification et de suppression de vos données personnelles. Vous
+                    pouvez exercer ce droit en contactant notre support.</p>
             </div>
             <div class="mt-6 text-center">
-                <button onclick="closeLegalModal('modal-confidentialite')" class="bg-q-magenta/20 border border-q-magenta text-q-magenta px-6 py-2 rounded-full font-bold hover:bg-q-magenta hover:text-black transition-all">J'ai compris</button>
+                <button onclick="closeLegalModal('modal-confidentialite')"
+                    class="bg-q-magenta/20 border border-q-magenta text-q-magenta px-6 py-2 rounded-full font-bold hover:bg-q-magenta hover:text-black transition-all">J'ai
+                    compris</button>
             </div>
         </div>
     </div>
-    <div id="player-login-modal" class="fixed inset-0 z-[200] bg-black/80 hidden items-center justify-center p-4 backdrop-blur-md">
-        <div class="w-full max-w-md bg-q-panel border border-q-cyan/50 rounded-3xl p-8 shadow-[0_0_30px_rgba(0,242,254,0.3)] relative">
-            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl cursor-pointer">&times;</button>
+    <div id="player-login-modal"
+        class="fixed inset-0 z-[200] bg-black/80 hidden items-center justify-center p-4 backdrop-blur-md">
+        <div
+            class="w-full max-w-md bg-q-panel border border-q-cyan/50 rounded-3xl p-8 shadow-[0_0_30px_rgba(0,242,254,0.3)] relative">
+            <button onclick="closeLoginModal()"
+                class="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl cursor-pointer">&times;</button>
             <div class="text-center mb-6">
                 <h1 class="text-4xl font-display font-black text-gradient">Alphabet216</h1>
             </div>
             <div class="space-y-4">
-                <input type="text" id="p-auth-username" placeholder="Nom d'utilisateur" class="w-full p-4 rounded-xl bg-black/50 border border-white/10 text-white focus:outline-none focus:border-q-cyan transition-colors">
-                <input type="password" id="p-auth-password" placeholder="Mot de passe" class="w-full p-4 rounded-xl bg-black/50 border border-white/10 text-white focus:outline-none focus:border-q-cyan transition-colors">
-                <button onclick="handlePlayerAuth()" class="w-full btn-liquid text-white font-black p-4 rounded-xl uppercase tracking-widest mt-4 shadow-lg cursor-pointer">Connexion</button>
+                <input type="text" id="p-auth-username" placeholder="Nom d'utilisateur"
+                    class="w-full p-4 rounded-xl bg-black/50 border border-white/10 text-white focus:outline-none focus:border-q-cyan transition-colors">
+                <input type="password" id="p-auth-password" placeholder="Mot de passe"
+                    class="w-full p-4 rounded-xl bg-black/50 border border-white/10 text-white focus:outline-none focus:border-q-cyan transition-colors">
+                <button onclick="handlePlayerAuth()"
+                    class="w-full btn-liquid text-white font-black p-4 rounded-xl uppercase tracking-widest mt-4 shadow-lg cursor-pointer">Connexion</button>
             </div>
         </div>
     </div>
 
-    <div id="register-modal" class="fixed inset-0 z-[200] bg-black/80 hidden items-center justify-center p-4 backdrop-blur-md">
-        <div class="w-full max-w-md bg-q-panel border border-q-magenta/50 rounded-3xl p-8 shadow-[0_0_30px_rgba(254,9,121,0.3)] relative">
-            <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl cursor-pointer">&times;</button>
+    <div id="register-modal"
+        class="fixed inset-0 z-[200] bg-black/80 hidden items-center justify-center p-4 backdrop-blur-md">
+        <div
+            class="w-full max-w-md bg-q-panel border border-q-magenta/50 rounded-3xl p-8 shadow-[0_0_30px_rgba(254,9,121,0.3)] relative">
+            <button onclick="closeRegisterModal()"
+                class="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl cursor-pointer">&times;</button>
             <h2 class="text-white text-2xl font-display font-bold mb-6 text-center">Créer un compte</h2>
             <div class="space-y-4">
-                <input type="text" id="reg-username" placeholder="Nom d'utilisateur" class="w-full p-4 rounded-xl bg-black/50 border border-white/10 text-white focus:outline-none focus:border-q-magenta transition-colors">
-                <input type="password" id="reg-password" placeholder="Mot de passe" class="w-full p-4 rounded-xl bg-black/50 border border-white/10 text-white focus:outline-none focus:border-q-magenta transition-colors">
-                <button onclick="registerPlayer()" class="w-full btn-liquid text-white font-black p-4 rounded-xl uppercase tracking-widest mt-4 shadow-lg cursor-pointer">S'inscrire</button>
+                <input type="text" id="reg-username" placeholder="Nom d'utilisateur"
+                    class="w-full p-4 rounded-xl bg-black/50 border border-white/10 text-white focus:outline-none focus:border-q-magenta transition-colors">
+                <input type="password" id="reg-password" placeholder="Mot de passe"
+                    class="w-full p-4 rounded-xl bg-black/50 border border-white/10 text-white focus:outline-none focus:border-q-magenta transition-colors">
+                <button onclick="registerPlayer()"
+                    class="w-full btn-liquid text-white font-black p-4 rounded-xl uppercase tracking-widest mt-4 shadow-lg cursor-pointer">S'inscrire</button>
             </div>
         </div>
     </div>
 
-    <div id="cashier-modal" class="fixed inset-0 z-[200] hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-q-panel border border-q-gold/50 rounded-3xl w-full max-w-md p-6 relative shadow-[0_0_30px_rgba(249,212,35,0.2)]">
-            <button onclick="toggleCashier()" class="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-3xl cursor-pointer">&times;</button>
-            <h2 class="text-xl font-display font-black text-white mb-6 flex items-center gap-2">💳 Caisse </h2>
+    <div id="cashier-modal"
+        class="fixed inset-0 z-[200] hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div
+            class="bg-q-panel border border-q-gold/50 rounded-3xl w-full max-w-md p-6 relative shadow-[0_0_30px_rgba(249,212,35,0.2)]">
+            <button onclick="toggleCashier()"
+                class="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-3xl cursor-pointer">&times;</button>
+            <h2 class="text-xl font-display font-black text-white mb-6 flex items-center gap-2">💳 Caisse</h2>
             <div class="flex gap-2 mb-6 bg-black/50 p-1 rounded-xl border border-white/5">
-                <button onclick="switchCashierTab('deposit')" id="tab-deposit" class="flex-1 bg-q-cyan text-black font-bold py-2 rounded-lg text-xs transition-all shadow-md cursor-pointer">Dépôt</button>
-                <button onclick="switchCashierTab('withdraw'); syncBalance();" id="tab-withdraw" class="flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all cursor-pointer">Retrait</button>
+                <button onclick="switchCashierTab('deposit')" id="tab-deposit"
+                    class="flex-1 bg-q-cyan text-black font-bold py-2 rounded-lg text-xs transition-all shadow-md cursor-pointer">Dépôt</button>
+                <button onclick="switchCashierTab('withdraw'); syncBalance();" id="tab-withdraw"
+                    class="flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all cursor-pointer">Retrait</button>
             </div>
-            
+
             <div id="deposit-section" class="space-y-4">
                 <label class="text-xs text-gray-400 font-bold">Choisissez la méthode:</label>
+
+                <!-- شبكة الأزرار (أوريدو، أورانج، USDT، و Voucher) -->
                 <div id="payment-methods-grid" class="grid grid-cols-2 gap-3">
-                    <button onclick="showForm('form-d17')" class="bg-black/50 border border-white/10 hover:border-q-cyan p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
-                        <span class="text-2xl">📱</span><span class="text-[10px] font-bold text-white">D17 / Flouci</span>
+
+                    <!-- 2. USDT Crypto -->
+                    <button onclick="showForm('form-usdt')"
+                        class="bg-black/50 border border-white/10 hover:border-q-cyan p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
+                        <span class="text-2xl text-q-cyan">💎</span>
+                        <span class="text-[10px] font-bold text-white">USDT (Crypto)</span>
                     </button>
-                    <button onclick="showForm('form-usdt')" class="bg-black/50 border border-white/10 hover:border-q-gold p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
-                        <span class="text-2xl text-q-gold">💎</span><span class="text-[10px] font-bold text-white">USDT</span>
+
+                    <!-- 3. Ooredoo -->
+                    <button onclick="showForm('form-ooredoo')"
+                        class="bg-black/50 border border-white/10 hover:border-[#ED0000] p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
+                        <span class="text-2xl text-[#ED0000] font-black">Ooredoo</span>
+                        <span class="text-[10px] font-bold text-white">Recharge</span>
                     </button>
-                    <button onclick="showForm('form-ooredoo')" class="bg-black/50 border border-white/10 hover:border-[#ED0000] p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
-                        <span class="text-2xl text-[#ED0000] font-black">Ooredoo</span><span class="text-[10px] font-bold text-white">Recharge</span>
-                    </button>
-                    <button onclick="showForm('form-orange')" class="bg-black/50 border border-white/10 hover:border-[#FF7900] p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
-                        <span class="text-2xl text-[#FF7900] font-black">Orange</span><span class="text-[10px] font-bold text-white">Recharge</span>
+
+                    <!-- 4. Orange -->
+                    <button onclick="showForm('form-orange')"
+                        class="bg-black/50 border border-white/10 hover:border-[#FF7900] p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
+                        <span class="text-2xl text-[#FF7900] font-black">Orange</span>
+                        <span class="text-[10px] font-bold text-white">Recharge</span>
                     </button>
                 </div>
-                
-                <div id="form-d17" class="hidden space-y-3 mt-4">
-                    <div class="bg-black/50 p-3 rounded-lg border border-q-cyan/30 text-center">
-                        <p class="text-xs text-gray-400 mb-1">Veuillez envoyer l'argent à ce numéro :</p>
-                        <p class="text-xl font-bold text-q-cyan">22 123 456</p>
-                    </div>
-                    <input type="number" id="d17-code" placeholder="Montant envoyé (TND)" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-q-cyan">
-                    <label class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-q-cyan transition-all">
-                        <span class="text-sm text-gray-300">📸 Importer le reçu</span>
-                        <input type="file" id="d17-file" accept="image/*" class="hidden" onchange="updateFileName('d17')">
-                    </label>
-                    <div class="flex gap-2 mt-2">
-                        <button onclick="backToMethods()" class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button>
-                        <button onclick="submitDeposit('d17')" class="flex-1 bg-q-cyan text-black font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button>
-                    </div>
-                </div>
-                
+
+                <!-- نموذج USDT -->
                 <div id="form-usdt" class="hidden space-y-3 mt-4">
-                    <div class="bg-black/50 p-3 rounded-lg border border-q-gold/30 text-center">
+                    <div class="bg-black/50 p-3 rounded-lg border border-q-cyan/30 text-center">
                         <p class="text-xs text-gray-400 mb-1">Adresse USDT (TRC20) :</p>
-                        <p class="text-xs font-bold text-q-gold break-all">TXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</p>
+                        <p class="text-xs font-bold text-q-cyan break-all font-mono">TXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                        </p>
                     </div>
-                    <input type="number" id="usdt-code" placeholder="Montant (USDT)" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-q-gold">
-                    <label class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-q-gold transition-all">
+                    <input type="number" id="usdt-code" placeholder="Montant (USDT)"
+                        class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-q-cyan">
+                    <label
+                        class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-q-cyan transition-all">
                         <span class="text-sm text-gray-300">📸 Importer le reçu</span>
-                        <input type="file" id="usdt-file" accept="image/*" class="hidden" onchange="updateFileName('usdt')">
+                        <input type="file" id="usdt-file" accept="image/*" class="hidden"
+                            onchange="updateFileName('usdt')">
                     </label>
                     <div class="flex gap-2 mt-2">
-                        <button onclick="backToMethods()" class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button>
-                        <button onclick="submitDeposit('usdt')" class="flex-1 bg-q-gold text-black font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button>
+                        <button onclick="backToMethods()"
+                            class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button>
+                        <button onclick="submitDeposit('usdt')"
+                            class="flex-1 bg-q-cyan text-black font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button>
                     </div>
                 </div>
 
+                <!-- نموذج أوريدو -->
                 <div id="form-ooredoo" class="hidden space-y-3 mt-4">
-                    <input type="number" id="ooredoo-code" placeholder="Code de recharge Ooredoo" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#ED0000]">
-                    <label class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-[#ED0000] transition-all">
+                    <input type="number" id="ooredoo-code" placeholder="Code de recharge Ooredoo"
+                        class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#ED0000]">
+                    <label
+                        class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-[#ED0000] transition-all">
                         <span class="text-sm text-gray-300">📸 Capture d'écran</span>
-                        <input type="file" id="ooredoo-file" accept="image/*" class="hidden" onchange="updateFileName('ooredoo')">
+                        <input type="file" id="ooredoo-file" accept="image/*" class="hidden"
+                            onchange="updateFileName('ooredoo')">
                     </label>
                     <div class="flex gap-2 mt-2">
-                        <button onclick="backToMethods()" class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button>
-                        <button onclick="submitDeposit('ooredoo')" class="flex-1 bg-[#ED0000] text-white font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button>
+                        <button onclick="backToMethods()"
+                            class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button>
+                        <button onclick="submitDeposit('ooredoo')"
+                            class="flex-1 bg-[#ED0000] text-white font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button>
                     </div>
                 </div>
 
+                <!-- نموذج أورانج -->
                 <div id="form-orange" class="hidden space-y-3 mt-4">
-                    <input type="number" id="orange-code" placeholder="Code de recharge Orange" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#FF7900]">
-                    <label class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-[#FF7900] transition-all">
+                    <input type="number" id="orange-code" placeholder="Code de recharge Orange"
+                        class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#FF7900]">
+                    <label
+                        class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-[#FF7900] transition-all">
                         <span class="text-sm text-gray-300">📸 Capture d'écran</span>
-                        <input type="file" id="orange-file" accept="image/*" class="hidden" onchange="updateFileName('orange')">
+                        <input type="file" id="orange-file" accept="image/*" class="hidden"
+                            onchange="updateFileName('orange')">
                     </label>
                     <div class="flex gap-2 mt-2">
-                        <button onclick="backToMethods()" class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button>
-                        <button onclick="submitDeposit('orange')" class="flex-1 bg-[#FF7900] text-white font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button>
+                        <button onclick="backToMethods()"
+                            class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button>
+                        <button onclick="submitDeposit('orange')"
+                            class="flex-1 bg-[#FF7900] text-white font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button>
                     </div>
                 </div>
-            </div>
-
-            <div id="withdraw-section" class="hidden space-y-4">
-                <div class="bg-q-magenta/10 border border-q-magenta/30 p-3 rounded-xl text-xs text-q-magenta font-bold mb-4 text-center">
-                    Solde disponible: <span id="modal-balance">0.00</span> TND
-                </div>
-                <input type="number" id="withdraw-amount" placeholder="Montant à retirer" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-q-cyan text-sm font-mono focus:outline-none focus:border-q-cyan">
-                <input type="text" id="withdraw-account" placeholder="Numéro D17 / Adresse USDT" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm font-mono focus:outline-none focus:border-q-cyan">
-                <button onclick="submitWithdraw()" class="w-full bg-red-600 hover:bg-red-500 text-white font-black py-3 rounded-xl text-xs uppercase tracking-wider transition-all mt-2 shadow-[0_0_15px_rgba(220,38,38,0.5)] cursor-pointer">Demander le Retrait</button>
             </div>
         </div>
+    </div>
+
+    <div id="withdraw-section" class="hidden space-y-4">
+        <div
+            class="bg-q-magenta/10 border border-q-magenta/30 p-3 rounded-xl text-xs text-q-magenta font-bold mb-4 text-center">
+            Solde disponible: <span id="modal-balance">0.00</span> TND
+        </div>
+        <input type="number" id="withdraw-amount" placeholder="Montant à retirer"
+            class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-q-cyan text-sm font-mono focus:outline-none focus:border-q-cyan">
+        <input type="text" id="withdraw-account" placeholder="Numéro D17 / Adresse USDT"
+            class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm font-mono focus:outline-none focus:border-q-cyan">
+        <button onclick="submitWithdraw()"
+            class="w-full bg-red-600 hover:bg-red-500 text-white font-black py-3 rounded-xl text-xs uppercase tracking-wider transition-all mt-2 shadow-[0_0_15px_rgba(220,38,38,0.5)] cursor-pointer">Demander
+            le Retrait</button>
+    </div>
+    </div>
     </div>
 
     <!-- Iframes Containers -->
     <div id="casino-iframe-container" class="fixed inset-0 z-[200] bg-black hidden flex-col">
-        <button onclick="closeCasinoGame()" class="absolute top-4 right-4 z-[210] bg-q-magenta text-white w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold shadow-[0_0_15px_rgba(254,9,121,0.8)] cursor-pointer">✖</button>
+        <button onclick="closeCasinoGame()"
+            class="absolute top-4 right-4 z-[210] bg-q-magenta text-white w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold shadow-[0_0_15px_rgba(254,9,121,0.8)] cursor-pointer">✖</button>
         <div id="casino-loader" class="absolute inset-0 flex items-center justify-center bg-black z-[-1]">
             <span class="text-q-cyan font-display text-2xl animate-pulse tracking-widest">Alphabet LOADING...</span>
         </div>
@@ -355,57 +638,81 @@
     <div id="sportsbook-overlay" class="fixed inset-0 z-[200] bg-q-bg hidden flex-col">
         <div class="h-14 w-full bg-q-panel border-b border-q-cyan/20 flex items-center justify-between px-4">
             <h2 class="text-q-cyan font-display font-bold tracking-widest uppercase">Alphabet Sports</h2>
-            <button onclick="closeSportsbook()" class="text-gray-400 hover:text-white text-3xl cursor-pointer">&times;</button>
+            <button onclick="closeSportsbook()"
+                class="text-gray-400 hover:text-white text-3xl cursor-pointer">&times;</button>
         </div>
         <iframe id="sportsbook-iframe" src="" frameborder="0" class="w-full h-full"></iframe>
     </div>
 
     <div id="virtual-games-overlay" class="fixed inset-0 z-[200] bg-black hidden flex-col">
-        <button onclick="closeVirtualGames()" class="absolute top-4 right-4 z-[210] bg-q-gold text-black w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold shadow-[0_0_15px_rgba(249,212,35,0.8)] cursor-pointer">✖</button>
+        <button onclick="closeVirtualGames()"
+            class="absolute top-4 right-4 z-[210] bg-q-gold text-black w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold shadow-[0_0_15px_rgba(249,212,35,0.8)] cursor-pointer">✖</button>
         <div id="virtual-loader" class="absolute inset-0 flex items-center justify-center bg-black z-[-1]">
             <span class="text-q-gold font-display text-2xl animate-pulse tracking-widest">VIRTUALS LOADING...</span>
         </div>
-        <iframe id="virtual-games-iframe" class="w-full h-full border-0 relative z-10" allow="autoplay; fullscreen; encrypted-media; geolocation" allowfullscreen></iframe>
+        <iframe id="virtual-games-iframe" class="w-full h-full border-0 relative z-10"
+            allow="autoplay; fullscreen; encrypted-media; geolocation" allowfullscreen></iframe>
     </div>
 
     <!-- ================= Header (Dynamic Island) ================= -->
-    <div class="fixed top-4 md:top-6 left-1/2 transform -translate-x-1/2 z-[100] w-[95%] md:w-auto transition-all duration-500">
-        <div class="glass-card rounded-full px-3 md:px-8 py-2 md:py-3 flex items-center justify-between gap-3 md:gap-10 mx-auto shadow-[0_10px_30px_rgba(0,0,0,0.8)] border border-white/10">
+    <div
+        class="fixed top-4 md:top-6 left-1/2 transform -translate-x-1/2 z-[100] w-[95%] md:w-auto transition-all duration-500">
+        <div
+            class="glass-card rounded-full px-3 md:px-8 py-2 md:py-3 flex items-center justify-between gap-3 md:gap-10 mx-auto shadow-[0_10px_30px_rgba(0,0,0,0.8)] border border-white/10">
             <!-- Logo -->
             <div class="flex items-center gap-2 md:gap-3 cursor-pointer group" onclick="switchSection('accueil')">
-                <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-q-cyan/20 border border-q-cyan/50 flex items-center justify-center animate-pulse group-hover:bg-q-cyan/40 group-hover:rotate-180 transition-all duration-700">
+                <div
+                    class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-q-cyan/20 border border-q-cyan/50 flex items-center justify-center animate-pulse group-hover:bg-q-cyan/40 group-hover:rotate-180 transition-all duration-700">
                     <i class="fas fa-atom text-q-cyan text-sm md:text-lg"></i>
                 </div>
-                <h1 class="font-display font-black text-xl md:text-2xl tracking-widest hidden md:block text-white drop-shadow-[0_0_10px_rgba(0,242,254,0.5)]">
+                <h1
+                    class="font-display font-black text-xl md:text-2xl tracking-widest hidden md:block text-white drop-shadow-[0_0_10px_rgba(0,242,254,0.5)]">
                     Alphabet216
                 </h1>
             </div>
 
             <!-- Desktop Menu -->
             <div class="hidden lg:flex items-center gap-2">
-                <button onclick="switchSection('accueil')" id="btn-menu-accueil" class="btn-glass active px-5 py-2 rounded-full text-xs font-semibold tracking-wider cursor-pointer"><i class="fas fa-home mr-2 text-q-cyan"></i>Accueil</button>
-                <button onclick="openSportsbook()" id="btn-menu-sport" class="btn-glass px-5 py-2 rounded-full text-xs font-semibold tracking-wider text-gray-300 hover:text-white cursor-pointer"><i class="fas fa-futbol mr-2 text-green-400"></i>Sports</button>
-                <button onclick="switchSection('casino'); initCasinoLobby();" id="btn-menu-casino" class="btn-glass px-5 py-2 rounded-full text-xs font-semibold tracking-wider text-gray-300 hover:text-white cursor-pointer"><i class="fas fa-dice mr-2 text-q-magenta"></i>Casino</button>
-                <button onclick="switchSection('virtuals'); initVirtualsLobby();" id="btn-menu-virtuals" class="btn-glass px-5 py-2 rounded-full text-xs font-semibold tracking-wider text-gray-300 hover:text-white cursor-pointer"><i class="fas fa-gamepad mr-2 text-q-gold"></i>Virtuels</button>
+                <button onclick="switchSection('accueil')" id="btn-menu-accueil"
+                    class="btn-glass active px-5 py-2 rounded-full text-xs font-semibold tracking-wider cursor-pointer"><i
+                        class="fas fa-home mr-2 text-q-cyan"></i>Accueil</button>
+                <button onclick="openSportsbook()" id="btn-menu-sport"
+                    class="btn-glass px-5 py-2 rounded-full text-xs font-semibold tracking-wider text-gray-300 hover:text-white cursor-pointer"><i
+                        class="fas fa-futbol mr-2 text-green-400"></i>Sports</button>
+                <button onclick="switchSection('casino'); initCasinoLobby();" id="btn-menu-casino"
+                    class="btn-glass px-5 py-2 rounded-full text-xs font-semibold tracking-wider text-gray-300 hover:text-white cursor-pointer"><i
+                        class="fas fa-dice mr-2 text-q-magenta"></i>Casino</button>
+                <button onclick="switchSection('virtuals'); initVirtualsLobby();" id="btn-menu-virtuals"
+                    class="btn-glass px-5 py-2 rounded-full text-xs font-semibold tracking-wider text-gray-300 hover:text-white cursor-pointer"><i
+                        class="fas fa-gamepad mr-2 text-q-gold"></i>Virtuels</button>
             </div>
 
             <!-- Auth / Profile -->
             <div class="flex items-center gap-2 md:gap-3">
                 <div id="auth-buttons-container" class="flex items-center gap-1.5">
-                    <button onclick="openLoginModal()" class="btn-glass px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wide cursor-pointer text-q-cyan border-q-cyan/50 hover:bg-q-cyan/20">Login</button>
-                    <button onclick="openRegisterModal()" class="btn-liquid px-3 py-1.5 rounded-full text-[10px] font-bold text-white uppercase tracking-wide cursor-pointer">S'inscrire</button>
+                    <button onclick="openLoginModal()"
+                        class="btn-glass px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wide cursor-pointer text-q-cyan border-q-cyan/50 hover:bg-q-cyan/20">Login</button>
+                    <button onclick="openRegisterModal()"
+                        class="btn-liquid px-3 py-1.5 rounded-full text-[10px] font-bold text-white uppercase tracking-wide cursor-pointer">S'inscrire</button>
                 </div>
-                
+
                 <div id="top-user-profile" class="hidden items-center gap-2">
                     <div class="flex flex-col items-end mr-1 hidden sm:flex">
-                        <span id="player-name-display" class="text-[10px] md:text-xs text-q-cyan font-display tracking-widest uppercase font-bold">User</span>
-                        <span class="text-white font-bold text-xs md:text-sm tracking-wider shadow-[0_0_10px_rgba(254,9,121,0.5)] rounded-full px-2 cursor-pointer" onclick="toggleCashier()"><span id="player-balance-val">0.00</span> <span class="text-q-magenta">TND</span></span>
+                        <span id="player-name-display"
+                            class="text-[10px] md:text-xs text-q-cyan font-display tracking-widest uppercase font-bold">User</span>
+                        <span
+                            class="text-white font-bold text-xs md:text-sm tracking-wider shadow-[0_0_10px_rgba(254,9,121,0.5)] rounded-full px-2 cursor-pointer"
+                            onclick="toggleCashier()"><span id="player-balance-val">0.00</span> <span
+                                class="text-q-magenta">TND</span></span>
                     </div>
-                    <button onclick="toggleCashier()" class="btn-liquid px-4 md:px-6 py-2 md:py-2.5 rounded-full text-white font-bold text-[10px] md:text-xs uppercase tracking-widest shadow-lg flex items-center gap-2 cursor-pointer">
+                    <button onclick="toggleCashier()"
+                        class="btn-liquid px-4 md:px-6 py-2 md:py-2.5 rounded-full text-white font-bold text-[10px] md:text-xs uppercase tracking-widest shadow-lg flex items-center gap-2 cursor-pointer">
                         <span class="hidden sm:inline">Dépôt</span> <i class="fas fa-bolt animate-bounce"></i>
                     </button>
-                    <div onclick="openProfile()" class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 flex items-center justify-center ml-1 md:ml-2 cursor-pointer border border-white/20 hover:border-q-cyan transition-all overflow-hidden group">
-                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=QuantumUser" class="w-6 h-6 md:w-8 md:h-8 group-hover:scale-125 transition-transform">
+                    <div onclick="openProfile()"
+                        class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 flex items-center justify-center ml-1 md:ml-2 cursor-pointer border border-white/20 hover:border-q-cyan transition-all overflow-hidden group">
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=QuantumUser"
+                            class="w-6 h-6 md:w-8 md:h-8 group-hover:scale-125 transition-transform">
                     </div>
                 </div>
             </div>
@@ -413,56 +720,75 @@
     </div>
 
 
-   <!-- Expandable Sidebar (Desktop) -->
+    <!-- Expandable Sidebar (Desktop) -->
     <aside class="fixed left-4 top-1/2 transform -translate-y-1/2 z-50 hidden xl:flex flex-col gap-4">
-        
-        <button onclick="switchSection('casino'); initCasinoLobby();" class="sidebar-btn btn-glass text-gray-400 group cursor-pointer">
-            <div class="sidebar-icon"><i class="fas fa-gamepad text-lg group-hover:text-q-cyan transition-colors"></i></div>
+
+        <button onclick="switchSection('casino'); initCasinoLobby();"
+            class="sidebar-btn btn-glass text-gray-400 group cursor-pointer">
+            <div class="sidebar-icon"><i class="fas fa-gamepad text-lg group-hover:text-q-cyan transition-colors"></i>
+            </div>
             <span class="sidebar-text font-display font-bold text-sm tracking-widest uppercase text-white">Casino</span>
         </button>
-        
-        <button onclick="switchSection('live-casino'); openLiveCasino();" class="sidebar-btn btn-glass text-gray-400 group cursor-pointer">
-            <div class="sidebar-icon"><i class="fas fa-video text-lg group-hover:text-q-purple transition-colors"></i></div>
-            <span class="sidebar-text font-display font-bold text-sm tracking-widest uppercase text-white">Live Casino</span>
-        </button>
-        
-        <button onclick="openSportsbook()" class="sidebar-btn btn-glass text-gray-400 group cursor-pointer">
-            <div class="sidebar-icon"><i class="fas fa-futbol text-lg group-hover:text-green-400 transition-colors"></i></div>
-            <span class="sidebar-text font-display font-bold text-sm tracking-widest uppercase text-white">Sports</span>
-        </button>
-        
-        <button onclick="switchSection('virtuals'); initVirtualsLobby();" class="sidebar-btn btn-glass text-gray-400 group cursor-pointer">
-            <div class="sidebar-icon"><i class="fas fa-rocket text-lg group-hover:text-q-gold transition-colors"></i></div>
-            <span class="sidebar-text font-display font-bold text-sm tracking-widest uppercase text-white">Virtuels</span>
+
+        <button onclick="switchSection('live-casino'); openLiveCasino();"
+            class="sidebar-btn btn-glass text-gray-400 group cursor-pointer">
+            <div class="sidebar-icon"><i class="fas fa-video text-lg group-hover:text-q-purple transition-colors"></i>
+            </div>
+            <span class="sidebar-text font-display font-bold text-sm tracking-widest uppercase text-white">Live
+                Casino</span>
         </button>
 
-        <button onclick="playCasinoGame('SPRIBE', 'aviator')" class="sidebar-btn btn-glass text-gray-400 group cursor-pointer border-q-magenta/30 hover:border-q-magenta">
-            <div class="sidebar-icon"><i class="fas fa-rocket text-lg text-q-magenta group-hover:scale-110 transition-transform animate-pulse"></i></div>
+        <button onclick="openSportsbook()" class="sidebar-btn btn-glass text-gray-400 group cursor-pointer">
+            <div class="sidebar-icon"><i class="fas fa-futbol text-lg group-hover:text-green-400 transition-colors"></i>
+            </div>
+            <span class="sidebar-text font-display font-bold text-sm tracking-widest uppercase text-white">Sports</span>
+        </button>
+
+        <button onclick="switchSection('virtuals'); initVirtualsLobby();"
+            class="sidebar-btn btn-glass text-gray-400 group cursor-pointer">
+            <div class="sidebar-icon"><i class="fas fa-rocket text-lg group-hover:text-q-gold transition-colors"></i>
+            </div>
+            <span
+                class="sidebar-text font-display font-bold text-sm tracking-widest uppercase text-white">Virtuels</span>
+        </button>
+
+        <button onclick="playCasinoGame('SPRIBE', 'aviator')"
+            class="sidebar-btn btn-glass text-gray-400 group cursor-pointer border-q-magenta/30 hover:border-q-magenta">
+            <div class="sidebar-icon"><i
+                    class="fas fa-rocket text-lg text-q-magenta group-hover:scale-110 transition-transform animate-pulse"></i>
+            </div>
             <span class="sidebar-text font-display font-bold text-sm tracking-widest uppercase text-white">Crash</span>
         </button>
 
     </aside>
-    
+
     <!-- ================= Main Content Area ================= -->
     <main class="flex-1 pt-28 md:pt-44 pb-24 w-full max-w-7xl mx-auto px-4 xl:pl-32 relative z-10">
-        
+
         <!-- PANE: ACCUEIL -->
         <div id="pane-accueil" class="player-view-section block w-full">
             <!-- ================= LIVE WINNERS TICKER (QUANTUM STYLE) ================= -->
             <style>
                 @keyframes scroll-left {
-                    0% { transform: translateX(0) translateZ(0); }
-                    100% { transform: translateX(-50%) translateZ(0); }
+                    0% {
+                        transform: translateX(0) translateZ(0);
+                    }
+
+                    100% {
+                        transform: translateX(-50%) translateZ(0);
+                    }
                 }
+
                 .ticker-track {
                     display: inline-flex;
                     white-space: nowrap;
                     animation: scroll-left 50s linear infinite;
                     /* السحر يبدأ هنا لتسريع الحركة */
-                    will-change: transform; 
+                    will-change: transform;
                     -webkit-backface-visibility: hidden;
                     backface-visibility: hidden;
                 }
+
                 .ticker-track:hover {
                     animation-play-state: paused;
                 }
@@ -470,21 +796,29 @@
 
             <div class="relative w-full max-w-5xl mx-auto mb-8 mt-2">
                 <!-- الحاوية الزجاجية الفخمة -->
-                <div class="bg-q-panel/40 backdrop-blur-xl border border-q-cyan/30 rounded-full p-1.5 md:p-2 flex items-center shadow-[0_0_20px_rgba(0,242,254,0.15)] relative overflow-hidden">
-                    
+                <div
+                    class="bg-q-panel/40 backdrop-blur-xl border border-q-cyan/30 rounded-full p-1.5 md:p-2 flex items-center shadow-[0_0_20px_rgba(0,242,254,0.15)] relative overflow-hidden">
+
                     <!-- زر LIVE النابض (ثابت على اليسار) -->
-                    <div class="bg-red-500/20 border border-red-500 rounded-full px-3 py-1 flex items-center gap-2 z-20 shrink-0 backdrop-blur-md shadow-[0_0_10px_rgba(239,68,68,0.5)]">
+                    <div
+                        class="bg-red-500/20 border border-red-500 rounded-full px-3 py-1 flex items-center gap-2 z-20 shrink-0 backdrop-blur-md shadow-[0_0_10px_rgba(239,68,68,0.5)]">
                         <div class="w-2 h-2 rounded-full bg-red-500 animate-ping"></div>
-                        <span class="text-red-500 text-[9px] md:text-xs font-black uppercase tracking-widest">Live</span>
+                        <span
+                            class="text-red-500 text-[9px] md:text-xs font-black uppercase tracking-widest">Live</span>
                     </div>
 
                     <!-- التدرجات اللونية لإخفاء النص بنعومة على الأطراف (Fade Effect) -->
-                    <div class="absolute left-16 top-0 bottom-0 w-12 bg-gradient-to-r from-[#0d0518] to-transparent z-10 pointer-events-none"></div>
-                    <div class="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#0d0518] to-transparent z-10 pointer-events-none"></div>
+                    <div
+                        class="absolute left-16 top-0 bottom-0 w-12 bg-gradient-to-r from-[#0d0518] to-transparent z-10 pointer-events-none">
+                    </div>
+                    <div
+                        class="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#0d0518] to-transparent z-10 pointer-events-none">
+                    </div>
 
                     <!-- شريط الأسماء المتحرك -->
                     <div class="flex-grow overflow-hidden relative h-7 md:h-9 flex items-center ml-2">
-                        <div id="winners-ticker-track" class="ticker-track gap-4 md:gap-6 px-4 items-center cursor-pointer">
+                        <div id="winners-ticker-track"
+                            class="ticker-track gap-4 md:gap-6 px-4 items-center cursor-pointer">
                             <!-- سيتم تعبئتها بالجافا سكريبت بلمسة سحرية -->
                         </div>
                     </div>
@@ -492,13 +826,16 @@
             </div>
             <!-- ================= END TICKER ================= -->
             <div class="text-center md:text-left mb-8 md:mb-12">
-                <h2 class="font-display font-black text-4xl md:text-7xl uppercase tracking-tighter scramble-target" data-final="bienvenue à">
+                <h2 class="font-display font-black text-4xl md:text-7xl uppercase tracking-tighter scramble-target"
+                    data-final="bienvenue à">
                     <span class="opacity-0">bienvenue à</span>
                 </h2>
                 <h2 class="font-display font-black text-4xl md:text-7xl uppercase tracking-tighter mt-1 md:mt-0">
-                    <span class="text-gradient text-glow glitch scramble-target" data-text="" data-final="Alphabet216"></span>
+                    <span class="text-gradient text-glow glitch scramble-target" data-text=""
+                        data-final="Alphabet216"></span>
                 </h2>
-                <p class="text-gray-400 font-light mt-3 md:mt-4 max-w-lg text-[11px] md:text-sm mx-auto md:mx-0 border-l-2 border-q-cyan pl-3 md:pl-4 bg-gradient-to-r from-q-cyan/10 to-transparent py-1.5 md:py-2">
+                <p
+                    class="text-gray-400 font-light mt-3 md:mt-4 max-w-lg text-[11px] md:text-sm mx-auto md:mx-0 border-l-2 border-q-cyan pl-3 md:pl-4 bg-gradient-to-r from-q-cyan/10 to-transparent py-1.5 md:py-2">
                     Le casino le plus avancé en Tunisie. Des retraits instantanés et des jeux certifiés.
                 </p>
             </div>
@@ -506,46 +843,79 @@
             <div class="grid grid-cols-3 gap-2 md:gap-8 mb-10 md:mb-12">
 
                 <!-- MEGA JACKPOT -->
-                <div id="mega-wrapper" class="relative group cursor-pointer" data-tilt data-tilt-glare data-tilt-max-glare="0.3" data-tilt-max="10">
-                    <div class="absolute inset-0 bg-gradient-to-r from-q-gold to-yellow-600 rounded-xl md:rounded-3xl blur-md md:blur-xl opacity-40 group-hover:opacity-80 transition duration-500 animate-pulse"></div>
-                    <div class="relative h-full bg-q-panel/60 backdrop-blur-xl border border-q-gold/50 rounded-xl md:rounded-3xl p-2 py-3 md:p-8 flex flex-col items-center justify-center overflow-hidden shadow-[inset_0_0_15px_rgba(249,212,35,0.15)] md:shadow-[inset_0_0_30px_rgba(249,212,35,0.15)]">
-                        <div class="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-25deg] group-hover:left-[200%] transition-all duration-1000 ease-out"></div>
-                        
-                        <i class="fas fa-crown text-xl md:text-5xl text-q-gold mb-1 md:mb-3 drop-shadow-[0_0_10px_rgba(249,212,35,0.9)] group-hover:scale-125 transition-transform duration-500"></i>
-                        <span class="text-q-gold text-[7px] md:text-xs font-black uppercase tracking-[0.2em] md:tracking-[0.4em] mb-0.5 md:mb-1">Mega Drop</span>
-                        
-                        <div class="text-white font-mono font-black text-[11px] sm:text-xs md:text-4xl tracking-wider text-glow flex items-baseline gap-0.5 md:gap-1">
-                            <span id="jackpot-mega">124,567.89</span> <span class="hidden sm:inline text-[7px] md:text-sm text-q-gold font-display">TND</span>
+                <div id="mega-wrapper" class="relative group cursor-pointer" data-tilt data-tilt-glare
+                    data-tilt-max-glare="0.3" data-tilt-max="10">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-q-gold to-yellow-600 rounded-xl md:rounded-3xl blur-md md:blur-xl opacity-40 group-hover:opacity-80 transition duration-500 animate-pulse">
+                    </div>
+                    <div
+                        class="relative h-full bg-q-panel/60 backdrop-blur-xl border border-q-gold/50 rounded-xl md:rounded-3xl p-2 py-3 md:p-8 flex flex-col items-center justify-center overflow-hidden shadow-[inset_0_0_15px_rgba(249,212,35,0.15)] md:shadow-[inset_0_0_30px_rgba(249,212,35,0.15)]">
+                        <div
+                            class="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-25deg] group-hover:left-[200%] transition-all duration-1000 ease-out">
+                        </div>
+
+                        <i
+                            class="fas fa-crown text-xl md:text-5xl text-q-gold mb-1 md:mb-3 drop-shadow-[0_0_10px_rgba(249,212,35,0.9)] group-hover:scale-125 transition-transform duration-500"></i>
+                        <span
+                            class="text-q-gold text-[7px] md:text-xs font-black uppercase tracking-[0.2em] md:tracking-[0.4em] mb-0.5 md:mb-1">Mega
+                            Drop</span>
+
+                        <div
+                            class="text-white font-mono font-black text-[11px] sm:text-xs md:text-4xl tracking-wider text-glow flex items-baseline gap-0.5 md:gap-1">
+                            <span id="jackpot-mega">124,567.89</span> <span
+                                class="hidden sm:inline text-[7px] md:text-sm text-q-gold font-display">TND</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- MAJOR JACKPOT -->
-                <div id="major-wrapper" class="relative group cursor-pointer" data-tilt data-tilt-glare data-tilt-max-glare="0.3" data-tilt-max="10">
-                    <div class="absolute inset-0 bg-gradient-to-r from-q-cyan to-blue-600 rounded-xl md:rounded-3xl blur-md md:blur-xl opacity-30 group-hover:opacity-70 transition duration-500"></div>
-                    <div class="relative h-full bg-q-panel/60 backdrop-blur-xl border border-q-cyan/50 rounded-xl md:rounded-3xl p-2 py-3 md:p-8 flex flex-col items-center justify-center overflow-hidden shadow-[inset_0_0_15px_rgba(0,242,254,0.15)] md:shadow-[inset_0_0_30px_rgba(0,242,254,0.15)]">
-                        <div class="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-25deg] group-hover:left-[200%] transition-all duration-1000 ease-out"></div>
-                        
-                        <i class="fas fa-gem text-xl md:text-5xl text-q-cyan mb-1 md:mb-3 drop-shadow-[0_0_10px_rgba(0,242,254,0.9)] group-hover:scale-125 transition-transform duration-500"></i>
-                        <span class="text-q-cyan text-[7px] md:text-xs font-black uppercase tracking-[0.2em] md:tracking-[0.4em] mb-0.5 md:mb-1">Major Drop</span>
-                        
-                        <div class="text-white font-mono font-black text-[11px] sm:text-xs md:text-4xl tracking-wider drop-shadow-[0_0_10px_rgba(0,242,254,0.6)] flex items-baseline gap-0.5 md:gap-1">
-                            <span id="jackpot-major">14,230.50</span> <span class="hidden sm:inline text-[7px] md:text-sm text-q-cyan font-display">TND</span>
+                <div id="major-wrapper" class="relative group cursor-pointer" data-tilt data-tilt-glare
+                    data-tilt-max-glare="0.3" data-tilt-max="10">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-q-cyan to-blue-600 rounded-xl md:rounded-3xl blur-md md:blur-xl opacity-30 group-hover:opacity-70 transition duration-500">
+                    </div>
+                    <div
+                        class="relative h-full bg-q-panel/60 backdrop-blur-xl border border-q-cyan/50 rounded-xl md:rounded-3xl p-2 py-3 md:p-8 flex flex-col items-center justify-center overflow-hidden shadow-[inset_0_0_15px_rgba(0,242,254,0.15)] md:shadow-[inset_0_0_30px_rgba(0,242,254,0.15)]">
+                        <div
+                            class="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-25deg] group-hover:left-[200%] transition-all duration-1000 ease-out">
+                        </div>
+
+                        <i
+                            class="fas fa-gem text-xl md:text-5xl text-q-cyan mb-1 md:mb-3 drop-shadow-[0_0_10px_rgba(0,242,254,0.9)] group-hover:scale-125 transition-transform duration-500"></i>
+                        <span
+                            class="text-q-cyan text-[7px] md:text-xs font-black uppercase tracking-[0.2em] md:tracking-[0.4em] mb-0.5 md:mb-1">Major
+                            Drop</span>
+
+                        <div
+                            class="text-white font-mono font-black text-[11px] sm:text-xs md:text-4xl tracking-wider drop-shadow-[0_0_10px_rgba(0,242,254,0.6)] flex items-baseline gap-0.5 md:gap-1">
+                            <span id="jackpot-major">14,230.50</span> <span
+                                class="hidden sm:inline text-[7px] md:text-sm text-q-cyan font-display">TND</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- MINI JACKPOT -->
-                <div id="mini-wrapper" class="relative group cursor-pointer" data-tilt data-tilt-glare data-tilt-max-glare="0.3" data-tilt-max="10">
-                    <div class="absolute inset-0 bg-gradient-to-r from-q-magenta to-red-600 rounded-xl md:rounded-3xl blur-md md:blur-xl opacity-30 group-hover:opacity-70 transition duration-500"></div>
-                    <div class="relative h-full bg-q-panel/60 backdrop-blur-xl border border-q-magenta/50 rounded-xl md:rounded-3xl p-2 py-3 md:p-8 flex flex-col items-center justify-center overflow-hidden shadow-[inset_0_0_15px_rgba(254,9,121,0.15)] md:shadow-[inset_0_0_30px_rgba(254,9,121,0.15)]">
-                        <div class="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-25deg] group-hover:left-[200%] transition-all duration-1000 ease-out"></div>
-                        
-                        <i class="fas fa-fire text-xl md:text-5xl text-q-magenta mb-1 md:mb-3 drop-shadow-[0_0_10px_rgba(254,9,121,0.9)] group-hover:scale-125 transition-transform duration-500"></i>
-                        <span class="text-q-magenta text-[7px] md:text-xs font-black uppercase tracking-[0.2em] md:tracking-[0.4em] mb-0.5 md:mb-1">Mini Drop</span>
-                        
-                        <div class="text-white font-mono font-black text-[11px] sm:text-xs md:text-4xl tracking-wider drop-shadow-[0_0_10px_rgba(254,9,121,0.6)] flex items-baseline gap-0.5 md:gap-1">
-                            <span id="jackpot-mini">1,850.25</span> <span class="hidden sm:inline text-[7px] md:text-sm text-q-magenta font-display">TND</span>
+                <div id="mini-wrapper" class="relative group cursor-pointer" data-tilt data-tilt-glare
+                    data-tilt-max-glare="0.3" data-tilt-max="10">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-q-magenta to-red-600 rounded-xl md:rounded-3xl blur-md md:blur-xl opacity-30 group-hover:opacity-70 transition duration-500">
+                    </div>
+                    <div
+                        class="relative h-full bg-q-panel/60 backdrop-blur-xl border border-q-magenta/50 rounded-xl md:rounded-3xl p-2 py-3 md:p-8 flex flex-col items-center justify-center overflow-hidden shadow-[inset_0_0_15px_rgba(254,9,121,0.15)] md:shadow-[inset_0_0_30px_rgba(254,9,121,0.15)]">
+                        <div
+                            class="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-25deg] group-hover:left-[200%] transition-all duration-1000 ease-out">
+                        </div>
+
+                        <i
+                            class="fas fa-fire text-xl md:text-5xl text-q-magenta mb-1 md:mb-3 drop-shadow-[0_0_10px_rgba(254,9,121,0.9)] group-hover:scale-125 transition-transform duration-500"></i>
+                        <span
+                            class="text-q-magenta text-[7px] md:text-xs font-black uppercase tracking-[0.2em] md:tracking-[0.4em] mb-0.5 md:mb-1">Mini
+                            Drop</span>
+
+                        <div
+                            class="text-white font-mono font-black text-[11px] sm:text-xs md:text-4xl tracking-wider drop-shadow-[0_0_10px_rgba(254,9,121,0.6)] flex items-baseline gap-0.5 md:gap-1">
+                            <span id="jackpot-mini">1,850.25</span> <span
+                                class="hidden sm:inline text-[7px] md:text-sm text-q-magenta font-display">TND</span>
                         </div>
                     </div>
                 </div>
@@ -556,84 +926,116 @@
                 <h3 class="font-display font-bold text-2xl md:text-3xl mb-4 md:mb-6 tracking-widest flex items-center">
                     <i class="fas fa-bolt text-q-gold mr-3 animate-pulse"></i> Offres Éclair
                 </h3>
-                
-                <div class="flex md:grid md:grid-cols-3 gap-4 md:gap-6 overflow-x-auto hide-scroll pb-4 snap-x snap-mandatory">
-                    <div class="voucher-card glass-card rounded-2xl h-36 md:h-56 w-[85vw] md:w-auto shrink-0 snap-center flex flex-col justify-between p-4 md:p-6 border border-q-cyan/30 cursor-pointer shadow-[0_0_15px_rgba(0,242,254,0.1)]" data-tilt data-tilt-glare data-tilt-max-glare="0.5" data-tilt-max="10">
-                        <img src="https://images.unsplash.com/photo-1633519895180-b2cc22bc0838?q=80&w=800&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-20 z-0">
-                        <div class="absolute inset-0 bg-gradient-to-r from-q-panel via-q-panel/80 to-transparent z-0"></div>
+
+                <div
+                    class="flex md:grid md:grid-cols-3 gap-4 md:gap-6 overflow-x-auto hide-scroll pb-4 snap-x snap-mandatory">
+                    <div class="voucher-card glass-card rounded-2xl h-36 md:h-56 w-[85vw] md:w-auto shrink-0 snap-center flex flex-col justify-between p-4 md:p-6 border border-q-cyan/30 cursor-pointer shadow-[0_0_15px_rgba(0,242,254,0.1)]"
+                        data-tilt data-tilt-glare data-tilt-max-glare="0.5" data-tilt-max="10">
+                        <img src="https://images.unsplash.com/photo-1633519895180-b2cc22bc0838?q=80&w=800&auto=format&fit=crop"
+                            class="absolute inset-0 w-full h-full object-cover opacity-20 z-0">
+                        <div class="absolute inset-0 bg-gradient-to-r from-q-panel via-q-panel/80 to-transparent z-0">
+                        </div>
                         <div class="relative z-10 transform translate-z-10">
-                            <span class="bg-q-cyan text-black text-[9px] md:text-[10px] font-black px-2 py-0.5 md:py-1 rounded uppercase tracking-widest">Nouveau Joueur</span>
-                            <h4 class="font-display font-bold text-2xl md:text-3xl text-white mt-1 md:mt-2">BONUS 200%</h4>
-                            <p class="text-gray-400 text-[10px] md:text-xs mt-1 font-semibold line-clamp-1">Jusqu'à 1000 TND sur votre 1er Dépôt.</p>
+                            <span
+                                class="bg-q-cyan text-black text-[9px] md:text-[10px] font-black px-2 py-0.5 md:py-1 rounded uppercase tracking-widest">Nouveau
+                                Joueur</span>
+                            <h4 class="font-display font-bold text-2xl md:text-3xl text-white mt-1 md:mt-2">BONUS 200%
+                            </h4>
+                            <p class="text-gray-400 text-[10px] md:text-xs mt-1 font-semibold line-clamp-1">Jusqu'à 1000
+                                TND sur votre 1er Dépôt.</p>
                         </div>
                     </div>
-                    <div class="voucher-card glass-card rounded-2xl h-36 md:h-56 w-[85vw] md:w-auto shrink-0 snap-center flex flex-col justify-between p-4 md:p-6 border border-q-magenta/30 cursor-pointer shadow-[0_0_15px_rgba(254,9,121,0.1)]" data-tilt data-tilt-glare data-tilt-max-glare="0.5" data-tilt-max="10">
-                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-20 z-0">
-                        <div class="absolute inset-0 bg-gradient-to-r from-q-panel via-q-panel/80 to-transparent z-0"></div>
+                    <div class="voucher-card glass-card rounded-2xl h-36 md:h-56 w-[85vw] md:w-auto shrink-0 snap-center flex flex-col justify-between p-4 md:p-6 border border-q-magenta/30 cursor-pointer shadow-[0_0_15px_rgba(254,9,121,0.1)]"
+                        data-tilt data-tilt-glare data-tilt-max-glare="0.5" data-tilt-max="10">
+                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop"
+                            class="absolute inset-0 w-full h-full object-cover opacity-20 z-0">
+                        <div class="absolute inset-0 bg-gradient-to-r from-q-panel via-q-panel/80 to-transparent z-0">
+                        </div>
                         <div class="relative z-10 transform translate-z-10">
-                            <span class="bg-q-magenta text-white text-[9px] md:text-[10px] font-black px-2 py-0.5 md:py-1 rounded uppercase tracking-widest">Événement Hebdo</span>
-                            <h4 class="font-display font-bold text-2xl md:text-3xl text-white mt-1 md:mt-2">15% CASHBACK</h4>
-                            <p class="text-gray-400 text-[10px] md:text-xs mt-1 font-semibold line-clamp-1">Sur toutes vos pertes du weekend.</p>
+                            <span
+                                class="bg-q-magenta text-white text-[9px] md:text-[10px] font-black px-2 py-0.5 md:py-1 rounded uppercase tracking-widest">Événement
+                                Hebdo</span>
+                            <h4 class="font-display font-bold text-2xl md:text-3xl text-white mt-1 md:mt-2">15% CASHBACK
+                            </h4>
+                            <p class="text-gray-400 text-[10px] md:text-xs mt-1 font-semibold line-clamp-1">Sur toutes
+                                vos pertes du weekend.</p>
                         </div>
                     </div>
-                    <div class="voucher-card glass-card rounded-2xl h-36 md:h-56 w-[85vw] md:w-auto shrink-0 snap-center flex flex-col justify-between p-4 md:p-6 border border-q-gold/30 cursor-pointer shadow-[0_0_15px_rgba(249,212,35,0.1)] md:col-span-1" data-tilt data-tilt-glare data-tilt-max-glare="0.5" data-tilt-max="10">
-                        <img src="https://images.unsplash.com/photo-1610996841578-83b6320aab5d?q=80&w=800&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-20 z-0 mix-blend-luminosity">
-                        <div class="absolute inset-0 bg-gradient-to-r from-q-panel via-q-panel/80 to-transparent z-0"></div>
+                    <div class="voucher-card glass-card rounded-2xl h-36 md:h-56 w-[85vw] md:w-auto shrink-0 snap-center flex flex-col justify-between p-4 md:p-6 border border-q-gold/30 cursor-pointer shadow-[0_0_15px_rgba(249,212,35,0.1)] md:col-span-1"
+                        data-tilt data-tilt-glare data-tilt-max-glare="0.5" data-tilt-max="10">
+                        <img src="https://images.unsplash.com/photo-1610996841578-83b6320aab5d?q=80&w=800&auto=format&fit=crop"
+                            class="absolute inset-0 w-full h-full object-cover opacity-20 z-0 mix-blend-luminosity">
+                        <div class="absolute inset-0 bg-gradient-to-r from-q-panel via-q-panel/80 to-transparent z-0">
+                        </div>
                         <div class="relative z-10 transform translate-z-10">
-                            <span class="bg-q-gold text-black text-[9px] md:text-[10px] font-black px-2 py-0.5 md:py-1 rounded uppercase tracking-widest">Exclusif Crypto</span>
-                            <h4 class="font-display font-bold text-2xl md:text-3xl text-white mt-1 md:mt-2">FREE SPINS VIP</h4>
-                            <p class="text-gray-400 text-[10px] md:text-xs mt-1 font-semibold line-clamp-1">50 Tours gratuits pour tout dépôt USDT.</p>
+                            <span
+                                class="bg-q-gold text-black text-[9px] md:text-[10px] font-black px-2 py-0.5 md:py-1 rounded uppercase tracking-widest">Exclusif
+                                Crypto</span>
+                            <h4 class="font-display font-bold text-2xl md:text-3xl text-white mt-1 md:mt-2">FREE SPINS
+                                VIP</h4>
+                            <p class="text-gray-400 text-[10px] md:text-xs mt-1 font-semibold line-clamp-1">50 Tours
+                                gratuits pour tout dépôt USDT.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- ================= QUICK ACCESS NAVIGATION ( MENU - MOBILE SCROLL) ================= -->
-            <div class="flex flex-nowrap overflow-x-auto hide-scroll items-center justify-start gap-3 md:gap-4 mb-10 w-full relative z-20 pb-4">
-                
+            <div
+                class="flex flex-nowrap overflow-x-auto hide-scroll items-center justify-start gap-3 md:gap-4 mb-10 w-full relative z-20 pb-4">
+
                 <!-- 1. Casino / Populaires -->
-                <button onclick="switchSection('accueil')" class="shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-full bg-q-panel/60 border border-q-magenta/50 text-q-magenta backdrop-blur-md shadow-[0_0_10px_rgba(254,9,121,0.2)] hover:shadow-[0_0_20px_rgba(254,9,121,0.6)] hover:bg-q-magenta hover:text-white transition-all duration-300 hover:-translate-y-1 group">
+                <button onclick="switchSection('accueil')"
+                    class="shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-full bg-q-panel/60 border border-q-magenta/50 text-q-magenta backdrop-blur-md shadow-[0_0_10px_rgba(254,9,121,0.2)] hover:shadow-[0_0_20px_rgba(254,9,121,0.6)] hover:bg-q-magenta hover:text-white transition-all duration-300 hover:-translate-y-1 group">
                     <i class="fas fa-fire text-lg group-hover:animate-bounce"></i>
                     <span class="text-[10px] md:text-xs font-black uppercase tracking-widest">Casino</span>
                 </button>
 
                 <!-- 2. Live Casino -->
-                <button onclick="switchSection('live-casino')" class="shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-full bg-q-panel/40 border border-purple-500/30 text-gray-300 backdrop-blur-md hover:border-purple-500 hover:text-purple-400 hover:bg-purple-500/10 hover:shadow-[0_0_15px_rgba(168,85,247,0.4)] transition-all duration-300 hover:-translate-y-1">
+                <button onclick="switchSection('live-casino')"
+                    class="shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-full bg-q-panel/40 border border-purple-500/30 text-gray-300 backdrop-blur-md hover:border-purple-500 hover:text-purple-400 hover:bg-purple-500/10 hover:shadow-[0_0_15px_rgba(168,85,247,0.4)] transition-all duration-300 hover:-translate-y-1">
                     <i class="fas fa-headset text-lg"></i>
                     <span class="text-[10px] md:text-xs font-black uppercase tracking-widest">Live Casino</span>
                 </button>
 
                 <!-- 3. Sports -->
-                <button onclick="openSportsbook()" class="shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-full bg-q-panel/40 border border-green-500/30 text-gray-300 backdrop-blur-md hover:border-green-500 hover:text-green-400 hover:bg-green-500/10 hover:shadow-[0_0_15px_rgba(34,197,94,0.4)] transition-all duration-300 hover:-translate-y-1">
+                <button onclick="openSportsbook()"
+                    class="shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-full bg-q-panel/40 border border-green-500/30 text-gray-300 backdrop-blur-md hover:border-green-500 hover:text-green-400 hover:bg-green-500/10 hover:shadow-[0_0_15px_rgba(34,197,94,0.4)] transition-all duration-300 hover:-translate-y-1">
                     <i class="fas fa-futbol text-lg"></i>
                     <span class="text-[10px] md:text-xs font-black uppercase tracking-widest">Sports</span>
                 </button>
 
                 <!-- 4. Virtuels -->
-                <button onclick="switchSection('virtuals'); initVirtualsLobby();" class="shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-full bg-q-panel/40 border border-q-gold/30 text-gray-300 backdrop-blur-md hover:border-q-gold hover:text-q-gold hover:bg-q-gold/10 hover:shadow-[0_0_15px_rgba(249,212,35,0.4)] transition-all duration-300 hover:-translate-y-1">
+                <button onclick="switchSection('virtuals'); initVirtualsLobby();"
+                    class="shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-full bg-q-panel/40 border border-q-gold/30 text-gray-300 backdrop-blur-md hover:border-q-gold hover:text-q-gold hover:bg-q-gold/10 hover:shadow-[0_0_15px_rgba(249,212,35,0.4)] transition-all duration-300 hover:-translate-y-1">
                     <i class="fas fa-gamepad text-lg"></i>
                     <span class="text-[10px] md:text-xs font-black uppercase tracking-widest">Virtuels</span>
                 </button>
 
                 <!-- 5. Mini-Jeux -->
-                <button onclick="switchSection('accueil')" class="shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-full bg-q-panel/40 border border-q-cyan/30 text-gray-300 backdrop-blur-md hover:border-q-cyan hover:text-q-cyan hover:bg-q-cyan/10 hover:shadow-[0_0_15px_rgba(0,242,254,0.4)] transition-all duration-300 hover:-translate-y-1">
+                <button onclick="switchSection('accueil')"
+                    class="shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-full bg-q-panel/40 border border-q-cyan/30 text-gray-300 backdrop-blur-md hover:border-q-cyan hover:text-q-cyan hover:bg-q-cyan/10 hover:shadow-[0_0_15px_rgba(0,242,254,0.4)] transition-all duration-300 hover:-translate-y-1">
                     <i class="fas fa-bomb text-lg"></i>
                     <span class="text-[10px] md:text-xs font-black uppercase tracking-widest">Mini-Jeux</span>
                 </button>
 
                 <!-- 6. Aviator -->
-                <button onclick="playCasinoGame('SPRIBE', 'aviator')" class="shrink-0 flex items-center gap-2 px-6 py-2.5 rounded-full bg-red-600/10 border-2 border-red-500 text-red-500 backdrop-blur-md shadow-[0_0_15px_rgba(239,68,68,0.3)] hover:shadow-[0_0_25px_rgba(239,68,68,0.8)] hover:bg-red-500 hover:text-white transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                <button onclick="playCasinoGame('SPRIBE', 'aviator')"
+                    class="shrink-0 flex items-center gap-2 px-6 py-2.5 rounded-full bg-red-600/10 border-2 border-red-500 text-red-500 backdrop-blur-md shadow-[0_0_15px_rgba(239,68,68,0.3)] hover:shadow-[0_0_25px_rgba(239,68,68,0.8)] hover:bg-red-500 hover:text-white transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700">
+                    </div>
                     <i class="fas fa-plane-departure text-lg group-hover:animate-pulse"></i>
                     <span class="text-[10px] md:text-xs font-black uppercase tracking-widest">Aviator</span>
                 </button>
-                
+
             </div>
             <!-- ================= END QUICK ACCESS ================= -->
             <!-- ================= DYNAMIC 3D SWIPER ================= -->
             <div class="swiper mySwiper swiper-3d-container">
                 <div class="swiper-wrapper" id="dynamic-swiper-wrapper">
-                    <div class="swiper-slide relative group shadow-[0_0_20px_rgba(0,0,0,0.8)] border border-white/10 rounded-2xl overflow-hidden flex items-center justify-center bg-q-panel">
+                    <div
+                        class="swiper-slide relative group shadow-[0_0_20px_rgba(0,0,0,0.8)] border border-white/10 rounded-2xl overflow-hidden flex items-center justify-center bg-q-panel">
                         <span class="text-q-cyan animate-pulse font-display tracking-widest">LOADING GAMES...</span>
                     </div>
                 </div>
@@ -644,11 +1046,12 @@
                 <h3 class="font-display font-bold text-2xl md:text-3xl mb-4 md:mb-6 tracking-widest flex items-center">
                     <i class="fas fa-star text-q-cyan mr-3 animate-pulse"></i> Sélection du Jour
                 </h3>
-                
+
                 <!-- شبكة الألعاب الستة -->
                 <div id="games-of-the-day-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
                     <!-- سيتم تعبئتها أوتوماتيكياً عبر الجافا سكريبت -->
-                    <div class="col-span-full text-center text-q-cyan py-10 animate-pulse font-display tracking-widest">CHARGEMENT DES JEUX... ⏳</div>
+                    <div class="col-span-full text-center text-q-cyan py-10 animate-pulse font-display tracking-widest">
+                        CHARGEMENT DES JEUX... ⏳</div>
                 </div>
             </div>
 
@@ -659,38 +1062,57 @@
             <div class="flex flex-col md:flex-row gap-6">
                 <!-- User Card Sidebar -->
                 <div class="w-full md:w-1/3 space-y-4">
-                    <div class="glass-card rounded-2xl p-6 text-center border border-white/10 shadow-[0_0_20px_rgba(0,242,254,0.1)] relative overflow-hidden">
+                    <div
+                        class="glass-card rounded-2xl p-6 text-center border border-white/10 shadow-[0_0_20px_rgba(0,242,254,0.1)] relative overflow-hidden">
                         <div class="absolute top-0 right-0 w-32 h-32 bg-q-cyan/10 blur-3xl rounded-full"></div>
-                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=QuantumUser" class="w-24 h-24 mx-auto rounded-full bg-black/50 p-2 mb-4 border border-q-cyan/50 relative z-10">
-                        <h2 class="text-2xl font-display font-bold text-white relative z-10" id="profile-page-username">User</h2>
-                        <p class="text-q-cyan font-mono text-xl mt-1 font-bold relative z-10"><span id="profile-page-balance">0.00</span> TND</p>
-                        
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=QuantumUser"
+                            class="w-24 h-24 mx-auto rounded-full bg-black/50 p-2 mb-4 border border-q-cyan/50 relative z-10">
+                        <h2 class="text-2xl font-display font-bold text-white relative z-10" id="profile-page-username">
+                            User</h2>
+                        <p class="text-q-cyan font-mono text-xl mt-1 font-bold relative z-10"><span
+                                id="profile-page-balance">0.00</span> TND</p>
+
                         <div class="flex gap-2 mt-6 relative z-10">
-                            <button onclick="toggleCashier(); switchCashierTab('deposit');" class="flex-1 btn-liquid text-white text-xs font-bold py-2.5 rounded-xl uppercase tracking-wider">Dépôt</button>
-                            <button onclick="toggleCashier(); switchCashierTab('withdraw');" class="flex-1 bg-black/50 border border-white/20 hover:border-q-magenta hover:bg-q-magenta/10 text-white text-xs font-bold py-2.5 rounded-xl transition-colors uppercase tracking-wider">Retrait</button>
+                            <button onclick="toggleCashier(); switchCashierTab('deposit');"
+                                class="flex-1 btn-liquid text-white text-xs font-bold py-2.5 rounded-xl uppercase tracking-wider">Dépôt</button>
+                            <button onclick="toggleCashier(); switchCashierTab('withdraw');"
+                                class="flex-1 bg-black/50 border border-white/20 hover:border-q-magenta hover:bg-q-magenta/10 text-white text-xs font-bold py-2.5 rounded-xl transition-colors uppercase tracking-wider">Retrait</button>
                         </div>
-                        <button onclick="logoutPlayer()" class="w-full mt-3 bg-red-600/10 border border-red-600/30 text-red-500 text-xs font-bold py-2.5 rounded-xl hover:bg-red-600 hover:text-white transition-colors uppercase tracking-wider relative z-10"><i class="fas fa-sign-out-alt mr-2"></i> Déconnexion</button>
+                        <button onclick="logoutPlayer()"
+                            class="w-full mt-3 bg-red-600/10 border border-red-600/30 text-red-500 text-xs font-bold py-2.5 rounded-xl hover:bg-red-600 hover:text-white transition-colors uppercase tracking-wider relative z-10"><i
+                                class="fas fa-sign-out-alt mr-2"></i> Déconnexion</button>
                     </div>
 
                     <!-- Tabs Menu -->
                     <div class="glass-card rounded-2xl p-4 border border-white/10 flex flex-col gap-2">
-                        <button onclick="loadProfileHistory('bets', this)" class="prof-tab-btn active text-left px-4 py-3.5 rounded-xl text-sm font-bold bg-q-cyan/10 text-q-cyan border border-q-cyan/50 transition-colors shadow-inner"><i class="fas fa-ticket-alt w-6"></i> Mes Paris Sportifs</button>
-                        <button onclick="loadProfileHistory('casino', this)" class="prof-tab-btn text-left px-4 py-3.5 rounded-xl text-sm font-bold text-gray-400 border border-transparent hover:border-white/10 hover:bg-white/5 transition-colors"><i class="fas fa-dice w-6"></i> Historique Casino</button>
-                        <button onclick="loadProfileHistory('transactions', this)" class="prof-tab-btn text-left px-4 py-3.5 rounded-xl text-sm font-bold text-gray-400 border border-transparent hover:border-white/10 hover:bg-white/5 transition-colors"><i class="fas fa-exchange-alt w-6"></i> Dépôts & Retraits</button>
+                        <button onclick="loadProfileHistory('bets', this)"
+                            class="prof-tab-btn active text-left px-4 py-3.5 rounded-xl text-sm font-bold bg-q-cyan/10 text-q-cyan border border-q-cyan/50 transition-colors shadow-inner"><i
+                                class="fas fa-ticket-alt w-6"></i> Mes Paris Sportifs</button>
+                        <button onclick="loadProfileHistory('casino', this)"
+                            class="prof-tab-btn text-left px-4 py-3.5 rounded-xl text-sm font-bold text-gray-400 border border-transparent hover:border-white/10 hover:bg-white/5 transition-colors"><i
+                                class="fas fa-dice w-6"></i> Historique Casino</button>
+                        <button onclick="loadProfileHistory('transactions', this)"
+                            class="prof-tab-btn text-left px-4 py-3.5 rounded-xl text-sm font-bold text-gray-400 border border-transparent hover:border-white/10 hover:bg-white/5 transition-colors"><i
+                                class="fas fa-exchange-alt w-6"></i> Dépôts & Retraits</button>
                     </div>
                 </div>
 
                 <!-- Main Content Area -->
-                <div class="w-full md:w-2/3 glass-card rounded-2xl p-6 border border-white/10 min-h-[500px] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                <div
+                    class="w-full md:w-2/3 glass-card rounded-2xl p-6 border border-white/10 min-h-[500px] shadow-[0_0_20px_rgba(0,0,0,0.5)]">
                     <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
-                        <h3 class="text-xl md:text-2xl font-display font-bold text-white flex items-center gap-2" id="profile-history-title">
+                        <h3 class="text-xl md:text-2xl font-display font-bold text-white flex items-center gap-2"
+                            id="profile-history-title">
                             <i class="fas fa-ticket-alt text-q-cyan"></i> Mes Paris Sportifs
                         </h3>
-                        <button onclick="loadProfileHistory(currentProfileTab)" class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-sync-alt"></i></button>
+                        <button onclick="loadProfileHistory(currentProfileTab)"
+                            class="text-gray-400 hover:text-white transition-colors"><i
+                                class="fas fa-sync-alt"></i></button>
                     </div>
-                    
+
                     <div id="profile-history-content" class="space-y-3">
-                        <div class="text-center py-10 text-gray-500 animate-pulse font-display">Chargement des données...</div>
+                        <div class="text-center py-10 text-gray-500 animate-pulse font-display">Chargement des
+                            données...</div>
                     </div>
                 </div>
             </div>
@@ -698,36 +1120,46 @@
 
         <!-- PANE: CASINO (Standard Grid) -->
         <div id="pane-casino" class="player-view-section hidden w-full">
-            <div class="flex flex-col md:flex-row gap-4 bg-q-panel/80 p-4 rounded-xl border border-white/10 mb-4 backdrop-blur-md">
+            <div
+                class="flex flex-col md:flex-row gap-4 bg-q-panel/80 p-4 rounded-xl border border-white/10 mb-4 backdrop-blur-md">
                 <h2 class="text-white font-display font-black text-xl flex items-center gap-2">
                     <span class="text-q-magenta">🎰</span> Casino
                 </h2>
-                <input type="text" id="game-search-input" onkeyup="filterGames()" placeholder="Chercher un jeu..." class="w-full bg-black/50 text-white border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-q-cyan transition-colors">
+                <input type="text" id="game-search-input" onkeyup="filterGames()" placeholder="Chercher un jeu..."
+                    class="w-full bg-black/50 text-white border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-q-cyan transition-colors">
             </div>
             <div id="providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4"></div>
-            <div id="games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4 w-full pb-10"></div>
+            <div id="games-grid"
+                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4 w-full pb-10">
+            </div>
         </div>
 
         <!-- PANE: LIVE CASINO -->
         <div id="pane-live-casino" class="player-view-section hidden w-full">
-            <div class="flex items-center justify-between bg-q-panel/80 p-4 rounded-xl border border-white/10 mb-4 backdrop-blur-md">
+            <div
+                class="flex items-center justify-between bg-q-panel/80 p-4 rounded-xl border border-white/10 mb-4 backdrop-blur-md">
                 <h2 class="text-white font-display font-black text-xl flex items-center gap-2">
                     <span class="animate-pulse text-red-500">🔴</span> Live Casino
                 </h2>
             </div>
-            <div id="live-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 w-full pb-10"></div>
+            <div id="live-games-grid"
+                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 w-full pb-10"></div>
         </div>
 
         <!-- PANE: VIRTUALS -->
         <div id="pane-virtuals" class="player-view-section hidden w-full">
-            <div class="flex flex-col md:flex-row gap-4 bg-q-panel/80 p-4 rounded-xl border border-white/10 mb-4 backdrop-blur-md">
+            <div
+                class="flex flex-col md:flex-row gap-4 bg-q-panel/80 p-4 rounded-xl border border-white/10 mb-4 backdrop-blur-md">
                 <h2 class="text-white font-display font-black text-xl flex items-center gap-2 whitespace-nowrap">
                     <span class="text-q-gold">🎮</span> Virtuels
                 </h2>
-                <input type="text" id="virtual-search-input" onkeyup="filterVirtualGames()" placeholder="Chercher un jeu virtuel..." class="w-full bg-black/50 text-white border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-q-gold transition-colors">
+                <input type="text" id="virtual-search-input" onkeyup="filterVirtualGames()"
+                    placeholder="Chercher un jeu virtuel..."
+                    class="w-full bg-black/50 text-white border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-q-gold transition-colors">
             </div>
             <div id="virtual-categories-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4"></div>
-            <div id="virtuals-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 w-full pb-10"></div>
+            <div id="virtuals-games-grid"
+                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 w-full pb-10"></div>
         </div>
 
         <!-- PANE: SPORTS -->
@@ -735,103 +1167,131 @@
             <div class="text-center text-q-cyan py-10 font-display animate-pulse">Ouverture des sports en cours...</div>
         </div>
         <!-- ================= FOOTER & LEGAL (TERMS, PAYMENTS, LIMITS) ================= -->
-            <footer class="relative mt-20 bg-q-panel/40 border-t border-white/10 backdrop-blur-xl pt-10 pb-8 rounded-t-3xl shadow-[0_-10px_30px_rgba(0,0,0,0.5)] w-full">
-                <div class="max-w-7xl mx-auto px-4 md:px-8">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-8">
-                        
-                        <!-- 1. الشروط والأحكام والروابط -->
-                        <div>
-                            <h4 class="text-white font-display font-bold text-lg mb-4 flex items-center gap-2">
-                                <i class="fas fa-gavel text-q-cyan"></i> Légal & Conditions
-                            </h4>
-                            <ul class="space-y-2 text-[11px] md:text-xs text-gray-400">
-                                <li><a href="javascript:void(0)" onclick="openLegalModal('modal-tc')" class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Termes et Conditions (T&C)</a></li>
-                                <li><a href="javascript:void(0)" onclick="openLegalModal('modal-confidentialite')" class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Politique de Confidentialité</a></li>
-                                <li><a href="javascript:void(0)" onclick="openLegalModal('modal-regles')" class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Règles des Paris Sportifs</a></li>
-                                <li><a href="javascript:void(0)" onclick="openLegalModal('modal-responsable')" class="hover:text-q-cyan hover:pl-2 transition-all duration-300 text-q-gold">Jeu Responsable</a></li>
-                            </ul>
-                        </div>
+        <footer
+            class="relative mt-20 bg-q-panel/40 border-t border-white/10 backdrop-blur-xl pt-10 pb-8 rounded-t-3xl shadow-[0_-10px_30px_rgba(0,0,0,0.5)] w-full">
+            <div class="max-w-7xl mx-auto px-4 md:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-8">
 
-                        <!-- 2. طرق الدفع المتاحة -->
-                        <div>
-                            <h4 class="text-white font-display font-bold text-lg mb-4 flex items-center gap-2">
-                                <i class="fas fa-wallet text-q-magenta"></i> Méthodes de Paiement
-                            </h4>
-                            <div class="flex flex-wrap gap-2 md:gap-3">
-                                <div class="bg-black/30 border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2 hover:border-gray-400 transition-colors cursor-default">
-                                    <i class="fas fa-mobile-alt text-gray-300"></i> <span class="text-[10px] md:text-xs font-bold text-gray-300">D17</span>
-                                </div>
-                                <div class="bg-black/30 border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2 hover:border-[#26A17B] transition-colors cursor-default">
-                                    <i class="fab fa-bitcoin text-[#26A17B]"></i> <span class="text-[10px] md:text-xs font-bold text-gray-300">USDT</span>
-                                </div>
-                                <div class="bg-black/30 border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2 hover:border-blue-500 transition-colors cursor-default">
-                                    <i class="fas fa-university text-blue-400"></i> <span class="text-[10px] md:text-xs font-bold text-gray-300">Banque</span>
-                                </div>
-                                <div class="bg-black/30 border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2 hover:border-q-gold transition-colors cursor-default">
-                                    <i class="fas fa-money-bill-wave text-q-gold"></i> <span class="text-[10px] md:text-xs font-bold text-gray-300">Cash</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 3. التنبيه القانوني (الحد الأقصى للربح) -->
-                        <div>
-                            <h4 class="text-white font-display font-bold text-lg mb-4 flex items-center gap-2">
-                                <i class="fas fa-exclamation-triangle text-red-500 animate-pulse"></i> Limite de Gain
-                            </h4>
-                            <div class="bg-red-900/10 border border-red-500/30 rounded-xl p-3 md:p-4 hover:bg-red-900/20 transition-colors">
-                                <p class="text-gray-400 text-[10px] md:text-xs leading-relaxed mb-3">
-                                    Conformément à nos conditions générales, le retrait des gains est soumis à un plafond strict pour garantir l'équité.
-                                </p>
-                                <div class="flex items-center gap-2 bg-black/40 rounded-lg p-2 border border-red-500/20">
-                                    <div class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></div>
-                                    <span class="text-white font-black text-[11px] md:text-sm">Plafond Mensuel : <span class="text-red-400 text-glow">30,000 TND</span></span>
-                                </div>
-                            </div>
-                        </div>
-
+                    <!-- 1. الشروط والأحكام والروابط -->
+                    <div>
+                        <h4 class="text-white font-display font-bold text-lg mb-4 flex items-center gap-2">
+                            <i class="fas fa-gavel text-q-cyan"></i> Légal & Conditions
+                        </h4>
+                        <ul class="space-y-2 text-[11px] md:text-xs text-gray-400">
+                            <li><a href="javascript:void(0)" onclick="openLegalModal('modal-tc')"
+                                    class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Termes et
+                                    Conditions (T&C)</a></li>
+                            <li><a href="javascript:void(0)" onclick="openLegalModal('modal-confidentialite')"
+                                    class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Politique de
+                                    Confidentialité</a></li>
+                            <li><a href="javascript:void(0)" onclick="openLegalModal('modal-regles')"
+                                    class="hover:text-q-cyan hover:pl-2 transition-all duration-300">Règles des Paris
+                                    Sportifs</a></li>
+                            <li><a href="javascript:void(0)" onclick="openLegalModal('modal-responsable')"
+                                    class="hover:text-q-cyan hover:pl-2 transition-all duration-300 text-q-gold">Jeu
+                                    Responsable</a></li>
+                        </ul>
                     </div>
-                    
-                    <!-- الحقوق وعلامة +18 -->
-                    <div class="border-t border-white/5 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
-                        <div class="text-gray-500 text-[10px] md:text-xs">
-                            &copy; 2026 Alphabet216. Tous droits réservés.
+
+                    <!-- طرق الدفع المتاحة -->
+                    <div>
+                        <h4 class="text-white font-display font-bold text-lg mb-4 flex items-center gap-2">
+                            <i class="fas fa-wallet text-q-magenta"></i> Méthodes de Paiement
+                        </h4>
+                        <div class="flex flex-wrap gap-2 md:gap-3">
+                            <!-- Voucher / Recharge -->
+                            <div
+                                class="bg-black/30 border border-q-gold/40 px-3 py-1.5 rounded-lg flex items-center gap-2">
+                                <i class="fas fa-ticket-alt text-q-gold"></i>
+                                <span class="text-[10px] md:text-xs text-gray-200 font-bold">Coupon / Voucher</span>
+                            </div>
+                            <!-- Crypto / USDT -->
+                            <div
+                                class="bg-black/30 border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2">
+                                <i class="fab fa-bitcoin text-[#26A17B]"></i>
+                                <span class="text-[10px] md:text-xs text-gray-300">USDT / Crypto</span>
+                            </div>
+                            <!-- Perfect Money / USD -->
+                            <div
+                                class="bg-black/30 border border-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2">
+                                <i class="fas fa-dollar-sign text-green-400"></i>
+                                <span class="text-[10px] md:text-xs text-gray-300">USD Card</span>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-3">
-                            <span class="text-[10px] font-black text-gray-400 border border-gray-600 rounded px-2 py-0.5 opacity-60">18+</span>
-                            <span class="text-[10px] font-bold text-gray-500">Jeu Responsable</span>
+                    </div>
+                    <!-- 3. التنبيه القانوني (الحد الأقصى للربح) -->
+                    <div>
+                        <h4 class="text-white font-display font-bold text-lg mb-4 flex items-center gap-2">
+                            <i class="fas fa-exclamation-triangle text-red-500 animate-pulse"></i> Limite de Gain
+                        </h4>
+                        <div
+                            class="bg-red-900/10 border border-red-500/30 rounded-xl p-3 md:p-4 hover:bg-red-900/20 transition-colors">
+                            <p class="text-gray-400 text-[10px] md:text-xs leading-relaxed mb-3">
+                                Conformément à nos conditions générales, le retrait des gains est soumis à un plafond
+                                strict pour garantir l'équité.
+                            </p>
+                            <div class="flex items-center gap-2 bg-black/40 rounded-lg p-2 border border-red-500/20">
+                                <div class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></div>
+                                <span class="text-white font-black text-[11px] md:text-sm">Plafond Mensuel : <span
+                                        class="text-red-400 text-glow">30,000 TND</span></span>
+                            </div>
                         </div>
+                    </div>
+
+                </div>
+
+                <!-- الحقوق وعلامة +18 -->
+                <div class="border-t border-white/5 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="text-gray-500 text-[10px] md:text-xs">
+                        &copy; 2026 Alphabet216. Tous droits réservés.
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span
+                            class="text-[10px] font-black text-gray-400 border border-gray-600 rounded px-2 py-0.5 opacity-60">18+</span>
+                        <span class="text-[10px] font-bold text-gray-500">Jeu Responsable</span>
                     </div>
                 </div>
-            </footer>
-            <!-- ================= END FOOTER ================= -->
+            </div>
+        </footer>
+        <!-- ================= END FOOTER ================= -->
     </main>
 
     <!-- Radar Mobile Bottom Bar -->
-    <div class="fixed bottom-0 left-0 right-0 h-[70px] bg-q-panel/95 backdrop-blur-2xl border-t border-q-cyan/20 lg:hidden z-50 flex items-center justify-around px-2 pb-1 rounded-t-[2rem] shadow-[0_-15px_30px_rgba(0,242,254,0.1)]">
-        <button onclick="switchSection('accueil')" class="flex flex-col items-center gap-1 w-[20%] text-q-cyan hover:-translate-y-1 transition-transform cursor-pointer">
+    <div
+        class="fixed bottom-0 left-0 right-0 h-[70px] bg-q-panel/95 backdrop-blur-2xl border-t border-q-cyan/20 lg:hidden z-50 flex items-center justify-around px-2 pb-1 rounded-t-[2rem] shadow-[0_-15px_30px_rgba(0,242,254,0.1)]">
+        <button onclick="switchSection('accueil')"
+            class="flex flex-col items-center gap-1 w-[20%] text-q-cyan hover:-translate-y-1 transition-transform cursor-pointer">
             <i class="fas fa-home text-xl md:text-2xl drop-shadow-[0_0_8px_rgba(0,242,254,0.8)]"></i>
             <span class="text-[8px] md:text-[9px] font-bold tracking-widest uppercase mt-0.5">Lobby</span>
         </button>
-        <button onclick="openSportsbook()" class="flex flex-col items-center gap-1 w-[20%] text-gray-500 hover:text-green-400 hover:-translate-y-1 transition-transform cursor-pointer">
+        <button onclick="openSportsbook()"
+            class="flex flex-col items-center gap-1 w-[20%] text-gray-500 hover:text-green-400 hover:-translate-y-1 transition-transform cursor-pointer">
             <i class="fas fa-futbol text-lg md:text-xl"></i>
             <span class="text-[8px] md:text-[9px] font-bold tracking-widest uppercase mt-0.5">Sports</span>
         </button>
-        
+
         <!-- Center Play Button (Casino) -->
-        <div class="relative -top-6 md:-top-8 w-[20%] flex justify-center group cursor-pointer" onclick="switchSection('casino'); initCasinoLobby();">
-            <div class="absolute inset-0 rounded-full border-2 border-q-magenta animate-radar pointer-events-none"></div>
-            <div class="absolute inset-0 rounded-full border-2 border-q-cyan animate-radar pointer-events-none" style="animation-delay: 1s;"></div>
-            <button class="btn-liquid w-14 h-14 md:w-16 md:h-16 rounded-full flex flex-col items-center justify-center bg-q-panel shadow-[0_0_20px_rgba(254,9,121,0.6)] border-4 border-q-panel z-10 transform group-hover:scale-110 transition-transform duration-300 cursor-pointer">
-                <i class="fas fa-dice text-xl md:text-2xl text-white mb-0.5 md:mb-1 group-hover:rotate-180 transition-transform duration-500"></i>
+        <div class="relative -top-6 md:-top-8 w-[20%] flex justify-center group cursor-pointer"
+            onclick="switchSection('casino'); initCasinoLobby();">
+            <div class="absolute inset-0 rounded-full border-2 border-q-magenta animate-radar pointer-events-none">
+            </div>
+            <div class="absolute inset-0 rounded-full border-2 border-q-cyan animate-radar pointer-events-none"
+                style="animation-delay: 1s;"></div>
+            <button
+                class="btn-liquid w-14 h-14 md:w-16 md:h-16 rounded-full flex flex-col items-center justify-center bg-q-panel shadow-[0_0_20px_rgba(254,9,121,0.6)] border-4 border-q-panel z-10 transform group-hover:scale-110 transition-transform duration-300 cursor-pointer">
+                <i
+                    class="fas fa-dice text-xl md:text-2xl text-white mb-0.5 md:mb-1 group-hover:rotate-180 transition-transform duration-500"></i>
             </button>
         </div>
 
-        <button onclick="toggleCashier()" class="flex flex-col items-center gap-1 w-[20%] text-gray-500 hover:text-q-gold hover:-translate-y-1 transition-transform cursor-pointer">
+        <button onclick="toggleCashier()"
+            class="flex flex-col items-center gap-1 w-[20%] text-gray-500 hover:text-q-gold hover:-translate-y-1 transition-transform cursor-pointer">
             <i class="fas fa-wallet text-lg md:text-xl"></i>
             <span class="text-[8px] md:text-[9px] font-bold tracking-widest uppercase mt-0.5">Dépôt</span>
         </button>
-        
-        <button onclick="openProfile()" class="flex flex-col items-center gap-1 w-[20%] text-gray-500 hover:text-white hover:-translate-y-1 transition-transform cursor-pointer">
+
+        <button onclick="openProfile()"
+            class="flex flex-col items-center gap-1 w-[20%] text-gray-500 hover:text-white hover:-translate-y-1 transition-transform cursor-pointer">
             <i class="fas fa-user-circle text-lg md:text-xl"></i>
             <span class="text-[8px] md:text-[9px] font-bold tracking-widest uppercase mt-0.5">Profil</span>
         </button>
@@ -839,7 +1299,7 @@
 
     <!-- ================= JAVASCRIPT ================= -->
     <script>
-        const BACKEND_URL = "https://alpha-backend-server.onrender.com"; 
+        const BACKEND_URL = "https://alpha-backend-server.onrender.com";
         let playerSession = null;
         let balanceInterval = null;
         let currentProfileTab = 'bets';
@@ -849,12 +1309,12 @@
             loadGamesOfTheDay();
             setTimeout(() => {
                 const loader = document.getElementById('preloader');
-                if(loader) {
+                if (loader) {
                     loader.style.opacity = '0';
                     setTimeout(() => { loader.style.display = 'none'; startScramble(); }, 500);
                 }
             }, 800);
-            
+
             const savedSession = localStorage.getItem('alpha_player_session');
             if (savedSession) {
                 playerSession = JSON.parse(savedSession);
@@ -863,7 +1323,7 @@
 
             const savedSection = localStorage.getItem('active_section') || 'accueil';
             switchSection(savedSection);
-            
+
             generateLiveWinnersTicker();
             loadDynamicSwiper();
         });
@@ -873,8 +1333,8 @@
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
             targets.forEach(target => {
                 const finalStr = target.getAttribute('data-final');
-                if(!finalStr) return;
-                target.innerHTML = ''; 
+                if (!finalStr) return;
+                target.innerHTML = '';
                 let currentStr = Array(finalStr.length).fill('').map(() => chars[Math.floor(Math.random() * chars.length)]);
                 let iteration = 0;
                 const interval = setInterval(() => {
@@ -883,7 +1343,7 @@
                         return chars[Math.floor(Math.random() * chars.length)];
                     }).join('');
                     if (iteration >= finalStr.length) clearInterval(interval);
-                    iteration += 1 / 3; 
+                    iteration += 1 / 3;
                 }, 30);
             });
         }
@@ -891,7 +1351,7 @@
         const cursorDot = document.querySelector('.cursor-dot');
         const cursorOutline = document.querySelector('.cursor-outline');
         window.addEventListener('mousemove', (e) => {
-            if(cursorDot && cursorOutline && window.innerWidth >= 1024) {
+            if (cursorDot && cursorOutline && window.innerWidth >= 1024) {
                 cursorDot.style.left = `${e.clientX}px`;
                 cursorDot.style.top = `${e.clientY}px`;
                 cursorOutline.animate({ left: `${e.clientX}px`, top: `${e.clientY}px` }, { duration: 200, fill: "forwards" });
@@ -918,18 +1378,18 @@
         function generateLiveWinnersTicker() {
             const track = document.getElementById('winners-ticker-track');
             if (!track) return;
-            
+
             const fakeNames = ["Fethi", "Ahmed", "Samir", "Karim", "Yassine", "Baya", "Sarah", "Rayen", "Wassim", "Nizar"];
             const gamesList = ["Aviator 🚀", "Gates of Olympus ⚡", "Sweet Bonanza 🍭", "Roulette 🎡", "Wanted Dead 🔥", "Blackjack 🃏"];
-            
+
             let tickerHTML = '';
-            
+
             // توليد 25 فائز بشكل عشوائي ومستمر
             for (let i = 0; i < 25; i++) {
                 const name = fakeNames[Math.floor(Math.random() * fakeNames.length)] + "***";
                 const game = gamesList[Math.floor(Math.random() * gamesList.length)];
                 const amount = (Math.random() * 1500 + 50).toFixed(2);
-                
+
                 tickerHTML += `
                 <div class="flex items-center gap-1.5 md:gap-2 text-[9px] md:text-xs font-bold text-gray-300 bg-white/5 px-3 md:px-4 py-1 md:py-1.5 rounded-full border border-white/10 hover:bg-q-cyan/10 hover:border-q-cyan hover:scale-105 transition-all duration-300 shrink-0">
                     <i class="fas fa-trophy text-q-gold drop-shadow-[0_0_5px_rgba(249,212,35,0.8)]"></i>
@@ -940,7 +1400,7 @@
                     <span class="text-q-magenta">${game}</span>
                 </div>`;
             }
-            
+
             track.innerHTML = tickerHTML;
         }
         // تشغيل شريط الفائزين فوراً
@@ -955,39 +1415,39 @@
                 });
                 const data = await response.json();
                 let gamesArray = data.games || data.data || [];
-                
+
                 if (gamesArray.length > 0) {
                     // قائمة الألعاب الذهبية المطلوبة بدقة
                     const targetGames = [
-                        "Gates of Olympus", "Sweet Bonanza", "Sugar Rush", 
-                        "The Dog House Megaways", "Big Bass Bonanza", 
+                        "Gates of Olympus", "Sweet Bonanza", "Sugar Rush",
+                        "The Dog House Megaways", "Big Bass Bonanza",
                         "Starlight Princess", "Madame Destiny Megaways", "5 Lions Megaways"
                     ];
 
                     let topGames = [];
-                    
+
                     // البحث في المصفوفة الأصلية عن الأسماء المحددة
                     targetGames.forEach(target => {
                         const found = gamesArray.find(g => {
                             const name = (g.game_name || g.name || "").toLowerCase();
                             return name.includes(target.toLowerCase());
                         });
-                        if(found) topGames.push(found);
+                        if (found) topGames.push(found);
                     });
 
                     // إذا لم نجد كل الألعاب (لأي سبب)، نكمل القائمة لتصل إلى 8
-                    if(topGames.length < 8) {
+                    if (topGames.length < 8) {
                         const remaining = gamesArray.filter(g => !topGames.includes(g));
                         topGames = [...topGames, ...remaining].slice(0, 8);
                     }
-                    
+
                     const wrapper = document.getElementById('dynamic-swiper-wrapper');
-                    
+
                     wrapper.innerHTML = topGames.map(g => {
                         const title = g.game_name || g.name || "Game";
                         const img = g.banner || g.image || g.thumb || "https://placehold.co/400x600/180A2B/FFF?text=Game";
                         const code = g.game_code || g.id;
-                        
+
                         return `
                         <div class="swiper-slide relative group shadow-[0_0_20px_rgba(0,0,0,0.8)] border border-white/10 rounded-2xl overflow-hidden cursor-pointer" onclick="playCasinoGame('PRAGMATIC', '${code}')">
                             <div class="absolute inset-0 bg-cover bg-center animate-bg-pan" style="background-image: url('${img}');"></div>
@@ -1026,10 +1486,10 @@
                 panelElement.classList.remove('hidden');
                 panelElement.classList.add('block');
             }
-            
+
             document.querySelectorAll('.btn-glass').forEach(btn => btn.classList.remove('active'));
             const targetBtn = document.getElementById(`btn-menu-${sectionId}`);
-            if(targetBtn) targetBtn.classList.add('active');
+            if (targetBtn) targetBtn.classList.add('active');
 
             // ⚡ التعديل الذكي: إعادة تحميل بيانات القسم تلقائياً عند فتحة أو عند عمل Refresh
             if (sectionId === 'casino' && typeof initCasinoLobby === 'function') {
@@ -1042,7 +1502,7 @@
 
             window.scrollTo(0, 0);
         }
-        
+
 
         // ================= PROFILE DASHBOARD LOGIC =================
         function openProfile() {
@@ -1051,20 +1511,20 @@
                 return;
             }
             switchSection('profile');
-            
+
             document.getElementById('profile-page-username').innerText = playerSession.username;
             document.getElementById('profile-page-balance').innerText = parseFloat(playerSession.balance || 0).toFixed(2);
-            
+
             loadProfileHistory('bets');
         }
 
         function loadProfileHistory(type, btnElement = null) {
             currentProfileTab = type;
-            
+
             document.querySelectorAll('.prof-tab-btn').forEach(btn => {
                 btn.className = "prof-tab-btn text-left px-4 py-3.5 rounded-xl text-sm font-bold text-gray-400 border border-transparent hover:border-white/10 hover:bg-white/5 transition-colors cursor-pointer";
             });
-            
+
             if (btnElement) {
                 btnElement.className = "prof-tab-btn active text-left px-4 py-3.5 rounded-xl text-sm font-bold bg-q-cyan/10 text-q-cyan border border-q-cyan/50 transition-colors shadow-inner cursor-pointer";
             } else {
@@ -1078,7 +1538,7 @@
 
             const titleEl = document.getElementById('profile-history-title');
             const contentEl = document.getElementById('profile-history-content');
-            
+
             contentEl.innerHTML = '<div class="text-center py-10 text-q-cyan font-display animate-pulse">Chargement en cours...</div>';
 
             if (type === 'bets') {
@@ -1098,9 +1558,9 @@
                 const res = await fetch(`${BACKEND_URL}/api/admin/transactions-history?username=${playerSession.username}`, {
                     headers: getAuthHeaders()
                 });
-                if(res.ok) {
+                if (res.ok) {
                     const txs = await res.json();
-                    if(txs.length === 0) {
+                    if (txs.length === 0) {
                         contentEl.innerHTML = '<div class="text-center py-8 text-gray-500 bg-black/30 rounded-xl border border-white/5">Aucune transaction trouvée.</div>';
                         return;
                     }
@@ -1122,7 +1582,7 @@
                         </div>
                     `).join('');
                 }
-            } catch(e) {
+            } catch (e) {
                 contentEl.innerHTML = '<div class="text-center py-8 text-red-500">Erreur de chargement.</div>';
             }
         }
@@ -1132,18 +1592,18 @@
                 const res = await fetch(`${BACKEND_URL}/api/admin/get-player-tickets?username=${playerSession.username}`, {
                     headers: getAuthHeaders()
                 });
-                if(res.ok) {
+                if (res.ok) {
                     const tickets = await res.json();
                     const bets = tickets.filter(t => t.type !== 'deposit');
-                    
-                    if(bets.length === 0) {
+
+                    if (bets.length === 0) {
                         contentEl.innerHTML = '<div class="text-center py-8 text-gray-500 bg-black/30 rounded-xl border border-white/5">Aucun pari sportif trouvé.</div>';
                         return;
                     }
                     contentEl.innerHTML = bets.map(b => {
-                        let statusColor = b.status === 'gagne' ? 'bg-green-500/20 text-green-400 border-green-500/50' : 
-                                          b.status === 'perdu' ? 'bg-red-500/20 text-red-400 border-red-500/50' : 
-                                          'bg-q-gold/20 text-q-gold border-q-gold/50';
+                        let statusColor = b.status === 'gagne' ? 'bg-green-500/20 text-green-400 border-green-500/50' :
+                            b.status === 'perdu' ? 'bg-red-500/20 text-red-400 border-red-500/50' :
+                                'bg-q-gold/20 text-q-gold border-q-gold/50';
                         return `
                         <div class="p-4 bg-black/30 rounded-xl border border-white/5 mb-3 hover:border-white/10 transition-colors">
                             <div class="flex justify-between items-center border-b border-white/10 pb-3 mb-3">
@@ -1156,17 +1616,17 @@
                             <div class="flex justify-between items-center">
                                 <div>
                                     <p class="text-[10px] text-gray-500 uppercase tracking-widest">Mise Totale</p>
-                                    <p class="text-sm md:text-base font-bold text-white">${parseFloat(b.mise||0).toFixed(2)} TND</p>
+                                    <p class="text-sm md:text-base font-bold text-white">${parseFloat(b.mise || 0).toFixed(2)} TND</p>
                                 </div>
                                 <div class="text-right">
                                     <p class="text-[10px] text-gray-500 uppercase tracking-widest">Gain Potentiel</p>
-                                    <p class="text-sm md:text-base font-bold text-q-cyan drop-shadow-[0_0_5px_rgba(0,242,254,0.5)]">${parseFloat(b.gain||0).toFixed(2)} TND</p>
+                                    <p class="text-sm md:text-base font-bold text-q-cyan drop-shadow-[0_0_5px_rgba(0,242,254,0.5)]">${parseFloat(b.gain || 0).toFixed(2)} TND</p>
                                 </div>
                             </div>
                         </div>
                     `}).join('');
                 }
-            } catch(e) {
+            } catch (e) {
                 contentEl.innerHTML = '<div class="text-center py-8 text-gray-500 bg-black/30 rounded-xl border border-white/5">Historique des paris non disponible.</div>';
             }
         }
@@ -1250,19 +1710,19 @@
             document.getElementById('auth-buttons-container')?.classList.add('hidden');
             const topProfile = document.getElementById('top-user-profile');
             if (topProfile) { topProfile.classList.remove('hidden'); topProfile.classList.add('flex'); }
-            
+
             const playerDisplay = document.getElementById('player-name-display');
             if (playerDisplay) playerDisplay.innerText = `${playerSession.username}`;
-            
+
             const balanceDisplay = document.getElementById('player-balance-val');
             if (balanceDisplay) balanceDisplay.innerText = `${parseFloat(playerSession.balance || 0).toFixed(2)}`;
 
             if (!balanceInterval) balanceInterval = setInterval(refreshPlayerBalance, 4000);
-            
+
             const profilePageName = document.getElementById('profile-page-username');
-            if(profilePageName) profilePageName.innerText = playerSession.username;
+            if (profilePageName) profilePageName.innerText = playerSession.username;
             const profilePageBalance = document.getElementById('profile-page-balance');
-            if(profilePageBalance) profilePageBalance.innerText = parseFloat(playerSession.balance || 0).toFixed(2);
+            if (profilePageBalance) profilePageBalance.innerText = parseFloat(playerSession.balance || 0).toFixed(2);
         }
 
         function logoutPlayer() {
@@ -1288,10 +1748,10 @@
                     if (currentMe) {
                         playerSession.balance = currentMe.balance;
                         localStorage.setItem('alpha_player_session', JSON.stringify(playerSession));
-                        
+
                         const balVal = document.getElementById('player-balance-val');
                         if (balVal) balVal.innerText = `${parseFloat(playerSession.balance).toFixed(2)}`;
-                        
+
                         const profBal = document.getElementById('profile-page-balance');
                         if (profBal) profBal.innerText = `${parseFloat(playerSession.balance).toFixed(2)}`;
                     }
@@ -1309,10 +1769,10 @@
             document.getElementById('deposit-section').classList.add('hidden');
             document.getElementById('withdraw-section').classList.add('hidden');
             document.getElementById(`${tabName}-section`).classList.remove('hidden');
-            
+
             document.getElementById('tab-deposit').className = "flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all cursor-pointer";
             document.getElementById('tab-withdraw').className = "flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all cursor-pointer";
-            document.getElementById(`tab-${tabName}`).className = `flex-1 ${tabName==='deposit'?'bg-q-cyan text-black':'bg-q-magenta text-white'} font-bold py-2 rounded-lg text-xs transition-all shadow-md cursor-pointer`;
+            document.getElementById(`tab-${tabName}`).className = `flex-1 ${tabName === 'deposit' ? 'bg-q-cyan text-black' : 'bg-q-magenta text-white'} font-bold py-2 rounded-lg text-xs transition-all shadow-md cursor-pointer`;
         }
         function showForm(formId) {
             document.getElementById('payment-methods-grid').classList.add('hidden');
@@ -1320,14 +1780,14 @@
         }
         function backToMethods() {
             document.getElementById('payment-methods-grid').classList.remove('hidden');
-            document.getElementById('form-d17').classList.add('hidden');
-            document.getElementById('form-usdt').classList.add('hidden');
-            document.getElementById('form-ooredoo').classList.add('hidden');
-            document.getElementById('form-orange').classList.add('hidden');
+            if (document.getElementById('form-usdt')) document.getElementById('form-usdt').classList.add('hidden');
+            if (document.getElementById('form-ooredoo')) document.getElementById('form-ooredoo').classList.add('hidden');
+            if (document.getElementById('form-orange')) document.getElementById('form-orange').classList.add('hidden');
         }
+        
         function updateFileName(method) {
             const fileInput = document.getElementById(method + '-file');
-            const labelSpan = fileInput.previousElementSibling; 
+            const labelSpan = fileInput.previousElementSibling;
             if (fileInput.files && fileInput.files.length > 0) {
                 labelSpan.innerHTML = "✅ " + fileInput.files[0].name;
                 labelSpan.classList.add("text-q-cyan", "font-bold");
@@ -1335,14 +1795,14 @@
             }
         }
         function syncBalance() {
-            if(playerSession) document.getElementById('modal-balance').innerText = parseFloat(playerSession.balance || 0).toFixed(2);
+            if (playerSession) document.getElementById('modal-balance').innerText = parseFloat(playerSession.balance || 0).toFixed(2);
         }
         function getBase64(file) {
-           return new Promise((resolve, reject) => {
-             const reader = new FileReader(); reader.readAsDataURL(file);
-             reader.onload = () => resolve(reader.result);
-             reader.onerror = error => reject(error);
-           });
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader(); reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
         }
         async function submitDeposit(method) {
             if (!playerSession) return showNotification("Veuillez vous connecter d'abord", "error");
@@ -1371,15 +1831,15 @@
         }
         async function submitWithdraw() {
             if (!playerSession) return showNotification("Veuillez vous connecter d'abord", "error");
-            
+
             const amountInput = document.getElementById('withdraw-amount');
             const accountInput = document.getElementById('withdraw-account');
             const amount = parseFloat(amountInput.value);
             const accountInfo = accountInput.value.strip();
-            
+
             if (isNaN(amount) || amount <= 0) return showNotification("Montant invalide", "error");
             if (!accountInfo) return showNotification("Entrez votre numéro D17 ou adresse USDT", "error");
-            
+
             if (amount > parseFloat(playerSession.balance || 0)) {
                 return showNotification("Solde insuffisant!", "error");
             }
@@ -1474,10 +1934,10 @@
                     const res = await fetch(`${BACKEND_URL}/api/get-providers`);
                     const data = await res.json();
                     casinoProviders = data.providers || data.data || [];
-                    if(casinoProviders.length > 0) {
+                    if (casinoProviders.length > 0) {
                         bar.innerHTML = casinoProviders.map(p => `<button onclick="loadProviderGames('${p.code}')" class="btn-glass px-4 py-2 rounded-full text-xs font-bold text-gray-300 hover:text-white shrink-0">${p.name || p.code}</button>`).join('');
                         loadProviderGames(casinoProviders[0].code);
-                        
+
                         // 👈 تفعيل السحب بالفأرة هنا فوراً بعد رسم الأزرار
                         setTimeout(() => enableMouseDragScroll('providers-bar'), 200);
                     }
@@ -1519,7 +1979,7 @@
         }
         function filterGames() {
             const term = document.getElementById('game-search-input').value.toLowerCase();
-            const filtered = currentProviderGames.filter(g => (g.game_name||g.name||"").toLowerCase().includes(term));
+            const filtered = currentProviderGames.filter(g => (g.game_name || g.name || "").toLowerCase().includes(term));
             renderCasinoGrid(filtered, "PRAGMATIC");
         }
 
@@ -1559,7 +2019,7 @@
             { id: "greyhounds", name: "🐕 Lévriers" }, { id: "motor", name: "🏍️ Motos" }, { id: "penalty", name: "🥅 Penalty" }
         ];
         let currentVirtuals = [];
-        
+
         function initVirtualsLobby() {
             const bar = document.getElementById('virtual-categories-bar');
             bar.innerHTML = virtualCategories.map(cat => `<button onclick="filterVirtualsByCategory('${cat.id}')" id="btn-vcat-${cat.id}" class="vcat-tab-btn btn-glass px-4 py-2 rounded-full text-xs font-bold text-gray-300 hover:text-white shrink-0">${cat.name}</button>`).join('');
@@ -1582,18 +2042,18 @@
         function filterVirtualsByCategory(categoryId) {
             document.querySelectorAll('.vcat-tab-btn').forEach(btn => { btn.classList.remove('active', 'border-q-gold'); btn.classList.add('border-white/10'); });
             const activeBtn = document.getElementById(`btn-vcat-${categoryId}`);
-            if(activeBtn) { activeBtn.classList.add('active', 'border-q-gold'); activeBtn.classList.remove('border-white/10'); }
-            
+            if (activeBtn) { activeBtn.classList.add('active', 'border-q-gold'); activeBtn.classList.remove('border-white/10'); }
+
             let filtered = currentVirtuals;
             if (categoryId !== 'all') {
                 const kw = categoryId === 'football' ? 'foot' : categoryId === 'horses' ? 'horse' : categoryId === 'greyhounds' ? 'hound' : categoryId;
-                filtered = currentVirtuals.filter(g => (g.game_name||g.name||"").toLowerCase().includes(kw));
+                filtered = currentVirtuals.filter(g => (g.game_name || g.name || "").toLowerCase().includes(kw));
             }
             renderVirtualsGrid(filtered);
         }
         function filterVirtualGames() {
             const term = document.getElementById('virtual-search-input').value.toLowerCase();
-            const filtered = currentVirtuals.filter(g => (g.game_name||g.name||"").toLowerCase().includes(term));
+            const filtered = currentVirtuals.filter(g => (g.game_name || g.name || "").toLowerCase().includes(term));
             renderVirtualsGrid(filtered);
         }
         function renderVirtualsGrid(games) {
@@ -1617,11 +2077,11 @@
         }
 
         async function launchSpecificVirtualGame(gameUuid) {
-            if (!playerSession) return openLoginModal(); 
+            if (!playerSession) return openLoginModal();
             const container = document.getElementById('virtual-games-overlay');
             const iframe = document.getElementById('virtual-games-iframe');
             const loader = document.getElementById('virtual-loader');
-            
+
             container.classList.remove('hidden'); container.classList.add('flex');
             iframe.style.opacity = '0'; if (loader) loader.style.display = 'flex';
 
@@ -1643,7 +2103,7 @@
             document.getElementById('virtual-games-iframe').src = "";
             refreshPlayerBalance();
         }
-// ================= المتغيرات المفقودة (Crash & Dictionary) =================
+        // ================= المتغيرات المفقودة (Crash & Dictionary) =================
         let currentLangCode = "fr";
         let currentBetsSubTab = "encours";
 
@@ -1678,7 +2138,7 @@
         }
 
         let isTicketOpen = false;
-        
+
         function toggleTicketSize() {
             const body = document.getElementById('ticket-full-body');
             const label = document.getElementById('minimized-bar-label');
@@ -1700,17 +2160,17 @@
 
         function closeTicketComplete() {
             const container = document.getElementById('main-ticket-container');
-            if(container) container.classList.add('hidden');
+            if (container) container.classList.add('hidden');
             isTicketOpen = false;
-            
+
             const body = document.getElementById('ticket-full-body');
-            if(body) {
+            if (body) {
                 body.classList.add('max-h-0');
                 body.classList.remove('max-h-[400px]');
             }
-            
+
             const label = document.getElementById('minimized-bar-label');
-            if(label) label.innerText = "👀 Ouvrir";
+            if (label) label.innerText = "👀 Ouvrir";
         }
 
         function clearTicket() {
@@ -1731,42 +2191,42 @@
             comboTicketMatchesList = comboTicketMatchesList.filter(item => item.matchId !== matchId);
             comboTicketMatchesList.push({ matchId, matchName, outcome, odds });
             renderComboTicketUI();
-            
+
             if (currentGlobalMatches.length > 0 && typeof renderMatchesList === 'function') {
                 renderMatchesList(currentGlobalMatches);
             }
-            
+
             const container = document.getElementById('main-ticket-container');
-            if(container) container.classList.remove('hidden');
-            
+            if (container) container.classList.remove('hidden');
+
             if (!isTicketOpen && comboTicketMatchesList.length === 1) toggleTicketSize();
         }
 
         function removeMatchFromCombo(matchId) {
             comboTicketMatchesList = comboTicketMatchesList.filter(item => item.matchId !== matchId);
             renderComboTicketUI();
-            
+
             if (currentGlobalMatches.length > 0 && typeof renderMatchesList === 'function') {
                 renderMatchesList(currentGlobalMatches);
             }
-            
+
             if (comboTicketMatchesList.length === 0) closeTicketComplete();
         }
 
         function renderComboTicketUI() {
             const box = document.getElementById('ticket-odds-box');
-            if(!box) return;
-            
+            if (!box) return;
+
             const matchCount = comboTicketMatchesList.length;
             const bonusRate = getBonusRate(matchCount);
 
             const badge = document.getElementById('ticket-count-badge');
-            if(badge) badge.innerText = matchCount;
-            
+            if (badge) badge.innerText = matchCount;
+
             if (matchCount === 0) {
                 box.innerHTML = `<div class="text-center text-gray-500 py-4">${dictionary_translations[currentLangCode].ticket_empty}</div>`;
                 const oddsEl = document.getElementById('ticket-total-odds');
-                if(oddsEl) oddsEl.innerText = "1.00";
+                if (oddsEl) oddsEl.innerText = "1.00";
                 calculatePotentialGain();
                 return;
             }
@@ -1783,26 +2243,26 @@
                     </div>
                 `;
             }).join('');
-            
+
             if (bonusRate > 0) {
                 box.innerHTML += `<div class="text-q-gold text-[10px] font-bold text-center mt-1 p-1 border-t border-white/10 bg-q-gold/10 rounded">🎁 Bonus: +${(bonusRate * 100)}%</div>`;
             }
-            
+
             const oddsEl = document.getElementById('ticket-total-odds');
-            if(oddsEl) oddsEl.innerText = totalCoteCalculated.toFixed(2);
+            if (oddsEl) oddsEl.innerText = totalCoteCalculated.toFixed(2);
             calculatePotentialGain();
         }
 
         function calculatePotentialGain() {
             const stakeInput = document.getElementById('ticket-stake-input');
             const oddsEl = document.getElementById('ticket-total-odds');
-            if(!stakeInput || !oddsEl) return;
-            
+            if (!stakeInput || !oddsEl) return;
+
             const stake = parseFloat(stakeInput.value) || 0;
             const totalOdds = parseFloat(oddsEl.innerText) || 1.00;
             const matchCount = comboTicketMatchesList.length;
             const bonusRate = getBonusRate(matchCount);
-            
+
             const totalGain = (stake * totalOdds) * (1 + bonusRate);
             const displayElement = document.getElementById('ticket-potential-gain');
             if (displayElement) displayElement.innerText = `${totalGain.toFixed(2)} TND`;
@@ -1888,8 +2348,8 @@
                 });
                 const data = await res.json();
                 let games = data.games || data.data || [];
-                
-                if(games.length > 0) {
+
+                if (games.length > 0) {
                     container.innerHTML = games.slice(0, 30).map(g => {
                         const img = g.banner || g.image || g.thumb || "https://placehold.co/400x400/180A2B/FFF";
                         return `
@@ -1915,7 +2375,7 @@
         function startJackpots() {
             setInterval(() => {
                 const now = new Date();
-                
+
                 // حساب التقدم اليومي والأسبوعي والشهري
                 let miniProgress = (now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds()) / 86400;
                 let megaVal = (((now.getDate() - 1) * 86400 + (now.getHours() * 3600)) / 2592000 * 1000);
@@ -1925,20 +2385,20 @@
                 // تحديث الأرقام في الشاشة
                 const m = document.getElementById('jackpot-mega');
                 if (m) m.innerText = megaVal.toFixed(2);
-                
+
                 const maj = document.getElementById('jackpot-major');
                 if (maj) maj.innerText = majorVal.toFixed(2);
-                
+
                 const min = document.getElementById('jackpot-mini');
                 if (min) min.innerText = miniVal.toFixed(2);
 
                 // تأثير النبض الخطر للـ Mega عندما يتجاوز 700
                 const megaWrapper = document.getElementById('mega-wrapper');
                 if (megaWrapper) {
-                    if (megaVal > 700) { 
-                        megaWrapper.classList.add('about-to-drop'); 
-                    } else { 
-                        megaWrapper.classList.remove('about-to-drop'); 
+                    if (megaVal > 700) {
+                        megaWrapper.classList.add('about-to-drop');
+                    } else {
+                        megaWrapper.classList.remove('about-to-drop');
                     }
                 }
             }, 1000); // تحديث كل ثانية
@@ -1968,14 +2428,14 @@
                     // نختار أشهر 6 ألعاب (الخوارزمية ستبحث عن هذه الأسماء وتجلبها)
                     const targetGames = ["Gates of Olympus", "Sweet Bonanza", "Sugar Rush", "Starlight Princess", "Big Bass Splash", "The Dog House"];
                     let top6 = [];
-                    
+
                     targetGames.forEach(target => {
                         const found = gamesArray.find(g => (g.game_name || g.name || "").toLowerCase().includes(target.toLowerCase()));
-                        if(found) top6.push(found);
+                        if (found) top6.push(found);
                     });
-                    
+
                     // إذا لم يجد بعض الألعاب المحددة، سيكمل العدد لأول 6 ألعاب في القائمة
-                    if(top6.length < 6) {
+                    if (top6.length < 6) {
                         const remaining = gamesArray.filter(g => !top6.includes(g));
                         top6 = [...top6, ...remaining].slice(0, 6);
                     }
@@ -1985,7 +2445,7 @@
                         const title = g.game_name || g.name || "Game";
                         const img = g.banner || g.image || g.thumb || "https://placehold.co/400x400/180A2B/FFF";
                         const code = g.game_code || g.id;
-                        
+
                         return `
                         <div onclick="playCasinoGame('PRAGMATIC', '${code}')" class="bg-q-panel/60 backdrop-blur-md rounded-xl overflow-hidden border border-white/10 group cursor-pointer shadow-[0_0_15px_rgba(0,242,254,0.05)] hover:border-q-cyan transition-all flex flex-col h-full relative" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.3">
                             <div class="absolute top-0 right-0 bg-gradient-to-r from-q-magenta to-red-600 text-white text-[8px] font-black px-2 py-1 rounded-bl-lg z-20 shadow-md animate-pulse">HOT 🔥</div>
@@ -2001,9 +2461,9 @@
                             </div>
                         </div>`;
                     }).join('');
-                    
+
                     // تفعيل تأثير الـ 3D (Vanilla Tilt) على الألعاب الجديدة
-                    if(typeof VanillaTilt !== 'undefined') {
+                    if (typeof VanillaTilt !== 'undefined') {
                         VanillaTilt.init(container.querySelectorAll('[data-tilt]'));
                     }
                 }
@@ -2014,7 +2474,7 @@
 
         // ================= محرك زر العودة للأعلى =================
         const scrollToTopBtn = document.getElementById('scrollToTopBtn');
-        
+
         // مراقبة النزول لإظهار أو إخفاء الزر
         window.addEventListener('scroll', () => {
             if (window.scrollY > 400) {
@@ -2038,13 +2498,13 @@
         // ================= محرك النوافذ القانونية (Legal Modals) =================
         function openLegalModal(modalId) {
             const modal = document.getElementById(modalId);
-            if(modal) {
+            if (modal) {
                 // إظهار العنصر أولاً
                 modal.classList.remove('hidden');
                 // إضافة حركة الدخول (Fade-in & Scale-up) بعد جزء من الثانية
                 setTimeout(() => {
                     modal.classList.remove('opacity-0');
-                    if(modal.children[0]) {
+                    if (modal.children[0]) {
                         modal.children[0].classList.remove('scale-95');
                         modal.children[0].classList.add('scale-100');
                     }
@@ -2056,10 +2516,10 @@
 
         function closeLegalModal(modalId) {
             const modal = document.getElementById(modalId);
-            if(modal) {
+            if (modal) {
                 // تفعيل حركة الخروج (Fade-out & Scale-down)
                 modal.classList.add('opacity-0');
-                if(modal.children[0]) {
+                if (modal.children[0]) {
                     modal.children[0].classList.remove('scale-100');
                     modal.children[0].classList.add('scale-95');
                 }
@@ -2071,8 +2531,10 @@
         }
     </script>
     <!-- ================= SCROLL TO TOP BUTTON  ================= -->
-    <button id="scrollToTopBtn" onclick="scrollToTop()" class="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[100] bg-q-panel/80 backdrop-blur-md border border-q-cyan/50 text-q-cyan w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(0,242,254,0.3)] hover:shadow-[0_0_25px_rgba(0,242,254,0.6)] hover:bg-q-cyan hover:text-black transition-all duration-500 translate-y-24 opacity-0 pointer-events-none group">
+    <button id="scrollToTopBtn" onclick="scrollToTop()"
+        class="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[100] bg-q-panel/80 backdrop-blur-md border border-q-cyan/50 text-q-cyan w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(0,242,254,0.3)] hover:shadow-[0_0_25px_rgba(0,242,254,0.6)] hover:bg-q-cyan hover:text-black transition-all duration-500 translate-y-24 opacity-0 pointer-events-none group">
         <i class="fas fa-arrow-up text-lg md:text-xl group-hover:-translate-y-1 transition-transform duration-300"></i>
     </button>
 </body>
+
 </html>
