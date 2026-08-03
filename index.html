@@ -401,15 +401,18 @@
         <!-- PANE: ACCUEIL -->
         <div id="pane-accueil" class="player-view-section block w-full">
             <!-- ================= LIVE WINNERS TICKER (QUANTUM STYLE) ================= -->
-            <style>
+<style>
                 @keyframes scroll-left {
-                    0% { transform: translateX(0); }
-                    100% { transform: translateX(-50%); }
+                    0% { transform: translateX(0) translateZ(0); }
+                    100% { transform: translateX(-50%) translateZ(0); }
                 }
                 .ticker-track {
                     display: inline-flex;
                     white-space: nowrap;
-                    animation: scroll-left 120s linear infinite;  
+                    animation: scroll-left 50s linear infinite;
+                    will-change: transform; 
+                    -webkit-backface-visibility: hidden;
+                    backface-visibility: hidden;
                 }
                 .ticker-track:hover {
                     animation-play-state: paused;
