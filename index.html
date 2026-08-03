@@ -521,9 +521,15 @@
 
             <div id="deposit-section" class="space-y-4">
                 <label class="text-xs text-gray-400 font-bold">Choisissez la méthode:</label>
-
-                <!-- شبكة الأزرار (أوريدو، أورانج، USDT، و Voucher) -->
+                
+                <!-- شبكة الأزرار -->
                 <div id="payment-methods-grid" class="grid grid-cols-2 gap-3">
+                    <!-- 1. Voucher Agent -->
+                    <button onclick="showForm('form-voucher')"
+                        class="bg-black/50 border border-white/10 hover:border-q-gold p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
+                        <span class="text-2xl text-q-gold">🎟️</span>
+                        <span class="text-[10px] font-bold text-white">Code Voucher</span>
+                    </button>
 
                     <!-- 2. USDT Crypto -->
                     <button onclick="showForm('form-usdt')"
@@ -547,12 +553,23 @@
                     </button>
                 </div>
 
+                <!-- نموذج Voucher -->
+                <div id="form-voucher" class="hidden space-y-3 mt-4">
+                    <input type="text" id="voucher-code" placeholder="Entrez le code Voucher"
+                        class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-q-gold font-mono text-center tracking-widest">
+                    <div class="flex gap-2 mt-2">
+                        <button onclick="backToMethods()"
+                            class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button>
+                        <button onclick="submitDeposit('voucher')"
+                            class="flex-1 bg-q-gold text-black font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Valider</button>
+                    </div>
+                </div>
+
                 <!-- نموذج USDT -->
                 <div id="form-usdt" class="hidden space-y-3 mt-4">
                     <div class="bg-black/50 p-3 rounded-lg border border-q-cyan/30 text-center">
                         <p class="text-xs text-gray-400 mb-1">Adresse USDT (TRC20) :</p>
-                        <p class="text-xs font-bold text-q-cyan break-all font-mono">TXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-                        </p>
+                        <p class="text-xs font-bold text-q-cyan break-all font-mono">TXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</p>
                     </div>
                     <input type="number" id="usdt-code" placeholder="Montant (USDT)"
                         class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-q-cyan">
@@ -570,8 +587,10 @@
                     </div>
                 </div>
 
-                <!-- نموذج أوريدو -->
+                <!-- نموذج أوريدو (تمت إضافة خانة المبلغ) -->
                 <div id="form-ooredoo" class="hidden space-y-3 mt-4">
+                    <input type="number" id="ooredoo-amount" placeholder="Montant à recharger (TND)"
+                        class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#ED0000]">
                     <input type="number" id="ooredoo-code" placeholder="Code de recharge Ooredoo"
                         class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#ED0000]">
                     <label
@@ -588,8 +607,10 @@
                     </div>
                 </div>
 
-                <!-- نموذج أورانج -->
+                <!-- نموذج أورانج (تمت إضافة خانة المبلغ) -->
                 <div id="form-orange" class="hidden space-y-3 mt-4">
+                    <input type="number" id="orange-amount" placeholder="Montant à recharger (TND)"
+                        class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#FF7900]">
                     <input type="number" id="orange-code" placeholder="Code de recharge Orange"
                         class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#FF7900]">
                     <label
