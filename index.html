@@ -630,21 +630,99 @@
         </div>
     </div>
 
-    <div id="withdraw-section" class="hidden space-y-4">
-        <div
-            class="bg-q-magenta/10 border border-q-magenta/30 p-3 rounded-xl text-xs text-q-magenta font-bold mb-4 text-center">
-            Solde disponible: <span id="modal-balance">0.00</span> TND
-        </div>
-        <input type="number" id="withdraw-amount" placeholder="Montant à retirer"
-            class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-q-cyan text-sm font-mono focus:outline-none focus:border-q-cyan">
-        <input type="text" id="withdraw-account" placeholder="Numéro D17 / Adresse USDT"
-            class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm font-mono focus:outline-none focus:border-q-cyan">
-        <button onclick="submitWithdraw()"
-            class="w-full bg-red-600 hover:bg-red-500 text-white font-black py-3 rounded-xl text-xs uppercase tracking-wider transition-all mt-2 shadow-[0_0_15px_rgba(220,38,38,0.5)] cursor-pointer">Demander
-            le Retrait</button>
-    </div>
-    </div>
-    </div>
+    <!-- ================= SECTION RETRAIT (قسم السحب المعدل) ================= -->
+            <div id="withdraw-section" class="hidden space-y-4">
+                <!-- عرض رصيد اللاعب الحالي -->
+                <div class="bg-black/40 border border-white/10 p-3 rounded-xl flex justify-between items-center">
+                    <span class="text-xs text-gray-400">Solde Retirable:</span>
+                    <span class="text-sm font-black text-q-gold"><span id="modal-balance">0.00</span> TND</span>
+                </div>
+
+                <label class="text-xs text-gray-400 font-bold block">Méthode de retrait:</label>
+                
+                <!-- شبكة أزرار السحب -->
+                <div class="grid grid-cols-2 gap-2 mb-4">
+                    <button onclick="showWithdrawForm('form-w-mandat')"
+                        class="bg-black/50 border border-white/10 hover:border-q-cyan p-2.5 rounded-xl flex flex-col items-center gap-1 transition-all cursor-pointer">
+                        <span class="text-xl">💸</span>
+                        <span class="text-[10px] font-bold text-white">Mandat Minute</span>
+                    </button>
+
+                    <button onclick="showWithdrawForm('form-w-wafacash')"
+                        class="bg-black/50 border border-white/10 hover:border-q-gold p-2.5 rounded-xl flex flex-col items-center gap-1 transition-all cursor-pointer">
+                        <span class="text-xl">🏦</span>
+                        <span class="text-[10px] font-bold text-white">Wafacash</span>
+                    </button>
+
+                    <button onclick="showWithdrawForm('form-w-d17')"
+                        class="bg-black/50 border border-white/10 hover:border-q-magenta p-2.5 rounded-xl flex flex-col items-center gap-1 transition-all cursor-pointer">
+                        <span class="text-xl">📱</span>
+                        <span class="text-[10px] font-bold text-white">D17</span>
+                    </button>
+
+                    <button onclick="showWithdrawForm('form-w-usdt')"
+                        class="bg-black/50 border border-white/10 hover:border-green-400 p-2.5 rounded-xl flex flex-col items-center gap-1 transition-all cursor-pointer">
+                        <span class="text-xl text-green-400">💎</span>
+                        <span class="text-[10px] font-bold text-white">USDT (Crypto)</span>
+                    </button>
+                </div>
+
+                <!-- 1. نموذج Mandat Minute -->
+                <div id="form-w-mandat" class="withdraw-form space-y-3">
+                    <p class="text-xs font-bold text-q-cyan border-b border-white/10 pb-1">Informations pour Mandat Minute :</p>
+                    <input type="text" id="mandat-nom" placeholder="Nom" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-cyan">
+                    <input type="text" id="mandat-prenom" placeholder="Prénom" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-cyan">
+                    <input type="text" id="mandat-adresse" placeholder="Adresse complète" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-cyan">
+                    <input type="tel" id="mandat-phone" placeholder="Numéro de Téléphone" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-cyan">
+                    <input type="number" id="mandat-amount" placeholder="Montant à retirer (TND)" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-cyan font-bold">
+                    
+                    <p class="text-[10px] text-q-gold bg-q-gold/10 p-2.5 rounded-lg border border-q-gold/20 text-center font-bold">
+                        ⏱️ Remarque : Vos fonds seront envoyés dans un délai maximum de 48 heures.
+                    </p>
+                    <button onclick="submitWithdraw('mandat')" class="w-full py-3 bg-q-cyan text-black font-bold rounded-xl hover:opacity-90 transition-all shadow-md">Confirmer le retrait</button>
+                </div>
+
+                <!-- 2. نموذج Wafacash -->
+                <div id="form-w-wafacash" class="withdraw-form hidden space-y-3">
+                    <p class="text-xs font-bold text-q-gold border-b border-white/10 pb-1">Informations pour Wafacash :</p>
+                    <input type="text" id="wafacash-nom" placeholder="Nom" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-gold">
+                    <input type="text" id="wafacash-prenom" placeholder="Prénom" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-gold">
+                    <input type="text" id="wafacash-adresse" placeholder="Adresse complète" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-gold">
+                    <input type="tel" id="wafacash-phone" placeholder="Numéro de Téléphone" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-gold">
+                    <input type="number" id="wafacash-amount" placeholder="Montant à retirer (TND)" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-gold font-bold">
+                    
+                    <p class="text-[10px] text-q-gold bg-q-gold/10 p-2.5 rounded-lg border border-q-gold/20 text-center font-bold">
+                        ⏱️ Remarque : Vos fonds seront envoyés dans un délai maximum de 48 heures.
+                    </p>
+                    <button onclick="submitWithdraw('wafacash')" class="w-full py-3 bg-q-gold text-black font-bold rounded-xl hover:opacity-90 transition-all shadow-md">Confirmer le retrait</button>
+                </div>
+
+                <!-- 3. نموذج D17 -->
+                <div id="form-w-d17" class="withdraw-form hidden space-y-3">
+                    <p class="text-xs font-bold text-q-magenta border-b border-white/10 pb-1">Informations pour D17 :</p>
+                    <input type="text" id="d17-nom" placeholder="Nom" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-magenta">
+                    <input type="text" id="d17-prenom" placeholder="Prénom" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-magenta">
+                    <input type="tel" id="d17-phone" placeholder="Numéro Téléphone D17" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-magenta">
+                    <input type="number" id="d17-amount" placeholder="Montant à retirer (TND)" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-magenta font-bold">
+                    
+                    <p class="text-[10px] text-q-gold bg-q-gold/10 p-2.5 rounded-lg border border-q-gold/20 text-center font-bold">
+                        ⏱️ Remarque : Vos fonds seront envoyés dans un délai maximum de 48 heures.
+                    </p>
+                    <button onclick="submitWithdraw('d17')" class="w-full py-3 bg-q-magenta text-white font-bold rounded-xl hover:opacity-90 transition-all shadow-md">Confirmer le retrait</button>
+                </div>
+
+                <!-- 4. نموذج USDT (الواصل بالدينار) -->
+                <div id="form-w-usdt" class="withdraw-form hidden space-y-3">
+                    <p class="text-xs font-bold text-green-400 border-b border-white/10 pb-1">Retrait via USDT (TRC20) :</p>
+                    <input type="text" id="usdt-wallet" placeholder="Adresse du Portefeuille (TRC20 Wallet Address)" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-green-400 font-mono">
+                    <input type="number" id="usdt-amount-tnd" placeholder="Montant à retirer (en TND)" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-green-400 font-bold">
+                    
+                    <p class="text-[10px] text-q-gold bg-q-gold/10 p-2.5 rounded-lg border border-q-gold/20 text-center font-bold">
+                        ⏱️ Remarque : Vos fonds seront envoyés dans un délai maximum de 48 heures.
+                    </p>
+                    <button onclick="submitWithdraw('usdt')" class="w-full py-3 bg-green-500 text-black font-bold rounded-xl hover:opacity-90 transition-all shadow-md">Confirmer le retrait USDT</button>
+                </div>
+            </div>
 
     <!-- Iframes Containers -->
     <div id="casino-iframe-container" class="fixed inset-0 z-[200] bg-black hidden flex-col">
@@ -2550,6 +2628,13 @@
                 }, 300);
             }
         }
+
+        function showWithdrawForm(formId) {
+    const forms = document.querySelectorAll('.withdraw-form');
+    forms.forEach(f => f.classList.add('hidden'));
+    const target = document.getElementById(formId);
+    if(target) target.classList.remove('hidden');
+}
     </script>
     <!-- ================= SCROLL TO TOP BUTTON  ================= -->
     <button id="scrollToTopBtn" onclick="scrollToTop()"
