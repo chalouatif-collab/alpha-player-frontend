@@ -505,132 +505,102 @@
         </div>
     </div>
 
-    <div id="cashier-modal"
-        class="fixed inset-0 z-[200] hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div
-            class="bg-q-panel border border-q-gold/50 rounded-3xl w-full max-w-md p-6 relative shadow-[0_0_30px_rgba(249,212,35,0.2)]">
-            <button onclick="toggleCashier()"
-                class="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-3xl cursor-pointer">&times;</button>
+    <!-- ================= CAISSE (DÉPÔT & RETRAIT) MODAL ================= -->
+    <div id="cashier-modal" class="fixed inset-0 z-[200] hidden bg-black/80 backdrop-blur-md items-center justify-center p-4">
+        <!-- الصندوق الداخلي (النافذة الأنيقة) -->
+        <div class="bg-q-panel border border-q-gold/50 rounded-3xl w-full max-w-md p-6 relative shadow-[0_0_30px_rgba(249,212,35,0.2)] max-h-[90vh] overflow-y-auto hide-scroll">
+            <button onclick="toggleCashier()" class="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-3xl cursor-pointer">&times;</button>
             <h2 class="text-xl font-display font-black text-white mb-6 flex items-center gap-2">💳 Caisse</h2>
+            
             <div class="flex gap-2 mb-6 bg-black/50 p-1 rounded-xl border border-white/5">
-                <button onclick="switchCashierTab('deposit')" id="tab-deposit"
-                    class="flex-1 bg-q-cyan text-black font-bold py-2 rounded-lg text-xs transition-all shadow-md cursor-pointer">Dépôt</button>
-                <button onclick="switchCashierTab('withdraw'); syncBalance();" id="tab-withdraw"
-                    class="flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all cursor-pointer">Retrait</button>
+                <button onclick="switchCashierTab('deposit')" id="tab-deposit" class="flex-1 bg-q-cyan text-black font-bold py-2 rounded-lg text-xs transition-all shadow-md cursor-pointer">Dépôt</button>
+                <button onclick="switchCashierTab('withdraw')" id="tab-withdraw" class="flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all cursor-pointer">Retrait</button>
             </div>
 
+            <!-- ================= 1. SECTION DÉPÔT ================= -->
             <div id="deposit-section" class="space-y-4">
                 <label class="text-xs text-gray-400 font-bold">Choisissez la méthode:</label>
-
-                <!-- شبكة الأزرار -->
                 <div id="payment-methods-grid" class="grid grid-cols-2 gap-3">
-                    <!-- 1. Voucher Agent -->
-                    <button onclick="showForm('form-voucher')"
-                        class="bg-black/50 border border-white/10 hover:border-q-gold p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
-                        <span class="text-2xl text-q-gold">🎟️</span>
-                        <span class="text-[10px] font-bold text-white">Code Voucher</span>
-                    </button>
-
-                    <!-- 2. USDT Crypto -->
-                    <button onclick="showForm('form-usdt')"
-                        class="bg-black/50 border border-white/10 hover:border-q-cyan p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
-                        <span class="text-2xl text-q-cyan">💎</span>
-                        <span class="text-[10px] font-bold text-white">USDT (Crypto)</span>
-                    </button>
-
-                    <!-- 3. Ooredoo -->
-                    <button onclick="showForm('form-ooredoo')"
-                        class="bg-black/50 border border-white/10 hover:border-[#ED0000] p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
-                        <span class="text-2xl text-[#ED0000] font-black">Ooredoo</span>
-                        <span class="text-[10px] font-bold text-white">Recharge</span>
-                    </button>
-
-                    <!-- 4. Orange -->
-                    <button onclick="showForm('form-orange')"
-                        class="bg-black/50 border border-white/10 hover:border-[#FF7900] p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer">
-                        <span class="text-2xl text-[#FF7900] font-black">Orange</span>
-                        <span class="text-[10px] font-bold text-white">Recharge</span>
-                    </button>
+                    <button onclick="showForm('form-voucher')" class="bg-black/50 border border-white/10 hover:border-q-gold p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer"><span class="text-2xl text-q-gold">🎟️</span><span class="text-[10px] font-bold text-white">Code Voucher</span></button>
+                    <button onclick="showForm('form-usdt')" class="bg-black/50 border border-white/10 hover:border-q-cyan p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer"><span class="text-2xl text-q-cyan">💎</span><span class="text-[10px] font-bold text-white">USDT (Crypto)</span></button>
+                    <button onclick="showForm('form-ooredoo')" class="bg-black/50 border border-white/10 hover:border-[#ED0000] p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer"><span class="text-2xl text-[#ED0000] font-black">Ooredoo</span><span class="text-[10px] font-bold text-white">Recharge</span></button>
+                    <button onclick="showForm('form-orange')" class="bg-black/50 border border-white/10 hover:border-[#FF7900] p-3 rounded-xl flex flex-col items-center gap-2 transition-all cursor-pointer"><span class="text-2xl text-[#FF7900] font-black">Orange</span><span class="text-[10px] font-bold text-white">Recharge</span></button>
                 </div>
 
-                <!-- نموذج Voucher -->
                 <div id="form-voucher" class="hidden space-y-3 mt-4">
-                    <input type="text" id="voucher-code" placeholder="Entrez le code Voucher"
-                        class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-q-gold font-mono text-center tracking-widest">
-                    <div class="flex gap-2 mt-2">
-                        <button onclick="backToMethods()"
-                            class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button>
-                        <button onclick="submitDeposit('voucher')"
-                            class="flex-1 bg-q-gold text-black font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Valider</button>
-                    </div>
+                    <input type="text" id="voucher-code" placeholder="Entrez le code Voucher" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-q-gold font-mono text-center tracking-widest">
+                    <div class="flex gap-2 mt-2"><button onclick="backToMethods()" class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button><button onclick="submitDeposit('voucher')" class="flex-1 bg-q-gold text-black font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Valider</button></div>
                 </div>
-
-                <!-- نموذج USDT -->
                 <div id="form-usdt" class="hidden space-y-3 mt-4">
-                    <div class="bg-black/50 p-3 rounded-lg border border-q-cyan/30 text-center">
-                        <p class="text-xs text-gray-400 mb-1">Adresse USDT (TRC20) :</p>
-                        <p class="text-xs font-bold text-q-cyan break-all font-mono">TXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-                        </p>
-                    </div>
-                    <input type="number" id="usdt-code" placeholder="Montant (USDT)"
-                        class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-q-cyan">
-                    <label
-                        class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-q-cyan transition-all">
-                        <span class="text-sm text-gray-300">📸 Importer le reçu</span>
-                        <input type="file" id="usdt-file" accept="image/*" class="hidden"
-                            onchange="updateFileName('usdt')">
-                    </label>
-                    <div class="flex gap-2 mt-2">
-                        <button onclick="backToMethods()"
-                            class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button>
-                        <button onclick="submitDeposit('usdt')"
-                            class="flex-1 bg-q-cyan text-black font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button>
-                    </div>
+                    <div class="bg-black/50 p-3 rounded-lg border border-q-cyan/30 text-center"><p class="text-xs text-gray-400 mb-1">Adresse USDT (TRC20) :</p><p class="text-xs font-bold text-q-cyan break-all font-mono">TXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</p></div>
+                    <input type="number" id="usdt-code" placeholder="Montant (USDT)" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-q-cyan">
+                    <label class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-q-cyan transition-all"><span class="text-sm text-gray-300">📸 Importer le reçu</span><input type="file" id="usdt-file" accept="image/*" class="hidden" onchange="updateFileName('usdt')"></label>
+                    <div class="flex gap-2 mt-2"><button onclick="backToMethods()" class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button><button onclick="submitDeposit('usdt')" class="flex-1 bg-q-cyan text-black font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button></div>
                 </div>
-
-                <!-- نموذج أوريدو (تمت إضافة خانة المبلغ) -->
                 <div id="form-ooredoo" class="hidden space-y-3 mt-4">
-                    <input type="number" id="ooredoo-amount" placeholder="Montant à recharger (TND)"
-                        class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#ED0000]">
-                    <input type="number" id="ooredoo-code" placeholder="Code de recharge Ooredoo"
-                        class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#ED0000]">
-                    <label
-                        class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-[#ED0000] transition-all">
-                        <span class="text-sm text-gray-300">📸 Capture d'écran</span>
-                        <input type="file" id="ooredoo-file" accept="image/*" class="hidden"
-                            onchange="updateFileName('ooredoo')">
-                    </label>
-                    <div class="flex gap-2 mt-2">
-                        <button onclick="backToMethods()"
-                            class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button>
-                        <button onclick="submitDeposit('ooredoo')"
-                            class="flex-1 bg-[#ED0000] text-white font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button>
-                    </div>
+                    <input type="number" id="ooredoo-amount" placeholder="Montant (TND)" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#ED0000]">
+                    <input type="number" id="ooredoo-code" placeholder="Code Ooredoo" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#ED0000]">
+                    <label class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-[#ED0000] transition-all"><span class="text-sm text-gray-300">📸 Capture</span><input type="file" id="ooredoo-file" accept="image/*" class="hidden" onchange="updateFileName('ooredoo')"></label>
+                    <div class="flex gap-2 mt-2"><button onclick="backToMethods()" class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button><button onclick="submitDeposit('ooredoo')" class="flex-1 bg-[#ED0000] text-white font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button></div>
+                </div>
+                <div id="form-orange" class="hidden space-y-3 mt-4">
+                    <input type="number" id="orange-amount" placeholder="Montant (TND)" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#FF7900]">
+                    <input type="number" id="orange-code" placeholder="Code Orange" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#FF7900]">
+                    <label class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-[#FF7900] transition-all"><span class="text-sm text-gray-300">📸 Capture</span><input type="file" id="orange-file" accept="image/*" class="hidden" onchange="updateFileName('orange')"></label>
+                    <div class="flex gap-2 mt-2"><button onclick="backToMethods()" class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button><button onclick="submitDeposit('orange')" class="flex-1 bg-[#FF7900] text-white font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button></div>
+                </div>
+            </div>
+
+            <!-- ================= 2. SECTION RETRAIT ================= -->
+            <div id="withdraw-section" class="hidden space-y-4">
+                <div class="bg-black/40 border border-white/10 p-3 rounded-xl flex justify-between items-center mb-2">
+                    <span class="text-xs text-gray-400">Solde Retirable:</span>
+                    <span class="text-sm font-black text-q-gold"><span id="modal-balance">0.00</span> TND</span>
                 </div>
 
-                <!-- نموذج أورانج (تمت إضافة خانة المبلغ) -->
-                <div id="form-orange" class="hidden space-y-3 mt-4">
-                    <input type="number" id="orange-amount" placeholder="Montant à recharger (TND)"
-                        class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#FF7900]">
-                    <input type="number" id="orange-code" placeholder="Code de recharge Orange"
-                        class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-white text-sm outline-none focus:border-[#FF7900]">
-                    <label
-                        class="block w-full bg-black/30 border border-white/20 border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-[#FF7900] transition-all">
-                        <span class="text-sm text-gray-300">📸 Capture d'écran</span>
-                        <input type="file" id="orange-file" accept="image/*" class="hidden"
-                            onchange="updateFileName('orange')">
-                    </label>
-                    <div class="flex gap-2 mt-2">
-                        <button onclick="backToMethods()"
-                            class="flex-1 bg-transparent border border-white/20 text-white font-bold rounded-lg py-2 hover:bg-white/5 transition-all">Retour</button>
-                        <button onclick="submitDeposit('orange')"
-                            class="flex-1 bg-[#FF7900] text-white font-bold rounded-lg py-2 hover:opacity-90 transition-all shadow-md">Confirmer</button>
-                    </div>
+                <label class="text-xs text-gray-400 font-bold block">Méthode de retrait:</label>
+                <div class="grid grid-cols-2 gap-2 mb-4">
+                    <button onclick="showWithdrawForm('form-w-mandat')" class="bg-black/50 border border-white/10 hover:border-q-cyan p-2.5 rounded-xl flex flex-col items-center gap-1 transition-all cursor-pointer"><span class="text-xl">💸</span><span class="text-[10px] font-bold text-white">Mandat Minute</span></button>
+                    <button onclick="showWithdrawForm('form-w-wafacash')" class="bg-black/50 border border-white/10 hover:border-q-gold p-2.5 rounded-xl flex flex-col items-center gap-1 transition-all cursor-pointer"><span class="text-xl">🏦</span><span class="text-[10px] font-bold text-white">Wafacash</span></button>
+                    <button onclick="showWithdrawForm('form-w-d17')" class="bg-black/50 border border-white/10 hover:border-q-magenta p-2.5 rounded-xl flex flex-col items-center gap-1 transition-all cursor-pointer"><span class="text-xl">📱</span><span class="text-[10px] font-bold text-white">D17</span></button>
+                    <button onclick="showWithdrawForm('form-w-usdt')" class="bg-black/50 border border-white/10 hover:border-green-400 p-2.5 rounded-xl flex flex-col items-center gap-1 transition-all cursor-pointer"><span class="text-xl text-green-400">💎</span><span class="text-[10px] font-bold text-white">USDT (Crypto)</span></button>
+                </div>
+
+                <div id="form-w-mandat" class="withdraw-form space-y-3">
+                    <p class="text-xs font-bold text-q-cyan border-b border-white/10 pb-1">Mandat Minute :</p>
+                    <input type="text" id="mandat-nom" placeholder="Nom" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-cyan">
+                    <input type="text" id="mandat-prenom" placeholder="Prénom" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-cyan">
+                    <input type="tel" id="mandat-phone" placeholder="Numéro de Téléphone" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-cyan">
+                    <input type="number" id="mandat-amount" placeholder="Montant à retirer (TND)" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-cyan font-bold">
+                    <button onclick="submitWithdraw('mandat')" class="w-full py-3 bg-q-cyan text-black font-bold rounded-xl hover:opacity-90 transition-all shadow-md">Confirmer</button>
+                </div>
+
+                <div id="form-w-wafacash" class="withdraw-form hidden space-y-3">
+                    <p class="text-xs font-bold text-q-gold border-b border-white/10 pb-1">Wafacash :</p>
+                    <input type="text" id="wafacash-nom" placeholder="Nom" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-gold">
+                    <input type="text" id="wafacash-prenom" placeholder="Prénom" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-gold">
+                    <input type="tel" id="wafacash-phone" placeholder="Numéro de Téléphone" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-gold">
+                    <input type="number" id="wafacash-amount" placeholder="Montant à retirer (TND)" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-gold font-bold">
+                    <button onclick="submitWithdraw('wafacash')" class="w-full py-3 bg-q-gold text-black font-bold rounded-xl hover:opacity-90 transition-all shadow-md">Confirmer</button>
+                </div>
+
+                <div id="form-w-d17" class="withdraw-form hidden space-y-3">
+                    <p class="text-xs font-bold text-q-magenta border-b border-white/10 pb-1">D17 :</p>
+                    <input type="text" id="d17-nom" placeholder="Nom" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-magenta">
+                    <input type="tel" id="d17-phone" placeholder="Numéro Téléphone D17" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-magenta">
+                    <input type="number" id="d17-amount" placeholder="Montant à retirer (TND)" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-q-magenta font-bold">
+                    <button onclick="submitWithdraw('d17')" class="w-full py-3 bg-q-magenta text-white font-bold rounded-xl hover:opacity-90 transition-all shadow-md">Confirmer</button>
+                </div>
+
+                <div id="form-w-usdt" class="withdraw-form hidden space-y-3">
+                    <p class="text-xs font-bold text-green-400 border-b border-white/10 pb-1">USDT (TRC20) :</p>
+                    <input type="text" id="usdt-wallet" placeholder="Adresse du Portefeuille (TRC20)" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-green-400 font-mono">
+                    <input type="number" id="usdt-amount-tnd" placeholder="Montant à retirer (en TND)" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-white text-xs outline-none focus:border-green-400 font-bold">
+                    <button onclick="submitWithdraw('usdt')" class="w-full py-3 bg-green-500 text-black font-bold rounded-xl hover:opacity-90 transition-all shadow-md">Confirmer</button>
                 </div>
             </div>
         </div>
     </div>
-
     <!-- ================= SECTION RETRAIT (قسم السحب المعدل) ================= -->
     <div id="withdraw-section" class="hidden space-y-4">
         <!-- عرض رصيد اللاعب الحالي -->
