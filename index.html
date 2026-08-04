@@ -1898,15 +1898,7 @@
             if (modal.classList.contains('hidden')) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
             else { modal.classList.add('hidden'); modal.classList.remove('flex'); }
         }
-        function switchCashierTab(tabName) {
-            document.getElementById('deposit-section').classList.add('hidden');
-            document.getElementById('withdraw-section').classList.add('hidden');
-            document.getElementById(`${tabName}-section`).classList.remove('hidden');
 
-            document.getElementById('tab-deposit').className = "flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all cursor-pointer";
-            document.getElementById('tab-withdraw').className = "flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all cursor-pointer";
-            document.getElementById(`tab-${tabName}`).className = `flex-1 ${tabName === 'deposit' ? 'bg-q-cyan text-black' : 'bg-q-magenta text-white'} font-bold py-2 rounded-lg text-xs transition-all shadow-md cursor-pointer`;
-        }
         function showForm(formId) {
             document.getElementById('payment-methods-grid').classList.add('hidden');
             document.getElementById(formId).classList.remove('hidden');
@@ -1962,16 +1954,31 @@
                 } else showNotification("Erreur serveur", "error");
             } catch (error) { showNotification("Erreur de connexion", "error"); }
         }
-        async function submitWithdraw() {
+       async function submitWithdraw(method) {
             if (!playerSession) return showNotification("Veuillez vous connecter d'abord", "error");
 
-            const amountInput = document.getElementById('withdraw-amount');
-            const accountInput = document.getElementById('withdraw-account');
-            const amount = parseFloat(amountInput.value);
-            const accountInfo = accountInput.value.strip();
+            let amountInput, accountInfo;
+            
+            // استخراج البيانات بذكاء حسب طريقة السحب التي اختارها اللاعب
+            if (method === 'mandat') {
+                amountInput = document.getElementById('mandat-amount');
+                accountInfo = `Mandat: ${document.getElementById('mandat-nom').value} ${document.getElementById('mandat-prenom').value}, Tel: ${document.getElementById('mandat-phone').value}`;
+            } else if (method === 'wafacash') {
+                amountInput = document.getElementById('wafacash-amount');
+                accountInfo = `Wafacash: ${document.getElementById('wafacash-nom').value} ${document.getElementById('wafacash-prenom').value}, Tel: ${document.getElementById('wafacash-phone').value}`;
+            } else if (method === 'd17') {
+                amountInput = document.getElementById('d17-amount');
+                accountInfo = `D17: ${document.getElementById('d17-nom').value}, Tel: ${document.getElementById('d17-phone').value}`;
+            } else if (method === 'usdt') {
+                amountInput = document.getElementById('usdt-amount-tnd');
+                accountInfo = `USDT: ${document.getElementById('usdt-wallet').value}`;
+            }
 
+            const amount = parseFloat(amountInput.value);
+
+            // التحقق من الأخطاء قبل الإرسال
             if (isNaN(amount) || amount <= 0) return showNotification("Montant invalide", "error");
-            if (!accountInfo) return showNotification("Entrez votre numéro D17 ou adresse USDT", "error");
+            if (!accountInfo || accountInfo.includes("undefined") || accountInfo.trim() === "") return showNotification("Veuillez remplir tous les champs obligatoires", "error");
 
             if (amount > parseFloat(playerSession.balance || 0)) {
                 return showNotification("Solde insuffisant!", "error");
@@ -1985,15 +1992,27 @@
                         target_username: playerSession.username,
                         action: 'withdraw_request',
                         amount: amount,
-                        tx_id: `WITHDRAW-${Date.now()}-${accountInfo}`
+                        tx_id: `WITHDRAW-${Date.now()}-${accountInfo.replace(/[^a-zA-Z0-9:, ]/g, "").substring(0, 50)}` 
                     })
                 });
 
                 if (response.ok) {
                     showNotification("Demande de retrait envoyée!", "success");
-                    toggleCashier();
-                    amountInput.value = "";
-                    accountInput.value = "";
+                    
+                    // ==========================================
+                    // السحر هنا: إغلاق النافذة فوراً بعد النجاح!
+                    // ==========================================
+                    const modal = document.getElementById('cashier-modal');
+                    if (modal) {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                    }
+                    
+                    // تنظيف الحقول لكي لا تبقى محتفظة بالبيانات للمرة القادمة
+                    document.querySelectorAll('.withdraw-form input').forEach(input => input.value = '');
+                    
+                    // تحديث رصيد اللاعب
+                    refreshPlayerBalance();
                 } else {
                     showNotification("Erreur lors de la demande", "error");
                 }
@@ -2723,29 +2742,51 @@
             const target = document.getElementById(formId);
             if (target) target.classList.remove('hidden');
         }
+        function switchCashierTab(tabName) {
+            // --- حماية تبويب السحب (للمسجلين أونلاين فقط) ---
+            if (tabName === 'withdraw') {
+                if (playerSession.created_by !== 'Self-Register') {
+                    showNotification("Le retrait direct est réservé aux comptes créés en ligne.", "error");
+                    return; // نوقف العملية ولا نفتح قسم السحب
+                }
+                syncBalance();
+            }
+            // ------------------------------------------------
+
+            document.getElementById('deposit-section').classList.add('hidden');
+            document.getElementById('withdraw-section').classList.add('hidden');
+            document.getElementById(`${tabName}-section`).classList.remove('hidden');
+
+            document.getElementById('tab-deposit').className = "flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all cursor-pointer";
+            document.getElementById('tab-withdraw').className = "flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all cursor-pointer";
+            document.getElementById(`tab-${tabName}`).className = `flex-1 ${tabName === 'deposit' ? 'bg-q-cyan text-black' : 'bg-q-magenta text-white'} font-bold py-2 rounded-lg text-xs transition-all shadow-md cursor-pointer`;
+        }
+
         // ================= دالة فتح السحب المباشر وإغلاق البروفايل =================
         function openDirectRetrait() {
-            // 1. إغلاق نافذة البروفايل أولاً لكي لا تغطي على الشاشة
+            // --- حماية زر السحب في البروفايل (للمسجلين أونلاين فقط) ---
+            if (playerSession.created_by !== 'Self-Register') {
+                showNotification("Le retrait direct est réservé aux comptes créés en ligne.", "error");
+                return;
+            }
+            // ---------------------------------------------------------
+
+            // 1. إغلاق نافذة البروفايل أولاً 
             const profileModal = document.getElementById('player-profile-modal') || document.getElementById('profile-modal');
             if (profileModal) {
                 profileModal.classList.add('hidden');
             }
 
-            // 2. التوجيه المباشر إلى قسم/تبويب السحب الشامل
-            if (typeof switchTab === 'function') {
-                switchTab('retrait'); // تفعيل تبويب السحب
-            }
+            // 2. التوجيه المباشر إلى تبويب السحب
+            switchCashierTab('withdraw'); 
 
             // 3. إظهار نافذة السحب/الكاشير
-            const caisseModal = document.getElementById('caisse-modal') || document.getElementById('cashier-modal');
+            const caisseModal = document.getElementById('cashier-modal');
             if (caisseModal) {
                 caisseModal.classList.remove('hidden');
-                setTimeout(() => {
-                    caisseModal.classList.remove('opacity-0');
-                }, 10);
+                caisseModal.classList.add('flex');
             }
         }
-
     </script>
     <!-- ================= SCROLL TO TOP BUTTON  ================= -->
     <button id="scrollToTopBtn" onclick="scrollToTop()"
