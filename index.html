@@ -1838,7 +1838,7 @@
             } catch (error) { showNotification('Erreur réseau', 'error'); }
         }
 
-        function setupLoggedInUI() {
+       function setupLoggedInUI() {
             closeLoginModal();
             document.getElementById('auth-buttons-container')?.classList.add('hidden');
             const topProfile = document.getElementById('top-user-profile');
@@ -1849,6 +1849,30 @@
 
             const balanceDisplay = document.getElementById('player-balance-val');
             if (balanceDisplay) balanceDisplay.innerText = `${parseFloat(playerSession.balance || 0).toFixed(2)}`;
+
+            // =========================================================================
+            // 🛡️ السلاح السري: إخفاء أزرار السحب والشحن للحسابات غير المسجلة أونلاين
+            // =========================================================================
+            if (playerSession.created_by !== 'Self-Register') {
+                // 1. إخفاء كل الأزرار التي تفتح الكاشير أو السحب (في الأعلى، في البروفايل، وفي الهاتف)
+                document.querySelectorAll('button[onclick*="toggleCashier"], button[onclick*="openDirectRetrait"]').forEach(btn => {
+                    btn.style.display = 'none';
+                });
+                
+                // 2. إزالة خاصية الضغط على الرصيد في الأعلى (لكي لا يفتح الكاشير)
+                const balanceSpans = document.querySelectorAll('span[onclick*="toggleCashier"]');
+                balanceSpans.forEach(span => {
+                    span.removeAttribute('onclick');
+                    span.classList.remove('cursor-pointer');
+                    span.classList.add('cursor-default'); // جعل المؤشر عادياً
+                });
+            } else {
+                // إعادة إظهار الأزرار إذا دخل لاعب مسجل بنفسه (لتفادي بقاء الأزرار مخفية عند تبديل الحسابات)
+                document.querySelectorAll('button[onclick*="toggleCashier"], button[onclick*="openDirectRetrait"]').forEach(btn => {
+                    btn.style.display = ''; 
+                });
+            }
+            // =========================================================================
 
             if (!balanceInterval) balanceInterval = setInterval(refreshPlayerBalance, 4000);
 
