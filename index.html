@@ -1417,10 +1417,10 @@
             </button>
         </div>
 
-        <button onclick="toggleCashier()"
+        <button onclick="switchSection('virtuals'); initVirtualsLobby();"
             class="flex flex-col items-center gap-1 w-[20%] text-gray-500 hover:text-q-gold hover:-translate-y-1 transition-transform cursor-pointer">
-            <i class="fas fa-wallet text-lg md:text-xl"></i>
-            <span class="text-[8px] md:text-[9px] font-bold tracking-widest uppercase mt-0.5">Dépôt</span>
+            <i class="fas fa-gamepad text-lg md:text-xl"></i>
+            <span class="text-[8px] md:text-[9px] font-bold tracking-widest uppercase mt-0.5">Virtuels</span>
         </button>
 
         <button onclick="openProfile()"
@@ -1838,7 +1838,7 @@
             } catch (error) { showNotification('Erreur réseau', 'error'); }
         }
 
-       function setupLoggedInUI() {
+        function setupLoggedInUI() {
             closeLoginModal();
             document.getElementById('auth-buttons-container')?.classList.add('hidden');
             const topProfile = document.getElementById('top-user-profile');
