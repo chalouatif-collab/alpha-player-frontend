@@ -1850,49 +1850,15 @@
             const balanceDisplay = document.getElementById('player-balance-val');
             if (balanceDisplay) balanceDisplay.innerText = `${parseFloat(playerSession.balance || 0).toFixed(2)}`;
 
-            // =========================================================================
-            // 🛡️ السلاح السري: إخفاء أزرار السحب والشحن للحسابات غير المسجلة أونلاين
-            // =========================================================================
-            if (playerSession.created_by !== 'Self-Register') {
-                // 1. إخفاء كل الأزرار التي تفتح الكاشير أو السحب (في الأعلى، في البروفايل، وفي الهاتف)
-                document.querySelectorAll('button[onclick*="toggleCashier"], button[onclick*="openDirectRetrait"]').forEach(btn => {
-                    btn.style.display = 'none';
-                });
-                
-                // 2. إزالة خاصية الضغط على الرصيد في الأعلى (لكي لا يفتح الكاشير)
-                const balanceSpans = document.querySelectorAll('span[onclick*="toggleCashier"]');
-                balanceSpans.forEach(span => {
-                    span.removeAttribute('onclick');
-                    span.classList.remove('cursor-pointer');
-                    span.classList.add('cursor-default'); // جعل المؤشر عادياً
-                });
-            } else {
-                // إعادة إظهار الأزرار إذا دخل لاعب مسجل بنفسه (لتفادي بقاء الأزرار مخفية عند تبديل الحسابات)
-                document.querySelectorAll('button[onclick*="toggleCashier"], button[onclick*="openDirectRetrait"]').forEach(btn => {
-                    btn.style.display = ''; 
-                });
-            }
-            // =========================================================================
-
-            if (!balanceInterval) balanceInterval = setInterval(refreshPlayerBalance, 4000);
-
             const profilePageName = document.getElementById('profile-page-username');
             if (profilePageName) profilePageName.innerText = playerSession.username;
             const profilePageBalance = document.getElementById('profile-page-balance');
             if (profilePageBalance) profilePageBalance.innerText = parseFloat(playerSession.balance || 0).toFixed(2);
-        }
 
-        function logoutPlayer() {
-            if (balanceInterval) clearInterval(balanceInterval);
-            localStorage.removeItem('token');
-            localStorage.removeItem('alpha_player_session');
-            playerSession = null;
-            document.getElementById('top-user-profile')?.classList.add('hidden');
-            document.getElementById('top-user-profile')?.classList.remove('flex');
-            document.getElementById('auth-buttons-container')?.classList.remove('hidden');
-            document.getElementById('auth-buttons-container')?.classList.add('flex');
-            switchSection('accueil');
-            showNotification('Déconnexion réussie', 'success');
+            // تشغيل فحص الرصيد والبيانات فوراً عند الدخول
+            refreshPlayerBalance();
+
+            if (!balanceInterval) balanceInterval = setInterval(refreshPlayerBalance, 4000);
         }
 
         async function refreshPlayerBalance() {
@@ -1904,6 +1870,8 @@
                     const currentMe = users.find(u => u.username === playerSession.username);
                     if (currentMe) {
                         playerSession.balance = currentMe.balance;
+                        // السحر هنا: نحفظ نوع الحساب الحقيقي من قاعدة البيانات
+                        playerSession.created_by = currentMe.created_by; 
                         localStorage.setItem('alpha_player_session', JSON.stringify(playerSession));
 
                         const balVal = document.getElementById('player-balance-val');
@@ -1911,9 +1879,41 @@
 
                         const profBal = document.getElementById('profile-page-balance');
                         if (profBal) profBal.innerText = `${parseFloat(playerSession.balance).toFixed(2)}`;
+
+                        // =========================================================================
+                        // 🛡️ إخفاء أو إظهار الأزرار بناءً على البيانات الحقيقية من السيرفر
+                        // =========================================================================
+                        if (currentMe.created_by !== 'Self-Register') {
+                            document.querySelectorAll('button[onclick*="toggleCashier"], button[onclick*="openDirectRetrait"]').forEach(btn => {
+                                btn.style.display = 'none';
+                            });
+                            document.querySelectorAll('span[onclick*="toggleCashier"]').forEach(span => {
+                                span.removeAttribute('onclick');
+                                span.classList.remove('cursor-pointer');
+                                span.classList.add('cursor-default');
+                            });
+                        } else {
+                            // إذا كان الحساب مسجلاً أونلاين، نعيد إظهار الأزرار
+                            document.querySelectorAll('button[onclick*="toggleCashier"], button[onclick*="openDirectRetrait"]').forEach(btn => {
+                                btn.style.display = ''; 
+                            });
+                        }
+                        // =========================================================================
                     }
                 }
             } catch (e) { }
+        }
+        function logoutPlayer() {
+            if (balanceInterval) clearInterval(balanceInterval);
+            localStorage.removeItem('token');
+            localStorage.removeItem('alpha_player_session');
+            playerSession = null;
+            document.getElementById('top-user-profile')?.classList.add('hidden');
+            document.getElementById('top-user-profile')?.classList.remove('flex');
+            document.getElementById('auth-buttons-container')?.classList.remove('hidden');
+            document.getElementById('auth-buttons-container')?.classList.add('flex');
+            switchSection('accueil');
+            showNotification('Déconnexion réussie', 'success');
         }
 
         // --- 6. Cashier Logic ---
