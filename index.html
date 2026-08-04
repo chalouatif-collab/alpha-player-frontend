@@ -2056,9 +2056,12 @@
             document.getElementById('sportsbook-iframe').src = "about:blank";
         }
 
-        // Casino Grid & Providers
-        let casinoProviders = [];
+       let casinoProviders = [];
         let currentProviderGames = [];
+        let currentDisplayLimit = 40;
+        let currentActiveProviderCode = "PRAGMATIC";
+        let gamesObserver = null;
+
         async function initCasinoLobby() {
             if (casinoProviders.length === 0) {
                 const bar = document.getElementById('providers-bar');
@@ -2070,34 +2073,38 @@
                     if (casinoProviders.length > 0) {
                         bar.innerHTML = casinoProviders.map(p => `<button onclick="loadProviderGames('${p.code}')" class="btn-glass px-4 py-2 rounded-full text-xs font-bold text-gray-300 hover:text-white shrink-0">${p.name || p.code}</button>`).join('');
                         loadProviderGames(casinoProviders[0].code);
-
-                        // 👈 تفعيل السحب بالفأرة هنا فوراً بعد رسم الأزرار
                         setTimeout(() => enableMouseDragScroll('providers-bar'), 200);
                     }
                 } catch (e) { bar.innerHTML = '<span class="text-q-magenta text-xs">Erreur</span>'; }
             }
         }
+
         async function loadProviderGames(providerCode) {
+            currentActiveProviderCode = providerCode;
+            currentDisplayLimit = 40;
             const container = document.getElementById('games-grid');
             container.innerHTML = '<div class="col-span-full text-center text-q-cyan py-10 animate-pulse">Chargement... ⏳</div>';
+            
             try {
                 const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ provider_code: providerCode })
                 });
                 const data = await res.json();
-                let gamesArray = data.games || data.data || [];
-                currentProviderGames = gamesArray;
-                renderCasinoGrid(gamesArray, providerCode);
+                currentProviderGames = data.games || data.data || [];
+                renderCasinoGrid();
             } catch (e) { container.innerHTML = '<div class="col-span-full text-red-500 text-center">Erreur</div>'; }
         }
-        function renderCasinoGrid(games, providerCode) {
+
+        function renderCasinoGrid() {
             const container = document.getElementById('games-grid');
-            container.innerHTML = games.slice(0, 50).map(g => {
+            const gamesToDisplay = currentProviderGames.slice(0, currentDisplayLimit);
+            
+            container.innerHTML = gamesToDisplay.map(g => {
                 const title = g.game_name || g.name || "Game";
                 const img = g.banner || g.image || g.thumb || "https://placehold.co/400x400/180A2B/FFF";
                 const code = g.game_code || g.id;
                 return `
-                <div onclick="playCasinoGame('${providerCode}', '${code}')" class="bg-black/50 rounded-xl overflow-hidden border border-white/5 group cursor-pointer shadow-lg hover:border-q-cyan transition-all flex flex-col h-full">
+                <div onclick="playCasinoGame('${currentActiveProviderCode}', '${code}')" class="bg-black/50 rounded-xl overflow-hidden border border-white/5 group cursor-pointer shadow-lg hover:border-q-cyan transition-all flex flex-col h-full">
                     <div class="relative w-full aspect-square overflow-hidden">
                         <img src="${img}" alt="${title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 backdrop-blur-[1px]">
@@ -2109,11 +2116,58 @@
                     </div>
                 </div>`;
             }).join('');
+
+            let sentinel = document.getElementById('games-scroll-sentinel');
+            if (currentDisplayLimit < currentProviderGames.length) {
+                if (!sentinel) {
+                    sentinel = document.createElement('div');
+                    sentinel.id = 'games-scroll-sentinel';
+                    sentinel.className = 'col-span-full text-center py-6 text-q-cyan font-display animate-pulse text-xs';
+                    sentinel.innerHTML = 'Chargement de plus de jeux... 🔄';
+                    container.parentNode.appendChild(sentinel);
+                }
+                
+                if (!gamesObserver) {
+                    gamesObserver = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting && currentDisplayLimit < currentProviderGames.length) {
+                                currentDisplayLimit += 40;
+                                renderCasinoGrid();
+                            }
+                        });
+                    }, { rootMargin: '300px' });
+                }
+                gamesObserver.observe(sentinel);
+            } else if (sentinel) {
+                sentinel.remove();
+            }
         }
+
         function filterGames() {
             const term = document.getElementById('game-search-input').value.toLowerCase();
             const filtered = currentProviderGames.filter(g => (g.game_name || g.name || "").toLowerCase().includes(term));
-            renderCasinoGrid(filtered, "PRAGMATIC");
+            
+            const container = document.getElementById('games-grid');
+            container.innerHTML = filtered.map(g => {
+                const title = g.game_name || g.name || "Game";
+                const img = g.banner || g.image || g.thumb || "https://placehold.co/400x400/180A2B/FFF";
+                const code = g.game_code || g.id;
+                return `
+                <div onclick="playCasinoGame('${currentActiveProviderCode}', '${code}')" class="bg-black/50 rounded-xl overflow-hidden border border-white/5 group cursor-pointer shadow-lg hover:border-q-cyan transition-all flex flex-col h-full">
+                    <div class="relative w-full aspect-square overflow-hidden">
+                        <img src="${img}" alt="${title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 backdrop-blur-[1px]">
+                            <span class="btn-liquid text-white text-[10px] font-bold px-4 py-2 rounded-full">JOUER</span>
+                        </div>
+                    </div>
+                    <div class="p-2 flex justify-between items-center bg-q-panel border-t border-white/5 flex-grow">
+                        <span class="text-white text-[10px] font-bold truncate pr-1 group-hover:text-q-cyan">${title}</span>
+                    </div>
+                </div>`;
+            }).join('');
+            
+            const sentinel = document.getElementById('games-scroll-sentinel');
+            if (sentinel) sentinel.remove();
         }
 
         // Live Casino
