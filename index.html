@@ -1595,11 +1595,11 @@
             const targetBtn = document.getElementById(`btn-menu-${sectionId}`);
             if (targetBtn) targetBtn.classList.add('active');
 
-            // ⚡ التعديل الذكي: إعادة تحميل بيانات القسم تلقائياً عند فتحة أو عند عمل Refresh
+           // ⚡ التعديل الذكي: إعادة تحميل بيانات القسم تلقائياً عند فتحة أو عند عمل Refresh
             if (sectionId === 'casino' && typeof initCasinoLobby === 'function') {
                 initCasinoLobby();
-            } else if (sectionId === 'live-casino' && typeof loadLiveGamesData === 'function') {
-                loadLiveGamesData();
+            } else if (sectionId === 'live-casino' && typeof openLiveCasino === 'function') {
+                openLiveCasino(true); // نمرر true لمنع الدوران اللانهائي
             } else if (sectionId === 'virtuals' && typeof initVirtualsLobby === 'function') {
                 initVirtualsLobby();
             }
@@ -2196,8 +2196,12 @@
             { code: 'BETGAMES', name: 'BetGames TV' }
         ];
 
-        async function openLiveCasino() {
-            switchSection('live-casino');
+        async function openLiveCasino(skipSwitch = false) {
+            // نمنع إعادة تشغيل القسم إذا كان مفتوحاً بالفعل لتجنب الأخطاء الحمراء (classList)
+            if (!skipSwitch) {
+                switchSection('live-casino');
+                return; 
+            }
             
             // رسم أزرار المزودين
             const bar = document.getElementById('live-providers-bar');
@@ -2207,10 +2211,11 @@
                 ).join('');
             }
             
-            // تحميل ألعاب أول مزود في القائمة تلقائياً
-            loadLiveGamesData(liveCasinoProviders[0].code);
+            // تحميل ألعاب أول مزود في القائمة تلقائياً (تأكد أن القائمة غير فارغة)
+            if (liveCasinoProviders.length > 0) {
+                loadLiveGamesData(liveCasinoProviders[0].code);
+            }
         }
-
         // Virtuals (EuroVirtuals)
         const virtualCategories = [
             { id: "all", name: "🎰 Tous" }, { id: "football", name: "⚽ Football" }, { id: "horses", name: "🏇 Chevaux" },
