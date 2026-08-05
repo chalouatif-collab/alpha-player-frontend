@@ -969,7 +969,7 @@
             </div>
             
             <!-- ================= LIVE JACKPOTS (BREATHING NEON EFFECT) ================= -->
-            <div class="grid grid-cols-3 gap-2 md:gap-8 mb-10 md:mb-12">
+            <div class="grid grid-cols-3 gap-2 md:gap-8 mb-4">
 
                 <!-- MEGA JACKPOT -->
                 <div id="mega-wrapper" class="relative group cursor-pointer hover:-translate-y-3 transition-transform duration-500" data-tilt data-tilt-glare data-tilt-max-glare="0.5" data-tilt-max="15">
@@ -1009,52 +1009,49 @@
                 </div>
                 
             </div>>
-            <!-- ================= أزرار التنقل السحرية (تحت الجاكبوت) ================= -->
-            <div class="relative w-full mb-10 md:mb-14 overflow-hidden mt-4">
+            <!-- ================= أزرار التنقل السحرية (ممتدة ومقتربة) ================= -->
+            <!-- خدعة -mx-4 تكسر الحواجز وتجعل الأزرار تمتد لأقصى الشاشة في الهاتف -->
+            <div class="relative w-[calc(100%+2rem)] -mx-4 md:w-full md:mx-0 mb-8 overflow-hidden mt-0">
                 
-                <!-- تدرج لوني على الأطراف للهاتف ليعطي إيحاء السحب المخفي -->
-                <div class="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-[#0d0518] to-transparent z-10 pointer-events-none md:hidden"></div>
-                <div class="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-[#0d0518] to-transparent z-10 pointer-events-none md:hidden"></div>
-
-                <!-- حاوية الأزرار (تمرير أفقي سلس على الهاتف، وتوسيط على الكمبيوتر) -->
-                <div class="flex overflow-x-auto hide-scroll gap-3 md:gap-5 pb-4 px-4 md:justify-center snap-x items-center">
+                <!-- حاوية الأزرار تمتد من الحافة للحافة -->
+                <div class="flex overflow-x-auto hide-scroll gap-3 md:gap-4 px-4 md:justify-center snap-x items-center pb-3">
                     
                     <!-- CASINO -->
-                    <button onclick="switchTab('casino')" class="shrink-0 snap-center group relative px-5 py-2.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-q-magenta/40 text-white font-display text-xs md:text-sm tracking-widest uppercase flex items-center gap-2 hover:border-q-magenta hover:shadow-[0_0_20px_rgba(254,9,121,0.6)] hover:-translate-y-1.5 transition-all duration-300">
+                    <button onclick="switchTab('casino')" class="shrink-0 snap-center group relative px-5 py-2.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-q-magenta/40 text-white font-display text-xs md:text-sm tracking-widest uppercase flex items-center gap-2 hover:border-q-magenta hover:shadow-[0_0_20px_rgba(254,9,121,0.6)] transition-all duration-300">
                         <i class="fas fa-fire text-q-magenta group-hover:scale-125 transition-transform duration-300"></i>
                         Casino
                     </button>
 
                     <!-- LIVE CASINO -->
-                    <button onclick="switchTab('live')" class="shrink-0 snap-center group relative px-5 py-2.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-q-purple/40 text-white font-display text-xs md:text-sm tracking-widest uppercase flex items-center gap-2 hover:border-q-purple hover:shadow-[0_0_20px_rgba(138,43,226,0.6)] hover:-translate-y-1.5 transition-all duration-300">
+                    <button onclick="switchTab('live')" class="shrink-0 snap-center group relative px-5 py-2.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-q-purple/40 text-white font-display text-xs md:text-sm tracking-widest uppercase flex items-center gap-2 hover:border-q-purple hover:shadow-[0_0_20px_rgba(138,43,226,0.6)] transition-all duration-300">
                         <i class="fas fa-headset text-q-purple group-hover:scale-125 transition-transform duration-300"></i>
                         Live Casino
                     </button>
 
                     <!-- SPORTS -->
-                    <button onclick="switchTab('sports')" class="shrink-0 snap-center group relative px-5 py-2.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-green-500/40 text-white font-display text-xs md:text-sm tracking-widest uppercase flex items-center gap-2 hover:border-green-500 hover:shadow-[0_0_20px_rgba(34,197,94,0.6)] hover:-translate-y-1.5 transition-all duration-300">
+                    <button onclick="switchTab('sports')" class="shrink-0 snap-center group relative px-5 py-2.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-green-500/40 text-white font-display text-xs md:text-sm tracking-widest uppercase flex items-center gap-2 hover:border-green-500 hover:shadow-[0_0_20px_rgba(34,197,94,0.6)] transition-all duration-300">
                         <i class="fas fa-futbol text-green-500 group-hover:scale-125 transition-transform duration-300"></i>
                         Sports
                     </button>
 
                     <!-- VIRTUELS -->
-                    <button onclick="switchTab('virtuels')" class="shrink-0 snap-center group relative px-5 py-2.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-q-gold/40 text-white font-display text-xs md:text-sm tracking-widest uppercase flex items-center gap-2 hover:border-q-gold hover:shadow-[0_0_20px_rgba(249,212,35,0.6)] hover:-translate-y-1.5 transition-all duration-300">
+                    <button onclick="switchTab('virtuels')" class="shrink-0 snap-center group relative px-5 py-2.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-q-gold/40 text-white font-display text-xs md:text-sm tracking-widest uppercase flex items-center gap-2 hover:border-q-gold hover:shadow-[0_0_20px_rgba(249,212,35,0.6)] transition-all duration-300">
                         <i class="fas fa-gamepad text-q-gold group-hover:scale-125 transition-transform duration-300"></i>
                         Virtuels
                     </button>
 
                     <!-- MINI-JEUX -->
-                    <button onclick="switchTab('mini-jeux')" class="shrink-0 snap-center group relative px-5 py-2.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-q-cyan/40 text-white font-display text-xs md:text-sm tracking-widest uppercase flex items-center gap-2 hover:border-q-cyan hover:shadow-[0_0_20px_rgba(0,242,254,0.6)] hover:-translate-y-1.5 transition-all duration-300">
+                    <button onclick="switchTab('mini-jeux')" class="shrink-0 snap-center group relative px-5 py-2.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-q-cyan/40 text-white font-display text-xs md:text-sm tracking-widest uppercase flex items-center gap-2 hover:border-q-cyan hover:shadow-[0_0_20px_rgba(0,242,254,0.6)] transition-all duration-300">
                         <i class="fas fa-bomb text-q-cyan group-hover:scale-125 transition-transform duration-300"></i>
                         Mini-Jeux
                     </button>
 
-                    <!-- AVIATOR (زر النخبة - تأثير النبض والانطلاق) -->
-                    <button onclick="playCasinoGame('SPRIBE', 'aviator')" class="shrink-0 snap-center group relative px-6 py-2.5 rounded-full bg-[#180A2B] backdrop-blur-md border-[2px] border-red-500 text-white font-display font-black text-xs md:text-sm tracking-widest uppercase flex items-center gap-2 shadow-[0_0_15px_rgba(239,68,68,0.5)] hover:shadow-[0_0_30px_rgba(239,68,68,0.9)] hover:bg-red-500/10 hover:-translate-y-2 animate-pulse hover:animate-none transition-all duration-300">
-                        <!-- الطائرة تطير عند اللمس! -->
+                    <!-- AVIATOR -->
+                    <button onclick="playCasinoGame('SPRIBE', 'aviator')" class="shrink-0 snap-center group relative px-6 py-2.5 rounded-full bg-[#180A2B] backdrop-blur-md border-[2px] border-red-500 text-white font-display font-black text-xs md:text-sm tracking-widest uppercase flex items-center gap-2 shadow-[0_0_15px_rgba(239,68,68,0.5)] hover:shadow-[0_0_30px_rgba(239,68,68,0.9)] hover:bg-red-500/10 animate-pulse hover:animate-none transition-all duration-300">
                         <i class="fas fa-plane-up text-red-500 group-hover:text-red-400 group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform duration-500 ease-out"></i>
                         Aviator
                     </button>
+
                 </div>
             </div>
             <!-- ================= END أزرار التنقل ================= -->
@@ -2795,13 +2792,16 @@
         function scrollToTop() {
             window.scrollTo({
                 top: 0,
-                behavior: 'smooth'
+                behavior: 'smooth' // هذا السحر الذي يجعله يصعد بنعومة وليس فجأة
             });
         }
+        // ================= محرك النوافذ القانونية (Legal Modals) =================
         function openLegalModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal) {
+                // إظهار العنصر أولاً
                 modal.classList.remove('hidden');
+                // إضافة حركة الدخول (Fade-in & Scale-up) بعد جزء من الثانية
                 setTimeout(() => {
                     modal.classList.remove('opacity-0');
                     if (modal.children[0]) {
@@ -2823,6 +2823,7 @@
                     modal.children[0].classList.remove('scale-100');
                     modal.children[0].classList.add('scale-95');
                 }
+                // إخفاء العنصر تماماً بعد انتهاء الحركة
                 setTimeout(() => {
                     modal.classList.add('hidden');
                 }, 300);
@@ -2836,10 +2837,11 @@
             if (target) target.classList.remove('hidden');
         }
         function switchCashierTab(tabName) {
+            // --- حماية تبويب السحب (للمسجلين أونلاين فقط) ---
             if (tabName === 'withdraw') {
                 if (playerSession.created_by !== 'Self-Register') {
                     showNotification("Le retrait direct est réservé aux comptes créés en ligne.", "error");
-                    return; 
+                    return; // نوقف العملية ولا نفتح قسم السحب
                 }
                 syncBalance();
             }
@@ -2854,11 +2856,16 @@
             document.getElementById(`tab-${tabName}`).className = `flex-1 ${tabName === 'deposit' ? 'bg-q-cyan text-black' : 'bg-q-magenta text-white'} font-bold py-2 rounded-lg text-xs transition-all shadow-md cursor-pointer`;
         }
 
+        // ================= دالة فتح السحب المباشر وإغلاق البروفايل =================
         function openDirectRetrait() {
+            // --- حماية زر السحب في البروفايل (للمسجلين أونلاين فقط) ---
             if (playerSession.created_by !== 'Self-Register') {
                 showNotification("Le retrait direct est réservé aux comptes créés en ligne.", "error");
                 return;
             }
+            // ---------------------------------------------------------
+
+            // 1. إغلاق نافذة البروفايل أولاً 
             const profileModal = document.getElementById('player-profile-modal') || document.getElementById('profile-modal');
             if (profileModal) {
                 profileModal.classList.add('hidden');
