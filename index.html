@@ -2788,16 +2788,18 @@
         // ================= محرك زر العودة للأعلى =================
         const scrollToTopBtn = document.getElementById('scrollToTopBtn');
 
-        // مراقبة النزول لإظهار أو إخفاء الزر
+        // ================= محرك زر العودة للأعلى (مُحصّن ضد الأخطاء) =================
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 400) {
-                // إظهار الزر
-                scrollToTopBtn.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
-                scrollToTopBtn.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
-            } else {
-                // إخفاء الزر
-                scrollToTopBtn.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
-                scrollToTopBtn.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+            const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+            // 🛡️ درع الحماية: لا تفعل شيئاً إلا إذا كان الزر موجوداً بالفعل
+            if (scrollToTopBtn) { 
+                if (window.scrollY > 400) {
+                    scrollToTopBtn.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+                    scrollToTopBtn.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+                } else {
+                    scrollToTopBtn.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+                    scrollToTopBtn.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+                }
             }
         });
 
