@@ -2083,6 +2083,7 @@
                     const res = await fetch(`${BACKEND_URL}/api/get-providers`);
                     const data = await res.json();
                     casinoProviders = data.providers || data.data || [];
+                    console.log("🔥 عدد المزودين المستلمين من السيرفر هو: ", casinoProviders.length);
                     if (casinoProviders.length > 0) {
                         bar.innerHTML = casinoProviders.map(p => `<button onclick="loadProviderGames('${p.code}')" class="btn-glass px-4 py-2 rounded-full text-xs font-bold text-gray-300 hover:text-white shrink-0">${p.name || p.code}</button>`).join('');
                         loadProviderGames(casinoProviders[0].code);
