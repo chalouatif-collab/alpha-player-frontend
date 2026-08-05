@@ -396,6 +396,37 @@
         .jackpot-gold-magic { animation: jackpot-breathe-gold 3s infinite alternate; }
         .jackpot-cyan-magic { animation: jackpot-breathe-cyan 3.5s infinite alternate; }
         .jackpot-magenta-magic { animation: jackpot-breathe-magenta 4s infinite alternate; }
+
+    /* ================= الصدمة الكهربائية لشريط الرابحين (إجباري) ================= */
+        .ticker-track {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            width: max-content !important;
+            /* تشغيل الحركة بقوة 30 ثانية */
+            animation: mad-ticker-scroll 30s linear infinite !important; 
+        }
+        
+        /* إيقاف الشريط عند لمسه بالإصبع أو الماوس ليقرأ اللاعب الاسم */
+        .ticker-track:hover {
+            animation-play-state: paused !important;
+        }
+
+        /* إجبار كل النصوص والأرقام داخل الشريط على أن تكون صغيرة وأنيقة */
+        #winners-ticker-track * {
+            font-size: 10px !important;
+            white-space: nowrap !important;
+        }
+
+        /* تكبير الأيقونات التعبيرية (الإيموجي) قليلاً لتبدو جميلة */
+        #winners-ticker-track i, 
+        #winners-ticker-track img {
+            font-size: 12px !important;
+        }
+
+        @keyframes mad-ticker-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } 
+        }
     </style>
 </head>
 
@@ -905,7 +936,7 @@
                     <div class="absolute left-16 top-0 bottom-0 w-12 bg-gradient-to-r from-[#0d0518] to-transparent z-10 pointer-events-none"></div>
                     <div class="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#0d0518] to-transparent z-10 pointer-events-none"></div>
 
-                  <!-- شريط الأسماء المتحرك -->
+                    <!-- شريط الأسماء المتحرك -->
                     <div class="flex-grow overflow-hidden relative h-7 md:h-9 flex items-center ml-2">
                         <div id="winners-ticker-track" class="ticker-track gap-4 md:gap-6 px-4 items-center cursor-pointer text-[10px] md:text-xs">
                             <!-- سيتم تعبئتها بالجافا سكريبت -->
@@ -913,6 +944,7 @@
                     </div>
                 </div>
             </div>
+            <!-- ================= END TICKER ================= -->
 
             <!-- ================= WELCOME TEXT (يطفو بسحر ويشع) ================= -->
             <div class="text-center md:text-left mb-10 md:mb-12 animate-magic-float relative">
