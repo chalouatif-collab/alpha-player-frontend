@@ -1237,18 +1237,19 @@
             </div>
         </div>
 
-        <!-- PANE: LIVE CASINO -->
+       <!-- PANE: LIVE CASINO -->
         <div id="pane-live-casino" class="player-view-section hidden w-full">
-            <div
-                class="flex items-center justify-between bg-q-panel/80 p-4 rounded-xl border border-white/10 mb-4 backdrop-blur-md">
+            <div class="flex items-center justify-between bg-q-panel/80 p-4 rounded-xl border border-white/10 mb-4 backdrop-blur-md">
                 <h2 class="text-white font-display font-black text-xl flex items-center gap-2">
                     <span class="animate-pulse text-red-500">🔴</span> Live Casino
                 </h2>
             </div>
-            <div id="live-games-grid"
-                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 w-full pb-10"></div>
+            
+            <!-- هذا هو الشريط الجديد الذي سيحتوي على أزرار المزودين -->
+            <div id="live-providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4"></div>
+            
+            <div id="live-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 w-full pb-10"></div>
         </div>
-
         <!-- PANE: VIRTUALS -->
         <div id="pane-virtuals" class="player-view-section hidden w-full">
             <div
@@ -2185,33 +2186,29 @@
         }
 
         // Live Casino
+        // ================= أزرار مزودي اللايف كازينو =================
+        // يمكنك إضافة أو حذف أي مزود هنا حسب اشتراكك في نكسيس
+        const liveCasinoProviders = [
+            { code: 'PRAGMATIC_LIVE', name: 'Pragmatic Live' },
+            { code: 'EVOLUTION', name: 'Evolution Gaming' },
+            { code: 'EZUGI', name: 'Ezugi' },
+            { code: 'VIVO', name: 'Vivo Gaming' },
+            { code: 'BETGAMES', name: 'BetGames TV' }
+        ];
+
         async function openLiveCasino() {
             switchSection('live-casino');
-            const container = document.getElementById('live-games-grid');
-            container.innerHTML = '<div class="col-span-full text-center text-q-purple py-10 animate-pulse">Chargement Live... ⏳</div>';
-            try {
-                const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ provider_code: 'PRAGMATIC_LIVE' })
-                });
-                const data = await res.json();
-                let games = data.games || data.data || [];
-                container.innerHTML = games.slice(0, 30).map(g => {
-                    const img = g.banner || g.image || g.thumb || "https://placehold.co/400x400/180A2B/FFF";
-                    return `
-                    <div onclick="playCasinoGame('PRAGMATIC_LIVE', '${g.game_code || g.id}')" class="bg-black/50 rounded-xl overflow-hidden border border-white/5 group cursor-pointer shadow-lg hover:border-q-purple transition-all flex flex-col h-full">
-                        <div class="relative w-full aspect-square overflow-hidden">
-                            <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                            <div class="absolute top-0 right-0 bg-red-600 text-white text-[8px] font-black px-2 py-0.5 rounded-bl-lg animate-pulse z-10">LIVE</div>
-                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-                                <span class="bg-q-purple text-white text-[10px] font-bold px-4 py-2 rounded-full">REJOINDRE</span>
-                            </div>
-                        </div>
-                        <div class="p-2 flex justify-between items-center bg-q-panel border-t border-white/5 flex-grow">
-                            <span class="text-white text-[10px] font-bold truncate pr-1 group-hover:text-q-purple">${g.game_name || g.name}</span>
-                        </div>
-                    </div>`;
-                }).join('');
-            } catch (e) { container.innerHTML = '<div class="col-span-full text-red-500 text-center">Erreur Live</div>'; }
+            
+            // رسم أزرار المزودين
+            const bar = document.getElementById('live-providers-bar');
+            if (bar) {
+                bar.innerHTML = liveCasinoProviders.map(p => 
+                    `<button onclick="loadLiveGamesData('${p.code}')" class="btn-glass px-4 py-2 rounded-full text-xs font-bold text-gray-300 hover:text-white shrink-0">${p.name}</button>`
+                ).join('');
+            }
+            
+            // تحميل ألعاب أول مزود في القائمة تلقائياً
+            loadLiveGamesData(liveCasinoProviders[0].code);
         }
 
         // Virtuals (EuroVirtuals)
@@ -2537,15 +2534,17 @@
             loadLiveGamesData();
         }
 
-        async function loadLiveGamesData() {
+        async function loadLiveGamesData(providerCode) {
             const container = document.getElementById('live-games-grid');
             if (!container) return;
 
-            container.innerHTML = '<div class="col-span-full text-center text-q-purple py-10 animate-pulse">Chargement Live... ⏳</div>';
+            container.innerHTML = `<div class="col-span-full text-center text-q-purple py-10 animate-pulse">Chargement ${providerCode}... ⏳</div>`;
 
             try {
                 const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ provider_code: 'PRAGMATIC_LIVE' })
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ provider_code: providerCode }) // السحر هنا: الكود أصبح متغيراً وليس ثابتاً
                 });
                 const data = await res.json();
                 let games = data.games || data.data || [];
@@ -2554,7 +2553,7 @@
                     container.innerHTML = games.slice(0, 30).map(g => {
                         const img = g.banner || g.image || g.thumb || "https://placehold.co/400x400/180A2B/FFF";
                         return `
-                        <div onclick="playCasinoGame('PRAGMATIC_LIVE', '${g.game_code || g.id}')" class="bg-black/50 rounded-xl overflow-hidden border border-white/5 group cursor-pointer shadow-lg hover:border-q-purple transition-all flex flex-col h-full">
+                        <div onclick="playCasinoGame('${providerCode}', '${g.game_code || g.id}')" class="bg-black/50 rounded-xl overflow-hidden border border-white/5 group cursor-pointer shadow-lg hover:border-q-purple transition-all flex flex-col h-full">
                             <div class="relative w-full aspect-square overflow-hidden">
                                 <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                                 <div class="absolute top-0 right-0 bg-red-600 text-white text-[8px] font-black px-2 py-0.5 rounded-bl-lg animate-pulse z-10">LIVE</div>
@@ -2568,9 +2567,11 @@
                         </div>`;
                     }).join('');
                 } else {
-                    container.innerHTML = '<div class="col-span-full text-center text-gray-500 py-10">Aucune table live disponible.</div>';
+                    container.innerHTML = '<div class="col-span-full text-center text-gray-500 py-10">Aucune table live disponible pour ce fournisseur.</div>';
                 }
-            } catch (e) { container.innerHTML = '<div class="col-span-full text-red-500 text-center">Erreur de connexion Live</div>'; }
+            } catch (e) { 
+                container.innerHTML = '<div class="col-span-full text-red-500 text-center">Erreur de connexion Live</div>'; 
+            }
         }
         // ================= محرك الجاكبوت الحي (Live Jackpots) =================
         function startJackpots() {
