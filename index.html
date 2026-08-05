@@ -397,40 +397,45 @@
         .jackpot-cyan-magic { animation: jackpot-breathe-cyan 3.5s infinite alternate; }
         .jackpot-magenta-magic { animation: jackpot-breathe-magenta 4s infinite alternate; }
 
-    /* ================= محرك الدائرة الطافية (حركة عمودية) ================= */
-        .circular-ticker-track {
-            display: flex !important;
-            flex-direction: column !important; /* تحويل المسار ليكون من أعلى لأسفل */
-            width: 100% !important;
-            /* حركة بطيئة ومستمرة */
-            animation: magic-circle-scroll 15s linear infinite !important;
+    /* ================= محرك الدوران اللانهائي ================= */
+        
+        /* هذا الكلاس يصنع تلاشي (Fade) أسود في اليمين واليسار ليعطي إحساس الدوران الدائري */
+        .endless-ticker-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
         }
 
-        /* إيقاف الدوران عند لمس الدائرة */
-        .circular-ticker-track:hover {
+        /* المطرقة التي تجبر الشريط على التمدد والركض */
+        .endless-ticker-track {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            width: max-content !important;
+            animation: endless-scroll 25s linear infinite !important;
+        }
+
+        .endless-ticker-track:hover {
             animation-play-state: paused !important;
         }
 
-        /* تنسيق نصوص الرابحين داخل الدائرة لتبدو أنيقة */
-        .circular-ticker-track * {
-            font-size: 10px !important;
-            text-align: center !important;
-            white-space: normal !important; /* السماح بالتفاف النص إذا كان طويلاً */
-            line-height: 1.4 !important;
+        /* تصغير حجم الأسماء والأرقام لتبدو أنيقة على الهاتف */
+        .endless-ticker-track * {
+            font-size: 11px !important;
+            white-space: nowrap !important;
         }
 
-        /* تكبير الإيموجي وتوسيطه */
-        .circular-ticker-track i, 
-        .circular-ticker-track img {
-            font-size: 16px !important;
-            margin: 2px auto !important;
-            display: block !important; 
+        /* تكبير الإيموجي قليلاً */
+        .endless-ticker-track i, 
+        .endless-ticker-track img {
+            font-size: 13px !important;
         }
 
-        /* أنيميشن السحب العمودي مثل ماكينة السلوت */
-        @keyframes magic-circle-scroll {
-            0% { transform: translateY(100%); }
-            100% { transform: translateY(-200%); }
+        /* حركة الدوران المستمرة من اليمين لليسار */
+        @keyframes endless-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } 
         }
     </style>
 </head>
@@ -926,28 +931,26 @@
 <!-- PANE: ACCUEIL -->
         <div id="pane-accueil" class="player-view-section block w-full">
             
-            <!-- ================= الدائرة الطافية للرابحين (MAGIC ORB) ================= -->
-            <div class="relative mx-auto mb-6 mt-0 w-36 h-36 md:w-44 md:h-44 rounded-full bg-q-panel/40 backdrop-blur-2xl border-2 border-q-cyan/30 flex items-center justify-center shadow-[0_0_35px_rgba(0,242,254,0.2)] animate-magic-float overflow-hidden group">
-                
-                <!-- تأثيرات الدوران المضيئة (الرادار) -->
-                <div class="absolute inset-0 rounded-full border-t-4 border-q-cyan/60 animate-[spin_4s_linear_infinite] opacity-70"></div>
-                <div class="absolute inset-2 rounded-full border-b-4 border-q-purple/60 animate-[spin_3s_linear_infinite_reverse] opacity-70"></div>
+            <!-- ================= شريط الرابحين (الدوران اللانهائي 3D) ================= -->
+            <div class="relative w-full max-w-5xl mx-auto mb-6 mt-0" style="transform: perspective(800px) rotateX(10deg);">
+                <!-- الحاوية الزجاجية -->
+                <div class="bg-q-panel/40 backdrop-blur-xl border border-q-cyan/30 rounded-full p-1.5 md:p-2 flex items-center shadow-[0_0_20px_rgba(0,242,254,0.15)] relative overflow-hidden">
 
-                <!-- زر LIVE في أعلى الدائرة -->
-                <div class="absolute top-3 bg-red-500/20 border border-red-500 rounded-full px-2 py-0.5 flex items-center gap-1 z-20 shadow-[0_0_10px_rgba(239,68,68,0.5)]">
-                    <div class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></div>
-                    <span class="text-red-500 text-[8px] font-black uppercase tracking-widest">Live</span>
-                </div>
+                    <!-- زر LIVE -->
+                    <div class="bg-red-500/20 border border-red-500 rounded-full px-3 py-1 flex items-center gap-2 z-20 shrink-0 shadow-[0_0_10px_rgba(239,68,68,0.5)]">
+                        <div class="w-2 h-2 rounded-full bg-red-500 animate-ping"></div>
+                        <span class="text-red-500 text-[9px] md:text-xs font-black uppercase tracking-widest">Live</span>
+                    </div>
 
-                <!-- شاشة عرض الرابحين (تتحرك عمودياً) -->
-                <div class="relative z-10 w-full h-14 mt-4 flex flex-col items-center justify-start overflow-hidden text-center px-3" style="mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent); -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);">
-                    <!-- أضفنا كلاس circular-ticker-track للتحكم بالحركة -->
-                    <div id="winners-ticker-track" class="circular-ticker-track flex flex-col items-center gap-6">
-                        <!-- الجافاسكريبت سيضع الرابحين هنا -->
+                    <!-- مساحة الشريط الدائري الوهمي -->
+                    <div class="endless-ticker-container flex-grow h-7 md:h-9 ml-2">
+                        <div id="winners-ticker-track" class="endless-ticker-track gap-4 md:gap-6 px-4 items-center cursor-pointer">
+                            <!-- سيتم تعبئتها بالجافا سكريبت -->
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- ================= END MAGIC ORB ================= -->
+            <!-- ================= END TICKER ================= -->
 
             <!-- ================= WELCOME TEXT (يطفو بسحر ويشع) ================= -->
             <div class="text-center md:text-left mb-10 md:mb-12 animate-magic-float relative">
