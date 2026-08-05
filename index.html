@@ -1044,38 +1044,37 @@
                 </div>
                 
             </div>
-           <!-- ================= أزرار التنقل السحرية (ممتدة على الحاسوب) ================= -->
+<!-- ================= أزرار التنقل السحرية (محدثة وتعمل 100%) ================= -->
             <div class="relative w-[calc(100%+2rem)] -mx-4 md:w-full md:mx-0 mb-8 overflow-hidden mt-0">
                 
-                <!-- حاوية الأزرار: مساحة كاملة (w-full) وبدون مسافات جانبية على الحاسوب (md:px-0) -->
                 <div class="flex overflow-x-auto hide-scroll gap-3 md:gap-4 px-4 md:px-0 snap-x items-center pb-3 w-full">
                     
-                          <!-- CASINO (ينقلك لقسم الكازينو) -->
-                    <button onclick="switchTab('casino')" class="shrink-0 snap-center md:flex-1 group relative px-5 py-2.5 md:py-3.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-q-magenta/40 text-white font-display text-xs md:text-sm lg:text-base tracking-widest uppercase flex items-center justify-center gap-2 md:gap-3 hover:border-q-magenta hover:shadow-[0_0_20px_rgba(254,9,121,0.6)] transition-all duration-300">
+                    <!-- CASINO (تم ربطه بمحرك الكازينو) -->
+                    <button onclick="switchSection('casino'); initCasinoLobby();" class="shrink-0 snap-center md:flex-1 group relative px-5 py-2.5 md:py-3.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-q-magenta/40 text-white font-display text-xs md:text-sm lg:text-base tracking-widest uppercase flex items-center justify-center gap-2 md:gap-3 hover:border-q-magenta hover:shadow-[0_0_20px_rgba(254,9,121,0.6)] transition-all duration-300">
                         <i class="fas fa-fire text-q-magenta md:text-xl group-hover:scale-125 transition-transform duration-300"></i>
                         Casino
                     </button>
 
-                    <!-- LIVE CASINO -->
-                    <button onclick="switchTab('live')" class="shrink-0 snap-center md:flex-1 group relative px-5 py-2.5 md:py-3.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-q-purple/40 text-white font-display text-xs md:text-sm lg:text-base tracking-widest uppercase flex items-center justify-center gap-2 md:gap-3 hover:border-q-purple hover:shadow-[0_0_20px_rgba(138,43,226,0.6)] transition-all duration-300">
+                    <!-- LIVE CASINO (افتراضاً اسمه live) -->
+                    <button onclick="switchSection('live'); initCasinoLobby();" class="shrink-0 snap-center md:flex-1 group relative px-5 py-2.5 md:py-3.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-q-purple/40 text-white font-display text-xs md:text-sm lg:text-base tracking-widest uppercase flex items-center justify-center gap-2 md:gap-3 hover:border-q-purple hover:shadow-[0_0_20px_rgba(138,43,226,0.6)] transition-all duration-300">
                         <i class="fas fa-headset text-q-purple md:text-xl group-hover:scale-125 transition-transform duration-300"></i>
                         <span class="whitespace-nowrap">Live Casino</span>
                     </button>
 
-                    <!-- SPORTS -->
-                    <button onclick="switchTab('sports')" class="shrink-0 snap-center md:flex-1 group relative px-5 py-2.5 md:py-3.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-green-500/40 text-white font-display text-xs md:text-sm lg:text-base tracking-widest uppercase flex items-center justify-center gap-2 md:gap-3 hover:border-green-500 hover:shadow-[0_0_20px_rgba(34,197,94,0.6)] transition-all duration-300">
+                    <!-- SPORTS (تم ربطه بكتاب الرياضة) -->
+                    <button onclick="openSportsbook()" class="shrink-0 snap-center md:flex-1 group relative px-5 py-2.5 md:py-3.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-green-500/40 text-white font-display text-xs md:text-sm lg:text-base tracking-widest uppercase flex items-center justify-center gap-2 md:gap-3 hover:border-green-500 hover:shadow-[0_0_20px_rgba(34,197,94,0.6)] transition-all duration-300">
                         <i class="fas fa-futbol text-green-500 md:text-xl group-hover:scale-125 transition-transform duration-300"></i>
                         Sports
                     </button>
 
-                    <!-- VIRTUELS -->
-                    <button onclick="switchTab('virtuels')" class="shrink-0 snap-center md:flex-1 group relative px-5 py-2.5 md:py-3.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-q-gold/40 text-white font-display text-xs md:text-sm lg:text-base tracking-widest uppercase flex items-center justify-center gap-2 md:gap-3 hover:border-q-gold hover:shadow-[0_0_20px_rgba(249,212,35,0.6)] transition-all duration-300">
+                    <!-- VIRTUELS (تم ربطه بمحرك الألعاب الافتراضية) -->
+                    <button onclick="switchSection('virtuals'); initVirtualsLobby();" class="shrink-0 snap-center md:flex-1 group relative px-5 py-2.5 md:py-3.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-q-gold/40 text-white font-display text-xs md:text-sm lg:text-base tracking-widest uppercase flex items-center justify-center gap-2 md:gap-3 hover:border-q-gold hover:shadow-[0_0_20px_rgba(249,212,35,0.6)] transition-all duration-300">
                         <i class="fas fa-gamepad text-q-gold md:text-xl group-hover:scale-125 transition-transform duration-300"></i>
                         Virtuels
                     </button>
 
                     <!-- MINI-JEUX -->
-                    <button onclick="switchTab('mini-jeux')" class="shrink-0 snap-center md:flex-1 group relative px-5 py-2.5 md:py-3.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-q-cyan/40 text-white font-display text-xs md:text-sm lg:text-base tracking-widest uppercase flex items-center justify-center gap-2 md:gap-3 hover:border-q-cyan hover:shadow-[0_0_20px_rgba(0,242,254,0.6)] transition-all duration-300">
+                    <button onclick="switchSection('mini-jeux')" class="shrink-0 snap-center md:flex-1 group relative px-5 py-2.5 md:py-3.5 rounded-full bg-q-panel/60 backdrop-blur-md border border-q-cyan/40 text-white font-display text-xs md:text-sm lg:text-base tracking-widest uppercase flex items-center justify-center gap-2 md:gap-3 hover:border-q-cyan hover:shadow-[0_0_20px_rgba(0,242,254,0.6)] transition-all duration-300">
                         <i class="fas fa-bomb text-q-cyan md:text-xl group-hover:scale-125 transition-transform duration-300"></i>
                         <span class="whitespace-nowrap">Mini-Jeux</span>
                     </button>
@@ -1088,6 +1087,7 @@
 
                 </div>
             </div>
+            <!-- ================= END أزرار التنقل ================= -->
            <!-- ================= عروض البرق (تصميم التذاكر الفضائية المهتزة) ================= -->
             <div class="mb-10 md:mb-14 mt-8 relative z-10">
                 <!-- أبعدنا العنوان عن البطاقات بـ mb-8 -->
