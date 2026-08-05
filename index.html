@@ -951,8 +951,9 @@
                 </div>
             </div>
             <!-- ================= END TICKER ================= -->
+            <!-- ================= END TICKER ================= -->
 
-<!-- ================= WELCOME TEXT (يطفو بسحر ويشع) ================= -->
+           <!-- ================= WELCOME TEXT (يطفو بسحر ويشع) ================= -->
             <div class="text-center md:text-left mb-10 md:mb-12 animate-magic-float relative">
                 <!-- توهج خلف النص -->
                 <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-32 bg-q-cyan/20 blur-[50px] rounded-full z-[-1] pointer-events-none"></div>
@@ -1055,65 +1056,66 @@
 
                 </div>
             </div>
-            <!-- ================= END أزرار التنقل ================= -->
-            <div class="mb-10 md:mb-14">
-                <h3 class="font-display font-bold text-2xl md:text-3xl mb-4 md:mb-6 tracking-widest flex items-center">
+            <!-- ================= عروض البرق (Offres Éclair - ترقص وتشع) ================= -->
+            <div class="mb-10 md:mb-14 mt-4">
+                <h3 class="font-display font-bold text-2xl md:text-3xl mb-4 md:mb-6 tracking-widest flex items-center drop-shadow-[0_0_10px_rgba(249,212,35,0.8)] px-4 md:px-0">
                     <i class="fas fa-bolt text-q-gold mr-3 animate-pulse"></i> Offres Éclair
                 </h3>
 
-                <div
-                    class="flex md:grid md:grid-cols-3 gap-4 md:gap-6 overflow-x-auto hide-scroll pb-4 snap-x snap-mandatory">
-                    <div class="voucher-card glass-card rounded-2xl h-36 md:h-56 w-[85vw] md:w-auto shrink-0 snap-center flex flex-col justify-between p-4 md:p-6 border border-q-cyan/30 cursor-pointer shadow-[0_0_15px_rgba(0,242,254,0.1)]"
-                        data-tilt data-tilt-glare data-tilt-max-glare="0.5" data-tilt-max="10">
-                        <img src="https://images.unsplash.com/photo-1633519895180-b2cc22bc0838?q=80&w=800&auto=format&fit=crop"
-                            class="absolute inset-0 w-full h-full object-cover opacity-20 z-0">
-                        <div class="absolute inset-0 bg-gradient-to-r from-q-panel via-q-panel/80 to-transparent z-0">
-                        </div>
-                        <div class="relative z-10 transform translate-z-10">
-                            <span
-                                class="bg-q-cyan text-black text-[9px] md:text-[10px] font-black px-2 py-0.5 md:py-1 rounded uppercase tracking-widest">Nouveau
-                                Joueur</span>
-                            <h4 class="font-display font-bold text-2xl md:text-3xl text-white mt-1 md:mt-2">BONUS 100%
-                            </h4>
-                            <p class="text-gray-400 text-[10px] md:text-xs mt-1 font-semibold line-clamp-1">Jusqu'à 500
-                                TND sur votre 1er Dépôt.</p>
-                        </div>
-                    </div>
-                    <div class="voucher-card glass-card rounded-2xl h-36 md:h-56 w-[85vw] md:w-auto shrink-0 snap-center flex flex-col justify-between p-4 md:p-6 border border-q-magenta/30 cursor-pointer shadow-[0_0_15px_rgba(254,9,121,0.1)]"
-                        data-tilt data-tilt-glare data-tilt-max-glare="0.5" data-tilt-max="10">
-                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop"
-                            class="absolute inset-0 w-full h-full object-cover opacity-20 z-0">
-                        <div class="absolute inset-0 bg-gradient-to-r from-q-panel via-q-panel/80 to-transparent z-0">
-                        </div>
-                        <div class="relative z-10 transform translate-z-10">
-                            <span
-                                class="bg-q-magenta text-white text-[9px] md:text-[10px] font-black px-2 py-0.5 md:py-1 rounded uppercase tracking-widest">Événement
-                                Hebdo</span>
-                            <h4 class="font-display font-bold text-2xl md:text-3xl text-white mt-1 md:mt-2">10% CASHBACK
-                            </h4>
-                            <p class="text-gray-400 text-[10px] md:text-xs mt-1 font-semibold line-clamp-1">Sur toutes
-                                vos pertes du jour.</p>
+                <!-- حاوية البطاقات (تمرير سلس على الهاتف، وشبكة متناسقة على الحاسوب) -->
+                <div class="flex md:grid md:grid-cols-3 gap-4 md:gap-6 overflow-x-auto hide-scroll pb-6 snap-x items-stretch px-4 md:px-0">
+                    
+                    <!-- البطاقة الأولى (BONUS 200%) - ترقص فوراً -->
+                    <div class="shrink-0 snap-center w-[85vw] md:w-auto relative group cursor-pointer animate-magic-float" style="animation-delay: 0s;">
+                        <div class="relative h-full bg-[#0B1021]/80 backdrop-blur-xl border border-q-cyan/50 rounded-2xl md:rounded-3xl p-5 md:p-6 overflow-hidden jackpot-cyan-magic transition-all duration-500 group-hover:-translate-y-3 group-hover:scale-[1.02]">
+                            <!-- خط اللمعان الزجاجي -->
+                            <div class="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-25deg] transition-all duration-700 ease-out group-hover:left-[200%] z-10"></div>
+                            
+                            <div class="relative z-20">
+                                <span class="bg-q-cyan text-[#0B1021] text-[10px] md:text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest mb-3 inline-block shadow-[0_0_10px_rgba(0,242,254,0.8)]">Nouveau Joueur</span>
+                                <h4 class="font-display font-black text-2xl md:text-3xl lg:text-4xl text-white mb-2 drop-shadow-lg">BONUS 100%</h4>
+                                <p class="text-gray-400 text-xs md:text-sm">Jusqu'à 500 TND sur votre 1er Dépôt.</p>
+                            </div>
+                            <!-- شكل زخرفي في الخلفية (يدور عند اللمس) -->
+                            <i class="fas fa-gift absolute -bottom-4 -right-4 text-7xl text-q-cyan/10 group-hover:text-q-cyan/30 group-hover:-rotate-12 group-hover:scale-110 transition-all duration-500 z-0"></i>
                         </div>
                     </div>
-                    <div class="voucher-card glass-card rounded-2xl h-36 md:h-56 w-[85vw] md:w-auto shrink-0 snap-center flex flex-col justify-between p-4 md:p-6 border border-q-gold/30 cursor-pointer shadow-[0_0_15px_rgba(249,212,35,0.1)] md:col-span-1"
-                        data-tilt data-tilt-glare data-tilt-max-glare="0.5" data-tilt-max="10">
-                        <img src="https://images.unsplash.com/photo-1610996841578-83b6320aab5d?q=80&w=800&auto=format&fit=crop"
-                            class="absolute inset-0 w-full h-full object-cover opacity-20 z-0 mix-blend-luminosity">
-                        <div class="absolute inset-0 bg-gradient-to-r from-q-panel via-q-panel/80 to-transparent z-0">
-                        </div>
-                        <div class="relative z-10 transform translate-z-10">
-                            <span
-                                class="bg-q-gold text-black text-[9px] md:text-[10px] font-black px-2 py-0.5 md:py-1 rounded uppercase tracking-widest">Exclusif
-                                Crypto</span>
-                            <h4 class="font-display font-bold text-2xl md:text-3xl text-white mt-1 md:mt-2">BONUS
-                                VIP</h4>
-                            <p class="text-gray-400 text-[10px] md:text-xs mt-1 font-semibold line-clamp-1">200%
-                                bonus pour tout dépôt USDT.</p>
+
+                    <!-- البطاقة الثانية (CASHBACK) - تتأخر قليلاً في الرقص -->
+                    <div class="shrink-0 snap-center w-[85vw] md:w-auto relative group cursor-pointer animate-magic-float" style="animation-delay: 0.3s;">
+                        <div class="relative h-full bg-[#0B1021]/80 backdrop-blur-xl border border-q-magenta/50 rounded-2xl md:rounded-3xl p-5 md:p-6 overflow-hidden jackpot-magenta-magic transition-all duration-500 group-hover:-translate-y-3 group-hover:scale-[1.02]">
+                            <!-- خط اللمعان الزجاجي -->
+                            <div class="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-25deg] transition-all duration-700 ease-out group-hover:left-[200%] z-10"></div>
+                            
+                            <div class="relative z-20">
+                                <span class="bg-q-magenta text-white text-[10px] md:text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest mb-3 inline-block shadow-[0_0_10px_rgba(254,9,121,0.8)]">Événement Hebdo</span>
+                                <h4 class="font-display font-black text-2xl md:text-3xl lg:text-4xl text-white mb-2 drop-shadow-lg">10% CASHBACK</h4>
+                                <p class="text-gray-400 text-xs md:text-sm">Sur toutes vos pertes du jour.</p>
+                            </div>
+                            <!-- شكل زخرفي في الخلفية -->
+                            <i class="fas fa-undo-alt absolute -bottom-4 -right-4 text-7xl text-q-magenta/10 group-hover:text-q-magenta/30 group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 z-0"></i>
                         </div>
                     </div>
+
+                    <!-- البطاقة الثالثة (FREE SPINS VIP) - تتأخر أكثر لتصنع موجة -->
+                    <div class="shrink-0 snap-center w-[85vw] md:w-auto relative group cursor-pointer animate-magic-float" style="animation-delay: 0.6s;">
+                        <div class="relative h-full bg-[#0B1021]/80 backdrop-blur-xl border border-q-gold/50 rounded-2xl md:rounded-3xl p-5 md:p-6 overflow-hidden jackpot-gold-magic transition-all duration-500 group-hover:-translate-y-3 group-hover:scale-[1.02]">
+                            <!-- خط اللمعان الزجاجي -->
+                            <div class="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-25deg] transition-all duration-700 ease-out group-hover:left-[200%] z-10"></div>
+                            
+                            <div class="relative z-20">
+                                <span class="bg-q-gold text-[#0B1021] text-[10px] md:text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest mb-3 inline-block shadow-[0_0_10px_rgba(249,212,35,0.8)]">Exclusif Crypto</span>
+                                <h4 class="font-display font-black text-2xl md:text-3xl lg:text-4xl text-white mb-2 drop-shadow-lg">BUNUS VIP</h4>
+                                <p class="text-gray-400 text-xs md:text-sm">200% pour tout dépôt USDT.</p>
+                            </div>
+                            <!-- شكل زخرفي في الخلفية -->
+                            <i class="fab fa-bitcoin absolute -bottom-4 -right-4 text-7xl text-q-gold/10 group-hover:text-q-gold/30 group-hover:-rotate-12 group-hover:scale-110 transition-all duration-500 z-0"></i>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-            </div>
+            <!-- ================= END عروض البرق ================= -->
             <!-- ================= END QUICK ACCESS ================= -->
             <!-- ================= DYNAMIC 3D SWIPER ================= -->
             <div class="swiper mySwiper swiper-3d-container">
