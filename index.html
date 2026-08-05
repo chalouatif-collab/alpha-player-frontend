@@ -931,10 +931,10 @@
 <!-- PANE: ACCUEIL -->
         <div id="pane-accueil" class="player-view-section block w-full">
             
-            <!-- ================= شريط الرابحين (الدوران اللانهائي 3D) ================= -->
-            <div class="relative w-full max-w-5xl mx-auto mb-6 mt-0" style="transform: perspective(800px) rotateX(10deg);">
-                <!-- الحاوية الزجاجية -->
-                <div class="bg-q-panel/40 backdrop-blur-xl border border-q-cyan/30 rounded-full p-1.5 md:p-2 flex items-center shadow-[0_0_20px_rgba(0,242,254,0.15)] relative overflow-hidden">
+<!-- ================= شريط الرابحين (الدوران اللانهائي 3D - ممتد بالكامل) ================= -->
+            <div class="relative w-full mx-auto mb-6 mt-0" style="transform: perspective(800px) rotateX(10deg);">
+                <!-- الحاوية الزجاجية الممتدة -->
+                <div class="bg-q-panel/40 backdrop-blur-xl border border-q-cyan/30 rounded-full p-1.5 md:p-2 flex items-center shadow-[0_0_20px_rgba(0,242,254,0.15)] relative overflow-hidden w-full">
 
                     <!-- زر LIVE -->
                     <div class="bg-red-500/20 border border-red-500 rounded-full px-3 py-1 flex items-center gap-2 z-20 shrink-0 shadow-[0_0_10px_rgba(239,68,68,0.5)]">
@@ -943,13 +943,14 @@
                     </div>
 
                     <!-- مساحة الشريط الدائري الوهمي -->
-                    <div class="endless-ticker-container flex-grow h-7 md:h-9 ml-2">
+                    <div class="endless-ticker-container flex-grow h-7 md:h-9 ml-2 w-full">
                         <div id="winners-ticker-track" class="endless-ticker-track gap-4 md:gap-6 px-4 items-center cursor-pointer">
                             <!-- سيتم تعبئتها بالجافا سكريبت -->
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- ================= END TICKER ================= -->
             <!-- ================= END TICKER ================= -->
 
             <!-- ================= WELCOME TEXT (يطفو بسحر ويشع) ================= -->
