@@ -2047,6 +2047,7 @@
                     body: JSON.stringify({ game_code: gameCode, provider_code: providerCode, user_code: playerSession.username })
                 });
                 const data = await res.json();
+                console.log(`🔥 رد السيرفر عند تشغيل ${gameCode}:`, data);
                 if (data.launch_url) {
                     iframe.src = data.launch_url;
                     iframe.onload = () => { if (loader) loader.style.display = 'none'; iframe.style.opacity = '1'; };
