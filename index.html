@@ -1055,11 +1055,9 @@
                         <i class="fas fa-plane-up text-red-500 group-hover:text-red-400 group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform duration-500 ease-out"></i>
                         Aviator
                     </button>
-
                 </div>
             </div>
             <!-- ================= END أزرار التنقل ================= -->
-            <!-- Vouchers (Mobile: Horizontal Swipe / Desktop: Grid) -->
             <div class="mb-10 md:mb-14">
                 <h3 class="font-display font-bold text-2xl md:text-3xl mb-4 md:mb-6 tracking-widest flex items-center">
                     <i class="fas fa-bolt text-q-gold mr-3 animate-pulse"></i> Offres Éclair
@@ -2797,16 +2795,13 @@
         function scrollToTop() {
             window.scrollTo({
                 top: 0,
-                behavior: 'smooth' // هذا السحر الذي يجعله يصعد بنعومة وليس فجأة
+                behavior: 'smooth'
             });
         }
-        // ================= محرك النوافذ القانونية (Legal Modals) =================
         function openLegalModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal) {
-                // إظهار العنصر أولاً
                 modal.classList.remove('hidden');
-                // إضافة حركة الدخول (Fade-in & Scale-up) بعد جزء من الثانية
                 setTimeout(() => {
                     modal.classList.remove('opacity-0');
                     if (modal.children[0]) {
@@ -2828,7 +2823,6 @@
                     modal.children[0].classList.remove('scale-100');
                     modal.children[0].classList.add('scale-95');
                 }
-                // إخفاء العنصر تماماً بعد انتهاء الحركة
                 setTimeout(() => {
                     modal.classList.add('hidden');
                 }, 300);
@@ -2842,11 +2836,10 @@
             if (target) target.classList.remove('hidden');
         }
         function switchCashierTab(tabName) {
-            // --- حماية تبويب السحب (للمسجلين أونلاين فقط) ---
             if (tabName === 'withdraw') {
                 if (playerSession.created_by !== 'Self-Register') {
                     showNotification("Le retrait direct est réservé aux comptes créés en ligne.", "error");
-                    return; // نوقف العملية ولا نفتح قسم السحب
+                    return; 
                 }
                 syncBalance();
             }
@@ -2861,16 +2854,11 @@
             document.getElementById(`tab-${tabName}`).className = `flex-1 ${tabName === 'deposit' ? 'bg-q-cyan text-black' : 'bg-q-magenta text-white'} font-bold py-2 rounded-lg text-xs transition-all shadow-md cursor-pointer`;
         }
 
-        // ================= دالة فتح السحب المباشر وإغلاق البروفايل =================
         function openDirectRetrait() {
-            // --- حماية زر السحب في البروفايل (للمسجلين أونلاين فقط) ---
             if (playerSession.created_by !== 'Self-Register') {
                 showNotification("Le retrait direct est réservé aux comptes créés en ligne.", "error");
                 return;
             }
-            // ---------------------------------------------------------
-
-            // 1. إغلاق نافذة البروفايل أولاً 
             const profileModal = document.getElementById('player-profile-modal') || document.getElementById('profile-modal');
             if (profileModal) {
                 profileModal.classList.add('hidden');
