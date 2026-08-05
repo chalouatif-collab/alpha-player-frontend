@@ -1599,7 +1599,7 @@
             if (sectionId === 'casino' && typeof initCasinoLobby === 'function') {
                 initCasinoLobby();
             } else if (sectionId === 'live-casino' && typeof openLiveCasino === 'function') {
-                openLiveCasino(true); // نمرر true لمنع الدوران اللانهائي
+                openLiveCasino(); 
             } else if (sectionId === 'virtuals' && typeof initVirtualsLobby === 'function') {
                 initVirtualsLobby();
             }
@@ -2187,7 +2187,6 @@
 
         // Live Casino
         // ================= أزرار مزودي اللايف كازينو =================
-        // يمكنك إضافة أو حذف أي مزود هنا حسب اشتراكك في نكسيس
         const liveCasinoProviders = [
             { code: 'PRAGMATIC_LIVE', name: 'Pragmatic Live' },
             { code: 'EVOLUTION', name: 'Evolution Gaming' },
@@ -2535,8 +2534,18 @@
             });
         }
         async function openLiveCasino() {
-            switchSection('live-casino');
-            loadLiveGamesData();
+            // رسم أزرار المزودين
+            const bar = document.getElementById('live-providers-bar');
+            if (bar) {
+                bar.innerHTML = liveCasinoProviders.map(p => 
+                    `<button onclick="loadLiveGamesData('${p.code}')" class="btn-glass px-4 py-2 rounded-full text-xs font-bold text-gray-300 hover:text-white shrink-0">${p.name}</button>`
+                ).join('');
+            }
+            
+            // تحميل ألعاب أول مزود في القائمة تلقائياً
+            if (liveCasinoProviders.length > 0) {
+                loadLiveGamesData(liveCasinoProviders[0].code);
+            }
         }
 
         async function loadLiveGamesData(providerCode) {
