@@ -2506,13 +2506,12 @@
             });
         }
 const liveCasinoProviders = [
-            { code: 'PRAGMATIC', name: 'Pragmatic Live' }, // قمنا بحذف _LIVE
-            { code: 'EVOLUTION', name: 'Evolution Gaming' },
-            { code: 'EZUGI', name: 'Ezugi' },
+            { code: 'PPLIVE', name: 'Pragmatic Live' }, // جربنا PPLIVE وهو الكود الأشهر
+            { code: 'EVO', name: 'Evolution Gaming' },  // EVO بدل EVOLUTION
+            { code: 'EZG', name: 'Ezugi' },             // EZG بدل EZUGI
             { code: 'VIVO', name: 'Vivo Gaming' },
             { code: 'BETGAMES', name: 'BetGames TV' }
         ];
-
         async function openLiveCasino() {
             // رسم أزرار المزودين مع إعطاء كل زر ID مميز
             const bar = document.getElementById('live-providers-bar');
