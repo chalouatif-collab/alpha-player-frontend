@@ -1841,34 +1841,33 @@ window.addEventListener('popstate', (event) => {
             }
         }
 
-function switchSection(sectionId) {
-    localStorage.setItem('active_section', sectionId);
-    document.querySelectorAll('.player-view-section').forEach(el => {
-        el.classList.add('hidden'); el.classList.remove('block');
-    });
-    const panelElement = document.getElementById(`pane-${sectionId}`);
-    if (panelElement) {
-        panelElement.classList.remove('hidden');
-        panelElement.classList.add('block');
-    }
+        // --- 3. Core Routing ---
+        function switchSection(sectionId) {
+            localStorage.setItem('active_section', sectionId);
+            document.querySelectorAll('.player-view-section').forEach(el => {
+                el.classList.add('hidden'); el.classList.remove('block');
+            });
+            const panelElement = document.getElementById(`pane-${sectionId}`);
+            if (panelElement) {
+                panelElement.classList.remove('hidden');
+                panelElement.classList.add('block');
+            }
 
-    document.querySelectorAll('.btn-glass').forEach(btn => btn.classList.remove('active'));
-    const targetBtn = document.getElementById(`btn-menu-${sectionId}`);
-    if (targetBtn) targetBtn.classList.add('active');
+            document.querySelectorAll('.btn-glass').forEach(btn => btn.classList.remove('active'));
+            const targetBtn = document.getElementById(`btn-menu-${sectionId}`);
+            if (targetBtn) targetBtn.classList.add('active');
 
-    // ⚡ التعديل الذكي المضمون: تحميل اللوبي فوراً وبدون تأخير
-    if (sectionId === 'casino') {
-        if (typeof initCasinoLobby === 'function') {
-            initCasinoLobby();
+            // ⚡ التعديل الذكي: إعادة تحميل بيانات القسم تلقائياً عند فتحة أو عند عمل Refresh
+            if (sectionId === 'casino' && typeof initCasinoLobby === 'function') {
+                initCasinoLobby();
+            } else if (sectionId === 'live-casino' && typeof openLiveCasino === 'function') {
+                openLiveCasino();
+            } else if (sectionId === 'virtuals' && typeof initVirtualsLobby === 'function') {
+                initVirtualsLobby();
+            }
+
+            window.scrollTo(0, 0);
         }
-    } else if (sectionId === 'live-casino' && typeof openLiveCasino === 'function') {
-        openLiveCasino();
-    } else if (sectionId === 'virtuals' && typeof initVirtualsLobby === 'function') {
-        initVirtualsLobby();
-    }
-
-    window.scrollTo(0, 0);
-}
 
 
         // ================= PROFILE DASHBOARD LOGIC =================
@@ -2349,22 +2348,38 @@ function closeSportsbook(fromPopState = false) {
 }
 
         async function initCasinoLobby() {
-            if (casinoProviders.length === 0) {
-                const bar = document.getElementById('providers-bar');
-                bar.innerHTML = '<span class="text-q-cyan text-xs">Chargement...</span>';
-                try {
-                    const res = await fetch(`${BACKEND_URL}/api/get-providers`);
-                    const data = await res.json();
-                    casinoProviders = data.providers || data.data || [];
-                    console.log("🔥 عدد المزودين المستلمين من السيرفر هو: ", casinoProviders.length);
-                    if (casinoProviders.length > 0) {
-                        bar.innerHTML = casinoProviders.map(p => `<button onclick="loadProviderGames('${p.code}')" class="btn-glass px-4 py-2 rounded-full text-xs font-bold text-gray-300 hover:text-white shrink-0">${p.name || p.code}</button>`).join('');
-                        loadProviderGames(casinoProviders[0].code);
-                        setTimeout(() => enableMouseDragScroll('providers-bar'), 200);
-                    }
-                } catch (e) { bar.innerHTML = '<span class="text-q-magenta text-xs">Erreur</span>'; }
+    const bar = document.getElementById('providers-bar');
+    if (!bar) return;
+
+    // إذا لم تكن قائمة المزودين محملة، نقوم بجلبها من السيرفر
+    if (casinoProviders.length === 0) {
+        bar.innerHTML = '<span class="text-q-cyan text-xs">Chargement...</span>';
+        try {
+            const res = await fetch(`${BACKEND_URL}/api/get-providers`);
+            const data = await res.json();
+            casinoProviders = data.providers || data.data || [];
+            
+            if (casinoProviders.length > 0) {
+                bar.innerHTML = casinoProviders.map(p => 
+                    `<button onclick="loadProviderGames('${p.code}')" class="btn-glass px-4 py-2 rounded-full text-xs font-bold text-gray-300 hover:text-white shrink-0">${p.name || p.code}</button>`
+                ).join('');
+                
+                // تحميل ألعاب أول مزود تلقائياً
+                loadProviderGames(casinoProviders[0].code);
+                setTimeout(() => enableMouseDragScroll('providers-bar'), 200);
             }
+        } catch (e) { 
+            bar.innerHTML = '<span class="text-q-magenta text-xs">Erreur de chargement</span>'; 
         }
+    } else {
+        // إذا كان المزودون محملين مسبقاً، نضمن إعادة رسم الشبكة وعرض الألعاب فوراً
+        if (currentProviderGames.length === 0 && casinoProviders.length > 0) {
+            loadProviderGames(casinoProviders[0].code);
+        } else {
+            renderCasinoGrid();
+        }
+    }
+}
 
         async function loadProviderGames(providerCode) {
     currentActiveProviderCode = providerCode;
