@@ -1668,6 +1668,11 @@ window.addEventListener('popstate', (event) => {
         let playerSession = null;
         let balanceInterval = null;
         let currentProfileTab = 'bets';
+        let casinoProviders = [];
+        let currentProviderGames = [];
+        let currentDisplayLimit = 40;
+        let currentActiveProviderCode = "PRAGMATIC";
+        let gamesObserver = null;
 
         // --- 1. UI Initialization &  Effects ---
         window.addEventListener('load', () => {
