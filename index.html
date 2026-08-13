@@ -1841,33 +1841,34 @@ window.addEventListener('popstate', (event) => {
             }
         }
 
-        // --- 3. Core Routing ---
-        function switchSection(sectionId) {
-            localStorage.setItem('active_section', sectionId);
-            document.querySelectorAll('.player-view-section').forEach(el => {
-                el.classList.add('hidden'); el.classList.remove('block');
-            });
-            const panelElement = document.getElementById(`pane-${sectionId}`);
-            if (panelElement) {
-                panelElement.classList.remove('hidden');
-                panelElement.classList.add('block');
-            }
+function switchSection(sectionId) {
+    localStorage.setItem('active_section', sectionId);
+    document.querySelectorAll('.player-view-section').forEach(el => {
+        el.classList.add('hidden'); el.classList.remove('block');
+    });
+    const panelElement = document.getElementById(`pane-${sectionId}`);
+    if (panelElement) {
+        panelElement.classList.remove('hidden');
+        panelElement.classList.add('block');
+    }
 
-            document.querySelectorAll('.btn-glass').forEach(btn => btn.classList.remove('active'));
-            const targetBtn = document.getElementById(`btn-menu-${sectionId}`);
-            if (targetBtn) targetBtn.classList.add('active');
+    document.querySelectorAll('.btn-glass').forEach(btn => btn.classList.remove('active'));
+    const targetBtn = document.getElementById(`btn-menu-${sectionId}`);
+    if (targetBtn) targetBtn.classList.add('active');
 
-            // ⚡ التعديل الذكي: إعادة تحميل بيانات القسم تلقائياً عند فتحة أو عند عمل Refresh
-            if (sectionId === 'casino' && typeof initCasinoLobby === 'function') {
-                initCasinoLobby();
-            } else if (sectionId === 'live-casino' && typeof openLiveCasino === 'function') {
-                openLiveCasino();
-            } else if (sectionId === 'virtuals' && typeof initVirtualsLobby === 'function') {
-                initVirtualsLobby();
-            }
-
-            window.scrollTo(0, 0);
+    // ⚡ التعديل الذكي المضمون: تحميل اللوبي فوراً وبدون تأخير
+    if (sectionId === 'casino') {
+        if (typeof initCasinoLobby === 'function') {
+            initCasinoLobby();
         }
+    } else if (sectionId === 'live-casino' && typeof openLiveCasino === 'function') {
+        openLiveCasino();
+    } else if (sectionId === 'virtuals' && typeof initVirtualsLobby === 'function') {
+        initVirtualsLobby();
+    }
+
+    window.scrollTo(0, 0);
+}
 
 
         // ================= PROFILE DASHBOARD LOGIC =================
