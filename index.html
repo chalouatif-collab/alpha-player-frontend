@@ -2366,20 +2366,28 @@ function closeSportsbook(fromPopState = false) {
         }
 
         async function loadProviderGames(providerCode) {
-            currentActiveProviderCode = providerCode;
-            currentDisplayLimit = 40;
-            const container = document.getElementById('games-grid');
-            container.innerHTML = '<div class="col-span-full text-center text-q-cyan py-10 animate-pulse">Chargement... ⏳</div>';
+    currentActiveProviderCode = providerCode;
+    currentDisplayLimit = 40;
+    const container = document.getElementById('games-grid');
+    container.innerHTML = '<div class="col-span-full text-center text-q-cyan py-10 animate-pulse">Chargement... ⏳</div>';
 
-            try {
-                const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ provider_code: providerCode })
-                });
-                const data = await res.json();
-                currentProviderGames = data.games || data.data || [];
-                renderCasinoGrid();
-            } catch (e) { container.innerHTML = '<div class="col-span-full text-red-500 text-center">Erreur</div>'; }
-        }
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify({ provider_code: providerCode })
+        });
+        const data = await res.json();
+        console.log("🔥 الألعاب المستلمة للمزود:", data);
+        
+        // التقاط الألعاب سواء كانت في games أو data
+        currentProviderGames = data.games || data.data || [];
+        renderCasinoGrid();
+    } catch (e) { 
+        console.error("Erreur:", e);
+        container.innerHTML = '<div class="col-span-full text-red-500 text-center">Erreur de chargement</div>'; 
+    }
+}
 
         function renderCasinoGrid() {
             const container = document.getElementById('games-grid');
