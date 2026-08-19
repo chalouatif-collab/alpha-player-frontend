@@ -2409,12 +2409,7 @@
                 history.back();
             }
         }
-        function closeCasinoGame() {
-            document.getElementById('casino-iframe-container').classList.add('hidden');
-            document.getElementById('casino-iframe-container').classList.remove('flex');
-            document.getElementById('casino-iframe').src = "";
-            refreshPlayerBalance();
-        }
+        
 
         async function openSportsbook() {
             if (!playerSession) return openLoginModal();
@@ -3447,6 +3442,16 @@ function launchSport2() {
     showNotification("Chargement Sport 2...", "success");
     // TODO: استدعاء API السبور الثاني
 }
+
+// ================= محرك الاستماع الذكي للألعاب =================
+        // هذا الكود يستمع لأي حركة أو رسالة قادمة من اللعبة (Iframe) ويجبر الواجهة على تحديث الرصيد فوراً
+        window.addEventListener("message", (event) => {
+            // نتحقق من أن هناك جلسة لاعب فعالة
+            if (playerSession && playerSession.username) {
+                // نطلب من السيرفر جلب الرصيد الجديد فوراً بمجرد حدوث أي تغيير داخل اللعبة
+                refreshPlayerBalance();
+            }
+        });
     </script>
 
 
