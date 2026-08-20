@@ -2601,16 +2601,18 @@
         }
 
 
-       // ================= محرك ألعاب SMPL Premium =================
+// ================= محرك ألعاب SMPL Premium =================
         let smplProviders = [];
         let currentSMPLGames = [];
         let currentActiveSMPLProvider = "";
+        let currentSMPLDisplayLimit = 40; // 👈 سر السرعة: تحميل 40 لعبة فقط في البداية
+        let smplGamesObserver = null;
 
         async function initSMPLLobby() {
             const bar = document.getElementById('smpl-providers-bar');
             if (!bar) return;
 
-            // 1. جلب قائمة المزودين (الشركات) إذا لم يتم جلبها مسبقاً
+            // 1. جلب المزودين (الشركات) ديناميكياً من السيرفر
             if (smplProviders.length === 0) {
                 bar.innerHTML = '<span class="text-blue-500 text-xs">Chargement des fournisseurs... ⏳</span>';
                 try {
@@ -2619,15 +2621,15 @@
                     smplProviders = data.providers || [];
 
                     if (smplProviders.length > 0) {
-                        // 2. رسم أزرار المزودين
+                        // 2. بناء الأزرار تلقائياً بدون كتابتها يدوياً!
                         bar.innerHTML = smplProviders.map(p =>
                             `<button id="btn-smpl-prov-${p.code}" onclick="loadSMPLProviderGames('${p.code}')" class="smpl-prov-btn btn-glass px-4 py-2 rounded-full text-xs font-bold text-gray-400 hover:text-white shrink-0 transition-all">${p.name}</button>`
                         ).join('');
 
-                        // تفعيل السحب بالماوس للشريط
+                        // تفعيل السحب الأفقي بالماوس
                         setTimeout(() => enableMouseDragScroll('smpl-providers-bar'), 200);
                         
-                        // 3. تحميل ألعاب أول مزود في القائمة تلقائياً (مثل Endorphina)
+                        // 3. تحميل ألعاب أول شركة تلقائياً
                         loadSMPLProviderGames(smplProviders[0].code);
                     } else {
                         bar.innerHTML = '<span class="text-gray-500 text-xs">Aucun fournisseur trouvé.</span>';
@@ -2637,19 +2639,20 @@
                     bar.innerHTML = '<span class="text-red-500 text-xs">Erreur de chargement</span>';
                 }
             } else {
-                // إذا تم التحميل مسبقاً وعاد اللاعب للقسم، نعرض نفس الألعاب
+                // العودة للقسم دون إعادة التحميل من الصفر
                 if (currentSMPLGames.length === 0 && smplProviders.length > 0) {
                     loadSMPLProviderGames(smplProviders[0].code);
                 } else {
-                    renderSMPLGrid(currentSMPLGames);
+                    renderSMPLGrid();
                 }
             }
         }
 
         async function loadSMPLProviderGames(providerCode) {
             currentActiveSMPLProvider = providerCode;
+            currentSMPLDisplayLimit = 40; // تصفير عداد الألعاب عند تغيير الشركة
 
-            // 4. تلوين الزر النشط باللون الأزرق وإلغاء تلوين البقية
+            // تلوين زر الشركة النشطة باللون الأزرق
             document.querySelectorAll('.smpl-prov-btn').forEach(btn => {
                 btn.classList.remove('active', 'border-blue-500', 'bg-blue-500/20', 'text-white');
                 btn.classList.add('border-transparent', 'text-gray-400');
@@ -2664,7 +2667,7 @@
             container.innerHTML = '<div class="col-span-full text-center text-blue-500 py-10 animate-pulse font-display tracking-widest text-lg">CHARGEMENT DES JEUX... ⏳</div>';
 
             try {
-                // 5. جلب ألعاب هذه الشركة فقط من السيرفر
+                // جلب ألعاب هذه الشركة فقط من السيرفر (سريعة جداً بفضل الـ Cache في السيرفر)
                 const res = await fetch(`${BACKEND_URL}/api/smpl/games-by-provider`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -2673,9 +2676,9 @@
                 const data = await res.json();
 
                 currentSMPLGames = data.games || [];
-                renderSMPLGrid(currentSMPLGames);
+                renderSMPLGrid();
                 
-                // تصفير حقل البحث عند تغيير المزود
+                // تصفير حقل البحث
                 const searchInput = document.getElementById('smpl-search-input');
                 if (searchInput) searchInput.value = '';
 
@@ -2685,22 +2688,28 @@
             }
         }
 
-        // 6. دالة البحث والفلترة الذكية
         function filterSMPLGames() {
             const term = document.getElementById('smpl-search-input').value.toLowerCase();
             const filtered = currentSMPLGames.filter(g => (g.name || "").toLowerCase().includes(term));
-            renderSMPLGrid(filtered);
+            renderSMPLGridInternal(filtered);
         }
 
-        // 7. دالة رسم الشبكة الأنيقة
-        function renderSMPLGrid(games) {
+        function renderSMPLGrid() {
+            renderSMPLGridInternal(currentSMPLGames);
+        }
+
+        // 4. دالة الرسم مع نظام "التحميل التدريجي" (Infinite Scroll)
+        function renderSMPLGridInternal(gamesArray) {
             const container = document.getElementById('smpl-games-grid');
-            if (games.length === 0) {
+            // قطع المصفوفة وعرض 40 لعبة فقط في البداية
+            const gamesToDisplay = gamesArray.slice(0, currentSMPLDisplayLimit);
+
+            if (gamesToDisplay.length === 0) {
                 container.innerHTML = '<div class="col-span-full text-center text-gray-500 py-10">Aucun jeu trouvé.</div>';
                 return;
             }
 
-            container.innerHTML = games.map(g => {
+            container.innerHTML = gamesToDisplay.map(g => {
                 const title = g.name || "Game";
                 const img = g.image || "https://placehold.co/400x400/0f172a/3b82f6?text=Premium";
                 const code = g.id || g.uuid; 
@@ -2722,6 +2731,32 @@
                     </div>
                 </div>`;
             }).join('');
+
+            // 5. زر مخفي بأسفل الصفحة، عندما يراه المتصفح يحمل 40 لعبة إضافية
+            let sentinel = document.getElementById('smpl-games-scroll-sentinel');
+            if (currentSMPLDisplayLimit < gamesArray.length) {
+                if (!sentinel) {
+                    sentinel = document.createElement('div');
+                    sentinel.id = 'smpl-games-scroll-sentinel';
+                    sentinel.className = 'col-span-full text-center py-6 text-blue-500 font-display animate-pulse text-xs';
+                    sentinel.innerHTML = 'Chargement de plus de jeux... 🔄';
+                    container.parentNode.appendChild(sentinel);
+                }
+
+                if (!smplGamesObserver) {
+                    smplGamesObserver = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting && currentSMPLDisplayLimit < gamesArray.length) {
+                                currentSMPLDisplayLimit += 40;
+                                renderSMPLGridInternal(gamesArray);
+                            }
+                        });
+                    }, { rootMargin: '300px' });
+                }
+                smplGamesObserver.observe(sentinel);
+            } else if (sentinel) {
+                sentinel.remove();
+            }
         }
 
         async function launchSMPLGame(gameUuid) {
@@ -2759,7 +2794,6 @@
                 closeCasinoGame(); 
             }
         }
-
 
         // Virtuals (EuroVirtuals)
         const virtualCategories = [
