@@ -1580,6 +1580,32 @@
         <div id="pane-sport" class="player-view-section hidden w-full min-h-[800px]">
             <div class="text-center text-q-cyan py-10 font-display animate-pulse">Ouverture des sports en cours...</div>
         </div>
+        <!-- PANE: PREMIUM SMPL CASINO -->
+                    <div id="pane-smpl" class="player-view-section hidden w-full">
+                        <div
+                            class="flex flex-col md:flex-row gap-4 bg-q-panel/80 p-4 rounded-xl border border-blue-500/30 mb-4 backdrop-blur-md shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+                            <h2
+                                class="text-white font-display font-black text-xl flex items-center gap-2 whitespace-nowrap">
+                                <span class="text-blue-500"><i class="fas fa-crown"></i></span> Premium Casino
+                            </h2>
+                            <input type="text" id="smpl-search-input" onkeyup="filterSMPLGames()" placeholder="Chercher un jeu Premium..."
+                                class="w-full bg-black/50 text-white border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-blue-500 transition-colors">
+                        </div>
+
+                        <!-- شريط تصنيفات المزودين داخل SMPL -->
+                        <div id="smpl-providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4">
+                            <!-- سيتم تعبئتها بالجافاسكريبت -->
+                        </div>
+
+                        <!-- شبكة الألعاب -->
+                        <div id="smpl-games-grid"
+                            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4 w-full pb-10">
+                            <div
+                                class="col-span-full text-center text-blue-500 py-10 animate-pulse font-display tracking-widest text-lg">
+                                LIAISON AVEC LE SERVEUR EN COURS... ⏳
+                            </div>
+                        </div>
+                    </div>
         <!-- ================= FOOTER & LEGAL (TERMS, PAYMENTS, LIMITS) ================= -->
         <footer
             class="relative mt-20 bg-q-panel/40 border-t border-white/10 backdrop-blur-xl pt-10 pb-8 rounded-t-3xl shadow-[0_-10px_30px_rgba(0,0,0,0.5)] w-full">
@@ -1606,37 +1632,7 @@
                                     Responsable</a></li>
                         </ul>
                     </div>
-                    <!-- PANE: PREMIUM SMPL CASINO -->
-                    <div id="pane-smpl" class="player-view-section hidden w-full">
-                        <div
-                            class="flex flex-col md:flex-row gap-4 bg-q-panel/80 p-4 rounded-xl border border-blue-500/30 mb-4 backdrop-blur-md shadow-[0_0_20px_rgba(59,130,246,0.1)]">
-                            <h2
-                                class="text-white font-display font-black text-xl flex items-center gap-2 whitespace-nowrap">
-                                <span class="text-blue-500"><i class="fas fa-crown"></i></span> Premium Casino
-                            </h2>
-                            <input type="text" id="smpl-search-input" onkeyup="filterSMPLGames()"
-                                placeholder="Chercher un jeu Premium..."
-                                class="w-full bg-black/50 text-white border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-blue-500 transition-colors">
-                        </div>
-
-                        <!-- شريط تصنيفات المزودين داخل SMPL -->
-                        <div id="smpl-providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4">
-                            <button
-                                class="btn-glass active px-4 py-2 rounded-full text-xs font-bold text-white border-blue-500 bg-blue-500/20 shrink-0">Tous</button>
-                            <button
-                                class="btn-glass px-4 py-2 rounded-full text-xs font-bold text-gray-400 hover:text-white shrink-0">Evolution</button>
-                        </div>
-
-                        <!-- شبكة الألعاب -->
-                        <div id="smpl-games-grid"
-                            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4 w-full pb-10">
-                            <div
-                                class="col-span-full text-center text-blue-500 py-10 animate-pulse font-display tracking-widest text-lg">
-                                LIAISON AVEC LE SERVEUR EN COURS... ⏳
-                            </div>
-                        </div>
-                    </div>
-
+                    
                     <!-- طرق الدفع المتاحة -->
                     <div>
                         <h4 class="text-white font-display font-bold text-lg mb-4 flex items-center gap-2">
@@ -2601,7 +2597,7 @@
         }
 
 
-// ================= محرك ألعاب SMPL Premium =================
+       // ================= محرك ألعاب SMPL Premium =================
         let smplProviders = [];
         let currentSMPLGames = [];
         let currentActiveSMPLProvider = "";
@@ -2794,6 +2790,7 @@
                 closeCasinoGame(); 
             }
         }
+
 
         // Virtuals (EuroVirtuals)
         const virtualCategories = [
