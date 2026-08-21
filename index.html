@@ -3540,6 +3540,75 @@
                 refreshPlayerBalance();
             }
         });
+// ================= محرك الألعاب الافتراضية (Virtuals) =================
+        let currentVirtualGames = [];
+
+        async function initVirtualsLobby() {
+            const container = document.getElementById('virtuals-games-grid');
+            if (!container) return;
+
+            // إذا لم يتم تحميل الألعاب من قبل
+            if (currentVirtualGames.length === 0) {
+                container.innerHTML = '<div class="col-span-full text-center text-q-gold py-10 animate-pulse font-display text-lg">CHARGEMENT DES JEUX VIRTUELS... ⏳</div>';
+                
+                try {
+                    // نطلب الألعاب الافتراضية من السيرفر (غيّر EUROVIRTUALS إذا كان كود مزودك مختلفاً)
+                    const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ provider_code: 'EUROVIRTUALS' }) 
+                    });
+                    
+                    const data = await res.json();
+                    currentVirtualGames = data.games || data.data || [];
+                    
+                    if (currentVirtualGames.length > 0) {
+                        renderVirtualsGrid(currentVirtualGames);
+                    } else {
+                        container.innerHTML = '<div class="col-span-full text-center text-gray-500 py-10 font-bold border border-white/5 bg-black/30 rounded-xl">Aucun jeu virtuel disponible pour le moment.</div>';
+                    }
+                } catch (e) {
+                    console.error("Erreur Virtuals:", e);
+                    container.innerHTML = '<div class="col-span-full text-red-500 text-center border border-red-500/20 bg-red-900/10 rounded-xl py-10">Erreur de connexion avec le serveur.</div>';
+                }
+            } else {
+                // إذا كانت محملة مسبقاً، ارسمها فوراً
+                renderVirtualsGrid(currentVirtualGames);
+            }
+        }
+
+        function renderVirtualsGrid(gamesArray) {
+            const container = document.getElementById('virtuals-games-grid');
+            if (!container) return;
+            
+            container.innerHTML = gamesArray.map(g => {
+                const title = g.game_name || g.name || "Virtual Game";
+                const img = g.banner || g.image || g.thumb || "https://placehold.co/400x400/180A2B/F9D423?text=Virtuals";
+                const code = g.game_code || g.id || g.uuid; // جلب المعرف الخاص باللعبة
+                
+                return `
+                <div onclick="launchSpecificVirtualGame('${code}')" class="bg-q-panel/60 backdrop-blur-md rounded-xl overflow-hidden border border-white/10 group cursor-pointer shadow-[0_0_15px_rgba(249,212,35,0.05)] hover:border-q-gold transition-all flex flex-col h-full relative">
+                    <div class="relative w-full aspect-square overflow-hidden">
+                        <img src="${img}" alt="${title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
+                            <span class="bg-q-gold text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-[0_0_10px_rgba(249,212,35,0.5)] flex items-center gap-2"><i class="fas fa-play"></i> JOUER</span>
+                        </div>
+                    </div>
+                    <div class="p-2.5 flex justify-between items-center border-t border-white/5 flex-grow">
+                        <span class="text-white text-[10px] font-bold truncate pr-1 group-hover:text-q-gold transition-colors">${title}</span>
+                        <i class="fas fa-gamepad text-q-gold text-xs"></i>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // دالة تفعيل مربع البحث الخاص بالألعاب الافتراضية
+        function filterVirtualGames() {
+            const term = document.getElementById('virtual-search-input').value.toLowerCase();
+            const filtered = currentVirtualGames.filter(g => (g.game_name || g.name || "").toLowerCase().includes(term));
+            renderVirtualsGrid(filtered);
+        }
+
     </script>
 
 
