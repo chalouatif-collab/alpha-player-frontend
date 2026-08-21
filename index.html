@@ -2409,16 +2409,30 @@
             if (!container || !iframe) return;
 
             container.classList.remove('hidden'); container.classList.add('flex');
-            history.pushState({ modalOpen: true }, "", ""); // 👈 إضافة سجل وهمي لزر العودة
+            history.pushState({ modalOpen: true }, "", ""); // إضافة سجل وهمي لزر العودة
             if (loader) loader.style.display = 'flex';
             iframe.style.opacity = '0';
 
             try {
-                const res = await fetch(`${BACKEND_URL}/api/provider/launch-casino`, {
-                    method: 'POST', headers: getAuthHeaders(),
-                    body: JSON.stringify({ game_code: gameCode, provider_code: providerCode, user_code: playerSession.username })
+                // 1. الإعدادات الافتراضية للكازينو العادي (Nexus)
+                let endpointUrl = `${BACKEND_URL}/api/provider/launch-casino`;
+                let requestBody = { game_code: gameCode, provider_code: providerCode, user_code: playerSession.username };
+
+                // 2. 👈 التوجيه الذكي: إذا كان المزود SMPL، نغير الرابط والبيانات للمسار المخصص الذي رأيناه في الصورة!
+                if (providerCode === 'SMPL') {
+                    endpointUrl = `${BACKEND_URL}/api/smpl/launch`;
+                    requestBody = { game_uuid: gameCode, user_code: playerSession.username };
+                }
+
+                // 3. إرسال الطلب
+                const res = await fetch(endpointUrl, {
+                    method: 'POST', 
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(requestBody)
                 });
+                
                 const data = await res.json();
+                
                 if (data.launch_url) {
                     iframe.src = data.launch_url;
                     iframe.onload = () => { if (loader) loader.style.display = 'none'; iframe.style.opacity = '1'; };
@@ -2426,7 +2440,10 @@
                     showNotification(data.error || "Jeu non disponible", "error");
                     closeCasinoGame();
                 }
-            } catch (error) { showNotification("Erreur de connexion", "error"); closeCasinoGame(); }
+            } catch (error) { 
+                showNotification("Erreur de connexion", "error"); 
+                closeCasinoGame(); 
+            }
         }
 
         function closeCasinoGame(fromPopState = false) {
@@ -2725,7 +2742,7 @@
                 const code = g.game_code || g.id;
 
                 return `
-                    <div onclick="playCasinoGame('SMPL', '${code}')" class="bg-black/50 rounded-xl overflow-hidden border border-white/5 group cursor-pointer shadow-lg hover:border-blue-500 transition-all flex flex-col h-full">
+                <div onclick="playCasinoGame('SMPL', '${code}')" class="bg-black/50 rounded-xl overflow-hidden border border-white/5 group cursor-pointer shadow-lg hover:border-blue-500 transition-all flex flex-col h-full">
                     <div class="relative w-full aspect-square overflow-hidden">
                         <img src="${img}" alt="${title}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/0f172a/3b82f6?text=Premium'">
                         <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 backdrop-blur-[1px]">
