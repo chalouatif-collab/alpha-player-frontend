@@ -3553,11 +3553,10 @@
                 
                 try {
                     // نطلب الألعاب الافتراضية من السيرفر (غيّر EUROVIRTUALS إذا كان كود مزودك مختلفاً)
-                    const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ provider_code: 'EUROVIRTUALS' }) 
-                    });
+const res = await fetch(`${BACKEND_URL}/api/eurovirtuals/games`, {
+    method: 'GET', // أو POST حسب ما برمجته
+    headers: { 'Content-Type': 'application/json' }
+});
                     
                     const data = await res.json();
                     currentVirtualGames = data.games || data.data || [];
