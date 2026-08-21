@@ -2728,30 +2728,29 @@
             }
         }
 
-        function renderSMPLGridInternal(gamesArray) {
+       function renderSMPLGridInternal(gamesArray) {
     const container = document.getElementById('smpl-games-grid');
     const gamesToDisplay = gamesArray.slice(0, currentSMPLDisplayLimit);
 
-    // 🎯 رابط صورتك الاحترافية الداكنة (تليق بمنصة Alphabet216)
-    const ALPHABET_FALLBACK = "https://via.placeholder.com/400x400/111827/ffffff?text=Alphabet216+Premium";
+    // 🎯 استخدمنا سيرفر موثوق بألوان موقعك (خلفية بنفسجية ونص سماوي)
+    const ALPHABET_FALLBACK = "https://placehold.co/400x400/180A2B/00f2fe?text=Alphabet216";
 
     container.innerHTML = gamesToDisplay.map(g => {
         const title = g.game_name || g.name || "Premium Game";
         const code = g.game_code || g.id;
         
-        // 1. جلب رابط الصورة من المزود
         let img = g.banner || g.image || g.thumb;
 
-        // 2. الفلتر القاطع: إذا كان الرابط فارغاً، أو يحتوي على الصورة الزرقاء القديمة
-        if (!img || img.includes("placehold.co") || img === "") {
+        // الفلتر الذكي: إذا كان الرابط فارغاً أو يحتوي على كلمة Premium القديمة
+        if (!img || img.includes("text=Premium") || img === "") {
             img = ALPHABET_FALLBACK;
         }
 
         return `
         <div onclick="playCasinoGame('SMPL', '${code}')" class="bg-black/50 rounded-xl overflow-hidden border border-white/5 group cursor-pointer shadow-lg hover:border-blue-500 transition-all flex flex-col h-full">
-            <div class="relative w-full aspect-square overflow-hidden">
-                <!-- تم تغيير مسار onerror ليحمل صورتك الاحترافية بدلاً من الصورة الزرقاء -->
-                <img src="${img}" alt="${title}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.src='${ALPHABET_FALLBACK}'">
+            <div class="relative w-full aspect-square overflow-hidden bg-[#0B001A]">
+                <!-- أضفنا this.onerror=null لمنع المتصفح من الدخول في حلقة مفرغة وظهور السواد -->
+                <img src="${img}" alt="${title}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.onerror=null; this.src='${ALPHABET_FALLBACK}'">
                 <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 backdrop-blur-[1px]">
                     <span class="bg-gradient-to-r from-blue-600 to-purple-600 text-white text-[10px] font-bold px-4 py-2 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]">JOUER</span>
                 </div>
