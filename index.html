@@ -1581,31 +1581,31 @@
             <div class="text-center text-q-cyan py-10 font-display animate-pulse">Ouverture des sports en cours...</div>
         </div>
         <!-- PANE: PREMIUM SMPL CASINO -->
-                    <div id="pane-smpl" class="player-view-section hidden w-full">
-                        <div
-                            class="flex flex-col md:flex-row gap-4 bg-q-panel/80 p-4 rounded-xl border border-blue-500/30 mb-4 backdrop-blur-md shadow-[0_0_20px_rgba(59,130,246,0.1)]">
-                            <h2
-                                class="text-white font-display font-black text-xl flex items-center gap-2 whitespace-nowrap">
-                                <span class="text-blue-500"><i class="fas fa-crown"></i></span> Premium Casino
-                            </h2>
-                            <input type="text" id="smpl-search-input" onkeyup="filterSMPLGames()" placeholder="Chercher un jeu Premium..."
-                                class="w-full bg-black/50 text-white border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-blue-500 transition-colors">
-                        </div>
+        <div id="pane-smpl" class="player-view-section hidden w-full">
+            <div
+                class="flex flex-col md:flex-row gap-4 bg-q-panel/80 p-4 rounded-xl border border-blue-500/30 mb-4 backdrop-blur-md shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+                <h2 class="text-white font-display font-black text-xl flex items-center gap-2 whitespace-nowrap">
+                    <span class="text-blue-500"><i class="fas fa-crown"></i></span> Premium Casino
+                </h2>
+                <input type="text" id="smpl-search-input" onkeyup="filterSMPLGames()"
+                    placeholder="Chercher un jeu Premium..."
+                    class="w-full bg-black/50 text-white border border-white/10 rounded-lg px-4 py-2 outline-none focus:border-blue-500 transition-colors">
+            </div>
 
-                        <!-- شريط تصنيفات المزودين داخل SMPL -->
-                        <div id="smpl-providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4">
-                            <!-- سيتم تعبئتها بالجافاسكريبت -->
-                        </div>
+            <!-- شريط تصنيفات المزودين داخل SMPL -->
+            <div id="smpl-providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4">
+                <!-- سيتم تعبئتها بالجافاسكريبت -->
+            </div>
 
-                        <!-- شبكة الألعاب -->
-                        <div id="smpl-games-grid"
-                            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4 w-full pb-10">
-                            <div
-                                class="col-span-full text-center text-blue-500 py-10 animate-pulse font-display tracking-widest text-lg">
-                                Chargement des jeux Premium... ⏳</div>
-                            </div>
-                        </div>
-                    </div>
+            <!-- شبكة الألعاب -->
+            <div id="smpl-games-grid"
+                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4 w-full pb-10">
+                <div
+                    class="col-span-full text-center text-blue-500 py-10 animate-pulse font-display tracking-widest text-lg">
+                    Chargement des jeux Premium... ⏳</div>
+            </div>
+        </div>
+        </div>
         <!-- ================= FOOTER & LEGAL (TERMS, PAYMENTS, LIMITS) ================= -->
         <footer
             class="relative mt-20 bg-q-panel/40 border-t border-white/10 backdrop-blur-xl pt-10 pb-8 rounded-t-3xl shadow-[0_-10px_30px_rgba(0,0,0,0.5)] w-full">
@@ -1632,7 +1632,7 @@
                                     Responsable</a></li>
                         </ul>
                     </div>
-                    
+
                     <!-- طرق الدفع المتاحة -->
                     <div>
                         <h4 class="text-white font-display font-bold text-lg mb-4 flex items-center gap-2">
@@ -1955,6 +1955,8 @@
                 openLiveCasino();
             } else if (sectionId === 'virtuals' && typeof initVirtualsLobby === 'function') {
                 initVirtualsLobby();
+            } else if (sectionId === 'smpl' && typeof initSMPLLobby === 'function') {
+                initSMPLLobby();
             }
 
             window.scrollTo(0, 0);
@@ -2597,18 +2599,18 @@
         }
 
 
-       // ================= محرك ألعاب SMPL Premium =================
+        // ================= محرك ألعاب SMPL Premium =================
         let smplProviders = [];
         let currentSMPLGames = [];
         let currentActiveSMPLProvider = "";
         let currentSMPLDisplayLimit = 30; // 👈 التحميل بالـ 30 لعبة كما طلبت لحماية الهواتف
         let smplGamesObserver = null;
 
-       // دالة مساعدة لرسم شريط المزودين
+        // دالة مساعدة لرسم شريط المزودين
         function drawProvidersBar(bar) {
             bar.innerHTML = smplProviders.map(p => {
-                const logoHtml = p.logo 
-                    ? `<img src="${p.logo}" class="w-5 h-5 object-cover rounded-full border border-blue-400/40 shrink-0" onerror="this.replaceWith(document.createElement('i')).className='fas fa-crown text-blue-400 text-xs'">` 
+                const logoHtml = p.logo
+                    ? `<img src="${p.logo}" class="w-5 h-5 object-cover rounded-full border border-blue-400/40 shrink-0" onerror="this.replaceWith(document.createElement('i')).className='fas fa-crown text-blue-400 text-xs'">`
                     : `<i class="fas fa-crown text-blue-400 text-xs"></i>`;
                 return `<button id="btn-smpl-prov-${p.code}" onclick="loadSMPLProviderGames('${p.code}')" class="smpl-prov-btn btn-glass px-4 py-2 rounded-full text-xs font-bold text-gray-400 hover:text-white shrink-0 transition-all flex items-center gap-2">${logoHtml} <span>${p.name}</span></button>`;
             }).join('');
@@ -2638,7 +2640,7 @@
                 if (data.providers && data.providers.length > 0) {
                     smplProviders = data.providers;
                     localStorage.setItem('smpl_providers_cache', JSON.stringify(smplProviders));
-                    
+
                     if (!cachedProviders) {
                         drawProvidersBar(bar);
                         loadSMPLProviderGames(smplProviders[0].code);
@@ -2651,11 +2653,11 @@
 
         async function loadSMPLProviderGames(providerCode) {
             currentActiveSMPLProvider = providerCode;
-            currentSMPLDisplayLimit = 50; 
-            
+            currentSMPLDisplayLimit = 50;
+
             // حفظ آخر مزود لفتحه فوراً المرة القادمة
             localStorage.setItem('smpl_last_provider', providerCode);
-            
+
             if (smplGamesObserver) {
                 smplGamesObserver.disconnect();
                 smplGamesObserver = null;
@@ -2698,7 +2700,7 @@
                     currentSMPLGames = data.games;
                     // تحديث الكاش في الهاتف
                     localStorage.setItem(`smpl_games_${providerCode}`, JSON.stringify(currentSMPLGames));
-                    
+
                     // إذا لم تكن موجودة في الهاتف سابقاً، نرسمها الآن
                     if (!cachedGames) {
                         renderSMPLGridInternal(currentSMPLGames);
@@ -2709,10 +2711,10 @@
             }
         }
 
-// ================= دالة رسم ألعاب SMPL (مطابقة لنظام نكسيس) =================
+        // ================= دالة رسم ألعاب SMPL (مطابقة لنظام نكسيس) =================
         function renderSMPLGridInternal(gamesArray) {
             const container = document.getElementById('smpl-games-grid');
-            
+
             // جلب الدفعة الحالية من الألعاب فقط (لتخفيف الضغط على الهاتف)
             const gamesToDisplay = gamesArray.slice(0, currentSMPLDisplayLimit);
 
@@ -2721,7 +2723,7 @@
                 const title = g.game_name || g.name || "Premium Game";
                 const img = g.banner || g.image || g.thumb || "https://placehold.co/400x400/0f172a/3b82f6?text=Premium";
                 const code = g.game_code || g.id;
-                
+
                 return `
                 <div onclick="playCasinoGame('${currentActiveSMPLProvider}', '${code}')" class="bg-black/50 rounded-xl overflow-hidden border border-white/5 group cursor-pointer shadow-lg hover:border-blue-500 transition-all flex flex-col h-full">
                     <div class="relative w-full aspect-square overflow-hidden">
@@ -2738,7 +2740,7 @@
 
             // ================= نظام التمرير اللانهائي (Infinite Scroll) =================
             let sentinel = document.getElementById('smpl-games-scroll-sentinel');
-            
+
             // إذا كان لا يزال هناك ألعاب لم تُعرض بعد
             if (currentSMPLDisplayLimit < gamesArray.length) {
                 // إنشاء مؤشر التحميل السفلي إذا لم يكن موجوداً
@@ -3469,7 +3471,7 @@
                 modal.classList.add('hidden');
             }, 300); // الانتظار حتى ينتهي تأثير الاختفاء
         }
-// زر الرياضة الأول: Nexus Sports
+        // زر الرياضة الأول: Nexus Sports
         function launchSport1() {
             closeSportsSelector();
             openSportsbookForProvider('nexus'); // كود مزود نكسيس
@@ -3484,11 +3486,11 @@
         // الدالة الموحدة الذكية التي تتعامل مع المزودين معاً
         async function openSportsbookForProvider(providerCode) {
             if (!playerSession) return openLoginModal();
-            
+
             const overlay = document.getElementById('sportsbook-overlay');
             const iframe = document.getElementById('sportsbook-iframe');
             const loader = document.getElementById('casino-loader'); // استخدام نفس اللودر للتحميل
-            
+
             overlay.classList.remove('hidden');
             overlay.classList.add('flex');
             history.pushState({ modalOpen: true }, "", "");
@@ -3497,16 +3499,16 @@
 
             try {
                 const response = await fetch(`${BACKEND_URL}/api/provider/launch-sportsbook`, {
-                    method: 'POST', 
+                    method: 'POST',
                     headers: getAuthHeaders(),
-                    body: JSON.stringify({ 
+                    body: JSON.stringify({
                         provider_code: providerCode, // يرسل إما 'nexus' أو 'smpl'
-                        game_code: 'SPORTSBOOK', 
-                        user_code: playerSession.username 
+                        game_code: 'SPORTSBOOK',
+                        user_code: playerSession.username
                     })
                 });
                 const data = await response.json();
-                
+
                 if (data.launch_url) {
                     iframe.src = data.launch_url;
                     iframe.onload = () => { if (loader) loader.style.display = 'none'; iframe.style.opacity = '1'; };
@@ -3514,9 +3516,9 @@
                     showNotification(data.error || "Sportsbook non disponible", "error");
                     closeSportsbook();
                 }
-            } catch (error) { 
+            } catch (error) {
                 showNotification("Erreur de connexion", "error");
-                closeSportsbook(); 
+                closeSportsbook();
             }
         }
 
