@@ -3581,12 +3581,14 @@
         function renderVirtualsGrid(gamesArray) {
             const container = document.getElementById('virtuals-games-grid');
             if (!container) return;
-
+            
             container.innerHTML = gamesArray.map(g => {
                 const title = g.game_name || g.name || "Virtual Game";
                 const img = g.banner || g.image || g.thumb || "https://placehold.co/400x400/180A2B/F9D423?text=Virtuals";
-                const code = g.game_code || g.id || g.uuid; // جلب المعرف الخاص باللعبة
-
+                
+                // 👈 التعديل السحري هنا: إعطاء الأولوية القصوى للـ UUID
+                const code = g.uuid || g.game_uuid || g.game_code || g.id; 
+                
                 return `
                 <div onclick="launchSpecificVirtualGame('${code}')" class="bg-q-panel/60 backdrop-blur-md rounded-xl overflow-hidden border border-white/10 group cursor-pointer shadow-[0_0_15px_rgba(249,212,35,0.05)] hover:border-q-gold transition-all flex flex-col h-full relative">
                     <div class="relative w-full aspect-square overflow-hidden">
