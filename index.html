@@ -2,6 +2,7 @@
 <html lang="fr" dir="ltr">
 
 <head>
+    <script src="https://ui.invisiblesport.com/bt-renderer.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Alphabet216 - Premium Casino</title>
@@ -989,12 +990,12 @@
     </div>
 
     <div id="sportsbook-overlay" class="fixed inset-0 z-[200] bg-q-bg hidden flex-col">
-        <div class="h-14 w-full bg-q-panel border-b border-q-cyan/20 flex items-center justify-between px-4">
-            <h2 class="text-q-cyan font-display font-bold tracking-widest uppercase">Alphabet Sports</h2>
-
-        </div>
-        <iframe id="sportsbook-iframe" src="" frameborder="0" class="w-full h-full"></iframe>
+    <div class="h-14 w-full bg-q-panel border-b border-q-cyan/20 flex items-center justify-between px-4">
+        <h2 class="text-q-cyan font-display font-bold tracking-widest uppercase">Alphabet Sports</h2>
     </div>
+    <!-- هنا التغيير السحري: استبدلنا iframe بـ div الخاص بمزود Betby -->
+    <div id="bettech" class="w-full flex-grow relative bg-[#02000a]"></div>
+</div>
 
     <div id="virtual-games-overlay" class="fixed inset-0 z-[200] bg-black hidden flex-col">
 
@@ -3502,37 +3503,52 @@
             openSportsbookForProvider('smpl'); // كود مزود سمبل
         }
 
-        // الدالة الموحدة الذكية التي تتعامل مع المزودين معاً
         async function openSportsbookForProvider(providerCode) {
             if (!playerSession) return openLoginModal();
 
             const overlay = document.getElementById('sportsbook-overlay');
-            const iframe = document.getElementById('sportsbook-iframe');
-            const loader = document.getElementById('casino-loader'); // استخدام نفس اللودر للتحميل
-
             overlay.classList.remove('hidden');
             overlay.classList.add('flex');
             history.pushState({ modalOpen: true }, "", "");
-            if (loader) loader.style.display = 'flex';
-            iframe.style.opacity = '0';
 
             try {
+                // نطلب بيانات الدخول للرياضة من الباك إند
                 const response = await fetch(`${BACKEND_URL}/api/provider/launch-sportsbook`, {
                     method: 'POST',
                     headers: getAuthHeaders(),
                     body: JSON.stringify({
-                        provider_code: providerCode, // يرسل إما 'nexus' أو 'smpl'
-                        game_code: 'SPORTSBOOK',
+                        provider_code: providerCode, // 'smpl'
                         user_code: playerSession.username
                     })
                 });
                 const data = await response.json();
 
-                if (data.launch_url) {
-                    iframe.src = data.launch_url;
-                    iframe.onload = () => { if (loader) loader.style.display = 'none'; iframe.style.opacity = '1'; };
+                // التأكد من أن الباك إند أرسل التوكن ومعرف المتجر
+                if (data.token && data.brand_id) {
+                    // تشغيل محرك Betby كما ينص التوثيق
+                    BTRenderer().initialize({
+                        brand_id: data.brand_id,
+                        token: data.token,
+                        lang: "fr", // لغة الموقع
+                        target: document.getElementById("bettech"),
+                        betSlipOffsetTop: 56, // مسافة الشريط العلوي
+                        onTokenExpired: () => {
+                            // هذه الدالة تجلب توكن جديد إذا انتهت الجلسة واللاعب في الموقع
+                            return new Promise(async (resolve, reject) => {
+                                try {
+                                    const res = await fetch(`${BACKEND_URL}/api/provider/launch-sportsbook`, {
+                                        method: 'POST', headers: getAuthHeaders(),
+                                        body: JSON.stringify({ provider_code: providerCode, user_code: playerSession.username })
+                                    });
+                                    const newData = await res.json();
+                                    if(newData.token) resolve(newData.token);
+                                    else reject("No token");
+                                } catch (e) { reject(e); }
+                            });
+                        }
+                    });
                 } else {
-                    showNotification(data.error || "Sportsbook non disponible", "error");
+                    showNotification(data.error || "Paramètres Sportsbook manquants", "error");
                     closeSportsbook();
                 }
             } catch (error) {
@@ -3542,14 +3558,21 @@
         }
 
         function closeSportsbook(fromPopState = false) {
-            document.getElementById('sportsbook-overlay').classList.add('hidden');
-            document.getElementById('sportsbook-overlay').classList.remove('flex');
-            document.getElementById('sportsbook-iframe').src = "about:blank";
+            const overlay = document.getElementById('sportsbook-overlay');
+            if (overlay) {
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
+            }
+            
+            // تنظيف الكود وحذفه من الشاشة تماماً كما يطلب المزود
+            if (typeof bt !== 'undefined' && bt.kill) {
+                bt.kill();
+            }
+
             if (!fromPopState && history.state && history.state.modalOpen) {
                 history.back();
             }
         }
-
         // ================= محرك الاستماع الذكي للألعاب =================
         // هذا الكود يستمع لأي حركة أو رسالة قادمة من اللعبة (Iframe) ويجبر الواجهة على تحديث الرصيد فوراً
         window.addEventListener("message", (event) => {
