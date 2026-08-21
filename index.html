@@ -2426,13 +2426,13 @@
 
                 // 3. إرسال الطلب
                 const res = await fetch(endpointUrl, {
-                    method: 'POST', 
+                    method: 'POST',
                     headers: getAuthHeaders(),
                     body: JSON.stringify(requestBody)
                 });
-                
+
                 const data = await res.json();
-                
+
                 if (data.launch_url) {
                     iframe.src = data.launch_url;
                     iframe.onload = () => { if (loader) loader.style.display = 'none'; iframe.style.opacity = '1'; };
@@ -2440,9 +2440,9 @@
                     showNotification(data.error || "Jeu non disponible", "error");
                     closeCasinoGame();
                 }
-            } catch (error) { 
-                showNotification("Erreur de connexion", "error"); 
-                closeCasinoGame(); 
+            } catch (error) {
+                showNotification("Erreur de connexion", "error");
+                closeCasinoGame();
             }
         }
 
@@ -2738,7 +2738,16 @@
             // رسم البطاقات بنفس تصميم الكازينو العادي تماماً
             container.innerHTML = gamesToDisplay.map(g => {
                 const title = g.game_name || g.name || "Premium Game";
-                const img = g.banner || g.image || g.thumb || "https://placehold.co/400x400/0f172a/3b82f6?text=Premium";
+                // 1. استخراج رابط الصورة القادم من المزود
+                let img = g.banner || g.image || g.thumb;
+
+                // 2. الفلتر الذكي: إذا كان الرابط هو رابط الصورة البشعة، أو كان فارغاً
+                const BAD_IMAGE = "https://placehold.co/400x400/0f172a/3b82f6?text=Premium.jpg"; // استبدل هذا برابط الصورة الزرقاء بالضبط
+                const ALPHABET_FALLBACK = "https://via.placeholder.com/400x400/111827/ffffff?text=Alphabet216+Premium";
+
+                if (!img || img === BAD_IMAGE) {
+                    img = ALPHABET_FALLBACK;
+                }
                 const code = g.game_code || g.id;
 
                 return `
@@ -3557,7 +3566,7 @@
                 refreshPlayerBalance();
             }
         });
-       
+
         // ================= محرك الألعاب الافتراضية (Virtuals) =================
         let currentVirtualGames = [];
 
@@ -3598,14 +3607,14 @@
         function renderVirtualsGrid(gamesArray) {
             const container = document.getElementById('virtuals-games-grid');
             if (!container) return;
-            
+
             container.innerHTML = gamesArray.map(g => {
                 const title = g.game_name || g.name || "Virtual Game";
                 const img = g.banner || g.image || g.thumb || "https://placehold.co/400x400/180A2B/F9D423?text=Virtuals";
-                
+
                 // 👈 التعديل السحري هنا: إعطاء الأولوية القصوى للـ UUID
-                const code = g.uuid || g.game_uuid || g.game_code || g.id; 
-                
+                const code = g.uuid || g.game_uuid || g.game_code || g.id;
+
                 return `
                 <div onclick="launchSpecificVirtualGame('${code}')" class="bg-q-panel/60 backdrop-blur-md rounded-xl overflow-hidden border border-white/10 group cursor-pointer shadow-[0_0_15px_rgba(249,212,35,0.05)] hover:border-q-gold transition-all flex flex-col h-full relative">
                     <div class="relative w-full aspect-square overflow-hidden">
