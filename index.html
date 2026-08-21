@@ -2728,73 +2728,67 @@
             }
         }
 
-        // ================= دالة رسم ألعاب SMPL (مطابقة لنظام نكسيس) =================
         function renderSMPLGridInternal(gamesArray) {
-            const container = document.getElementById('smpl-games-grid');
+    const container = document.getElementById('smpl-games-grid');
+    const gamesToDisplay = gamesArray.slice(0, currentSMPLDisplayLimit);
 
-            // جلب الدفعة الحالية من الألعاب فقط (لتخفيف الضغط على الهاتف)
-            const gamesToDisplay = gamesArray.slice(0, currentSMPLDisplayLimit);
+    // 🎯 رابط صورتك الاحترافية الداكنة (تليق بمنصة Alphabet216)
+    const ALPHABET_FALLBACK = "https://via.placeholder.com/400x400/111827/ffffff?text=Alphabet216+Premium";
 
-            // رسم البطاقات بنفس تصميم الكازينو العادي تماماً
-            container.innerHTML = gamesToDisplay.map(g => {
-                const title = g.game_name || g.name || "Premium Game";
-                // 1. استخراج رابط الصورة القادم من المزود
-                let img = g.banner || g.image || g.thumb;
+    container.innerHTML = gamesToDisplay.map(g => {
+        const title = g.game_name || g.name || "Premium Game";
+        const code = g.game_code || g.id;
+        
+        // 1. جلب رابط الصورة من المزود
+        let img = g.banner || g.image || g.thumb;
 
-                // 2. الفلتر الذكي: إذا كان الرابط هو رابط الصورة البشعة، أو كان فارغاً
-                const BAD_IMAGE = "https://placehold.co/400x400/0f172a/3b82f6?text=Premium.jpg"; // استبدل هذا برابط الصورة الزرقاء بالضبط
-                const ALPHABET_FALLBACK = "https://via.placeholder.com/400x400/111827/ffffff?text=Alphabet216+Premium";
-
-                if (!img || img === BAD_IMAGE) {
-                    img = ALPHABET_FALLBACK;
-                }
-                const code = g.game_code || g.id;
-
-                return `
-                <div onclick="playCasinoGame('SMPL', '${code}')" class="bg-black/50 rounded-xl overflow-hidden border border-white/5 group cursor-pointer shadow-lg hover:border-blue-500 transition-all flex flex-col h-full">
-                    <div class="relative w-full aspect-square overflow-hidden">
-                        <img src="${img}" alt="${title}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.src='https://placehold.co/400x400/0f172a/3b82f6?text=Premium'">
-                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 backdrop-blur-[1px]">
-                            <span class="bg-gradient-to-r from-blue-600 to-purple-600 text-white text-[10px] font-bold px-4 py-2 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]">JOUER</span>
-                        </div>
-                    </div>
-                    <div class="p-2 flex justify-between items-center bg-q-panel border-t border-white/5 flex-grow">
-                        <span class="text-white text-[10px] font-bold truncate pr-1 group-hover:text-blue-500 transition-colors">${title}</span>
-                    </div>
-                </div>`;
-            }).join('');
-
-            // ================= نظام التمرير اللانهائي (Infinite Scroll) =================
-            let sentinel = document.getElementById('smpl-games-scroll-sentinel');
-
-            // إذا كان لا يزال هناك ألعاب لم تُعرض بعد
-            if (currentSMPLDisplayLimit < gamesArray.length) {
-                // إنشاء مؤشر التحميل السفلي إذا لم يكن موجوداً
-                if (!sentinel) {
-                    sentinel = document.createElement('div');
-                    sentinel.id = 'smpl-games-scroll-sentinel';
-                    sentinel.className = 'col-span-full text-center py-6 text-blue-500 font-display animate-pulse text-xs';
-                    sentinel.innerHTML = 'Chargement de plus de jeux Premium... 🔄';
-                    container.parentNode.appendChild(sentinel);
-                }
-
-                // مراقبة المؤشر السفلي، إذا ظهر في الشاشة نحمل المزيد
-                if (!smplGamesObserver) {
-                    smplGamesObserver = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting && currentSMPLDisplayLimit < gamesArray.length) {
-                                currentSMPLDisplayLimit += 30; // إضافة 30 لعبة جديدة عند النزول
-                                renderSMPLGridInternal(gamesArray);
-                            }
-                        });
-                    }, { rootMargin: '300px' }); // يبدأ التحميل قبل أن يصل اللاعب للنهاية بـ 300 بيكسل
-                }
-                smplGamesObserver.observe(sentinel);
-            } else if (sentinel) {
-                // إذا انتهت الألعاب، نزيل مؤشر التحميل
-                sentinel.remove();
-            }
+        // 2. الفلتر القاطع: إذا كان الرابط فارغاً، أو يحتوي على الصورة الزرقاء القديمة
+        if (!img || img.includes("placehold.co") || img === "") {
+            img = ALPHABET_FALLBACK;
         }
+
+        return `
+        <div onclick="playCasinoGame('SMPL', '${code}')" class="bg-black/50 rounded-xl overflow-hidden border border-white/5 group cursor-pointer shadow-lg hover:border-blue-500 transition-all flex flex-col h-full">
+            <div class="relative w-full aspect-square overflow-hidden">
+                <!-- تم تغيير مسار onerror ليحمل صورتك الاحترافية بدلاً من الصورة الزرقاء -->
+                <img src="${img}" alt="${title}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.src='${ALPHABET_FALLBACK}'">
+                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 backdrop-blur-[1px]">
+                    <span class="bg-gradient-to-r from-blue-600 to-purple-600 text-white text-[10px] font-bold px-4 py-2 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]">JOUER</span>
+                </div>
+            </div>
+            <div class="p-2 flex justify-between items-center bg-q-panel border-t border-white/5 flex-grow">
+                <span class="text-white text-[10px] font-bold truncate pr-1 group-hover:text-blue-500 transition-colors">${title}</span>
+            </div>
+        </div>`;
+    }).join('');
+
+    // ================= نظام التمرير اللانهائي (Infinite Scroll) =================
+    let sentinel = document.getElementById('smpl-games-scroll-sentinel');
+
+    if (currentSMPLDisplayLimit < gamesArray.length) {
+        if (!sentinel) {
+            sentinel = document.createElement('div');
+            sentinel.id = 'smpl-games-scroll-sentinel';
+            sentinel.className = 'col-span-full text-center py-6 text-blue-500 font-display animate-pulse text-xs';
+            sentinel.innerHTML = 'Chargement de plus de jeux Premium... 🔄';
+            container.parentNode.appendChild(sentinel);
+        }
+
+        if (!smplGamesObserver) {
+            smplGamesObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && currentSMPLDisplayLimit < gamesArray.length) {
+                        currentSMPLDisplayLimit += 30; 
+                        renderSMPLGridInternal(gamesArray);
+                    }
+                });
+            }, { rootMargin: '300px' }); 
+        }
+        smplGamesObserver.observe(sentinel);
+    } else if (sentinel) {
+        sentinel.remove();
+    }
+}
 
         async function launchSpecificVirtualGame(gameUuid) {
             if (!playerSession) return openLoginModal();
