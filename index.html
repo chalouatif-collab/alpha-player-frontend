@@ -3503,52 +3503,53 @@
             openSportsbookForProvider('smpl'); // كود مزود سمبل
         }
 
-        async function openSportsbookForProvider(providerCode) {
+  async function openSportsbookForProvider(providerCode) {
             if (!playerSession) return openLoginModal();
 
             const overlay = document.getElementById('sportsbook-overlay');
+            const bettechContainer = document.getElementById('bettech');
+            const loader = document.getElementById('casino-loader'); 
+            
             overlay.classList.remove('hidden');
             overlay.classList.add('flex');
             history.pushState({ modalOpen: true }, "", "");
+            
+            if (loader) loader.style.display = 'flex';
+            bettechContainer.innerHTML = ''; // تنظيف الحاوية
 
             try {
-                // نطلب بيانات الدخول للرياضة من الباك إند
+                // 1. طلب الرابط من سيرفرك
                 const response = await fetch(`${BACKEND_URL}/api/provider/launch-sportsbook`, {
                     method: 'POST',
                     headers: getAuthHeaders(),
                     body: JSON.stringify({
-                        provider_code: providerCode, // 'smpl'
-                        user_code: playerSession.username
+                        provider_code: providerCode,
+                        user_code: playerSession.username,
+                        game_code: "SPORTSBOOK"
                     })
                 });
                 const data = await response.json();
 
-                // التأكد من أن الباك إند أرسل التوكن ومعرف المتجر
-                if (data.token && data.brand_id) {
-                    // تشغيل محرك Betby كما ينص التوثيق
-                    BTRenderer().initialize({
-                        brand_id: data.brand_id,
-                        token: data.token,
-                        lang: "fr", // لغة الموقع
-                        target: document.getElementById("bettech"),
-                        betSlipOffsetTop: 56, // مسافة الشريط العلوي
-                        onTokenExpired: () => {
-                            // هذه الدالة تجلب توكن جديد إذا انتهت الجلسة واللاعب في الموقع
-                            return new Promise(async (resolve, reject) => {
-                                try {
-                                    const res = await fetch(`${BACKEND_URL}/api/provider/launch-sportsbook`, {
-                                        method: 'POST', headers: getAuthHeaders(),
-                                        body: JSON.stringify({ provider_code: providerCode, user_code: playerSession.username })
-                                    });
-                                    const newData = await res.json();
-                                    if(newData.token) resolve(newData.token);
-                                    else reject("No token");
-                                } catch (e) { reject(e); }
-                            });
-                        }
+                if (data.launch_url) {
+                    // 2. سحب كود الـ HTML من رابط SMPL وحقنه في الحاوية
+                    const htmlResponse = await fetch(data.launch_url);
+                    const htmlContent = await htmlResponse.text();
+                    
+                    if (loader) loader.style.display = 'none';
+                    
+                    // حقن الكود وتشغيل السكربتات المدمجة فيه
+                    bettechContainer.innerHTML = htmlContent;
+                    
+                    // إجبار المتصفح على تشغيل السكربت الذي تم حقنه
+                    Array.from(bettechContainer.querySelectorAll("script")).forEach(oldScript => {
+                        const newScript = document.createElement("script");
+                        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                        oldScript.parentNode.replaceChild(newScript, oldScript);
                     });
+
                 } else {
-                    showNotification(data.error || "Paramètres Sportsbook manquants", "error");
+                    showNotification(data.error || "Sportsbook non disponible", "error");
                     closeSportsbook();
                 }
             } catch (error) {
