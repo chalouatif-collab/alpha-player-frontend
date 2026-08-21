@@ -3540,7 +3540,8 @@
                 refreshPlayerBalance();
             }
         });
-// ================= محرك الألعاب الافتراضية (Virtuals) =================
+       
+        // ================= محرك الألعاب الافتراضية (Virtuals) =================
         let currentVirtualGames = [];
 
         async function initVirtualsLobby() {
@@ -3550,17 +3551,18 @@
             // إذا لم يتم تحميل الألعاب من قبل
             if (currentVirtualGames.length === 0) {
                 container.innerHTML = '<div class="col-span-full text-center text-q-gold py-10 animate-pulse font-display text-lg">CHARGEMENT DES JEUX VIRTUELS... ⏳</div>';
-                
+
                 try {
-                    // نطلب الألعاب الافتراضية من السيرفر (غيّر EUROVIRTUALS إذا كان كود مزودك مختلفاً)
-const res = await fetch(`${BACKEND_URL}/api/eurovirtuals/games`, {
-    method: 'GET', // أو POST حسب ما برمجته
-    headers: { 'Content-Type': 'application/json' }
-});
-                    
+                    // 👈 التعديل السحري هنا: الرابط الصحيح وطريقة GET
+                    const res = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games`, {
+                        method: 'GET'
+                    });
+
                     const data = await res.json();
-                    currentVirtualGames = data.games || data.data || [];
-                    
+
+                    // التقاط الألعاب بناءً على الكود الخاص بك
+                    currentVirtualGames = data.games || data.data || data || [];
+
                     if (currentVirtualGames.length > 0) {
                         renderVirtualsGrid(currentVirtualGames);
                     } else {
@@ -3579,12 +3581,12 @@ const res = await fetch(`${BACKEND_URL}/api/eurovirtuals/games`, {
         function renderVirtualsGrid(gamesArray) {
             const container = document.getElementById('virtuals-games-grid');
             if (!container) return;
-            
+
             container.innerHTML = gamesArray.map(g => {
                 const title = g.game_name || g.name || "Virtual Game";
                 const img = g.banner || g.image || g.thumb || "https://placehold.co/400x400/180A2B/F9D423?text=Virtuals";
                 const code = g.game_code || g.id || g.uuid; // جلب المعرف الخاص باللعبة
-                
+
                 return `
                 <div onclick="launchSpecificVirtualGame('${code}')" class="bg-q-panel/60 backdrop-blur-md rounded-xl overflow-hidden border border-white/10 group cursor-pointer shadow-[0_0_15px_rgba(249,212,35,0.05)] hover:border-q-gold transition-all flex flex-col h-full relative">
                     <div class="relative w-full aspect-square overflow-hidden">
