@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TUBET24 | Premium Casino & Sports</title>
+    <title>Alphabet216 | Premium Casino & Sports</title>
     <!-- مكتبات التصميم -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -28,7 +28,7 @@
             <div class="flex items-center gap-6">
                 <div class="flex items-center gap-2 cursor-pointer" onclick="switchSection('accueil')">
                     <div class="w-9 h-9 rounded-xl bg-emerald flex items-center justify-center text-black font-black text-xl shadow-md"><i class="fas fa-bolt"></i></div>
-                    <span class="font-extrabold text-2xl tracking-tight text-white">TUBE<span class="text-emerald">T24</span></span>
+                    <span class="font-extrabold text-2xl tracking-tight text-white">Alphabet<span class="text-emerald">216</span></span>
                 </div>
             </div>
 
@@ -328,6 +328,41 @@
     
     <!-- ================= JAVASCRIPT (محرك الألفابت الشامل) ================= -->
     <script>
+// ================= دالة السحب بالماوس (Drag to Scroll) =================
+        function enableMouseDragScroll(sliderId) {
+            const slider = document.getElementById(sliderId);
+            if (!slider) return;
+
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true;
+                slider.style.cursor = 'grabbing';
+                startX = e.pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+            });
+
+            slider.addEventListener('mouseleave', () => {
+                isDown = false;
+                slider.style.cursor = 'default';
+            });
+
+            slider.addEventListener('mouseup', () => {
+                isDown = false;
+                slider.style.cursor = 'default';
+            });
+
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - slider.offsetLeft;
+                const walk = (x - startX) * 2; // تسريع السحب
+                slider.scrollLeft = scrollLeft - walk;
+            });
+        }
+
         const BACKEND_URL = "https://alpha-backend-server.onrender.com";
         let playerSession = null;
 
@@ -512,6 +547,7 @@
                         bar.innerHTML = smplCasinoProviders.map(p => 
                             `<button id="btn-prov-${p.code}" onclick="loadProviderGames('${p.code}')" class="casino-prov-btn bg-[#1a1e29] border border-[#212631] hover:border-emerald px-4 py-2 rounded-xl text-xs font-bold text-gray-300 hover:text-white shrink-0 transition-all shadow-sm">${p.name || p.code}</button>`
                         ).join('');
+                        setTimeout(() => enableMouseDragScroll('providers-bar'), 200);
                         
                         loadProviderGames(smplCasinoProviders[0].code);
                     } else {
