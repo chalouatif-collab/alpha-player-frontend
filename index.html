@@ -533,22 +533,41 @@
         
         async function initCasinoLobby() {
             const bar = document.getElementById('providers-bar');
-            const grid = document.getElementById('games-grid');
             
             if (smplCasinoProviders.length === 0) {
-                if(bar) bar.innerHTML = '<span class="text-emerald text-xs animate-pulse">Chargement des fournisseurs SMPL... ⏳</span>';
+                if(bar) bar.innerHTML = '<span class="text-emerald text-xs animate-pulse">Chargement des fournisseurs... ⏳</span>';
                 try {
                     const res = await fetch(`${BACKEND_URL}/api/smpl/providers`);
                     const data = await res.json();
+                    let providers = data.providers || data.data || [];
                     
-                    smplCasinoProviders = data.providers || data.data || data || [];
-                    
-                    if (smplCasinoProviders.length > 0 && bar) {
-                        bar.innerHTML = smplCasinoProviders.map(p => 
-                            `<button id="btn-prov-${p.code}" onclick="loadProviderGames('${p.code}')" class="casino-prov-btn bg-[#1a1e29] border border-[#212631] hover:border-emerald px-4 py-2 rounded-xl text-xs font-bold text-gray-300 hover:text-white shrink-0 transition-all shadow-sm">${p.name || p.code}</button>`
-                        ).join('');
-                        setTimeout(() => enableMouseDragScroll('providers-bar'), 200);
+                    if (providers.length > 0) {
+                        // 🌟 القائمة الذهبية للمزودين (اكتب كود الشركة هنا لتظهر في الأول)
+                        const priorityList = ['pragmatic', 'evolution', 'hacksaw', 'spribe', 'nolimitcity', 'pushgaming'];
                         
+                        // خوارزمية ترتيب المزودين بذكاء
+                        providers.sort((a, b) => {
+                            const indexA = priorityList.indexOf((a.code || "").toLowerCase());
+                            const indexB = priorityList.indexOf((b.code || "").toLowerCase());
+                            
+                            if (indexA !== -1 && indexB !== -1) return indexA - indexB; // كلاهما في القائمة، نرتب حسب الأسبقية
+                            if (indexA !== -1) return -1; // A في القائمة، يذهب للأول
+                            if (indexB !== -1) return 1;  // B في القائمة، يذهب للأول
+                            return (a.name || "").localeCompare(b.name || ""); // البقية ترتيب أبجدي
+                        });
+                        
+                        smplCasinoProviders = providers;
+
+                        if(bar) {
+                            bar.innerHTML = smplCasinoProviders.map(p => 
+                                `<button id="btn-prov-${p.code}" onclick="loadProviderGames('${p.code}')" class="casino-prov-btn bg-[#1a1e29] border border-[#212631] hover:border-emerald px-4 py-2 rounded-xl text-xs font-bold text-gray-300 hover:text-white shrink-0 transition-all shadow-sm">${p.name || p.code}</button>`
+                            ).join('');
+                        }
+                        
+                        // تفعيل السحب بالماوس
+                        setTimeout(() => { if(typeof enableMouseDragScroll === 'function') enableMouseDragScroll('providers-bar'); }, 200);
+                        
+                        // فتح ألعاب أول شركة تلقائياً
                         loadProviderGames(smplCasinoProviders[0].code);
                     } else {
                         if(bar) bar.innerHTML = '<span class="text-gray-500 text-xs">Aucun fournisseur trouvé</span>';
