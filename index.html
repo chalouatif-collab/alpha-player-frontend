@@ -663,13 +663,25 @@ async function playSMPLGame(gameUuid) {
                 const res = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games`);
                 const data = await res.json();
                 let games = data.games || data.data || data || [];
-                if(grid) grid.innerHTML = games.map(g => `
-                    <div onclick="launchSpecificVirtualGame('${g.uuid || g.game_code || g.id}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-blue-500 transition-all">
-                        <img src="${g.banner || g.image || 'https://placehold.co/400x400/180A2B/FFF'}" class="w-full aspect-square object-cover">
+                
+                if(grid) grid.innerHTML = games.map(g => {
+                    // 👈 السحر هنا: التقاط UUID الصحيح بشتى الطرق الممكنة من Nexus
+                    const uuid = g.uuid || g.game_uuid || g.id || g.game_code; 
+                    
+                    return `
+                    <div onclick="launchSpecificVirtualGame('${uuid}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-blue-500 transition-all shadow-lg group">
+                        <div class="relative w-full aspect-square overflow-hidden bg-black/50">
+                            <img src="${g.banner || g.image || 'https://placehold.co/400x400/180A2B/FFF'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                                <span class="bg-blue-500 text-white text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
+                            </div>
+                        </div>
                         <div class="p-2 text-[10px] text-white font-bold truncate text-center">${g.game_name || g.name}</div>
                     </div>
-                `).join('');
-            } catch(e) {}
+                `}).join('');
+            } catch(e) {
+                if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de chargement</div>';
+            }
         }
 
         async function launchSpecificVirtualGame(uuid) {
