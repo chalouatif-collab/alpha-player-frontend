@@ -505,31 +505,47 @@
             } catch (error) { if(loader) loader.classList.add('hidden'); showNotification("Erreur réseau", "error"); }
         }
 
-        async function loadGamesOfTheDay() {
+async function loadGamesOfTheDay() {
+            const grid = document.getElementById('games-of-the-day-grid');
+            if(grid) grid.innerHTML = '<div class="col-span-full text-emerald text-center py-5 animate-pulse">Chargement des jeux... ⏳</div>';
+            
             try {
                 const res = await fetch(`${BACKEND_URL}/api/smpl/games-by-provider`, {
                     method: 'POST', headers: {'Content-Type':'application/json'},
                     body: JSON.stringify({provider_code: 'pragmatic'}) 
                 });
                 const data = await res.json();
-                const games = data.games || data.data || [];
+                let games = data.games || data.data || [];
                 
-                if(games.length > 0) {
-                    document.getElementById('games-of-the-day-grid').innerHTML = games.slice(0, 12).map(g => {
+                if (games.length > 0) games = games.reverse();
+                
+                if(games.length > 0 && grid) {
+                    grid.innerHTML = games.slice(0, 12).map(g => {
                         const code = g.uuid || g.game_uuid || g.id;
+                        const title = g.game_name || g.name || "Game";
+                        
+                        let img = g.image || g.icon || g.banner || g.thumb || g.thumbnail || g.url_thumb;
+                        const fallbackImg = `https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}`;
+                        if(!img || img === "") img = fallbackImg;
+
                         return `
-                        <div onclick="playSMPLGame('${code}')" class="bg-black/50 border border-white/10 rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all shadow-lg group">
-                            <div class="relative w-full aspect-square overflow-hidden bg-[#0f1117]">
-                                <img src="${g.banner || g.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/180A2B/FFF'">
+                        <div onclick="playSMPLGame('${code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all shadow-lg group">
+                            <div class="relative w-full aspect-square overflow-hidden bg-black">
+                                <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='${fallbackImg}';">
+                                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                                    <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
+                                </div>
                             </div>
-                            <div class="p-2 text-[10px] text-white font-bold truncate text-center">${g.game_name || g.name}</div>
+                            <div class="p-2 text-[10px] text-white font-bold truncate text-center">${title}</div>
                         </div>
                     `}).join('');
+                } else {
+                    if(grid) grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-5">Aucun jeu trouvé.</div>';
                 }
-            } catch(e) {}
+            } catch(e) {
+                if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-5">Erreur de connexion ❌</div>';
+            }
         }
-
-        let smplCasinoProviders = [];
         
         async function initCasinoLobby() {
             const bar = document.getElementById('providers-bar');
@@ -584,7 +600,6 @@ async function loadProviderGames(providerCode) {
             const grid = document.getElementById('games-grid');
             if(grid) grid.innerHTML = '<div class="col-span-full text-emerald text-center py-10 animate-pulse text-lg font-bold">Chargement des jeux... 🎰</div>';
             
-            // تلوين الزر النشط
             document.querySelectorAll('.casino-prov-btn').forEach(btn => {
                 btn.classList.remove('border-emerald', 'text-white', 'bg-[#212631]');
                 btn.classList.add('border-[#212631]', 'text-gray-300', 'bg-[#1a1e29]');
@@ -603,7 +618,6 @@ async function loadProviderGames(providerCode) {
                 const data = await res.json();
                 let games = data.games || data.data || [];
                 
-                // 🌟 السحر هنا: قلب القائمة لتظهر الألعاب الجديدة في المقدمة!
                 if (games.length > 0) {
                     games = games.reverse(); 
                 }
@@ -612,12 +626,16 @@ async function loadProviderGames(providerCode) {
                     grid.innerHTML = games.slice(0, 60).map(g => {
                         const code = g.uuid || g.game_uuid || g.id; 
                         const title = g.game_name || g.name || "Game";
-                        const img = g.banner || g.image || g.thumb || "https://placehold.co/400x400/180A2B/FFF";
+                        
+                        // 🌟 اصطياد الصورة وتوليد صورة بديلة باسم اللعبة
+                        let img = g.image || g.icon || g.banner || g.thumb || g.thumbnail || g.url_thumb;
+                        const fallbackImg = `https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}`;
+                        if(!img || img === "") img = fallbackImg;
                         
                         return `
                         <div onclick="playSMPLGame('${code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg">
-                            <div class="relative w-full aspect-square overflow-hidden bg-black/50">
-                                <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/180A2B/FFF'">
+                            <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
+                                <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='${fallbackImg}';">
                                 <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
                                     <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
                                 </div>
@@ -632,7 +650,8 @@ async function loadProviderGames(providerCode) {
                 if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de chargement</div>';
             }
         }
-async function playSMPLGame(gameUuid) {
+        
+        async function playSMPLGame(gameUuid) {
             if(!playerSession) return openLoginModal();
             document.getElementById('casino-iframe-container').classList.remove('hidden');
             document.getElementById('casino-iframe-container').classList.add('flex');
