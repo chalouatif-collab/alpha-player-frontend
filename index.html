@@ -1,25 +1,53 @@
 <!DOCTYPE html>
 <html lang="fr" dir="ltr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alphabet216 | Premium Casino & Sports</title>
     <!-- مكتبات التصميم -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- مكتبة عرض الرياضة SMPL -->
     <script src="https://ui.invisiblesport.com/bt-renderer.min.js"></script>
-    
+
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0f1117; color: #94a3b8; }
-        .bg-panel { background-color: #161922; border: 1px solid #212631; }
-        .text-emerald { color: #10b981; } .bg-emerald { background-color: #10b981; color: #000; }
-        .hide-scroll::-webkit-scrollbar { display: none; }
-        .player-view-section { display: none; }
-        .player-view-section.block { display: block; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0f1117;
+            color: #94a3b8;
+        }
+
+        .bg-panel {
+            background-color: #161922;
+            border: 1px solid #212631;
+        }
+
+        .text-emerald {
+            color: #10b981;
+        }
+
+        .bg-emerald {
+            background-color: #10b981;
+            color: #000;
+        }
+
+        .hide-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .player-view-section {
+            display: none;
+        }
+
+        .player-view-section.block {
+            display: block;
+        }
     </style>
 </head>
+
 <body class="antialiased text-sm flex flex-col min-h-screen">
 
     <!-- 1. الشريط العلوي (الرصيد وتسجيل الدخول) -->
@@ -27,27 +55,36 @@
         <div class="max-w-[1700px] mx-auto px-4 h-18 flex justify-between items-center py-3">
             <div class="flex items-center gap-6">
                 <div class="flex items-center gap-2 cursor-pointer" onclick="switchSection('accueil')">
-                    <div class="w-9 h-9 rounded-xl bg-emerald flex items-center justify-center text-black font-black text-xl shadow-md"><i class="fas fa-bolt"></i></div>
-                    <span class="font-extrabold text-2xl tracking-tight text-white">Alphabet<span class="text-emerald">216</span></span>
+                    <div
+                        class="w-9 h-9 rounded-xl bg-emerald flex items-center justify-center text-black font-black text-xl shadow-md">
+                        <i class="fas fa-bolt"></i></div>
+                    <span class="font-extrabold text-2xl tracking-tight text-white">Alphabet<span
+                            class="text-emerald">216</span></span>
                 </div>
             </div>
 
             <!-- أزرار الدخول أو رصيد اللاعب -->
             <div class="flex items-center gap-3">
                 <div id="auth-buttons-container" class="flex items-center gap-2">
-                    <button onclick="openLoginModal()" class="text-xs font-bold text-gray-300 hover:text-white uppercase px-3 py-2">Connexion</button>
-                    <button onclick="openRegisterModal()" class="bg-emerald text-black font-extrabold text-xs uppercase px-4 py-2 rounded-xl transition">S'inscrire</button>
+                    <button onclick="openLoginModal()"
+                        class="text-xs font-bold text-gray-300 hover:text-white uppercase px-3 py-2">Connexion</button>
+                    <button onclick="openRegisterModal()"
+                        class="bg-emerald text-black font-extrabold text-xs uppercase px-4 py-2 rounded-xl transition">S'inscrire</button>
                 </div>
 
                 <div id="top-user-profile" class="hidden items-center gap-3">
                     <div class="bg-[#0f1117] border border-[#212631] rounded-xl p-1 px-3 flex items-center gap-4">
                         <div>
-                            <span class="text-[9px] text-gray-500 font-bold uppercase block" id="player-name-display">User</span>
-                            <span class="font-bold text-emerald text-xs"><span id="player-balance-val">0.00</span> TND</span>
+                            <span class="text-[9px] text-gray-500 font-bold uppercase block"
+                                id="player-name-display">User</span>
+                            <span class="font-bold text-emerald text-xs"><span id="player-balance-val">0.00</span>
+                                TND</span>
                         </div>
                     </div>
-                    <button onclick="toggleCashier()" class="bg-emerald hover:bg-emerald-600 text-black font-extrabold uppercase text-xs px-5 py-2.5 rounded-xl transition shadow-lg hidden sm:block">Dépôt</button>
-                    <div onclick="logoutPlayer()" class="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-500 hover:text-white hover:bg-red-500 cursor-pointer transition">
+                    <button onclick="toggleCashier()"
+                        class="bg-emerald hover:bg-emerald-600 text-black font-extrabold uppercase text-xs px-5 py-2.5 rounded-xl transition shadow-lg hidden sm:block">Dépôt</button>
+                    <div onclick="logoutPlayer()"
+                        class="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-500 hover:text-white hover:bg-red-500 cursor-pointer transition">
                         <i class="fas fa-sign-out-alt"></i>
                     </div>
                 </div>
@@ -58,73 +95,108 @@
     <!-- 2. شريط التصنيفات السريع (الأزرار المطلوبة) -->
     <div class="bg-[#12151d] border-b border-[#212631] py-2.5">
         <div class="max-w-[1700px] mx-auto px-4 flex gap-2 overflow-x-auto text-xs font-bold text-gray-300 hide-scroll">
-            <button onclick="switchSection('accueil')" class="bg-[#1a1e29] hover:bg-[#212631] px-4 py-1.5 rounded-xl border border-[#2e3648] flex items-center gap-2 flex-shrink-0"><i class="fas fa-home"></i> Accueil</button>
-            <button onclick="openSportsbookForProvider('nexus')" class="bg-emerald text-black px-4 py-1.5 rounded-xl flex items-center gap-2 flex-shrink-0 shadow"><i class="fas fa-futbol"></i> Sportsbook</button>
-            <button onclick="switchSection('casino'); initCasinoLobby();" class="bg-[#1a1e29] hover:bg-[#212631] px-4 py-1.5 rounded-xl border border-[#2e3648] flex items-center gap-2 flex-shrink-0"><i class="fas fa-slot-machine text-emerald"></i> Slots</button>
-            <button onclick="switchSection('live-casino'); openLiveCasino();" class="bg-[#1a1e29] hover:bg-[#212631] px-4 py-1.5 rounded-xl border border-[#2e3648] flex items-center gap-2 flex-shrink-0"><i class="fas fa-video text-red-500"></i> Casino Live</button>
-            <button onclick="switchSection('virtuals'); initVirtualsLobby();" class="bg-[#1a1e29] hover:bg-[#212631] px-4 py-1.5 rounded-xl border border-[#2e3648] flex items-center gap-2 flex-shrink-0"><i class="fas fa-gamepad text-blue-400"></i> Virtuels</button>
-            <button onclick="playCasinoGame('SPRIBE', 'aviator')" class="bg-[#1a1e29] hover:bg-[#212631] px-4 py-1.5 rounded-xl border border-red-500/30 flex items-center gap-2 flex-shrink-0 text-white"><i class="fas fa-plane text-red-500"></i> Aviator</button>
+            <button onclick="switchSection('accueil')"
+                class="bg-[#1a1e29] hover:bg-[#212631] px-4 py-1.5 rounded-xl border border-[#2e3648] flex items-center gap-2 flex-shrink-0"><i
+                    class="fas fa-home"></i> Accueil</button>
+            <button onclick="openSportsbookForProvider('nexus')"
+                class="bg-emerald text-black px-4 py-1.5 rounded-xl flex items-center gap-2 flex-shrink-0 shadow"><i
+                    class="fas fa-futbol"></i> Sportsbook</button>
+            <button onclick="switchSection('casino'); initCasinoLobby();"
+                class="bg-[#1a1e29] hover:bg-[#212631] px-4 py-1.5 rounded-xl border border-[#2e3648] flex items-center gap-2 flex-shrink-0"><i
+                    class="fas fa-slot-machine text-emerald"></i> Slots</button>
+            <button onclick="switchSection('live-casino'); openLiveCasino();"
+                class="bg-[#1a1e29] hover:bg-[#212631] px-4 py-1.5 rounded-xl border border-[#2e3648] flex items-center gap-2 flex-shrink-0"><i
+                    class="fas fa-video text-red-500"></i> Casino Live</button>
+            <button onclick="switchSection('virtuals'); initVirtualsLobby();"
+                class="bg-[#1a1e29] hover:bg-[#212631] px-4 py-1.5 rounded-xl border border-[#2e3648] flex items-center gap-2 flex-shrink-0"><i
+                    class="fas fa-gamepad text-blue-400"></i> Virtuels</button>
+            <button onclick="playCasinoGame('SPRIBE', 'aviator')"
+                class="bg-[#1a1e29] hover:bg-[#212631] px-4 py-1.5 rounded-xl border border-red-500/30 flex items-center gap-2 flex-shrink-0 text-white"><i
+                    class="fas fa-plane text-red-500"></i> Aviator</button>
         </div>
     </div>
 
     <!-- 3. المحتوى الرئيسي للمنصة -->
     <main class="max-w-[1700px] mx-auto px-4 py-6 w-full flex-grow flex flex-col xl:flex-row gap-6">
-        
+
         <!-- LEFT: Sidebar Menu (Desktop) -->
         <div class="w-full xl:w-[20%] sticky-column hidden xl:flex flex-col gap-4">
             <div class="bg-panel rounded-2xl p-4 space-y-2 text-xs font-semibold">
-                <a href="javascript:void(0)" onclick="openSportsbookForProvider('nexus');" class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-white transition border border-emerald/30 bg-emerald/10"><i class="fas fa-futbol text-emerald text-lg"></i> Sports Betting</a>
-                <a href="javascript:void(0)" onclick="switchSection('casino'); initCasinoLobby();" class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i class="fas fa-slot-machine text-emerald text-lg"></i> Casino & Slots</a>
-                <a href="javascript:void(0)" onclick="switchSection('live-casino'); openLiveCasino();" class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i class="fas fa-video text-red-500 text-lg"></i> Live Casino</a>
-                <a href="javascript:void(0)" onclick="switchSection('virtuals'); initVirtualsLobby();" class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i class="fas fa-gamepad text-blue-400 text-lg"></i> Jeux Virtuels</a>
+                <a href="javascript:void(0)" onclick="openSportsbookForProvider('nexus');"
+                    class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-white transition border border-emerald/30 bg-emerald/10"><i
+                        class="fas fa-futbol text-emerald text-lg"></i> Sports Betting</a>
+                <a href="javascript:void(0)" onclick="switchSection('casino'); initCasinoLobby();"
+                    class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
+                        class="fas fa-slot-machine text-emerald text-lg"></i> Casino & Slots</a>
+                <a href="javascript:void(0)" onclick="switchSection('live-casino'); openLiveCasino();"
+                    class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
+                        class="fas fa-video text-red-500 text-lg"></i> Live Casino</a>
+                <a href="javascript:void(0)" onclick="switchSection('virtuals'); initVirtualsLobby();"
+                    class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
+                        class="fas fa-gamepad text-blue-400 text-lg"></i> Jeux Virtuels</a>
             </div>
 
             <!-- Ad Widget -->
-            <div class="bg-gradient-to-br from-[#1b2230] to-[#161922] border border-yellow-500/30 rounded-2xl p-4 text-center">
+            <div
+                class="bg-gradient-to-br from-[#1b2230] to-[#161922] border border-yellow-500/30 rounded-2xl p-4 text-center">
                 <h4 class="font-bold text-yellow-500 text-sm mt-2 mb-1">JACKPOT DROP</h4>
-                <p class="text-[11px] text-gray-400 mb-2">Gagnez jusqu'à <span class="text-white font-bold">124,567</span> TND</p>
-                <button class="w-full bg-yellow-500 text-black font-extrabold text-xs py-2 rounded-xl transition shadow">Participer</button>
+                <p class="text-[11px] text-gray-400 mb-2">Gagnez jusqu'à <span
+                        class="text-white font-bold">124,567</span> TND</p>
+                <button
+                    class="w-full bg-yellow-500 text-black font-extrabold text-xs py-2 rounded-xl transition shadow">Participer</button>
             </div>
         </div>
 
         <!-- CENTER: Dynamic Content Area (Panes) -->
         <div class="w-full xl:w-[55%] space-y-6">
-            
+
             <!-- PANE: ACCUEIL (الصفحة الرئيسية) -->
             <div id="pane-accueil" class="player-view-section block space-y-6 w-full">
-                <div class="bg-panel rounded-2xl p-6 relative overflow-hidden flex items-center justify-between border border-emerald/30">
+                <div
+                    class="bg-panel rounded-2xl p-6 relative overflow-hidden flex items-center justify-between border border-emerald/30">
                     <div class="relative z-10 max-w-md">
-                        <span class="bg-emerald/10 text-emerald text-[10px] font-black uppercase px-2.5 py-1 rounded-md mb-3 inline-block">Mega Bonus</span>
+                        <span
+                            class="bg-emerald/10 text-emerald text-[10px] font-black uppercase px-2.5 py-1 rounded-md mb-3 inline-block">Mega
+                            Bonus</span>
                         <h2 class="text-3xl font-bold text-white mb-2">200% de Bonus Bienvenue</h2>
                         <p class="text-xs text-gray-400 mb-4">Jouez sur vos sports et slots préférés.</p>
-                        <button onclick="openRegisterModal()" class="bg-emerald text-black font-bold text-xs uppercase px-5 py-2.5 rounded-xl hover:bg-emerald-600 mt-2">Réclamer</button>
+                        <button onclick="openRegisterModal()"
+                            class="bg-emerald text-black font-bold text-xs uppercase px-5 py-2.5 rounded-xl hover:bg-emerald-600 mt-2">Réclamer</button>
                     </div>
                     <i class="fas fa-gift text-7xl text-emerald/20 hidden md:block"></i>
                 </div>
                 <div>
-                    <h3 class="font-bold text-white uppercase text-xs tracking-wider mb-3"><i class="fas fa-star text-emerald"></i> Sélection du Jour</h3>
+                    <h3 class="font-bold text-white uppercase text-xs tracking-wider mb-3"><i
+                            class="fas fa-star text-emerald"></i> Sélection du Jour</h3>
                     <div id="games-of-the-day-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
                 </div>
             </div>
 
             <!-- PANE: SPORTSBOOK (يفتح هنا في الواجهة مباشرة!) -->
             <div id="pane-sport" class="player-view-section hidden w-full">
-                <div class="bg-panel rounded-2xl border border-[#212631] w-full min-h-[700px] relative overflow-hidden flex flex-col">
+                <div
+                    class="bg-panel rounded-2xl border border-[#212631] w-full min-h-[700px] relative overflow-hidden flex flex-col">
                     <div class="p-3 bg-[#12151d] border-b border-[#212631] flex justify-between items-center">
-                        <h3 class="text-white font-bold text-sm"><i class="fas fa-futbol text-emerald"></i> Sportsbook</h3>
-                        <button onclick="switchSection('accueil')" class="text-gray-400 hover:text-white text-xs bg-[#212631] px-3 py-1 rounded"><i class="fas fa-times"></i> Fermer</button>
+                        <h3 class="text-white font-bold text-sm"><i class="fas fa-futbol text-emerald"></i> Sportsbook
+                        </h3>
+                        <button onclick="switchSection('accueil')"
+                            class="text-gray-400 hover:text-white text-xs bg-[#212631] px-3 py-1 rounded"><i
+                                class="fas fa-times"></i> Fermer</button>
                     </div>
-                    
-                    <div id="casino-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0f1117] z-[5] hidden">
+
+                    <div id="casino-loader"
+                        class="absolute inset-0 flex flex-col items-center justify-center bg-[#0f1117] z-[5] hidden">
                         <i class="fas fa-futbol text-4xl text-emerald animate-bounce mb-3"></i>
                         <span class="text-emerald font-bold tracking-widest text-xs">CHARGEMENT DU SPORT...</span>
                     </div>
-                    
-                    <iframe id="sportsbook-iframe" class="w-full flex-grow border-0 relative z-10 hidden" style="min-height: 700px;"></iframe>
-                    <div id="bettech" class="w-full flex-grow relative z-10 hidden bg-[#0f1117]" style="min-height: 700px;"></div>
+
+                    <iframe id="sportsbook-iframe" class="w-full flex-grow border-0 relative z-10 hidden"
+                        style="min-height: 700px;"></iframe>
+                    <div id="bettech" class="w-full flex-grow relative z-10 hidden bg-[#0f1117]"
+                        style="min-height: 700px;"></div>
                 </div>
             </div>
-<!-- PANE: CASINO -->
+            <!-- PANE: CASINO -->
             <div id="pane-casino" class="player-view-section hidden w-full">
                 <div class="flex items-center gap-2 mb-4">
                     <i class="fas fa-slot-machine text-2xl text-emerald"></i>
@@ -136,62 +208,74 @@
                     <!-- 1. البحث عن الألعاب -->
                     <div class="relative flex-1">
                         <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                        <input type="text" id="game-search-input" onkeyup="filterGames()" placeholder="Rechercher un jeu (ex: Sweet Bonanza)..." class="w-full bg-[#161922] border border-[#212631] rounded-xl py-3 pl-11 pr-4 text-white text-sm outline-none focus:border-emerald transition-all shadow-md font-bold">
+                        <input type="text" id="game-search-input" onkeyup="filterGames()"
+                            placeholder="Rechercher un jeu (ex: Sweet Bonanza)..."
+                            class="w-full bg-[#161922] border border-[#212631] rounded-xl py-3 pl-11 pr-4 text-white text-sm outline-none focus:border-emerald transition-all shadow-md font-bold">
                     </div>
-                    
-                    <!-- 2. زر وقائمة المزودين -->
-                    <div class="relative">
-                        <button onclick="toggleProviderDropdown()" class="w-full md:w-auto bg-[#161922] border border-[#212631] hover:border-emerald px-6 py-3 rounded-xl text-sm font-bold text-gray-300 hover:text-white flex items-center justify-between gap-4 transition-all shadow-md">
-                            <span class="flex items-center gap-2"><i class="fas fa-filter text-emerald"></i> <span id="current-provider-label">Fournisseurs</span></span>
-                            <i class="fas fa-chevron-down text-xs text-gray-500"></i>
-                        </button>
-                        
-                        <!-- القائمة المنسدلة (Dropdown) -->
-                        <div id="provider-dropdown" class="absolute right-0 top-full mt-2 w-full md:w-72 bg-[#161922] border border-[#212631] rounded-xl shadow-2xl hidden flex-col overflow-hidden z-50">
-                            <!-- بحث المزودين -->
-                            <div class="p-3 border-b border-[#212631] bg-[#0f1117]">
-                                <div class="relative">
-                                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs"></i>
-                                    <input type="text" id="provider-search-input" onkeyup="filterProviders()" placeholder="Chercher un fournisseur..." class="w-full bg-[#1a1e29] border border-[#212631] rounded-lg py-2 pl-9 pr-3 text-white text-xs outline-none focus:border-emerald">
-                                </div>
+                    <!-- هذا هو الشريط الذي كان مفقوداً! 👇 -->
+                    <div id="providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4"></div>
+
+                    <div id="games-grid"
+                        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10"></div>
+                </div>
+                <!-- 2. زر وقائمة المزودين -->
+                <div class="relative">
+                    <button onclick="toggleProviderDropdown()"
+                        class="w-full md:w-auto bg-[#161922] border border-[#212631] hover:border-emerald px-6 py-3 rounded-xl text-sm font-bold text-gray-300 hover:text-white flex items-center justify-between gap-4 transition-all shadow-md">
+                        <span class="flex items-center gap-2"><i class="fas fa-filter text-emerald"></i> <span
+                                id="current-provider-label">Fournisseurs</span></span>
+                        <i class="fas fa-chevron-down text-xs text-gray-500"></i>
+                    </button>
+
+                    <!-- القائمة المنسدلة (Dropdown) -->
+                    <div id="provider-dropdown"
+                        class="absolute right-0 top-full mt-2 w-full md:w-72 bg-[#161922] border border-[#212631] rounded-xl shadow-2xl hidden flex-col overflow-hidden z-50">
+                        <!-- بحث المزودين -->
+                        <div class="p-3 border-b border-[#212631] bg-[#0f1117]">
+                            <div class="relative">
+                                <i
+                                    class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs"></i>
+                                <input type="text" id="provider-search-input" onkeyup="filterProviders()"
+                                    placeholder="Chercher un fournisseur..."
+                                    class="w-full bg-[#1a1e29] border border-[#212631] rounded-lg py-2 pl-9 pr-3 text-white text-xs outline-none focus:border-emerald">
                             </div>
-                            <!-- قائمة المزودين -->
-                            <div id="provider-dropdown-list" class="max-h-[300px] overflow-y-auto hide-scroll p-2 flex flex-col gap-1 bg-[#161922]">
-                                <!-- سيتم وضع المزودين هنا برمجياً -->
-                            </div>
+                        </div>
+                        <!-- قائمة المزودين -->
+                        <div id="provider-dropdown-list"
+                            class="max-h-[300px] overflow-y-auto hide-scroll p-2 flex flex-col gap-1 bg-[#161922]">
+                            <!-- سيتم وضع المزودين هنا برمجياً -->
                         </div>
                     </div>
                 </div>
-                
-                <!-- شبكة الألعاب -->
-                <div id="games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10"></div>
             </div>
-                <!-- هذا هو الشريط الذي كان مفقوداً! 👇 -->
-                <div id="providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4"></div>
-                
-                <div id="games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10"></div>
+
+            <!-- شبكة الألعاب -->
+            <div id="games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10">
             </div>
-            
-            <!-- PANE: LIVE CASINO -->
-            <div id="pane-live-casino" class="player-view-section hidden w-full">
-                <div class="flex items-center gap-2 mb-2">
-                    <i class="fas fa-video text-xl text-red-500"></i>
-                    <h2 class="text-white font-bold text-lg">Live Casino</h2>
-                </div>
-                <!-- وهذا شريط اللايف كازينو! 👇 -->
-                <div id="live-providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4"></div>
-                
-                <div id="live-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10"></div>
+        </div>
+
+
+        <!-- PANE: LIVE CASINO -->
+        <div id="pane-live-casino" class="player-view-section hidden w-full">
+            <div class="flex items-center gap-2 mb-2">
+                <i class="fas fa-video text-xl text-red-500"></i>
+                <h2 class="text-white font-bold text-lg">Live Casino</h2>
             </div>
-            
-            <!-- PANE: VIRTUALS -->
-            <div id="pane-virtuals" class="player-view-section hidden w-full">
-                <div class="flex items-center gap-2 mb-4">
-                    <i class="fas fa-gamepad text-xl text-blue-400"></i>
-                    <h2 class="text-white font-bold text-lg">Jeux Virtuels</h2>
-                </div>
-                <div id="virtuals-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pb-10"></div>
+            <!-- وهذا شريط اللايف كازينو! 👇 -->
+            <div id="live-providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4"></div>
+
+            <div id="live-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10">
             </div>
+        </div>
+
+        <!-- PANE: VIRTUALS -->
+        <div id="pane-virtuals" class="player-view-section hidden w-full">
+            <div class="flex items-center gap-2 mb-4">
+                <i class="fas fa-gamepad text-xl text-blue-400"></i>
+                <h2 class="text-white font-bold text-lg">Jeux Virtuels</h2>
+            </div>
+            <div id="virtuals-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pb-10"></div>
+        </div>
 
         </div>
 
@@ -200,7 +284,8 @@
             <div class="bg-panel rounded-2xl p-5 border-t-4 border-t-emerald shadow-lg">
                 <div class="flex justify-between items-center mb-4 pb-2 border-b border-[#212631]">
                     <h3 class="font-bold text-white uppercase text-xs">Coupon de Pari</h3>
-                    <span id="ticket-count-badge" class="bg-emerald text-black font-extrabold text-[10px] px-2 py-0.5 rounded-md">0</span>
+                    <span id="ticket-count-badge"
+                        class="bg-emerald text-black font-extrabold text-[10px] px-2 py-0.5 rounded-md">0</span>
                 </div>
 
                 <div id="ticket-odds-box" class="max-h-[300px] overflow-y-auto hide-scroll mb-4">
@@ -213,7 +298,9 @@
                         <span id="ticket-total-odds" class="text-white">1.00</span>
                     </div>
                     <div>
-                        <input type="number" id="ticket-stake-input" value="10" class="w-full bg-[#0f1117] border border-[#2e3648] p-2.5 rounded-xl text-white font-bold text-xs outline-none focus:border-emerald" placeholder="Mise (TND)">
+                        <input type="number" id="ticket-stake-input" value="10"
+                            class="w-full bg-[#0f1117] border border-[#2e3648] p-2.5 rounded-xl text-white font-bold text-xs outline-none focus:border-emerald"
+                            placeholder="Mise (TND)">
                     </div>
                     <div class="flex justify-between text-xs font-bold pt-2">
                         <span class="text-gray-400">Gains Potentiels:</span>
@@ -221,7 +308,8 @@
                     </div>
                 </div>
 
-                <button class="w-full bg-emerald hover:bg-emerald-600 text-black font-extrabold uppercase text-xs py-3.5 rounded-xl transition shadow-lg">
+                <button
+                    class="w-full bg-emerald hover:bg-emerald-600 text-black font-extrabold uppercase text-xs py-3.5 rounded-xl transition shadow-lg">
                     Placer le Pari
                 </button>
             </div>
@@ -230,78 +318,110 @@
     </main>
 
     <!-- ================= CAISSE (DÉPÔT & RETRAIT) MODAL ================= -->
-    <div id="cashier-modal" class="fixed inset-0 z-[400] hidden bg-black/80 backdrop-blur-md items-center justify-center p-4">
-        <div class="bg-[#161922] border border-[#212631] rounded-3xl w-full max-w-md p-6 relative shadow-2xl max-h-[90vh] overflow-y-auto hide-scroll">
-            <button onclick="toggleCashier()" class="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-3xl">&times;</button>
-            <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2"><i class="fas fa-wallet text-emerald"></i> Caisse</h2>
+    <div id="cashier-modal"
+        class="fixed inset-0 z-[400] hidden bg-black/80 backdrop-blur-md items-center justify-center p-4">
+        <div
+            class="bg-[#161922] border border-[#212631] rounded-3xl w-full max-w-md p-6 relative shadow-2xl max-h-[90vh] overflow-y-auto hide-scroll">
+            <button onclick="toggleCashier()"
+                class="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-3xl">&times;</button>
+            <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2"><i
+                    class="fas fa-wallet text-emerald"></i> Caisse</h2>
 
             <div class="flex gap-2 mb-6 bg-[#0f1117] p-1 rounded-xl border border-[#212631]">
-                <button onclick="switchCashierTab('deposit')" id="tab-deposit" class="flex-1 bg-emerald text-black font-bold py-2 rounded-lg text-xs transition-all shadow-md">Dépôt</button>
-                <button onclick="switchCashierTab('withdraw')" id="tab-withdraw" class="flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all">Retrait</button>
+                <button onclick="switchCashierTab('deposit')" id="tab-deposit"
+                    class="flex-1 bg-emerald text-black font-bold py-2 rounded-lg text-xs transition-all shadow-md">Dépôt</button>
+                <button onclick="switchCashierTab('withdraw')" id="tab-withdraw"
+                    class="flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all">Retrait</button>
             </div>
 
             <!-- SECTION DÉPÔT -->
             <div id="deposit-section" class="space-y-4">
                 <label class="text-xs text-gray-400 font-bold">Choisissez la méthode:</label>
                 <div id="payment-methods-grid" class="grid grid-cols-2 gap-3">
-                    <button onclick="showForm('form-voucher')" class="bg-[#0f1117] border border-[#212631] hover:border-emerald p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
-                        <span class="text-2xl text-yellow-500">🎟️</span><span class="text-[10px] font-bold text-white">Code Voucher</span>
+                    <button onclick="showForm('form-voucher')"
+                        class="bg-[#0f1117] border border-[#212631] hover:border-emerald p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
+                        <span class="text-2xl text-yellow-500">🎟️</span><span
+                            class="text-[10px] font-bold text-white">Code Voucher</span>
                     </button>
-                    <button onclick="showForm('form-usdt')" class="bg-[#0f1117] border border-[#212631] hover:border-emerald p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
-                        <span class="text-2xl text-green-400">💎</span><span class="text-[10px] font-bold text-white">USDT (Crypto)</span>
+                    <button onclick="showForm('form-usdt')"
+                        class="bg-[#0f1117] border border-[#212631] hover:border-emerald p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
+                        <span class="text-2xl text-green-400">💎</span><span
+                            class="text-[10px] font-bold text-white">USDT (Crypto)</span>
                     </button>
-                    <button onclick="showForm('form-ooredoo')" class="bg-[#0f1117] border border-[#212631] hover:border-red-500 p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
-                        <span class="text-2xl text-red-500 font-black">Ooredoo</span><span class="text-[10px] font-bold text-white">Recharge</span>
+                    <button onclick="showForm('form-ooredoo')"
+                        class="bg-[#0f1117] border border-[#212631] hover:border-red-500 p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
+                        <span class="text-2xl text-red-500 font-black">Ooredoo</span><span
+                            class="text-[10px] font-bold text-white">Recharge</span>
                     </button>
-                    <button onclick="showForm('form-orange')" class="bg-[#0f1117] border border-[#212631] hover:border-orange-500 p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
-                        <span class="text-2xl text-orange-500 font-black">Orange</span><span class="text-[10px] font-bold text-white">Recharge</span>
+                    <button onclick="showForm('form-orange')"
+                        class="bg-[#0f1117] border border-[#212631] hover:border-orange-500 p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
+                        <span class="text-2xl text-orange-500 font-black">Orange</span><span
+                            class="text-[10px] font-bold text-white">Recharge</span>
                     </button>
                 </div>
 
                 <div id="form-voucher" class="hidden space-y-3 mt-4">
-                    <input type="text" id="voucher-code" placeholder="Entrez le code Voucher" class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-3 text-white text-sm outline-none focus:border-emerald font-mono text-center tracking-widest">
+                    <input type="text" id="voucher-code" placeholder="Entrez le code Voucher"
+                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-3 text-white text-sm outline-none focus:border-emerald font-mono text-center tracking-widest">
                     <div class="flex gap-2 mt-2">
-                        <button onclick="backToMethods()" class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2">Retour</button>
-                        <button onclick="submitDeposit('voucher')" class="flex-1 bg-emerald text-black font-bold rounded-lg py-2">Valider</button>
+                        <button onclick="backToMethods()"
+                            class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2">Retour</button>
+                        <button onclick="submitDeposit('voucher')"
+                            class="flex-1 bg-emerald text-black font-bold rounded-lg py-2">Valider</button>
                     </div>
                 </div>
 
                 <div id="form-usdt" class="hidden space-y-3 mt-4">
                     <div class="bg-[#0f1117] p-3 rounded-lg border border-emerald/30 text-center">
                         <p class="text-xs text-gray-400 mb-1">Adresse USDT (TRC20) :</p>
-                        <p class="text-xs font-bold text-emerald break-all font-mono">TVXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</p>
+                        <p class="text-xs font-bold text-emerald break-all font-mono">TVXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                        </p>
                     </div>
-                    <label class="block w-full bg-[#0f1117] border border-[#212631] border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-emerald transition-all">
+                    <label
+                        class="block w-full bg-[#0f1117] border border-[#212631] border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-emerald transition-all">
                         <span class="text-sm text-gray-300">📸 Importer le reçu</span>
-                        <input type="file" id="usdt-file" accept="image/*" class="hidden" onchange="updateFileName('usdt')">
+                        <input type="file" id="usdt-file" accept="image/*" class="hidden"
+                            onchange="updateFileName('usdt')">
                     </label>
                     <div class="flex gap-2 mt-2">
-                        <button onclick="backToMethods()" class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2">Retour</button>
-                        <button onclick="submitDeposit('usdt')" class="flex-1 bg-emerald text-black font-bold rounded-lg py-2">Confirmer</button>
+                        <button onclick="backToMethods()"
+                            class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2">Retour</button>
+                        <button onclick="submitDeposit('usdt')"
+                            class="flex-1 bg-emerald text-black font-bold rounded-lg py-2">Confirmer</button>
                     </div>
                 </div>
 
                 <div id="form-ooredoo" class="hidden space-y-3 mt-4">
-                    <input type="number" id="ooredoo-code" placeholder="Code Ooredoo (14 chiffres)" class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-3 text-white text-sm outline-none focus:border-red-500">
-                    <label class="block w-full bg-[#0f1117] border border-[#212631] border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-red-500 transition-all">
+                    <input type="number" id="ooredoo-code" placeholder="Code Ooredoo (14 chiffres)"
+                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-3 text-white text-sm outline-none focus:border-red-500">
+                    <label
+                        class="block w-full bg-[#0f1117] border border-[#212631] border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-red-500 transition-all">
                         <span class="text-sm text-gray-300">📸 Capture d'écran</span>
-                        <input type="file" id="ooredoo-file" accept="image/*" class="hidden" onchange="updateFileName('ooredoo')">
+                        <input type="file" id="ooredoo-file" accept="image/*" class="hidden"
+                            onchange="updateFileName('ooredoo')">
                     </label>
                     <div class="flex gap-2 mt-2">
-                        <button onclick="backToMethods()" class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2">Retour</button>
-                        <button onclick="submitDeposit('ooredoo')" class="flex-1 bg-red-600 text-white font-bold rounded-lg py-2">Confirmer</button>
+                        <button onclick="backToMethods()"
+                            class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2">Retour</button>
+                        <button onclick="submitDeposit('ooredoo')"
+                            class="flex-1 bg-red-600 text-white font-bold rounded-lg py-2">Confirmer</button>
                     </div>
                 </div>
 
                 <div id="form-orange" class="hidden space-y-3 mt-4">
-                    <input type="number" id="orange-code" placeholder="Code Orange (14 chiffres)" class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-3 text-white text-sm outline-none focus:border-orange-500">
-                    <label class="block w-full bg-[#0f1117] border border-[#212631] border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-orange-500 transition-all">
+                    <input type="number" id="orange-code" placeholder="Code Orange (14 chiffres)"
+                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-3 text-white text-sm outline-none focus:border-orange-500">
+                    <label
+                        class="block w-full bg-[#0f1117] border border-[#212631] border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-orange-500 transition-all">
                         <span class="text-sm text-gray-300">📸 Capture d'écran</span>
-                        <input type="file" id="orange-file" accept="image/*" class="hidden" onchange="updateFileName('orange')">
+                        <input type="file" id="orange-file" accept="image/*" class="hidden"
+                            onchange="updateFileName('orange')">
                     </label>
                     <div class="flex gap-2 mt-2">
-                        <button onclick="backToMethods()" class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2">Retour</button>
-                        <button onclick="submitDeposit('orange')" class="flex-1 bg-orange-500 text-white font-bold rounded-lg py-2">Confirmer</button>
+                        <button onclick="backToMethods()"
+                            class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2">Retour</button>
+                        <button onclick="submitDeposit('orange')"
+                            class="flex-1 bg-orange-500 text-white font-bold rounded-lg py-2">Confirmer</button>
                     </div>
                 </div>
             </div>
@@ -314,24 +434,35 @@
                 </div>
                 <label class="text-xs text-gray-400 font-bold block">Méthode de retrait:</label>
                 <div class="grid grid-cols-2 gap-2 mb-4">
-                    <button onclick="showWithdrawForm('form-w-mandat')" class="bg-[#0f1117] border border-[#212631] hover:border-emerald p-2.5 rounded-xl flex flex-col items-center gap-1 transition-all">
-                        <span class="text-xl">💸</span><span class="text-[10px] font-bold text-white">Mandat Minute</span>
+                    <button onclick="showWithdrawForm('form-w-mandat')"
+                        class="bg-[#0f1117] border border-[#212631] hover:border-emerald p-2.5 rounded-xl flex flex-col items-center gap-1 transition-all">
+                        <span class="text-xl">💸</span><span class="text-[10px] font-bold text-white">Mandat
+                            Minute</span>
                     </button>
-                    <button onclick="showWithdrawForm('form-w-d17')" class="bg-[#0f1117] border border-[#212631] hover:border-emerald p-2.5 rounded-xl flex flex-col items-center gap-1 transition-all">
+                    <button onclick="showWithdrawForm('form-w-d17')"
+                        class="bg-[#0f1117] border border-[#212631] hover:border-emerald p-2.5 rounded-xl flex flex-col items-center gap-1 transition-all">
                         <span class="text-xl">📱</span><span class="text-[10px] font-bold text-white">D17</span>
                     </button>
                 </div>
                 <div id="form-w-d17" class="withdraw-form space-y-3 hidden">
-                    <input type="text" id="d17-nom" placeholder="Nom et Prénom" class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-2.5 text-white text-xs outline-none focus:border-emerald">
-                    <input type="tel" id="d17-phone" placeholder="Numéro D17" class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-2.5 text-white text-xs outline-none focus:border-emerald">
-                    <input type="number" id="d17-amount" placeholder="Montant (TND)" class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-2.5 text-white text-xs outline-none focus:border-emerald font-bold">
-                    <button onclick="submitWithdraw('d17')" class="w-full py-3 bg-emerald text-black font-bold rounded-xl hover:opacity-90 shadow-md">Confirmer</button>
+                    <input type="text" id="d17-nom" placeholder="Nom et Prénom"
+                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-2.5 text-white text-xs outline-none focus:border-emerald">
+                    <input type="tel" id="d17-phone" placeholder="Numéro D17"
+                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-2.5 text-white text-xs outline-none focus:border-emerald">
+                    <input type="number" id="d17-amount" placeholder="Montant (TND)"
+                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-2.5 text-white text-xs outline-none focus:border-emerald font-bold">
+                    <button onclick="submitWithdraw('d17')"
+                        class="w-full py-3 bg-emerald text-black font-bold rounded-xl hover:opacity-90 shadow-md">Confirmer</button>
                 </div>
                 <div id="form-w-mandat" class="withdraw-form space-y-3 hidden">
-                    <input type="text" id="mandat-nom" placeholder="Nom et Prénom" class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-2.5 text-white text-xs outline-none focus:border-emerald">
-                    <input type="tel" id="mandat-phone" placeholder="Numéro Téléphone" class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-2.5 text-white text-xs outline-none focus:border-emerald">
-                    <input type="number" id="mandat-amount" placeholder="Montant (TND)" class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-2.5 text-white text-xs outline-none focus:border-emerald font-bold">
-                    <button onclick="submitWithdraw('mandat')" class="w-full py-3 bg-emerald text-black font-bold rounded-xl hover:opacity-90 shadow-md">Confirmer</button>
+                    <input type="text" id="mandat-nom" placeholder="Nom et Prénom"
+                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-2.5 text-white text-xs outline-none focus:border-emerald">
+                    <input type="tel" id="mandat-phone" placeholder="Numéro Téléphone"
+                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-2.5 text-white text-xs outline-none focus:border-emerald">
+                    <input type="number" id="mandat-amount" placeholder="Montant (TND)"
+                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-2.5 text-white text-xs outline-none focus:border-emerald font-bold">
+                    <button onclick="submitWithdraw('mandat')"
+                        class="w-full py-3 bg-emerald text-black font-bold rounded-xl hover:opacity-90 shadow-md">Confirmer</button>
                 </div>
             </div>
         </div>
@@ -340,11 +471,15 @@
     <!-- Login Modal -->
     <div id="player-login-modal" class="fixed inset-0 z-[200] bg-black/80 hidden items-center justify-center p-4">
         <div class="w-full max-w-md bg-[#161922] border border-emerald/50 rounded-2xl p-8 relative">
-            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <button onclick="closeLoginModal()"
+                class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
             <h2 class="text-white text-2xl font-bold mb-6 text-center">Connexion</h2>
-            <input type="text" id="p-auth-username" placeholder="Nom d'utilisateur" class="w-full mb-3 p-3 rounded-xl bg-[#0f1117] border border-[#212631] text-white outline-none focus:border-emerald">
-            <input type="password" id="p-auth-password" placeholder="Mot de passe" class="w-full mb-4 p-3 rounded-xl bg-[#0f1117] border border-[#212631] text-white outline-none focus:border-emerald">
-            <button onclick="handlePlayerAuth()" class="w-full bg-emerald text-black font-bold p-3 rounded-xl">Entrer</button>
+            <input type="text" id="p-auth-username" placeholder="Nom d'utilisateur"
+                class="w-full mb-3 p-3 rounded-xl bg-[#0f1117] border border-[#212631] text-white outline-none focus:border-emerald">
+            <input type="password" id="p-auth-password" placeholder="Mot de passe"
+                class="w-full mb-4 p-3 rounded-xl bg-[#0f1117] border border-[#212631] text-white outline-none focus:border-emerald">
+            <button onclick="handlePlayerAuth()"
+                class="w-full bg-emerald text-black font-bold p-3 rounded-xl">Entrer</button>
         </div>
     </div>
 
@@ -360,10 +495,10 @@
     <!-- Toasts -->
     <div id="toast-container" class="fixed top-5 right-5 z-[500] flex flex-col gap-2 w-full max-w-sm px-4"></div>
 
-    
+
     <!-- ================= JAVASCRIPT (محرك الألفابت الشامل) ================= -->
     <script>
-// ================= دالة السحب بالماوس (Drag to Scroll) =================
+        // ================= دالة السحب بالماوس (Drag to Scroll) =================
         function enableMouseDragScroll(sliderId) {
             const slider = document.getElementById(sliderId);
             if (!slider) return;
@@ -409,7 +544,7 @@
             }
             switchSection('accueil');
             loadGamesOfTheDay();
-            
+
             // تشغيل لمسات الحيوية (الجاكبوت وشريط الفائزين)
             startRealJackpots();
             generateLiveWinnersTicker();
@@ -431,10 +566,10 @@
         // ================= 2. نظام الدخول والإشعارات (Auth & Notifications) =================
         function openLoginModal() { document.getElementById('player-login-modal').classList.remove('hidden'); document.getElementById('player-login-modal').classList.add('flex'); }
         function closeLoginModal() { document.getElementById('player-login-modal').classList.add('hidden'); document.getElementById('player-login-modal').classList.remove('flex'); }
-        
-        function showNotification(msg, type='success') {
+
+        function showNotification(msg, type = 'success') {
             const toast = document.createElement('div');
-            toast.className = `p-3 rounded-xl text-white text-xs font-bold ${type==='success'?'bg-emerald-600':'bg-red-600'} mb-2 shadow-lg transition-all border border-white/20`;
+            toast.className = `p-3 rounded-xl text-white text-xs font-bold ${type === 'success' ? 'bg-emerald-600' : 'bg-red-600'} mb-2 shadow-lg transition-all border border-white/20`;
             toast.innerText = msg;
             document.getElementById('toast-container').appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
@@ -443,33 +578,33 @@
         async function handlePlayerAuth() {
             const username = document.getElementById('p-auth-username').value.trim();
             const password = document.getElementById('p-auth-password').value;
-            if(!username || !password) return;
+            if (!username || !password) return;
             try {
                 const res = await fetch(`${BACKEND_URL}/api/login`, {
-                    method: 'POST', headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({username, password})
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
                 });
                 const data = await res.json();
-                if(res.ok) {
+                if (res.ok) {
                     playerSession = data;
                     localStorage.setItem('alpha_player_session', JSON.stringify(data));
                     localStorage.setItem('token', data.access_token);
                     setupLoggedInUI();
                     showNotification("Bienvenue ! 🟢");
                 } else showNotification(data.detail, 'error');
-            } catch(e) { showNotification("Erreur serveur", 'error'); }
+            } catch (e) { showNotification("Erreur serveur", 'error'); }
         }
 
         function setupLoggedInUI() {
             closeLoginModal();
             const authBtns = document.getElementById('auth-buttons-container');
-            if(authBtns) authBtns.classList.add('hidden');
+            if (authBtns) authBtns.classList.add('hidden');
             const userProfile = document.getElementById('top-user-profile');
-            if(userProfile) { userProfile.classList.remove('hidden'); userProfile.classList.add('flex'); }
-            
+            if (userProfile) { userProfile.classList.remove('hidden'); userProfile.classList.add('flex'); }
+
             const nameDisplay = document.getElementById('player-name-display');
-            if(nameDisplay) nameDisplay.innerText = playerSession.username;
-            
+            if (nameDisplay) nameDisplay.innerText = playerSession.username;
+
             refreshBalance();
             setInterval(refreshBalance, 5000);
         }
@@ -481,34 +616,34 @@
         }
 
         async function refreshBalance() {
-            if(!playerSession) return;
+            if (!playerSession) return;
             try {
                 const res = await fetch(`${BACKEND_URL}/gold_api`, {
-                    method: 'POST', headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({method: 'user_balance', user_code: playerSession.username})
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ method: 'user_balance', user_code: playerSession.username })
                 });
                 const data = await res.json();
-                if(data.user_balance !== undefined) {
+                if (data.user_balance !== undefined) {
                     playerSession.balance = data.user_balance;
                     document.getElementById('player-balance-val').innerText = parseFloat(data.user_balance).toFixed(2);
                 }
-            } catch(e){}
+            } catch (e) { }
         }
 
-        function getAuthHeaders() { return {'Authorization': `Bearer ${localStorage.getItem('token')}`, 'Content-Type': 'application/json'}; }
+        function getAuthHeaders() { return { 'Authorization': `Bearer ${localStorage.getItem('token')}`, 'Content-Type': 'application/json' }; }
 
         // ================= 3. المحركات (الرياضة، الكازينو، الافتراضي) =================
         async function openSportsbookForProvider(providerCode) {
             if (!playerSession) return openLoginModal();
             switchSection('sport');
-            
+
             const iframe = document.getElementById('sportsbook-iframe');
             const bettechContainer = document.getElementById('bettech');
-            const loader = document.getElementById('casino-loader'); 
-            
-            if(loader) loader.classList.remove('hidden');
-            if(iframe) iframe.classList.add('hidden');
-            if(bettechContainer) bettechContainer.classList.add('hidden');
+            const loader = document.getElementById('casino-loader');
+
+            if (loader) loader.classList.remove('hidden');
+            if (iframe) iframe.classList.add('hidden');
+            if (bettechContainer) bettechContainer.classList.add('hidden');
 
             try {
                 const response = await fetch(`${BACKEND_URL}/api/provider/launch-sportsbook`, {
@@ -518,9 +653,9 @@
                 const data = await response.json();
 
                 if (data.launch_url) {
-                    if(loader) loader.classList.add('hidden');
+                    if (loader) loader.classList.add('hidden');
                     if (providerCode === 'smpl') {
-                        if(bettechContainer) bettechContainer.classList.remove('hidden');
+                        if (bettechContainer) bettechContainer.classList.remove('hidden');
                         const htmlRes = await fetch(data.launch_url);
                         bettechContainer.innerHTML = await htmlRes.text();
                         Array.from(bettechContainer.querySelectorAll("script")).forEach(oldScript => {
@@ -530,41 +665,41 @@
                             oldScript.parentNode.replaceChild(newScript, oldScript);
                         });
                     } else {
-                        if(iframe) iframe.classList.remove('hidden');
+                        if (iframe) iframe.classList.remove('hidden');
                         iframe.src = data.launch_url;
                     }
                 } else {
-                    if(loader) loader.classList.add('hidden');
+                    if (loader) loader.classList.add('hidden');
                     showNotification("Sportsbook non disponible", "error");
                 }
-            } catch (error) { if(loader) loader.classList.add('hidden'); showNotification("Erreur réseau", "error"); }
+            } catch (error) { if (loader) loader.classList.add('hidden'); showNotification("Erreur réseau", "error"); }
         }
-// ================= 3. الكازينو والسلوتس (SMPL) =================
+        // ================= 3. الكازينو والسلوتس (SMPL) =================
         // الحماية القسوى: ربط المتغير بالويندو لمنع خطأ ReferenceError
         window.smplCasinoProviders = window.smplCasinoProviders || [];
-        
+
         async function loadGamesOfTheDay() {
             const grid = document.getElementById('games-of-the-day-grid');
-            if(grid) grid.innerHTML = '<div class="col-span-full text-emerald text-center py-5 animate-pulse">Chargement des jeux... ⏳</div>';
-            
+            if (grid) grid.innerHTML = '<div class="col-span-full text-emerald text-center py-5 animate-pulse">Chargement des jeux... ⏳</div>';
+
             try {
                 const res = await fetch(`${BACKEND_URL}/api/smpl/games-by-provider`, {
-                    method: 'POST', headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({provider_code: 'pragmatic'}) 
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider_code: 'pragmatic' })
                 });
                 const data = await res.json();
                 let games = data.games || data.data || [];
-                
+
                 if (games.length > 0) games = games.reverse();
-                
-                if(games.length > 0 && grid) {
+
+                if (games.length > 0 && grid) {
                     grid.innerHTML = games.slice(0, 12).map(g => {
                         const code = g.uuid || g.game_uuid || g.id;
                         const title = String(g.game_name || g.name || "Game");
-                        
+
                         let img = g.image || g.icon || g.banner || g.thumb || g.thumbnail || g.url_thumb;
                         const fallbackImg = `https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}`;
-                        if(!img || img === "") img = fallbackImg;
+                        if (!img || img === "") img = fallbackImg;
 
                         return `
                         <div onclick="playSMPLGame('${code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all shadow-lg group">
@@ -578,22 +713,22 @@
                         </div>
                     `}).join('');
                 } else {
-                    if(grid) grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-5">Aucun jeu trouvé.</div>';
+                    if (grid) grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-5">Aucun jeu trouvé.</div>';
                 }
-            } catch(e) {
-                if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-5">Erreur de connexion</div>';
+            } catch (e) {
+                if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-5">Erreur de connexion</div>';
             }
         }
 
         async function initCasinoLobby() {
             const bar = document.getElementById('providers-bar');
             if (window.smplCasinoProviders.length === 0) {
-                if(bar) bar.innerHTML = '<span class="text-emerald text-xs animate-pulse">Chargement des fournisseurs... ⏳</span>';
+                if (bar) bar.innerHTML = '<span class="text-emerald text-xs animate-pulse">Chargement des fournisseurs... ⏳</span>';
                 try {
                     const res = await fetch(`${BACKEND_URL}/api/smpl/providers`);
                     const data = await res.json();
                     let providers = data.providers || data.data || [];
-                    
+
                     if (providers.length > 0) {
                         const priorityList = ['pragmatic', 'evolution', 'hacksaw', 'spribe', 'nolimitcity', 'pushgaming'];
                         providers.sort((a, b) => {
@@ -604,60 +739,60 @@
                             if (indexB !== -1) return 1;
                             return String(a.name || "").localeCompare(String(b.name || ""));
                         });
-                        
+
                         window.smplCasinoProviders = providers;
-                        if(bar) {
-                            bar.innerHTML = window.smplCasinoProviders.map(p => 
+                        if (bar) {
+                            bar.innerHTML = window.smplCasinoProviders.map(p =>
                                 `<button id="btn-prov-${p.code}" onclick="loadProviderGames('${p.code}')" class="casino-prov-btn bg-[#1a1e29] border border-[#212631] hover:border-emerald px-4 py-2 rounded-xl text-xs font-bold text-gray-300 hover:text-white shrink-0 transition-all shadow-sm">${p.name || p.code}</button>`
                             ).join('');
                         }
-                        
-                        setTimeout(() => { if(typeof enableMouseDragScroll === 'function') enableMouseDragScroll('providers-bar'); }, 200);
+
+                        setTimeout(() => { if (typeof enableMouseDragScroll === 'function') enableMouseDragScroll('providers-bar'); }, 200);
                         loadProviderGames(window.smplCasinoProviders[0].code);
                     } else {
-                        if(bar) bar.innerHTML = '<span class="text-gray-500 text-xs">Aucun fournisseur trouvé</span>';
+                        if (bar) bar.innerHTML = '<span class="text-gray-500 text-xs">Aucun fournisseur trouvé</span>';
                     }
-                } catch(e) {
-                    if(bar) bar.innerHTML = '<span class="text-red-500 text-xs">Erreur de chargement</span>';
+                } catch (e) {
+                    if (bar) bar.innerHTML = '<span class="text-red-500 text-xs">Erreur de chargement</span>';
                 }
             } else {
-                if(window.smplCasinoProviders.length > 0) loadProviderGames(window.smplCasinoProviders[0].code);
+                if (window.smplCasinoProviders.length > 0) loadProviderGames(window.smplCasinoProviders[0].code);
             }
         }
 
         async function loadProviderGames(providerCode) {
             const grid = document.getElementById('games-grid');
-            if(grid) grid.innerHTML = '<div class="col-span-full text-emerald text-center py-10 animate-pulse text-lg font-bold">Chargement des jeux... 🎰</div>';
-            
+            if (grid) grid.innerHTML = '<div class="col-span-full text-emerald text-center py-10 animate-pulse text-lg font-bold">Chargement des jeux... 🎰</div>';
+
             document.querySelectorAll('.casino-prov-btn').forEach(btn => {
                 btn.classList.remove('border-emerald', 'text-white', 'bg-[#212631]');
                 btn.classList.add('border-[#212631]', 'text-gray-300', 'bg-[#1a1e29]');
             });
             const activeBtn = document.getElementById(`btn-prov-${providerCode}`);
-            if(activeBtn) {
+            if (activeBtn) {
                 activeBtn.classList.remove('border-[#212631]', 'text-gray-300', 'bg-[#1a1e29]');
                 activeBtn.classList.add('border-emerald', 'text-white', 'bg-[#212631]');
             }
-            
+
             try {
                 const res = await fetch(`${BACKEND_URL}/api/smpl/games-by-provider`, {
-                    method: 'POST', headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({provider_code: providerCode})
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider_code: providerCode })
                 });
                 const data = await res.json();
                 let games = data.games || data.data || [];
-                
+
                 if (games.length > 0) games = games.reverse();
-                
+
                 if (games.length > 0 && grid) {
                     grid.innerHTML = games.slice(0, 60).map(g => {
-                        const code = g.uuid || g.game_uuid || g.id; 
+                        const code = g.uuid || g.game_uuid || g.id;
                         const title = String(g.game_name || g.name || "Game");
-                        
+
                         let img = g.image || g.icon || g.banner || g.thumb || g.thumbnail || g.url_thumb;
                         const fallbackImg = `https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}`;
-                        if(!img || img === "") img = fallbackImg;
-                        
+                        if (!img || img === "") img = fallbackImg;
+
                         return `
                         <div onclick="playSMPLGame('${code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg">
                             <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
@@ -670,80 +805,80 @@
                         </div>
                     `}).join('');
                 } else {
-                    if(grid) grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-10">Aucun jeu trouvé.</div>';
+                    if (grid) grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-10">Aucun jeu trouvé.</div>';
                 }
-            } catch(e) {
-                if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur réseau</div>';
+            } catch (e) {
+                if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur réseau</div>';
             }
         }
 
         async function playSMPLGame(gameUuid) {
-            if(!playerSession) return openLoginModal();
+            if (!playerSession) return openLoginModal();
             const container = document.getElementById('casino-iframe-container');
             const iframe = document.getElementById('casino-iframe');
-            if(container) { container.classList.remove('hidden'); container.classList.add('flex'); }
-            if(iframe) iframe.src = ''; 
-            
+            if (container) { container.classList.remove('hidden'); container.classList.add('flex'); }
+            if (iframe) iframe.src = '';
+
             try {
                 const res = await fetch(`${BACKEND_URL}/api/smpl/launch`, {
                     method: 'POST', headers: getAuthHeaders(),
-                    body: JSON.stringify({game_uuid: gameUuid, user_code: playerSession.username})
+                    body: JSON.stringify({ game_uuid: gameUuid, user_code: playerSession.username })
                 });
                 const data = await res.json();
-                
-                if(data.launch_url || data.url) {
-                    if(iframe) iframe.src = data.launch_url || data.url;
+
+                if (data.launch_url || data.url) {
+                    if (iframe) iframe.src = data.launch_url || data.url;
                 } else {
                     showNotification(data.error || "Jeu non disponible", "error");
                     closeCasinoGame();
                 }
-            } catch(e) { 
+            } catch (e) {
                 showNotification("Erreur de connexion", "error");
-                closeCasinoGame(); 
+                closeCasinoGame();
             }
         }
 
         function closeCasinoGame() {
             const container = document.getElementById('casino-iframe-container');
-            if(container) { container.classList.add('hidden'); container.classList.remove('flex'); }
+            if (container) { container.classList.add('hidden'); container.classList.remove('flex'); }
             const iframe = document.getElementById('casino-iframe');
-            if(iframe) iframe.src = '';
+            if (iframe) iframe.src = '';
             refreshBalance();
         }
-        
+
 
 
         async function openLiveCasino() {
             const grid = document.getElementById('live-games-grid');
-            if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Chargement Live...</div>';
+            if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Chargement Live...</div>';
             try {
                 const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
-                    method: 'POST', headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({provider_code: 'PP_LIVE_PRO'})
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider_code: 'PP_LIVE_PRO' })
                 });
                 const data = await res.json();
-                if(grid) grid.innerHTML = (data.games || []).map(g => `
+                if (grid) grid.innerHTML = (data.games || []).map(g => `
                     <div onclick="playCasinoGame('PP_LIVE_PRO', '${g.game_code || g.id}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-red-500 transition-all relative">
                         <div class="absolute top-0 right-0 bg-red-600 text-white text-[8px] font-black px-2 py-0.5 z-10 animate-pulse rounded-bl">LIVE</div>
                         <img src="${g.banner || g.image || 'https://placehold.co/400x400/180A2B/FFF'}" class="w-full aspect-square object-cover">
                         <div class="p-2 text-[10px] text-white font-bold truncate text-center">${g.game_name || g.name}</div>
                     </div>
                 `).join('');
-            } catch(e) {}
+            } catch (e) { }
         }
 
         async function initVirtualsLobby() {
             const grid = document.getElementById('virtuals-games-grid');
-            if(grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10">Chargement Virtuels...</div>';
+            if (grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10">Chargement Virtuels...</div>';
             try {
                 const res = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games`);
                 const data = await res.json();
                 let games = data.games || data.data || data || [];
-                
-                if(grid) grid.innerHTML = games.map(g => {
+
+                if (grid) grid.innerHTML = games.map(g => {
                     // 👈 السحر هنا: التقاط UUID الصحيح بشتى الطرق الممكنة من Nexus
-                    const uuid = g.uuid || g.game_uuid || g.id || g.game_code; 
-                    
+                    const uuid = g.uuid || g.game_uuid || g.id || g.game_code;
+
                     return `
                     <div onclick="launchSpecificVirtualGame('${uuid}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-blue-500 transition-all shadow-lg group">
                         <div class="relative w-full aspect-square overflow-hidden bg-black/50">
@@ -755,37 +890,37 @@
                         <div class="p-2 text-[10px] text-white font-bold truncate text-center">${g.game_name || g.name}</div>
                     </div>
                 `}).join('');
-            } catch(e) {
-                if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de chargement</div>';
+            } catch (e) {
+                if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de chargement</div>';
             }
         }
 
         async function launchSpecificVirtualGame(uuid) {
-            if(!playerSession) return openLoginModal();
+            if (!playerSession) return openLoginModal();
             document.getElementById('casino-iframe-container').classList.remove('hidden');
             document.getElementById('casino-iframe-container').classList.add('flex');
             try {
                 const res = await fetch(`${BACKEND_URL}/api/provider/launch-eurovirtuals`, {
                     method: 'POST', headers: getAuthHeaders(),
-                    body: JSON.stringify({user_code: playerSession.username, game_uuid: uuid})
+                    body: JSON.stringify({ user_code: playerSession.username, game_uuid: uuid })
                 });
                 const data = await res.json();
-                if(data.launch_url) document.getElementById('casino-iframe').src = data.launch_url;
-            } catch(e) { closeCasinoGame(); }
+                if (data.launch_url) document.getElementById('casino-iframe').src = data.launch_url;
+            } catch (e) { closeCasinoGame(); }
         }
 
         async function playCasinoGame(provider, gameCode) {
-            if(!playerSession) return openLoginModal();
+            if (!playerSession) return openLoginModal();
             document.getElementById('casino-iframe-container').classList.remove('hidden');
             document.getElementById('casino-iframe-container').classList.add('flex');
             try {
                 const res = await fetch(`${BACKEND_URL}/api/provider/launch-casino`, {
                     method: 'POST', headers: getAuthHeaders(),
-                    body: JSON.stringify({provider_code: provider, game_code: gameCode, user_code: playerSession.username})
+                    body: JSON.stringify({ provider_code: provider, game_code: gameCode, user_code: playerSession.username })
                 });
                 const data = await res.json();
-                if(data.launch_url) document.getElementById('casino-iframe').src = data.launch_url;
-            } catch(e) { closeCasinoGame(); }
+                if (data.launch_url) document.getElementById('casino-iframe').src = data.launch_url;
+            } catch (e) { closeCasinoGame(); }
         }
 
         function closeCasinoGame() {
@@ -799,11 +934,11 @@
         function toggleCashier() {
             if (!playerSession) return openLoginModal();
             const modal = document.getElementById('cashier-modal');
-            if (modal.classList.contains('hidden')) { 
-                modal.classList.remove('hidden'); modal.classList.add('flex'); 
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden'); modal.classList.add('flex');
                 document.getElementById('modal-balance').innerText = parseFloat(playerSession.balance || 0).toFixed(2);
-            } else { 
-                modal.classList.add('hidden'); modal.classList.remove('flex'); 
+            } else {
+                modal.classList.add('hidden'); modal.classList.remove('flex');
             }
         }
 
@@ -824,7 +959,7 @@
         function backToMethods() {
             document.getElementById('payment-methods-grid').classList.remove('hidden');
             ['form-voucher', 'form-usdt', 'form-ooredoo', 'form-orange'].forEach(id => {
-                if(document.getElementById(id)) document.getElementById(id).classList.add('hidden');
+                if (document.getElementById(id)) document.getElementById(id).classList.add('hidden');
             });
         }
 
@@ -911,7 +1046,7 @@
                 const now = new Date();
                 let megaVal = (((now.getDate() - 1) * 86400 + (now.getHours() * 3600)) / 2592000 * 1000) + 120000;
                 const megaEl = document.getElementById('jackpot-mega');
-                if(megaEl) megaEl.innerText = megaVal.toFixed(2);
+                if (megaEl) megaEl.innerText = megaVal.toFixed(2);
             };
             setInterval(simulateJackpots, 1000);
         }
@@ -925,7 +1060,7 @@
             const stakeInput = document.getElementById('ticket-stake-input');
             const oddsEl = document.getElementById('ticket-total-odds');
             const gainEl = document.getElementById('ticket-potential-gain');
-            if(stakeInput && oddsEl && gainEl) {
+            if (stakeInput && oddsEl && gainEl) {
                 const stake = parseFloat(stakeInput.value) || 0;
                 const odds = parseFloat(oddsEl.innerText) || 1.00;
                 gainEl.innerText = (stake * odds).toFixed(2) + " TND";
@@ -934,4 +1069,5 @@
     </script>
     </script>
 </body>
+
 </html>
