@@ -127,20 +127,26 @@
 
             <!-- PANE: CASINO -->
             <div id="pane-casino" class="player-view-section hidden w-full">
-                <div class="flex items-center gap-2 mb-4">
+                <div class="flex items-center gap-2 mb-2">
                     <i class="fas fa-slot-machine text-xl text-emerald"></i>
                     <h2 class="text-white font-bold text-lg">Casino & Slots</h2>
                 </div>
-                <div id="games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pb-10"></div>
+                <!-- هذا هو الشريط الذي كان مفقوداً! 👇 -->
+                <div id="providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4"></div>
+                
+                <div id="games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10"></div>
             </div>
             
             <!-- PANE: LIVE CASINO -->
             <div id="pane-live-casino" class="player-view-section hidden w-full">
-                <div class="flex items-center gap-2 mb-4">
+                <div class="flex items-center gap-2 mb-2">
                     <i class="fas fa-video text-xl text-red-500"></i>
                     <h2 class="text-white font-bold text-lg">Live Casino</h2>
                 </div>
-                <div id="live-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pb-10"></div>
+                <!-- وهذا شريط اللايف كازينو! 👇 -->
+                <div id="live-providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4"></div>
+                
+                <div id="live-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10"></div>
             </div>
             
             <!-- PANE: VIRTUALS -->
