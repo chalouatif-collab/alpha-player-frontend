@@ -584,6 +584,7 @@ async function loadProviderGames(providerCode) {
             const grid = document.getElementById('games-grid');
             if(grid) grid.innerHTML = '<div class="col-span-full text-emerald text-center py-10 animate-pulse text-lg font-bold">Chargement des jeux... 🎰</div>';
             
+            // تلوين الزر النشط
             document.querySelectorAll('.casino-prov-btn').forEach(btn => {
                 btn.classList.remove('border-emerald', 'text-white', 'bg-[#212631]');
                 btn.classList.add('border-[#212631]', 'text-gray-300', 'bg-[#1a1e29]');
@@ -600,7 +601,12 @@ async function loadProviderGames(providerCode) {
                     body: JSON.stringify({provider_code: providerCode})
                 });
                 const data = await res.json();
-                const games = data.games || data.data || [];
+                let games = data.games || data.data || [];
+                
+                // 🌟 السحر هنا: قلب القائمة لتظهر الألعاب الجديدة في المقدمة!
+                if (games.length > 0) {
+                    games = games.reverse(); 
+                }
                 
                 if (games.length > 0 && grid) {
                     grid.innerHTML = games.slice(0, 60).map(g => {
@@ -620,13 +626,12 @@ async function loadProviderGames(providerCode) {
                         </div>
                     `}).join('');
                 } else {
-                    if(grid) grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-10">Aucun jeu trouvé pour ce fournisseur.</div>';
+                    if(grid) grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-10">Aucun jeu trouvé.</div>';
                 }
             } catch(e) {
                 if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de chargement</div>';
             }
         }
-
 async function playSMPLGame(gameUuid) {
             if(!playerSession) return openLoginModal();
             document.getElementById('casino-iframe-container').classList.remove('hidden');
