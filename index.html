@@ -482,41 +482,7 @@
 
     <!-- ================= JAVASCRIPT (محرك الألفابت الشامل) ================= -->
     <script>
-        // ================= دالة السحب بالماوس (Drag to Scroll) =================
-        function enableMouseDragScroll(sliderId) {
-            const slider = document.getElementById(sliderId);
-            if (!slider) return;
-
-            let isDown = false;
-            let startX;
-            let scrollLeft;
-
-            slider.addEventListener('mousedown', (e) => {
-                isDown = true;
-                slider.style.cursor = 'grabbing';
-                startX = e.pageX - slider.offsetLeft;
-                scrollLeft = slider.scrollLeft;
-            });
-
-            slider.addEventListener('mouseleave', () => {
-                isDown = false;
-                slider.style.cursor = 'default';
-            });
-
-            slider.addEventListener('mouseup', () => {
-                isDown = false;
-                slider.style.cursor = 'default';
-            });
-
-            slider.addEventListener('mousemove', (e) => {
-                if (!isDown) return;
-                e.preventDefault();
-                const x = e.pageX - slider.offsetLeft;
-                const walk = (x - startX) * 2; // تسريع السحب
-                slider.scrollLeft = scrollLeft - walk;
-            });
-        }
-
+        
         const BACKEND_URL = "https://alpha-backend-server.onrender.com";
         let playerSession = null;
 
@@ -528,13 +494,9 @@
             }
             switchSection('accueil');
             loadGamesOfTheDay();
-
-            // تشغيل لمسات الحيوية (الجاكبوت وشريط الفائزين)
-            startRealJackpots();
-            generateLiveWinnersTicker();
         };
 
-        // ================= 1. التنقل بين الأقسام (Routing) =================
+        // ================= 1. التنقل بين الأقسام =================
         function switchSection(sectionId) {
             document.querySelectorAll('.player-view-section').forEach(el => {
                 el.classList.add('hidden'); el.classList.remove('block');
@@ -547,13 +509,13 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // ================= 2. نظام الدخول والإشعارات (Auth & Notifications) =================
+        // ================= 2. المصادقة والرصيد =================
         function openLoginModal() { document.getElementById('player-login-modal').classList.remove('hidden'); document.getElementById('player-login-modal').classList.add('flex'); }
         function closeLoginModal() { document.getElementById('player-login-modal').classList.add('hidden'); document.getElementById('player-login-modal').classList.remove('flex'); }
-
-        function showNotification(msg, type = 'success') {
+        
+        function showNotification(msg, type='success') {
             const toast = document.createElement('div');
-            toast.className = `p-3 rounded-xl text-white text-xs font-bold ${type === 'success' ? 'bg-emerald-600' : 'bg-red-600'} mb-2 shadow-lg transition-all border border-white/20`;
+            toast.className = `p-3 rounded-xl text-white text-xs font-bold ${type==='success'?'bg-emerald-600':'bg-red-600'} mb-2 shadow-lg z-[999]`;
             toast.innerText = msg;
             document.getElementById('toast-container').appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
@@ -562,33 +524,33 @@
         async function handlePlayerAuth() {
             const username = document.getElementById('p-auth-username').value.trim();
             const password = document.getElementById('p-auth-password').value;
-            if (!username || !password) return;
+            if(!username || !password) return;
             try {
                 const res = await fetch(`${BACKEND_URL}/api/login`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
+                    method: 'POST', headers: {'Content-Type':'application/json'},
+                    body: JSON.stringify({username, password})
                 });
                 const data = await res.json();
-                if (res.ok) {
+                if(res.ok) {
                     playerSession = data;
                     localStorage.setItem('alpha_player_session', JSON.stringify(data));
                     localStorage.setItem('token', data.access_token);
                     setupLoggedInUI();
-                    showNotification("Bienvenue ! 🟢");
+                    showNotification("Bienvenue !");
                 } else showNotification(data.detail, 'error');
-            } catch (e) { showNotification("Erreur serveur", 'error'); }
+            } catch(e) { showNotification("Erreur serveur", 'error'); }
         }
 
         function setupLoggedInUI() {
             closeLoginModal();
             const authBtns = document.getElementById('auth-buttons-container');
-            if (authBtns) authBtns.classList.add('hidden');
+            if(authBtns) authBtns.classList.add('hidden');
             const userProfile = document.getElementById('top-user-profile');
-            if (userProfile) { userProfile.classList.remove('hidden'); userProfile.classList.add('flex'); }
-
+            if(userProfile) { userProfile.classList.remove('hidden'); userProfile.classList.add('flex'); }
+            
             const nameDisplay = document.getElementById('player-name-display');
-            if (nameDisplay) nameDisplay.innerText = playerSession.username;
-
+            if(nameDisplay) nameDisplay.innerText = playerSession.username;
+            
             refreshBalance();
             setInterval(refreshBalance, 5000);
         }
@@ -600,67 +562,25 @@
         }
 
         async function refreshBalance() {
-            if (!playerSession) return;
+            if(!playerSession) return;
             try {
                 const res = await fetch(`${BACKEND_URL}/gold_api`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ method: 'user_balance', user_code: playerSession.username })
+                    method: 'POST', headers: {'Content-Type':'application/json'},
+                    body: JSON.stringify({method: 'user_balance', user_code: playerSession.username})
                 });
                 const data = await res.json();
-                if (data.user_balance !== undefined) {
+                if(data.user_balance !== undefined) {
                     playerSession.balance = data.user_balance;
-                    document.getElementById('player-balance-val').innerText = parseFloat(data.user_balance).toFixed(2);
+                    const balDisplay = document.getElementById('player-balance-val');
+                    if(balDisplay) balDisplay.innerText = parseFloat(data.user_balance).toFixed(2);
                 }
-            } catch (e) { }
+            } catch(e){}
         }
 
-        function getAuthHeaders() { return { 'Authorization': `Bearer ${localStorage.getItem('token')}`, 'Content-Type': 'application/json' }; }
+        function getAuthHeaders() { return {'Authorization': `Bearer ${localStorage.getItem('token')}`, 'Content-Type': 'application/json'}; }
 
-        // ================= 3. المحركات (الرياضة، الكازينو، الافتراضي) =================
-        async function openSportsbookForProvider(providerCode) {
-            if (!playerSession) return openLoginModal();
-            switchSection('sport');
-
-            const iframe = document.getElementById('sportsbook-iframe');
-            const bettechContainer = document.getElementById('bettech');
-            const loader = document.getElementById('casino-loader');
-
-            if (loader) loader.classList.remove('hidden');
-            if (iframe) iframe.classList.add('hidden');
-            if (bettechContainer) bettechContainer.classList.add('hidden');
-
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/provider/launch-sportsbook`, {
-                    method: 'POST', headers: getAuthHeaders(),
-                    body: JSON.stringify({ provider_code: providerCode, user_code: playerSession.username, game_code: "SPORTSBOOK" })
-                });
-                const data = await response.json();
-
-                if (data.launch_url) {
-                    if (loader) loader.classList.add('hidden');
-                    if (providerCode === 'smpl') {
-                        if (bettechContainer) bettechContainer.classList.remove('hidden');
-                        const htmlRes = await fetch(data.launch_url);
-                        bettechContainer.innerHTML = await htmlRes.text();
-                        Array.from(bettechContainer.querySelectorAll("script")).forEach(oldScript => {
-                            const newScript = document.createElement("script");
-                            Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-                            newScript.appendChild(document.createTextNode(oldScript.innerHTML));
-                            oldScript.parentNode.replaceChild(newScript, oldScript);
-                        });
-                    } else {
-                        if (iframe) iframe.classList.remove('hidden');
-                        iframe.src = data.launch_url;
-                    }
-                } else {
-                    if (loader) loader.classList.add('hidden');
-                    showNotification("Sportsbook non disponible", "error");
-                }
-            } catch (error) { if (loader) loader.classList.add('hidden'); showNotification("Erreur réseau", "error"); }
         // ================= 3. الكازينو والسلوتس (NEXUS ENGINE + SEARCH) =================
         window.currentLoadedGames = window.currentLoadedGames || []; 
-        
-        // قائمة مزودي نكسيس الأساسية (للتحميل الفوري بدون انتظار السيرفر)
         window.nexusProviders = [
             { code: 'PRAGMATIC', name: 'Pragmatic Play' },
             { code: 'EVOLUTION', name: 'Evolution' },
@@ -682,10 +602,10 @@
             grid.innerHTML = games.slice(0, 80).map(g => {
                 const gameCode = g.game_code || g.id; 
                 const title = String(g.game_name || g.name || "Game");
-                const img = g.banner || g.image || 'https://placehold.co/400x400/180A2B/10b981?text=TUBE24';
+                const img = g.banner || g.image || `https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}`;
                 
                 return `
-                <div onclick="playNexusGame('${providerCode}', '${gameCode}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg">
+                <div onclick="playCasinoGame('${providerCode}', '${gameCode}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg">
                     <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
                         <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}';">
                         <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
@@ -699,9 +619,10 @@
         }
 
         async function initCasinoLobby() {
-            // تحميل قائمة المزودين فوراً في القائمة المنسدلة
             filterProviders();
-            loadProviderGames(window.nexusProviders[0].code, window.nexusProviders[0].name);
+            if(window.nexusProviders.length > 0) {
+                loadProviderGames(window.nexusProviders[0].code, window.nexusProviders[0].name);
+            }
         }
 
         async function loadProviderGames(providerCode, providerName = null) {
@@ -714,7 +635,6 @@
             if(searchInput) searchInput.value = '';
 
             try {
-                // استخدام مسار نكسيس السريع
                 const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
                     method: 'POST', headers: {'Content-Type':'application/json'},
                     body: JSON.stringify({provider_code: providerCode})
@@ -725,11 +645,10 @@
                 window.currentLoadedGames = games.map(g => ({...g, provider: providerCode})); 
                 renderGamesGrid(window.currentLoadedGames, 'games-grid', providerCode);
             } catch(e) {
-                if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de connexion</div>';
+                if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur réseau</div>';
             }
         }
 
-        // ================= دوال الفلترة والبحث =================
         function toggleProviderDropdown() {
             const dropdown = document.getElementById('provider-dropdown');
             if(dropdown) { dropdown.classList.toggle('hidden'); dropdown.classList.toggle('flex'); }
@@ -759,7 +678,6 @@
                 String(g.game_name || g.name || "").toLowerCase().includes(term)
             );
             
-            // نمرر الـ provider_code من أول لعبة في المصفوفة المفلترة أو الأصلية
             const provCode = window.currentLoadedGames[0].provider;
             renderGamesGrid(filtered, 'games-grid', provCode);
         }
@@ -772,7 +690,6 @@
             }
         });
 
-        // ================= تشغيل الكازينو (Nexus) =================
         async function loadGamesOfTheDay() {
             const grid = document.getElementById('games-of-the-day-grid');
             if(grid) grid.innerHTML = '<div class="col-span-full text-emerald text-center py-5 animate-pulse">Chargement... ⚡</div>';
@@ -787,7 +704,7 @@
             } catch(e) {}
         }
 
-        async function playNexusGame(providerCode, gameCode) {
+        async function playCasinoGame(providerCode, gameCode) {
             if(!playerSession) return openLoginModal();
             const container = document.getElementById('casino-iframe-container');
             const iframe = document.getElementById('casino-iframe');
@@ -813,6 +730,10 @@
             }
         }
 
+        // توحيد دوال التشغيل لكي تعمل الأزرار القديمة والجديدة بدون أخطاء
+        window.playSMPLGame = playCasinoGame; 
+        window.playNexusGame = playCasinoGame;
+
         function closeCasinoGame() {
             const container = document.getElementById('casino-iframe-container');
             if(container) { container.classList.add('hidden'); container.classList.remove('flex'); }
@@ -821,38 +742,80 @@
             refreshBalance();
         }
 
-        // ================= اللايف كازينو =================
+        // ================= 4. الرياضة، اللايف كازينو، والافتراضي =================
+        async function openSportsbookForProvider(providerCode) {
+            if (!playerSession) return openLoginModal();
+            switchSection('sport');
+            
+            const iframe = document.getElementById('sportsbook-iframe');
+            const bettechContainer = document.getElementById('bettech');
+            const loader = document.getElementById('casino-loader'); 
+            
+            if(loader) loader.classList.remove('hidden');
+            if(iframe) iframe.classList.add('hidden');
+            if(bettechContainer) bettechContainer.classList.add('hidden');
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/provider/launch-sportsbook`, {
+                    method: 'POST', headers: getAuthHeaders(),
+                    body: JSON.stringify({ provider_code: providerCode, user_code: playerSession.username, game_code: "SPORTSBOOK" })
+                });
+                const data = await response.json();
+
+                if (data.launch_url) {
+                    if(loader) loader.classList.add('hidden');
+                    if (providerCode === 'smpl') {
+                        if(bettechContainer) bettechContainer.classList.remove('hidden');
+                        const htmlRes = await fetch(data.launch_url);
+                        bettechContainer.innerHTML = await htmlRes.text();
+                        Array.from(bettechContainer.querySelectorAll("script")).forEach(oldScript => {
+                            const newScript = document.createElement("script");
+                            Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                            newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                            oldScript.parentNode.replaceChild(newScript, oldScript);
+                        });
+                    } else {
+                        if(iframe) { iframe.classList.remove('hidden'); iframe.src = data.launch_url; }
+                    }
+                } else {
+                    if(loader) loader.classList.add('hidden');
+                    showNotification("Sportsbook non disponible", "error");
+                }
+            } catch (error) { 
+                if(loader) loader.classList.add('hidden'); 
+                showNotification("Erreur réseau", "error"); 
+            }
+        }
+
         async function openLiveCasino() {
             const grid = document.getElementById('live-games-grid');
-            if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Chargement Live...</div>';
+            if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Chargement Live...</div>';
             try {
                 const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
-                    method: 'POST', headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({provider_code: 'PP_LIVE_PRO'})
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider_code: 'PP_LIVE_PRO' })
                 });
                 const data = await res.json();
-                if(grid) grid.innerHTML = (data.games || []).map(g => `
+                if (grid) grid.innerHTML = (data.games || []).map(g => `
                     <div onclick="playCasinoGame('PP_LIVE_PRO', '${g.game_code || g.id}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-red-500 transition-all relative">
                         <div class="absolute top-0 right-0 bg-red-600 text-white text-[8px] font-black px-2 py-0.5 z-10 animate-pulse rounded-bl">LIVE</div>
                         <img src="${g.banner || g.image || 'https://placehold.co/400x400/180A2B/FFF'}" class="w-full aspect-square object-cover">
                         <div class="p-2 text-[10px] text-white font-bold truncate text-center">${g.game_name || g.name}</div>
                     </div>
                 `).join('');
-            } catch(e) {}
+            } catch (e) { }
         }
 
         async function initVirtualsLobby() {
             const grid = document.getElementById('virtuals-games-grid');
-            if (grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10">Chargement Virtuels...</div>';
+            if(grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10">Chargement Virtuels...</div>';
             try {
                 const res = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games`);
                 const data = await res.json();
                 let games = data.games || data.data || data || [];
-
-                if (grid) grid.innerHTML = games.map(g => {
-                    // 👈 السحر هنا: التقاط UUID الصحيح بشتى الطرق الممكنة من Nexus
-                    const uuid = g.uuid || g.game_uuid || g.id || g.game_code;
-
+                
+                if(grid) grid.innerHTML = games.map(g => {
+                    const uuid = g.uuid || g.game_uuid || g.id || g.game_code; 
                     return `
                     <div onclick="launchSpecificVirtualGame('${uuid}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-blue-500 transition-all shadow-lg group">
                         <div class="relative w-full aspect-square overflow-hidden bg-black/50">
@@ -864,55 +827,44 @@
                         <div class="p-2 text-[10px] text-white font-bold truncate text-center">${g.game_name || g.name}</div>
                     </div>
                 `}).join('');
-            } catch (e) {
-                if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de chargement</div>';
+            } catch(e) {
+                if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de chargement</div>';
             }
         }
 
         async function launchSpecificVirtualGame(uuid) {
-            if (!playerSession) return openLoginModal();
-            document.getElementById('casino-iframe-container').classList.remove('hidden');
-            document.getElementById('casino-iframe-container').classList.add('flex');
+            if(!playerSession) return openLoginModal();
+            const container = document.getElementById('casino-iframe-container');
+            const iframe = document.getElementById('casino-iframe');
+            if(container) { container.classList.remove('hidden'); container.classList.add('flex'); }
+            if(iframe) iframe.src = ''; 
             try {
                 const res = await fetch(`${BACKEND_URL}/api/provider/launch-eurovirtuals`, {
                     method: 'POST', headers: getAuthHeaders(),
-                    body: JSON.stringify({ user_code: playerSession.username, game_uuid: uuid })
+                    body: JSON.stringify({user_code: playerSession.username, game_uuid: uuid})
                 });
                 const data = await res.json();
-                if (data.launch_url) document.getElementById('casino-iframe').src = data.launch_url;
-            } catch (e) { closeCasinoGame(); }
+                if(data.launch_url) {
+                    if(iframe) iframe.src = data.launch_url;
+                } else {
+                    showNotification("Jeu non disponible", "error");
+                    closeCasinoGame();
+                }
+            } catch(e) { 
+                showNotification("Erreur réseau", "error");
+                closeCasinoGame(); 
+            }
         }
 
-        async function playCasinoGame(provider, gameCode) {
-            if (!playerSession) return openLoginModal();
-            document.getElementById('casino-iframe-container').classList.remove('hidden');
-            document.getElementById('casino-iframe-container').classList.add('flex');
-            try {
-                const res = await fetch(`${BACKEND_URL}/api/provider/launch-casino`, {
-                    method: 'POST', headers: getAuthHeaders(),
-                    body: JSON.stringify({ provider_code: provider, game_code: gameCode, user_code: playerSession.username })
-                });
-                const data = await res.json();
-                if (data.launch_url) document.getElementById('casino-iframe').src = data.launch_url;
-            } catch (e) { closeCasinoGame(); }
-        }
-
-        function closeCasinoGame() {
-            document.getElementById('casino-iframe-container').classList.add('hidden');
-            document.getElementById('casino-iframe-container').classList.remove('flex');
-            document.getElementById('casino-iframe').src = '';
-            refreshBalance();
-        }
-
-        // ================= 4. الكاشير (Dépôt & Retrait) =================
+        // ================= 5. الكاشير =================
         function toggleCashier() {
             if (!playerSession) return openLoginModal();
             const modal = document.getElementById('cashier-modal');
-            if (modal.classList.contains('hidden')) {
-                modal.classList.remove('hidden'); modal.classList.add('flex');
+            if (modal.classList.contains('hidden')) { 
+                modal.classList.remove('hidden'); modal.classList.add('flex'); 
                 document.getElementById('modal-balance').innerText = parseFloat(playerSession.balance || 0).toFixed(2);
-            } else {
-                modal.classList.add('hidden'); modal.classList.remove('flex');
+            } else { 
+                modal.classList.add('hidden'); modal.classList.remove('flex'); 
             }
         }
 
@@ -933,7 +885,7 @@
         function backToMethods() {
             document.getElementById('payment-methods-grid').classList.remove('hidden');
             ['form-voucher', 'form-usdt', 'form-ooredoo', 'form-orange'].forEach(id => {
-                if (document.getElementById(id)) document.getElementById(id).classList.add('hidden');
+                if(document.getElementById(id)) document.getElementById(id).classList.add('hidden');
             });
         }
 
@@ -1012,33 +964,6 @@
                     refreshBalance();
                 } else showNotification("Erreur", "error");
             } catch (error) { showNotification("Erreur", "error"); }
-        }
-
-        // ================= 5. لمسات الحيوية (Jackpot, Ticker, Coupon) =================
-        function startRealJackpots() {
-            const simulateJackpots = () => {
-                const now = new Date();
-                let megaVal = (((now.getDate() - 1) * 86400 + (now.getHours() * 3600)) / 2592000 * 1000) + 120000;
-                const megaEl = document.getElementById('jackpot-mega');
-                if (megaEl) megaEl.innerText = megaVal.toFixed(2);
-            };
-            setInterval(simulateJackpots, 1000);
-        }
-
-        function generateLiveWinnersTicker() {
-            // يمكن ربطها لاحقاً ببيانات حقيقية، هنا محاكاة بسيطة للواجهة
-            // تم تجهيز الدالة لتعمل مع واجهة التيكر إن وجدت مستقبلاً
-        }
-
-        function calculatePotentialGain() {
-            const stakeInput = document.getElementById('ticket-stake-input');
-            const oddsEl = document.getElementById('ticket-total-odds');
-            const gainEl = document.getElementById('ticket-potential-gain');
-            if (stakeInput && oddsEl && gainEl) {
-                const stake = parseFloat(stakeInput.value) || 0;
-                const odds = parseFloat(oddsEl.innerText) || 1.00;
-                gainEl.innerText = (stake * odds).toFixed(2) + " TND";
-            }
         }
     </script>
     </script>
