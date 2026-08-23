@@ -152,6 +152,33 @@
 
             <!-- PANE: ACCUEIL (الصفحة الرئيسية) -->
             <div id="pane-accueil" class="player-view-section block space-y-6 w-full">
+                <!-- 🌟 شريط الجاكبوت المباشر (Live Jackpots) -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 w-full relative z-10">
+                <!-- MINI -->
+                <div class="bg-[#161922] border border-[#212631] rounded-xl p-3 flex flex-col items-center justify-center relative overflow-hidden shadow-lg">
+                    <div class="absolute inset-0 bg-gradient-to-t from-orange-500/5 to-transparent"></div>
+                    <span class="text-orange-500 font-black text-[10px] tracking-widest mb-1">MINI</span>
+                    <span id="jackpot-mini" class="text-white font-extrabold text-sm md:text-base">1,245.50 TND</span>
+                </div>
+                <!-- MINOR -->
+                <div class="bg-[#161922] border border-[#212631] rounded-xl p-3 flex flex-col items-center justify-center relative overflow-hidden shadow-lg">
+                    <div class="absolute inset-0 bg-gradient-to-t from-blue-500/5 to-transparent"></div>
+                    <span class="text-blue-500 font-black text-[10px] tracking-widest mb-1">MINOR</span>
+                    <span id="jackpot-minor" class="text-white font-extrabold text-sm md:text-base">4,890.20 TND</span>
+                </div>
+                <!-- MAJOR -->
+                <div class="bg-[#161922] border border-[#212631] rounded-xl p-3 flex flex-col items-center justify-center relative overflow-hidden shadow-lg">
+                    <div class="absolute inset-0 bg-gradient-to-t from-yellow-500/10 to-transparent"></div>
+                    <span class="text-yellow-500 font-black text-[10px] tracking-widest mb-1">MAJOR</span>
+                    <span id="jackpot-major" class="text-white font-extrabold text-sm md:text-base">15,420.75 TND</span>
+                </div>
+                <!-- GRAND (المميز) -->
+                <div class="bg-[#161922] border border-emerald/30 rounded-xl p-3 flex flex-col items-center justify-center relative overflow-hidden shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                    <div class="absolute inset-0 bg-gradient-to-t from-emerald-500/20 to-transparent"></div>
+                    <span class="text-emerald font-black text-[10px] tracking-widest mb-1 animate-pulse">GRAND</span>
+                    <span id="jackpot-grand" class="text-white font-black text-base md:text-lg drop-shadow-md">124,567.80 TND</span>
+                </div>
+            </div>
                 <div
                     class="bg-panel rounded-2xl p-6 relative overflow-hidden flex items-center justify-between border border-emerald/30">
                     <div class="relative z-10 max-w-md">
@@ -263,6 +290,7 @@
 
         </div>
 
+       
     </main>
 
     <!-- ================= CAISSE (DÉPÔT & RETRAIT) MODAL ================= -->
@@ -458,7 +486,35 @@
             }
             switchSection('accueil');
             loadGamesOfTheDay();
+            startLiveJackpots();
         };
+        // ================= محرك الجاكبوت الحي =================
+        function startLiveJackpots() {
+            let grand = 124567.80;
+            let major = 15420.75;
+            let minor = 4890.20;
+            let mini = 1245.50;
+
+            setInterval(() => {
+                // زيادة عشوائية بسيطة للأرقام
+                grand += Math.random() * 0.5;
+                major += Math.random() * 0.2;
+                minor += Math.random() * 0.1;
+                mini += Math.random() * 0.05;
+
+                const elGrand = document.getElementById('jackpot-grand');
+                const elMajor = document.getElementById('jackpot-major');
+                const elMinor = document.getElementById('jackpot-minor');
+                const elMini = document.getElementById('jackpot-mini');
+
+                // تنسيق الأرقام لتبدو كعملة حقيقية
+                if(elGrand) elGrand.innerText = grand.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' TND';
+                if(elMajor) elMajor.innerText = major.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' TND';
+                if(elMinor) elMinor.innerText = minor.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' TND';
+                if(elMini) elMini.innerText = mini.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' TND';
+            }, 2500); // تتحدث كل ثانيتين ونصف
+        }
+
 
         // ================= 1. التنقل بين الأقسام =================
         function switchSection(sectionId) {
