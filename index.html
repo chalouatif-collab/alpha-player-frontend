@@ -657,12 +657,22 @@
                     showNotification("Sportsbook non disponible", "error");
                 }
             } catch (error) { if (loader) loader.classList.add('hidden'); showNotification("Erreur réseau", "error"); }
-        }// ================= 3. الكازينو والسلوتس (SMPL) مع محركات البحث =================
-        window.smplCasinoProviders = window.smplCasinoProviders || [];
-        window.currentLoadedGames = window.currentLoadedGames || []; // حفظ الألعاب للبحث
+        // ================= 3. الكازينو والسلوتس (NEXUS ENGINE + SEARCH) =================
+        window.currentLoadedGames = window.currentLoadedGames || []; 
+        
+        // قائمة مزودي نكسيس الأساسية (للتحميل الفوري بدون انتظار السيرفر)
+        window.nexusProviders = [
+            { code: 'PRAGMATIC', name: 'Pragmatic Play' },
+            { code: 'EVOLUTION', name: 'Evolution' },
+            { code: 'HACKSAW', name: 'Hacksaw Gaming' },
+            { code: 'SPRIBE', name: 'Spribe' },
+            { code: 'NOLIMIT', name: 'NoLimit City' },
+            { code: 'PLAYNGO', name: 'Play N Go' },
+            { code: 'NETENT', name: 'NetEnt' },
+            { code: 'REDTIGER', name: 'Red Tiger' }
+        ];
 
-        // دالة مساعدة لرسم الألعاب (تستخدم للبحث وللتحميل العادي)
-        function renderGamesGrid(games, gridId) {
+        function renderGamesGrid(games, gridId, providerCode) {
             const grid = document.getElementById(gridId);
             if(!grid) return;
             if(games.length === 0) {
@@ -670,16 +680,14 @@
                 return;
             }
             grid.innerHTML = games.slice(0, 80).map(g => {
-                const code = g.uuid || g.game_uuid || g.id; 
+                const gameCode = g.game_code || g.id; 
                 const title = String(g.game_name || g.name || "Game");
-                let img = g.image || g.icon || g.banner || g.thumb || g.thumbnail || g.url_thumb;
-                const fallbackImg = `https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}`;
-                if(!img || img === "") img = fallbackImg;
+                const img = g.banner || g.image || 'https://placehold.co/400x400/180A2B/10b981?text=TUBE24';
                 
                 return `
-                <div onclick="playSMPLGame('${code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg">
+                <div onclick="playNexusGame('${providerCode}', '${gameCode}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg">
                     <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
-                        <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='${fallbackImg}';">
+                        <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}';">
                         <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
                             <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
                         </div>
@@ -691,141 +699,95 @@
         }
 
         async function initCasinoLobby() {
-            const list = document.getElementById('provider-dropdown-list');
-            if (window.smplCasinoProviders.length === 0) {
-                if(list) list.innerHTML = '<span class="text-emerald text-xs animate-pulse p-4 text-center block">Chargement... ⏳</span>';
-                try {
-                    const res = await fetch(`${BACKEND_URL}/api/smpl/providers`);
-                    const data = await res.json();
-                    let providers = data.providers || data.data || [];
-                    
-                    if (providers.length > 0) {
-                        const priorityList = ['pragmatic', 'evolution', 'hacksaw', 'spribe', 'nolimitcity', 'pushgaming'];
-                        providers.sort((a, b) => {
-                            const indexA = priorityList.indexOf((a.code || "").toLowerCase());
-                            const indexB = priorityList.indexOf((b.code || "").toLowerCase());
-                            if (indexA !== -1 && indexB !== -1) return indexA - indexB;
-                            if (indexA !== -1) return -1;
-                            if (indexB !== -1) return 1;
-                            return String(a.name || "").localeCompare(String(b.name || ""));
-                        });
-                        
-                        window.smplCasinoProviders = providers;
-                        filterProviders(); // رسم المزودين في القائمة المنسدلة
-                        loadProviderGames(window.smplCasinoProviders[0].code, window.smplCasinoProviders[0].name);
-                    } else {
-                        if(list) list.innerHTML = '<span class="text-gray-500 text-xs p-4 text-center block">Aucun fournisseur</span>';
-                    }
-                } catch(e) {
-                    if(list) list.innerHTML = '<span class="text-red-500 text-xs p-4 text-center block">Erreur réseau</span>';
-                }
-            } else {
-                filterProviders();
-                if(window.smplCasinoProviders.length > 0) loadProviderGames(window.smplCasinoProviders[0].code, window.smplCasinoProviders[0].name);
-            }
+            // تحميل قائمة المزودين فوراً في القائمة المنسدلة
+            filterProviders();
+            loadProviderGames(window.nexusProviders[0].code, window.nexusProviders[0].name);
         }
 
         async function loadProviderGames(providerCode, providerName = null) {
             const grid = document.getElementById('games-grid');
             const label = document.getElementById('current-provider-label');
-            if(grid) grid.innerHTML = '<div class="col-span-full text-emerald text-center py-10 animate-pulse text-lg font-bold">Chargement des jeux... 🎰</div>';
+            if(grid) grid.innerHTML = '<div class="col-span-full text-emerald text-center py-10 animate-pulse text-lg font-bold">Chargement rapide... ⚡</div>';
             
-            // تحديث اسم المزود في الزر
             if(providerName && label) label.innerText = providerName;
-            
-            // تصفير مربع بحث الألعاب
             const searchInput = document.getElementById('game-search-input');
             if(searchInput) searchInput.value = '';
 
             try {
-                const res = await fetch(`${BACKEND_URL}/api/smpl/games-by-provider`, {
+                // استخدام مسار نكسيس السريع
+                const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
                     method: 'POST', headers: {'Content-Type':'application/json'},
                     body: JSON.stringify({provider_code: providerCode})
                 });
                 const data = await res.json();
                 let games = data.games || data.data || [];
                 
-                if (games.length > 0) games = games.reverse();
-                
-                window.currentLoadedGames = games; // حفظ الألعاب لفلترتها لاحقاً
-                renderGamesGrid(games, 'games-grid');
+                window.currentLoadedGames = games.map(g => ({...g, provider: providerCode})); 
+                renderGamesGrid(window.currentLoadedGames, 'games-grid', providerCode);
             } catch(e) {
-                if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur réseau</div>';
+                if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de connexion</div>';
             }
         }
 
-        // ================= دوال محركات البحث =================
+        // ================= دوال الفلترة والبحث =================
         function toggleProviderDropdown() {
             const dropdown = document.getElementById('provider-dropdown');
-            if(dropdown) {
-                dropdown.classList.toggle('hidden');
-                dropdown.classList.toggle('flex');
-            }
+            if(dropdown) { dropdown.classList.toggle('hidden'); dropdown.classList.toggle('flex'); }
         }
 
         function filterProviders() {
             const input = document.getElementById('provider-search-input');
             const list = document.getElementById('provider-dropdown-list');
-            if(!list || !window.smplCasinoProviders) return;
+            if(!list) return;
             
             const term = input ? input.value.toLowerCase() : "";
-            const filtered = window.smplCasinoProviders.filter(p => 
-                String(p.name || p.code || "").toLowerCase().includes(term)
+            const filtered = window.nexusProviders.filter(p => 
+                String(p.name || p.code).toLowerCase().includes(term)
             );
             
             list.innerHTML = filtered.map(p => 
-                `<button onclick="loadProviderGames('${p.code}', '${p.name || p.code}'); toggleProviderDropdown();" class="text-left px-4 py-3 text-xs font-bold text-gray-300 hover:text-emerald hover:bg-[#212631] rounded-xl transition-all border border-transparent hover:border-[#2e3648]">${p.name || p.code}</button>`
+                `<button onclick="loadProviderGames('${p.code}', '${p.name}'); toggleProviderDropdown();" class="text-left px-4 py-3 text-xs font-bold text-gray-300 hover:text-emerald hover:bg-[#212631] rounded-xl transition-all border border-transparent hover:border-[#2e3648]">${p.name}</button>`
             ).join('');
         }
 
         function filterGames() {
             const input = document.getElementById('game-search-input');
-            if(!input || !window.currentLoadedGames) return;
+            if(!input || !window.currentLoadedGames || window.currentLoadedGames.length === 0) return;
             
             const term = input.value.toLowerCase();
             const filtered = window.currentLoadedGames.filter(g => 
                 String(g.game_name || g.name || "").toLowerCase().includes(term)
             );
             
-            renderGamesGrid(filtered, 'games-grid');
+            // نمرر الـ provider_code من أول لعبة في المصفوفة المفلترة أو الأصلية
+            const provCode = window.currentLoadedGames[0].provider;
+            renderGamesGrid(filtered, 'games-grid', provCode);
         }
 
-        // إخفاء القائمة المنسدلة عند الضغط خارجها
         document.addEventListener('click', function(event) {
             const dropdown = document.getElementById('provider-dropdown');
             const button = dropdown ? dropdown.previousElementSibling : null;
             if (dropdown && !dropdown.classList.contains('hidden') && !dropdown.contains(event.target) && button && !button.contains(event.target)) {
-                dropdown.classList.add('hidden');
-                dropdown.classList.remove('flex');
+                dropdown.classList.add('hidden'); dropdown.classList.remove('flex');
             }
         });
 
-        // ================= الألعاب السريعة وتشغيل الكازينو =================
+        // ================= تشغيل الكازينو (Nexus) =================
         async function loadGamesOfTheDay() {
             const grid = document.getElementById('games-of-the-day-grid');
-            if(grid) grid.innerHTML = '<div class="col-span-full text-emerald text-center py-5 animate-pulse">Chargement des jeux... ⏳</div>';
-            
+            if(grid) grid.innerHTML = '<div class="col-span-full text-emerald text-center py-5 animate-pulse">Chargement... ⚡</div>';
             try {
-                const res = await fetch(`${BACKEND_URL}/api/smpl/games-by-provider`, {
+                const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
                     method: 'POST', headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({provider_code: 'pragmatic'}) 
+                    body: JSON.stringify({provider_code: 'PRAGMATIC'}) 
                 });
                 const data = await res.json();
                 let games = data.games || data.data || [];
-                
-                if (games.length > 0) games = games.reverse();
-                
-                if(games.length > 0 && grid) {
-                    renderGamesGrid(games.slice(0, 12), 'games-of-the-day-grid');
-                } else {
-                    if(grid) grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-5">Aucun jeu trouvé.</div>';
-                }
-            } catch(e) {
-                if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-5">Erreur de connexion</div>';
-            }
+                if(games.length > 0 && grid) renderGamesGrid(games.slice(0, 12), 'games-of-the-day-grid', 'PRAGMATIC');
+            } catch(e) {}
         }
 
-        async function playSMPLGame(gameUuid) {
+        async function playNexusGame(providerCode, gameCode) {
             if(!playerSession) return openLoginModal();
             const container = document.getElementById('casino-iframe-container');
             const iframe = document.getElementById('casino-iframe');
@@ -833,16 +795,16 @@
             if(iframe) iframe.src = ''; 
             
             try {
-                const res = await fetch(`${BACKEND_URL}/api/smpl/launch`, {
+                const res = await fetch(`${BACKEND_URL}/api/provider/launch-casino`, {
                     method: 'POST', headers: getAuthHeaders(),
-                    body: JSON.stringify({game_uuid: gameUuid, user_code: playerSession.username})
+                    body: JSON.stringify({provider_code: providerCode, game_code: gameCode, user_code: playerSession.username})
                 });
                 const data = await res.json();
                 
-                if(data.launch_url || data.url) {
-                    if(iframe) iframe.src = data.launch_url || data.url;
+                if(data.launch_url) {
+                    if(iframe) iframe.src = data.launch_url;
                 } else {
-                    showNotification(data.error || "Jeu non disponible", "error");
+                    showNotification(data.error || "Erreur de lancement", "error");
                     closeCasinoGame();
                 }
             } catch(e) { 
