@@ -514,14 +514,12 @@
         }
 
 
-      // ================= 1. التنقل بين الأقسام (الضبط المثالي بدون قص) =================
+      // ================= 1. التنقل بين الأقسام (تثبيت كالتطبيقات لمنع القص) =================
         function switchSection(sectionId, fromPopState = false) {
-            // إخفاء كل الأقسام
             document.querySelectorAll('.player-view-section').forEach(el => {
                 el.classList.add('hidden'); el.classList.remove('block');
             });
             
-            // إظهار القسم المطلوب
             const panel = document.getElementById(`pane-${sectionId}`);
             if (panel) {
                 panel.classList.remove('hidden');
@@ -534,20 +532,20 @@
                 const centerArea = mainTag.children[1]; 
                 
                 if (sectionId === 'sport') {
-                    // إخفاء القائمة وتمديد العرض بالكامل
                     sidebar.style.display = 'none'; 
                     centerArea.classList.remove('xl:w-[55%]');
                     centerArea.classList.add('w-full');
                     
-                    // إزالة الفراغات مع الحفاظ على الصفر الدقيق لمنع القص
                     mainTag.classList.remove('py-6', 'px-4', 'gap-6', 'max-w-[1700px]');
                     mainTag.classList.add('p-0', 'm-0', 'max-w-full');
                     
-                    // تصفير الهامش تماماً لعدم سحب المحتوى خلف الشريط
-                    if(panel) panel.style.marginTop = '0px';
+                    // 🌟 السحر هنا: قفل تمرير الموقع تماماً لكي لا ينزلق الإطار تحت الشريط!
+                    document.body.style.overflow = 'hidden'; 
+                    
+                    // تحديد طول الإطار ليأخذ حجم الشاشة المتبقي بالضبط (بدون زيادة)
+                    if (panel) panel.style.height = 'calc(100vh - 120px)';
                     
                 } else {
-                    // إرجاع الإعدادات الافتراضية لباقي الأقسام
                     sidebar.style.display = ''; 
                     centerArea.classList.remove('w-full');
                     centerArea.classList.add('xl:w-[55%]');
@@ -555,16 +553,16 @@
                     mainTag.classList.remove('p-0', 'm-0', 'max-w-full');
                     mainTag.classList.add('py-6', 'px-4', 'gap-6', 'max-w-[1700px]');
                     
-                    if(panel) panel.style.marginTop = '0px';
+                    // إرجاع التمرير الطبيعي لباقي الأقسام
+                    document.body.style.overflow = '';
+                    if (panel) panel.style.height = 'auto';
                 }
             }
 
-            // دعم زر الرجوع في الهاتف
             if (!fromPopState) {
                 history.pushState({ section: sectionId }, "", `#${sectionId}`);
             }
             
-            // تلوين الزر النشط
             if(typeof setActiveMenuBtn === 'function') {
                 setActiveMenuBtn(`btn-nav-${sectionId === 'sport' ? 'sport' : sectionId}`);
             }
