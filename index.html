@@ -159,7 +159,19 @@
 
         <!-- CENTER: Dynamic Content Area (Panes) -->
         <div class="w-full xl:w-[55%] space-y-6">
-
+<style>
+    /* محرك حركة شريط الفائزين */
+    @keyframes scroll-ticker {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+    .ticker-move {
+        animation: scroll-ticker 25s linear infinite;
+    }
+    .ticker-move:hover {
+        animation-play-state: paused; /* يتوقف الشريط عند وضع الفأرة عليه */
+    }
+</style>
             <!-- PANE: ACCUEIL (الصفحة الرئيسية المتكاملة) -->
             <div id="pane-accueil" class="player-view-section block space-y-6 w-full">
 
