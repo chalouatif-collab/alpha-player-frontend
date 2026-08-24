@@ -482,13 +482,17 @@
         const BACKEND_URL = "https://alpha-backend-server.onrender.com";
         let playerSession = null;
 
-        window.onload = () => {
+       window.onload = () => {
             const savedSession = localStorage.getItem('alpha_player_session');
             if (savedSession) {
                 playerSession = JSON.parse(savedSession);
                 setupLoggedInUI();
             }
-            switchSection('accueil');
+            
+            // 🌟 استرجاع القسم المحفوظ، وإذا لم يوجد نعود للرئيسية 'accueil'
+            const savedSection = localStorage.getItem('active_section') || 'accueil';
+            switchSection(savedSection);
+            
             loadGamesOfTheDay();
             startLiveJackpots();
         };
@@ -520,6 +524,9 @@
         }
 
 function switchSection(sectionId, fromPopState = false) {
+            // 🌟 حفظ القسم الحالي في الذاكرة ليبقى اللاعب فيه عند عمل Refresh
+            localStorage.setItem('active_section', sectionId);
+
             window.scrollTo(0, 0); // الصعود للأعلى فوراً
             
             document.querySelectorAll('.player-view-section').forEach(el => {
@@ -562,6 +569,15 @@ function switchSection(sectionId, fromPopState = false) {
             
             if(typeof setActiveMenuBtn === 'function') {
                 setActiveMenuBtn(`btn-nav-${sectionId === 'sport' ? 'sport' : sectionId}`);
+            }
+
+            // تفعيل محركات الأقسام تلقائياً عند الحاجة
+            if (sectionId === 'casino' && typeof initCasinoLobby === 'function') {
+                initCasinoLobby();
+            } else if (sectionId === 'live-casino' && typeof openLiveCasino === 'function') {
+                openLiveCasino();
+            } else if (sectionId === 'virtuals' && typeof initVirtualsLobby === 'function') {
+                initVirtualsLobby();
             }
         }
         // ================= 2. المصادقة والرصيد =================
