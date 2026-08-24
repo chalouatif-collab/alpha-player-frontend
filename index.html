@@ -638,36 +638,167 @@
             }).join('');
         }
 
+// ================= 3. الكازينو والسلوتس (جلب ديناميكي + تمرير لانهائي Infinite Scroll) =================
+        window.currentLoadedGames = []; 
+        window.nexusProviders = []; 
+        
+        // 🌟 متغيرات التحكم في الصفحات (Pagination)
+        let currentPage = 1;
+        let currentProviderCode = '';
+        let isFetchingGames = false;
+        let hasMoreGames = true;
+
+        // 1. جلب المزودين ديناميكياً من السيرفر
         async function initCasinoLobby() {
-            filterProviders();
-            if(window.nexusProviders.length > 0) {
-                loadProviderGames(window.nexusProviders[0].code, window.nexusProviders[0].name);
+            const list = document.getElementById('provider-dropdown-list');
+            if (window.nexusProviders.length === 0) {
+                if(list) list.innerHTML = '<span class="text-emerald text-xs animate-pulse p-4 text-center block">Chargement des fournisseurs... ⏳</span>';
+                
+                try {
+                    // 👈 تأكد أن هذا الرابط هو الصحيح لجلب المزودين من سيرفرك
+                    const res = await fetch(`${BACKEND_URL}/api/providers`); 
+                    const data = await res.json();
+                    
+                    let providers = data.providers || data.data || [];
+                    
+                    if (providers.length > 0) {
+                        window.nexusProviders = providers;
+                        filterProviders(); // رسم القائمة المنسدلة
+                        
+                        // تحميل ألعاب أول مزود تلقائياً
+                        const firstCode = window.nexusProviders[0].code || window.nexusProviders[0].provider_code;
+                        loadProviderGames(firstCode, window.nexusProviders[0].name);
+                    } else {
+                        if(list) list.innerHTML = '<span class="text-gray-500 text-xs p-4 text-center block">Aucun fournisseur trouvé</span>';
+                    }
+                } catch(e) {
+                    if(list) list.innerHTML = '<span class="text-red-500 text-xs p-4 text-center block">Erreur de connexion</span>';
+                }
+            } else {
+                filterProviders();
+                const firstCode = window.nexusProviders[0].code || window.nexusProviders[0].provider_code;
+                if(window.nexusProviders.length > 0) loadProviderGames(firstCode, window.nexusProviders[0].name);
             }
         }
 
-        async function loadProviderGames(providerCode, providerName = null) {
+        // 2. تحميل الألعاب بذكاء (دعم الـ 50 لعبة والصفحات)
+        async function loadProviderGames(providerCode, providerName = null, isLoadMore = false) {
+            // منع تكرار الطلب إذا كان يحمل بالفعل، أو إذا انتهت الألعاب
+            if (isFetchingGames || (!hasMoreGames && isLoadMore)) return;
+            
             const grid = document.getElementById('games-grid');
             const label = document.getElementById('current-provider-label');
-            if(grid) grid.innerHTML = '<div class="col-span-full text-emerald text-center py-10 animate-pulse text-lg font-bold">Chargement rapide... ⚡</div>';
             
-            if(providerName && label) label.innerText = providerName;
-            const searchInput = document.getElementById('game-search-input');
-            if(searchInput) searchInput.value = '';
+            // 🌟 إذا كان مزوداً جديداً، نصفر العدادات وننظف الشاشة
+            if (!isLoadMore) {
+                currentPage = 1;
+                hasMoreGames = true;
+                currentProviderCode = providerCode;
+                window.currentLoadedGames = [];
+                if(providerName && label) label.innerText = providerName;
+                if(grid) grid.innerHTML = '<div class="col-span-full text-emerald text-center py-10 animate-pulse text-lg font-bold">Chargement des jeux... 🎰</div>';
+                
+                const searchInput = document.getElementById('game-search-input');
+                if(searchInput) searchInput.value = '';
+            } else {
+                // إضافة أيقونة تحميل صغيرة في الأسفل عند التمرير
+                const loader = document.createElement('div');
+                loader.id = 'more-loader';
+                loader.className = 'col-span-full text-emerald text-center py-5 animate-pulse font-bold text-sm';
+                loader.innerText = 'Chargement de plus de jeux... ⏳';
+                if(grid) grid.appendChild(loader);
+            }
+
+            isFetchingGames = true;
 
             try {
+                // 👈 إرسال رقم الصفحة (page) والعدد (limit) للسيرفر
                 const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
                     method: 'POST', headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({provider_code: providerCode})
+                    body: JSON.stringify({
+                        provider_code: currentProviderCode,
+                        page: currentPage, 
+                        limit: 50 // طلب 50 لعبة فقط
+                    })
                 });
                 const data = await res.json();
-                let games = data.games || data.data || [];
+                let newGames = data.games || data.data || [];
                 
-                window.currentLoadedGames = games.map(g => ({...g, provider: providerCode})); 
-                renderGamesGrid(window.currentLoadedGames, 'games-grid', providerCode);
+                // إزالة أيقونة التحميل السفلية
+                const moreLoader = document.getElementById('more-loader');
+                if(moreLoader) moreLoader.remove();
+
+                if (newGames.length > 0) {
+                    const gamesWithProvider = newGames.map(g => ({...g, provider: currentProviderCode}));
+                    window.currentLoadedGames = [...window.currentLoadedGames, ...gamesWithProvider];
+                    
+                    if (!isLoadMore) {
+                        // رسم الشاشة من الصفر (أول 50 لعبة)
+                        renderGamesGrid(window.currentLoadedGames, 'games-grid', currentProviderCode);
+                    } else {
+                        // إضافة الألعاب الجديدة تحت القديمة دون مسح الشاشة
+                        appendGamesToGrid(gamesWithProvider, 'games-grid', currentProviderCode);
+                    }
+                    
+                    currentPage++; // الانتقال للصفحة التالية للمرة القادمة
+                    
+                    // إذا أرجع السيرفر أقل من 50 لعبة، فهذا يعني أننا وصلنا للنهاية
+                    if (newGames.length < 50) {
+                        hasMoreGames = false;
+                    }
+                } else {
+                    hasMoreGames = false;
+                    if (!isLoadMore && grid) grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-10">Aucun jeu trouvé.</div>';
+                }
             } catch(e) {
-                if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur réseau</div>';
+                const moreLoader = document.getElementById('more-loader');
+                if(moreLoader) moreLoader.remove();
+                if (!isLoadMore && grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur réseau</div>';
+            } finally {
+                isFetchingGames = false;
             }
         }
+
+        // 3. دالة مساعدة لإضافة الألعاب بلطف في الأسفل (Append)
+        function appendGamesToGrid(games, gridId, providerCode) {
+            const grid = document.getElementById(gridId);
+            if(!grid) return;
+            
+            const newHtml = games.map(g => {
+                const gameCode = g.game_code || g.id; 
+                const title = String(g.game_name || g.name || "Game");
+                const img = g.banner || g.image || `https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}`;
+                
+                return `
+                <div onclick="playCasinoGame('${providerCode}', '${gameCode}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg">
+                    <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
+                        <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}';">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                            <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
+                        </div>
+                    </div>
+                    <div class="p-2 text-[10px] text-white font-bold truncate text-center">${title}</div>
+                </div>
+                `;
+            }).join('');
+            
+            // إضافة الكود الجديد في نهاية الشبكة مباشرة
+            grid.insertAdjacentHTML('beforeend', newHtml);
+        }
+
+        // 4. مراقب النزول (Infinite Scroll Listener)
+        window.addEventListener('scroll', () => {
+            const casinoSection = document.getElementById('pane-casino');
+            // التأكد أننا داخل قسم الكازينو
+            if (casinoSection && !casinoSection.classList.contains('hidden')) {
+                // إذا اقترب المستخدم من أسفل الشاشة بـ 200 بيكسل، نطلب 50 لعبة أخرى!
+                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
+                    if (!isFetchingGames && hasMoreGames && currentProviderCode) {
+                        loadProviderGames(currentProviderCode, null, true);
+                    }
+                }
+            }
+        });
 
         function toggleProviderDropdown() {
             const dropdown = document.getElementById('provider-dropdown');
