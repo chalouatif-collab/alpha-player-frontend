@@ -206,19 +206,19 @@
                 </div>
             </div>
 
-            <!-- PANE: SPORTSBOOK (ملتصق ومضبوط بالمليمتر) -->
+           <!-- PANE: SPORTSBOOK (محمي من الانزلاق تحت الشريط) -->
             <div id="pane-sport" class="player-view-section hidden w-full m-0 p-0">
-                <div class="bg-[#0f1117] w-full min-h-[85vh] relative overflow-hidden flex flex-col">
+                <!-- أزلنا min-h واستخدمنا h-full ليطيع الأوامر بدقة -->
+                <div class="bg-[#0f1117] w-full h-full relative overflow-hidden flex flex-col">
                     
-                    <!-- شاشة التحميل -->
                     <div id="casino-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0f1117] z-[5] hidden">
                         <i class="fas fa-futbol text-4xl text-emerald animate-bounce mb-3"></i>
                         <span class="text-emerald font-bold tracking-widest text-xs">CHARGEMENT DU SPORT...</span>
                     </div>
 
-                    <!-- الإطار المدمج (Iframe) -->
-                    <iframe id="sportsbook-iframe" class="w-full flex-grow border-0 relative z-10 hidden" style="min-height: 85vh;"></iframe>
-                    <div id="bettech" class="w-full flex-grow relative z-10 hidden bg-[#0f1117]" style="min-height: 85vh;"></div>
+                    <!-- تم إضافة display: block و h-full للتحكم المطلق -->
+                    <iframe id="sportsbook-iframe" class="w-full h-full flex-grow border-0 relative z-10 hidden" style="display: block;"></iframe>
+                    <div id="bettech" class="w-full h-full flex-grow relative z-10 hidden bg-[#0f1117]"></div>
                 </div>
             </div>
             <!-- PANE: CASINO -->
