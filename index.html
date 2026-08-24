@@ -600,18 +600,41 @@
         function getAuthHeaders() { return {'Authorization': `Bearer ${localStorage.getItem('token')}`, 'Content-Type': 'application/json'}; }
 
         // ================= 3. الكازينو والسلوتس (NEXUS ENGINE + SEARCH) =================
-        window.currentLoadedGames = window.currentLoadedGames || []; 
-        window.nexusProviders = [
-            { code: 'PRAGMATIC', name: 'Pragmatic Play' },
-            { code: 'EVOLUTION', name: 'Evolution' },
-            { code: 'HACKSAW', name: 'Hacksaw Gaming' },
-            { code: 'SPRIBE', name: 'Spribe' },
-            { code: 'NOLIMIT', name: 'NoLimit City' },
-            { code: 'PLAYNGO', name: 'Play N Go' },
-            { code: 'NETENT', name: 'NetEnt' },
-            { code: 'REDTIGER', name: 'Red Tiger' }
-        ];
-
+       if (window.nexusProviders.length === 0) {
+                window.nexusProviders = [
+                    { code: 'PRAGMATIC', name: 'Pragmatic Slot' },
+                    { code: 'HACKSAW', name: 'Hacksaw' },
+                    { code: 'SPRIBE', name: 'Spribe' },
+                    { code: 'PLAYNGO', name: "Play'n Go" },
+                    { code: 'PGSOFT', name: 'PGSoft' },
+                    { code: 'HABANERO', name: 'Habanero' },
+                    { code: 'PLAYSON', name: 'Playson' },
+                    { code: 'EVOPLAY', name: 'Evoplay' },
+                    { code: 'AMUSNET', name: 'Amusnet' },
+                    { code: 'EGT', name: 'EGT Digital' },
+                    { code: 'BOOONGO', name: 'Booongo' },
+                    { code: 'CQ9', name: 'CQ9' },
+                    { code: 'TOPTREND', name: 'TopTrend' },
+                    { code: 'DREAMTECH', name: 'DreamTech' },
+                    { code: 'FACHAI', name: 'FaChai' },
+                    { code: 'SPADEGAMING', name: 'Spadegaming' },
+                    { code: 'FASTSPIN', name: 'FastSpin' },
+                    { code: 'JOKERGAMING', name: 'Joker Gaming' },
+                    { code: 'RUBYPLAY', name: 'RubyPlay' },
+                    { code: 'AMATIC', name: 'Amatic' }
+                ];
+            }
+            // رسم المزودين في القائمة المنسدلة
+            filterProviders(); 
+            
+            // تحميل ألعاب أول مزود في القائمة تلقائياً (Pragmatic)
+            if (window.nexusProviders.length > 0) {
+                const firstCode = window.nexusProviders[0].code || window.nexusProviders[0].provider_code;
+                loadProviderGames(firstCode, window.nexusProviders[0].name);
+            } else {
+                if(list) list.innerHTML = '<span class="text-gray-500 text-xs p-4 text-center block">Aucun fournisseur trouvé</span>';
+            }
+        
         function renderGamesGrid(games, gridId, providerCode) {
             const grid = document.getElementById(gridId);
             if(!grid) return;
