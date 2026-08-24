@@ -261,29 +261,26 @@
                 </div>
             </div>
             <!-- 🌟 تذييل الصفحة (الشروط، الخصوصية، والقوانين) -->
-                <div class="mt-8 pt-6 border-t border-[#212631] flex flex-col items-center justify-center text-center space-y-4 pb-8 w-full">
+                <div class="mt-8 pt-6 border-t border-[#212631] flex flex-col items-center justify-center text-center space-y-3 pb-8 w-full">
                     
                     <!-- روابط الشروط والخصوصية -->
-                    <div class="flex flex-wrap justify-center gap-3 md:gap-6 text-xs font-bold text-gray-400">
-                        <button onclick="alert('Les Termes et Conditions seront affichés ici.')" class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Termes & Conditions</button>
+                    <div class="flex flex-wrap justify-center gap-3 md:gap-6 text-xs font-bold text-gray-400 mb-2">
+                        <button onclick="openPolicyModal('termes')" class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Termes & Conditions</button>
                         <span class="text-[#212631]">|</span>
-                        <button onclick="alert('La Politique de Confidentialité sera affichée ici.')" class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Politique de Confidentialité</button>
+                        <button onclick="openPolicyModal('confidentialite')" class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Politique de Confidentialité</button>
                         <span class="text-[#212631]">|</span>
-                        <button onclick="alert('Jeu Responsable sera affiché ici.')" class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Jeu Responsable</button>
+                        <button onclick="openPolicyModal('responsable')" class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Jeu Responsable</button>
                     </div>
 
-                    <!-- ⚠️ قانون الحد الأقصى للربح (مظلل وواضح) -->
-                    <div class="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-2.5 rounded-lg text-[10px] sm:text-xs font-bold flex items-center gap-2 max-w-lg shadow-lg">
-                        <i class="fas fa-exclamation-triangle text-red-500 text-sm animate-pulse"></i>
-                        <span><span class="text-white">Règle importante :</span> Le gain et retrait maximum autorisé par mois est strictement limité à <span class="text-emerald font-black text-sm">30 000 TND</span>.</span>
-                    </div>
-
-                    <!-- نص قانوني قصير وحقوق النشر -->
-                    <p class="text-[9px] text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                    <!-- نص قانوني قصير (مدمج معه شرط الحد الأقصى بخط صغير جداً) -->
+                    <p class="text-[9px] text-gray-600 max-w-2xl mx-auto leading-relaxed px-4">
                         Alphabet216 est une plateforme de divertissement. En utilisant ce site, vous acceptez nos conditions générales d'utilisation. Les jeux d'argent sont strictement interdits aux personnes de moins de 18 ans. Jouez avec modération.
+                        <br>
+                        <span class="text-gray-700 mt-1 block">* Note légale : Le gain et le retrait maximum autorisés par joueur sont limités à 30 000 TND par mois.</span>
                     </p>
-                    <div class="text-gray-500 text-[10px] font-black mt-2 tracking-widest uppercase flex items-center gap-2">
-                        <i class="fas fa-bolt text-emerald"></i> © 2026 Alphabet216. Tous droits réservés.
+                    
+                    <div class="text-gray-500 text-[10px] font-black mt-1 tracking-widest uppercase flex items-center gap-2">
+                        <i class="fas fa-bolt text-emerald/50"></i> © 2026 Alphabet216. Tous droits réservés.
                     </div>
                 </div>
             <!-- PANE: CASINO -->
@@ -521,7 +518,29 @@
                 class="w-full bg-emerald text-black font-bold p-3 rounded-xl">Entrer</button>
         </div>
     </div>
+<!-- 🌟 نافذة الشروط والأحكام (Policy Modal) -->
+    <div id="policy-modal" class="fixed inset-0 z-[200] bg-black/90 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
+        <div class="bg-[#161922] border border-[#212631] rounded-2xl w-full max-w-2xl flex flex-col max-h-[85vh] shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300" id="policy-modal-content">
+            
+            <!-- رأس النافذة -->
+            <div class="flex justify-between items-center p-5 border-b border-[#212631] bg-[#0f1117]">
+                <h3 id="policy-modal-title" class="text-white font-black uppercase tracking-wider text-lg">Titre</h3>
+                <button onclick="closePolicyModal()" class="text-gray-400 hover:text-red-500 transition text-xl w-8 h-8 flex items-center justify-center rounded-full bg-[#161922] hover:bg-red-500/10">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- محتوى النص (قابل للتمرير) -->
+            <div id="policy-modal-body" class="p-6 overflow-y-auto text-sm text-gray-300 space-y-4 custom-scrollbar">
+                <!-- سيتم حقن النص هنا عبر الجافاسكريبت -->
+            </div>
 
+            <!-- زر الإغلاق السفلي -->
+            <div class="p-4 border-t border-[#212631] bg-[#0f1117] flex justify-end">
+                <button onclick="closePolicyModal()" class="bg-emerald text-black font-bold text-xs uppercase px-6 py-2.5 rounded-xl hover:bg-emerald-600 transition">J'ai compris</button>
+            </div>
+        </div>
+    </div>
     <!-- Casino Iframe Container -->
      <!-- ⚽ Sportsbook Overlay (شاشة كاملة مستقلة) -->
     <div id="sportsbook-overlay" class="fixed inset-0 z-[300] bg-[#0f1117] hidden flex-col">
@@ -1385,8 +1404,83 @@ function switchSection(sectionId, fromPopState = false) {
             track.innerHTML = tickerHTML + tickerHTML; // تكرار لتكون الحركة سلسة
         }
 
-        // قم باستدعاء هذه الدالة داخل window.onload لتعمل فور فتح الموقع
-        // generateLiveWinnersTicker();  
+         // ================= نوافذ الشروط والخصوصية =================
+        function openPolicyModal(type) {
+            const modal = document.getElementById('policy-modal');
+            const titleEl = document.getElementById('policy-modal-title');
+            const bodyEl = document.getElementById('policy-modal-body');
+            
+            let title = "";
+            let content = "";
+
+            if (type === 'termes') {
+                title = "Termes et Conditions";
+                content = `
+                    <h4 class="text-white font-bold text-base mb-2">1. Acceptation des termes</h4>
+                    <p>En créant un compte sur Alphabet216, vous confirmez avoir lu, compris et accepté ces termes et conditions. Le jeu est strictement réservé aux personnes âgées de 18 ans et plus.</p>
+                    
+                    <h4 class="text-white font-bold text-base mt-4 mb-2">2. Règle des Gains et Retraits Maxima</h4>
+                    <div class="bg-red-500/10 border border-red-500/30 p-3 rounded-lg text-red-400 font-bold text-xs mb-3">
+                        ⚠️ Le gain maximum ainsi que le retrait total autorisé par joueur et par mois civil est strictement plafonné à 30 000 TND. Tout montant excédant cette limite ne pourra être retiré.
+                    </div>
+                    
+                    <h4 class="text-white font-bold text-base mt-4 mb-2">3. Utilisation du compte</h4>
+                    <p>Chaque joueur n'est autorisé à ouvrir qu'un seul compte. La création de comptes multiples entraînera la suspension immédiate et la confiscation des fonds.</p>
+
+                    <h4 class="text-white font-bold text-base mt-4 mb-2">4. Bonus et Promotions</h4>
+                    <p>Tous les bonus sont soumis à des conditions de mise (Wager) avant de pouvoir être retirés. L'abus de bonus est strictement interdit.</p>
+                `;
+            } else if (type === 'confidentialite') {
+                title = "Politique de Confidentialité";
+                content = `
+                    <h4 class="text-white font-bold text-base mb-2">1. Collecte des données</h4>
+                    <p>Nous collectons les informations nécessaires à la gestion de votre compte (nom, identifiant, historique des transactions et des jeux) afin de garantir un environnement sécurisé.</p>
+                    
+                    <h4 class="text-white font-bold text-base mt-4 mb-2">2. Utilisation des informations</h4>
+                    <p>Vos données sont utilisées exclusivement pour le bon fonctionnement de la plateforme Alphabet216, le traitement de vos retraits et la prévention de la fraude.</p>
+
+                    <h4 class="text-white font-bold text-base mt-4 mb-2">3. Protection et Sécurité</h4>
+                    <p>Nous utilisons des technologies de cryptage avancées pour garantir que vos données personnelles et financières restent strictement confidentielles et ne soient jamais partagées avec des tiers.</p>
+                `;
+            } else if (type === 'responsable') {
+                title = "Jeu Responsable";
+                content = `
+                    <h4 class="text-white font-bold text-base mb-2">1. Jouez pour le plaisir</h4>
+                    <p>Les jeux d'argent doivent rester un divertissement et non un moyen de gagner sa vie ou de rembourser des dettes. Ne jouez que ce que vous pouvez vous permettre de perdre.</p>
+                    
+                    <h4 class="text-white font-bold text-base mt-4 mb-2">2. Gardez le contrôle</h4>
+                    <p>Fixez-vous des limites de temps et d'argent avant de commencer à jouer. Si vous sentez que vous perdez le contrôle, faites une pause.</p>
+
+                    <h4 class="text-white font-bold text-base mt-4 mb-2">3. Auto-exclusion</h4>
+                    <p>Si vous souhaitez clôturer votre compte temporairement ou définitivement pour des raisons d'addiction, veuillez contacter notre support pour activer votre auto-exclusion immédiate.</p>
+                `;
+            }
+
+            titleEl.innerHTML = title;
+            bodyEl.innerHTML = content;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // إضافة تأثير الدخول (Zoom in)
+            setTimeout(() => {
+                document.getElementById('policy-modal-content').classList.remove('scale-95');
+                document.getElementById('policy-modal-content').classList.add('scale-100');
+            }, 10);
+        }
+
+        function closePolicyModal() {
+            const modal = document.getElementById('policy-modal');
+            const content = document.getElementById('policy-modal-content');
+            
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 200);
+        }
     </script>
 </body>
 
