@@ -642,32 +642,36 @@
         window.currentLoadedGames = []; 
         window.nexusProviders = []; 
         
-        // 🌟 متغيرات التحكم في الصفحات (Pagination)
-        let currentPage = 1;
-        let currentProviderCode = '';
-        let isFetchingGames = false;
-        let hasMoreGames = true;
+        // ================= 3. الكازينو والسلوتس (استعادة محرك نكسيس الأصلي + Infinite Scroll) =================
+        window.currentProviderGames = []; // لتخزين ألعاب المزود الحالي
+        window.nexusProviders = []; 
+        
+        let currentDisplayLimit = 50; // عرض 50 لعبة كبداية
+        let currentActiveProviderCode = "PRAGMATIC"; // المزود الافتراضي
+        let gamesObserver = null;
 
         // 1. جلب المزودين (نظام الطوارئ المزدوج)
         async function initCasinoLobby() {
             const list = document.getElementById('provider-dropdown-list');
+            
+            // جلب قائمة المزودين فقط إذا لم تكن محملة مسبقاً
             if (window.nexusProviders.length === 0) {
                 if(list) list.innerHTML = '<span class="text-emerald text-xs animate-pulse p-4 text-center block">Chargement des fournisseurs... ⏳</span>';
                 
                 try {
-                    // محاولة جلب المزودين من السيرفر الخاص بك
-                    const res = await fetch(`${BACKEND_URL}/api/providers`); 
-                    if (!res.ok) throw new Error("Endpoint 404");
+                    // استخدام نفس الرابط القديم الذي كان يعمل
+                    const res = await fetch(`${BACKEND_URL}/api/get-providers`); 
                     const data = await res.json();
                     
                     let providers = data.providers || data.data || [];
+                    
                     if (providers.length > 0) {
                         window.nexusProviders = providers;
                     } else {
                         throw new Error("No providers");
                     }
                 } catch(e) {
-                    // 🌟 نظام الطوارئ: إذا كان رابط السيرفر غير جاهز، نستخدم هذه القائمة لكي لا ينكسر الموقع!
+                    // نظام الطوارئ في حال فشل السيرفر في جلب المزودين
                     console.warn("الرابط غير موجود في السيرفر، تفعيل قائمة الطوارئ...");
                     window.nexusProviders = [
                         { code: 'PRAGMATIC', name: 'Pragmatic Play' },
@@ -680,157 +684,131 @@
                         { code: 'REDTIGER', name: 'Red Tiger' }
                     ];
                 }
+            }
 
-                // بعد تجهيز المزودين (من السيرفر أو الطوارئ)، نرسمهم ونشغل الألعاب
-                filterProviders(); 
-                if (window.nexusProviders.length > 0) {
-                    const firstCode = window.nexusProviders[0].code || window.nexusProviders[0].provider_code;
-                    loadProviderGames(firstCode, window.nexusProviders[0].name);
-                } else {
-                    if(list) list.innerHTML = '<span class="text-gray-500 text-xs p-4 text-center block">Aucun fournisseur trouvé</span>';
-                }
-
+            // رسم المزودين في القائمة المنسدلة
+            filterProviders(); 
+            
+            // تحميل ألعاب أول مزود في القائمة
+            if (window.nexusProviders.length > 0) {
+                const firstCode = window.nexusProviders[0].code || window.nexusProviders[0].provider_code;
+                loadProviderGames(firstCode, window.nexusProviders[0].name);
             } else {
-                filterProviders();
-                if(window.nexusProviders.length > 0) {
-                    const firstCode = window.nexusProviders[0].code || window.nexusProviders[0].provider_code;
-                    loadProviderGames(firstCode, window.nexusProviders[0].name);
-                }
+                if(list) list.innerHTML = '<span class="text-gray-500 text-xs p-4 text-center block">Aucun fournisseur trouvé</span>';
             }
         }
-
-        // 2. تحميل الألعاب بذكاء (دعم الـ 50 لعبة والصفحات)
-        async function loadProviderGames(providerCode, providerName = null, isLoadMore = false) {
-            // منع تكرار الطلب إذا كان يحمل بالفعل، أو إذا انتهت الألعاب
-            if (isFetchingGames || (!hasMoreGames && isLoadMore)) return;
+       // 2. تحميل الألعاب (باستخدام الدالة الأصلية)
+        async function loadProviderGames(providerCode, providerName = null) {
+            currentActiveProviderCode = providerCode;
+            currentDisplayLimit = 50; // تصفير الحد إلى 50 عند تغيير المزود
             
             const grid = document.getElementById('games-grid');
             const label = document.getElementById('current-provider-label');
             
-            // 🌟 إذا كان مزوداً جديداً، نصفر العدادات وننظف الشاشة
-            if (!isLoadMore) {
-                currentPage = 1;
-                hasMoreGames = true;
-                currentProviderCode = providerCode;
-                window.currentLoadedGames = [];
-                if(providerName && label) label.innerText = providerName;
-                if(grid) grid.innerHTML = '<div class="col-span-full text-emerald text-center py-10 animate-pulse text-lg font-bold">Chargement des jeux... 🎰</div>';
-                
-                const searchInput = document.getElementById('game-search-input');
-                if(searchInput) searchInput.value = '';
-            } else {
-                // إضافة أيقونة تحميل صغيرة في الأسفل عند التمرير
-                const loader = document.createElement('div');
-                loader.id = 'more-loader';
-                loader.className = 'col-span-full text-emerald text-center py-5 animate-pulse font-bold text-sm';
-                loader.innerText = 'Chargement de plus de jeux... ⏳';
-                if(grid) grid.appendChild(loader);
-            }
-
-            isFetchingGames = true;
+            if(providerName && label) label.innerText = providerName;
+            
+            const searchInput = document.getElementById('game-search-input');
+            if(searchInput) searchInput.value = '';
+            
+            if(grid) grid.innerHTML = '<div class="col-span-full text-emerald text-center py-10 animate-pulse text-lg font-bold">Chargement des jeux... 🎰</div>';
 
             try {
-                // 👈 إرسال رقم الصفحة (page) والعدد (limit) للسيرفر
+                // استخدام الرابط الأصلي الذي كان يعمل لجلب الألعاب
                 const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
-                    method: 'POST', headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({
-                        provider_code: currentProviderCode,
-                        page: currentPage, 
-                        limit: 50 // طلب 50 لعبة فقط
-                    })
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider_code: providerCode })
                 });
-                const data = await res.json();
-                let newGames = data.games || data.data || [];
                 
-                // إزالة أيقونة التحميل السفلية
-                const moreLoader = document.getElementById('more-loader');
-                if(moreLoader) moreLoader.remove();
-
-                if (newGames.length > 0) {
-                    const gamesWithProvider = newGames.map(g => ({...g, provider: currentProviderCode}));
-                    window.currentLoadedGames = [...window.currentLoadedGames, ...gamesWithProvider];
-                    
-                    if (!isLoadMore) {
-                        // رسم الشاشة من الصفر (أول 50 لعبة)
-                        renderGamesGrid(window.currentLoadedGames, 'games-grid', currentProviderCode);
-                    } else {
-                        // إضافة الألعاب الجديدة تحت القديمة دون مسح الشاشة
-                        appendGamesToGrid(gamesWithProvider, 'games-grid', currentProviderCode);
-                    }
-                    
-                    currentPage++; // الانتقال للصفحة التالية للمرة القادمة
-                    
-                    // إذا أرجع السيرفر أقل من 50 لعبة، فهذا يعني أننا وصلنا للنهاية
-                    if (newGames.length < 50) {
-                        hasMoreGames = false;
-                    }
-                } else {
-                    hasMoreGames = false;
-                    if (!isLoadMore && grid) grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-10">Aucun jeu trouvé.</div>';
-                }
+                const data = await res.json();
+                
+                // تخزين الألعاب المستلمة
+                window.currentProviderGames = data.games || data.data || [];
+                
+                // رسم الألعاب
+                renderCasinoGrid();
             } catch(e) {
-                const moreLoader = document.getElementById('more-loader');
-                if(moreLoader) moreLoader.remove();
-                if (!isLoadMore && grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur réseau</div>';
-            } finally {
-                isFetchingGames = false;
+                if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de connexion</div>';
             }
         }
 
-        // 3. دالة مساعدة لإضافة الألعاب بلطف في الأسفل (Append)
-        function appendGamesToGrid(games, gridId, providerCode) {
-            const grid = document.getElementById(gridId);
-            if(!grid) return;
+      // 3. رسم شبكة الألعاب (مع الـ Infinite Scroll)[cite: 1]
+        function renderCasinoGrid() {
+            const container = document.getElementById('games-grid');
+            if (!container) return;
             
-            const newHtml = games.map(g => {
-                const gameCode = g.game_code || g.id; 
+            if (window.currentProviderGames.length === 0) {
+                 container.innerHTML = '<div class="col-span-full text-gray-500 text-center py-10">Aucun jeu trouvé.</div>';
+                 return;
+            }
+
+            // اقتطاع الألعاب بناءً على الحد الحالي
+            const gamesToDisplay = window.currentProviderGames.slice(0, currentDisplayLimit);
+
+            container.innerHTML = gamesToDisplay.map(g => {
                 const title = String(g.game_name || g.name || "Game");
-                const img = g.banner || g.image || `https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}`;
+                const img = g.banner || g.image || g.thumb || `https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}`;
+                const code = g.game_code || g.id;
                 
                 return `
-                <div onclick="playCasinoGame('${providerCode}', '${gameCode}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg">
+                <div onclick="playCasinoGame('${currentActiveProviderCode}', '${code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg">
                     <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
-                        <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}';">
+                        <img src="${img}" alt="${title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}';">
                         <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
                             <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
                         </div>
                     </div>
                     <div class="p-2 text-[10px] text-white font-bold truncate text-center">${title}</div>
-                </div>
-                `;
+                </div>`;
             }).join('');
+
+            // نظام التمرير اللانهائي (Infinite Scroll)[cite: 1]
+            let sentinel = document.getElementById('games-scroll-sentinel');
             
-            // إضافة الكود الجديد في نهاية الشبكة مباشرة
-            grid.insertAdjacentHTML('beforeend', newHtml);
-        }
-
-        // 4. مراقب النزول (Infinite Scroll Listener)
-        window.addEventListener('scroll', () => {
-            const casinoSection = document.getElementById('pane-casino');
-            // التأكد أننا داخل قسم الكازينو
-            if (casinoSection && !casinoSection.classList.contains('hidden')) {
-                // إذا اقترب المستخدم من أسفل الشاشة بـ 200 بيكسل، نطلب 50 لعبة أخرى!
-                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
-                    if (!isFetchingGames && hasMoreGames && currentProviderCode) {
-                        loadProviderGames(currentProviderCode, null, true);
-                    }
+            if (currentDisplayLimit < window.currentProviderGames.length) {
+                // إذا كان هناك المزيد من الألعاب، نظهر رسالة التحميل
+                if (!sentinel) {
+                    sentinel = document.createElement('div');
+                    sentinel.id = 'games-scroll-sentinel';
+                    sentinel.className = 'col-span-full text-center py-6 text-emerald font-display animate-pulse text-xs font-bold';
+                    sentinel.innerHTML = 'Chargement de plus de jeux... ⏳';
+                    container.parentNode.appendChild(sentinel);
                 }
-            }
-        });
 
+                // مراقبة الوصول إلى أسفل الشاشة
+                if (!gamesObserver) {
+                    gamesObserver = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting && currentDisplayLimit < window.currentProviderGames.length) {
+                                currentDisplayLimit += 50; // زيادة الحد بـ 50 لعبة إضافية[cite: 1]
+                                renderCasinoGrid(); // إعادة رسم الشبكة
+                            }
+                        });
+                    }, { rootMargin: '300px' });
+                }
+                gamesObserver.observe(sentinel);
+            } else if (sentinel) {
+                // إذا تم عرض كل الألعاب، نزيل رسالة التحميل
+                sentinel.remove();
+            }
+        }
+        // ================= دوال محركات البحث =================
         function toggleProviderDropdown() {
             const dropdown = document.getElementById('provider-dropdown');
-            if(dropdown) { dropdown.classList.toggle('hidden'); dropdown.classList.toggle('flex'); }
+            if(dropdown) {
+                dropdown.classList.toggle('hidden');
+                dropdown.classList.toggle('flex');
+            }
         }
 
-        function filterProviders() {
+       function filterProviders() {
             const input = document.getElementById('provider-search-input');
             const list = document.getElementById('provider-dropdown-list');
-            if(!list) return;
+            if(!list || !window.nexusProviders) return;
             
             const term = input ? input.value.toLowerCase() : "";
             const filtered = window.nexusProviders.filter(p => 
-                String(p.name || p.code).toLowerCase().includes(term)
+                String(p.name || p.code || "").toLowerCase().includes(term)
             );
             
             list.innerHTML = filtered.map(p => 
@@ -838,24 +816,53 @@
             ).join('');
         }
 
+       // دالة الفلترة الذكية المدمجة مع الرندر القديم[cite: 1]
         function filterGames() {
             const input = document.getElementById('game-search-input');
-            if(!input || !window.currentLoadedGames || window.currentLoadedGames.length === 0) return;
+            if(!input || !window.currentProviderGames) return;
             
             const term = input.value.toLowerCase();
-            const filtered = window.currentLoadedGames.filter(g => 
+            const filtered = window.currentProviderGames.filter(g => 
                 String(g.game_name || g.name || "").toLowerCase().includes(term)
             );
             
-            const provCode = window.currentLoadedGames[0].provider;
-            renderGamesGrid(filtered, 'games-grid', provCode);
+            const container = document.getElementById('games-grid');
+            if (!container) return;
+            
+            if (filtered.length === 0) {
+                 container.innerHTML = '<div class="col-span-full text-gray-500 text-center py-10">Aucun jeu trouvé.</div>';
+                 return;
+            }
+
+            container.innerHTML = filtered.map(g => {
+                const title = String(g.game_name || g.name || "Game");
+                const img = g.banner || g.image || g.thumb || `https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}`;
+                const code = g.game_code || g.id;
+                
+                return `
+                <div onclick="playCasinoGame('${currentActiveProviderCode}', '${code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg">
+                    <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
+                        <img src="${img}" alt="${title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}';">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                            <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
+                        </div>
+                    </div>
+                    <div class="p-2 text-[10px] text-white font-bold truncate text-center">${title}</div>
+                </div>`;
+            }).join('');
+
+            // إخفاء رسالة التحميل أثناء البحث
+            const sentinel = document.getElementById('games-scroll-sentinel');
+            if (sentinel) sentinel.remove();
         }
 
+        // إخفاء القائمة المنسدلة عند الضغط خارجها
         document.addEventListener('click', function(event) {
             const dropdown = document.getElementById('provider-dropdown');
             const button = dropdown ? dropdown.previousElementSibling : null;
             if (dropdown && !dropdown.classList.contains('hidden') && !dropdown.contains(event.target) && button && !button.contains(event.target)) {
-                dropdown.classList.add('hidden'); dropdown.classList.remove('flex');
+                dropdown.classList.add('hidden');
+                dropdown.classList.remove('flex');
             }
         });
 
@@ -873,86 +880,73 @@
             } catch(e) {}
         }
 
+        // ================= تشغيل ألعاب الكازينو (Nexus) =================
+        // استخدام دالة اللعب الأصلية التي كانت تعمل بنجاح[cite: 1]
         async function playCasinoGame(providerCode, gameCode) {
-            if(!playerSession) return openLoginModal();
+            if (!playerSession) return openLoginModal();
             const container = document.getElementById('casino-iframe-container');
             const iframe = document.getElementById('casino-iframe');
-            if(container) { container.classList.remove('hidden'); container.classList.add('flex'); }
-            if(iframe) iframe.src = ''; 
-            
+            const loader = document.getElementById('casino-loader');
+            if (!container || !iframe) return;
+
+            container.classList.remove('hidden'); container.classList.add('flex');
+            history.pushState({ modalOpen: true }, "", "");
+            if (loader) loader.style.display = 'flex';
+            iframe.style.opacity = '0';
+
             try {
-                const res = await fetch(`${BACKEND_URL}/api/provider/launch-casino`, {
-                    method: 'POST', headers: getAuthHeaders(),
-                    body: JSON.stringify({provider_code: providerCode, game_code: gameCode, user_code: playerSession.username})
+                // التوجيه الذكي للمسار الصحيح[cite: 1]
+                let endpointUrl = `${BACKEND_URL}/api/provider/launch-casino`;
+                let requestBody = { game_code: gameCode, provider_code: providerCode, user_code: playerSession.username };
+
+                if (providerCode === 'SMPL') {
+                    endpointUrl = `${BACKEND_URL}/api/smpl/launch`;
+                    requestBody = { game_uuid: gameCode, user_code: playerSession.username };
+                }
+
+                const res = await fetch(endpointUrl, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(requestBody)
                 });
+
                 const data = await res.json();
-                
-                if(data.launch_url) {
-                    if(iframe) iframe.src = data.launch_url;
+
+                if (data.launch_url) {
+                    iframe.src = data.launch_url;
+                    iframe.onload = () => { if (loader) loader.style.display = 'none'; iframe.style.opacity = '1'; };
                 } else {
-                    showNotification(data.error || "Erreur de lancement", "error");
+                    showNotification(data.error || "Jeu non disponible", "error");
                     closeCasinoGame();
                 }
-            } catch(e) { 
+            } catch (error) {
                 showNotification("Erreur de connexion", "error");
-                closeCasinoGame(); 
+                closeCasinoGame();
             }
         }
 
-        // توحيد دوال التشغيل لكي تعمل الأزرار القديمة والجديدة بدون أخطاء
+        // توحيد دوال اللعب لضمان التوافق مع الأزرار القديمة والجديدة
         window.playSMPLGame = playCasinoGame; 
         window.playNexusGame = playCasinoGame;
 
-        function closeCasinoGame() {
+        function closeCasinoGame(fromPopState = false) {
             const container = document.getElementById('casino-iframe-container');
-            if(container) { container.classList.add('hidden'); container.classList.remove('flex'); }
+            if(container) { 
+                container.classList.add('hidden'); 
+                container.classList.remove('flex'); 
+            }
             const iframe = document.getElementById('casino-iframe');
             if(iframe) iframe.src = '';
-            refreshBalance();
-        }
-
-        // ================= 4. الرياضة، اللايف كازينو، والافتراضي =================
-        async function openSportsbookForProvider(providerCode) {
-            if (!playerSession) return openLoginModal();
-            switchSection('sport');
             
-            const iframe = document.getElementById('sportsbook-iframe');
-            const bettechContainer = document.getElementById('bettech');
-            const loader = document.getElementById('casino-loader'); 
+            // تحديث الرصيد بعد الخروج من اللعبة[cite: 1]
+            if (typeof refreshPlayerBalance === 'function') {
+                refreshPlayerBalance();
+            } else if (typeof refreshBalance === 'function') {
+                refreshBalance();
+            }
             
-            if(loader) loader.classList.remove('hidden');
-            if(iframe) iframe.classList.add('hidden');
-            if(bettechContainer) bettechContainer.classList.add('hidden');
-
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/provider/launch-sportsbook`, {
-                    method: 'POST', headers: getAuthHeaders(),
-                    body: JSON.stringify({ provider_code: providerCode, user_code: playerSession.username, game_code: "SPORTSBOOK" })
-                });
-                const data = await response.json();
-
-                if (data.launch_url) {
-                    if(loader) loader.classList.add('hidden');
-                    if (providerCode === 'smpl') {
-                        if(bettechContainer) bettechContainer.classList.remove('hidden');
-                        const htmlRes = await fetch(data.launch_url);
-                        bettechContainer.innerHTML = await htmlRes.text();
-                        Array.from(bettechContainer.querySelectorAll("script")).forEach(oldScript => {
-                            const newScript = document.createElement("script");
-                            Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-                            newScript.appendChild(document.createTextNode(oldScript.innerHTML));
-                            oldScript.parentNode.replaceChild(newScript, oldScript);
-                        });
-                    } else {
-                        if(iframe) { iframe.classList.remove('hidden'); iframe.src = data.launch_url; }
-                    }
-                } else {
-                    if(loader) loader.classList.add('hidden');
-                    showNotification("Sportsbook non disponible", "error");
-                }
-            } catch (error) { 
-                if(loader) loader.classList.add('hidden'); 
-                showNotification("Erreur réseau", "error"); 
+            if (!fromPopState && history.state && history.state.modalOpen) {
+                history.back();
             }
         }
 
@@ -1134,7 +1128,7 @@
                 } else showNotification("Erreur", "error");
             } catch (error) { showNotification("Erreur", "error"); }
         }
-    </script>
+    
     </script>
 </body>
 
