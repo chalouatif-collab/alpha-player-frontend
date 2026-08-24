@@ -1022,7 +1022,7 @@ function switchSection(sectionId, fromPopState = false) {
             }
         }
 
-        async function playCasinoGame(providerCode, gameCode) {
+       async function playCasinoGame(providerCode, gameCode) {
             if (!playerSession) return openLoginModal();
             const container = document.getElementById('casino-iframe-container');
             const iframe = document.getElementById('casino-iframe');
@@ -1033,11 +1033,27 @@ function switchSection(sectionId, fromPopState = false) {
 
             try {
                 let endpointUrl = `${BACKEND_URL}/api/provider/launch-casino`;
-                let requestBody = { game_code: gameCode, provider_code: providerCode, user_code: playerSession.username };
+                
+                // 🌟 التعديل هنا: تمت إضافة العملة، اللغة، ورصيد اللاعب الحالي
+                let requestBody = { 
+                    game_code: gameCode, 
+                    provider_code: providerCode, 
+                    user_code: playerSession.username,
+                    currency: "TND", 
+                    language: "fr",
+                    balance: playerSession.balance // بعض المزودين يحتاجون قراءة الرصيد المبدئي من هنا
+                };
 
                 if (providerCode === 'SMPL') {
                     endpointUrl = `${BACKEND_URL}/api/smpl/launch`;
-                    requestBody = { game_uuid: gameCode, user_code: playerSession.username };
+                    // 🌟 إضافة نفس المعطيات لمزود SMPL أيضاً
+                    requestBody = { 
+                        game_uuid: gameCode, 
+                        user_code: playerSession.username,
+                        currency: "TND",
+                        language: "fr",
+                        balance: playerSession.balance 
+                    };
                 }
 
                 const res = await fetch(endpointUrl, {
@@ -1060,7 +1076,6 @@ function switchSection(sectionId, fromPopState = false) {
                 closeCasinoGame();
             }
         }
-
         window.playSMPLGame = playCasinoGame; 
         window.playNexusGame = playCasinoGame;
 
