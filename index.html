@@ -206,31 +206,28 @@
                 </div>
             </div>
 
-            <!-- PANE: SPORTSBOOK (يفتح هنا في الواجهة مباشرة!) -->
+            <!-- PANE: SPORTSBOOK (مدمج بكامل الشاشة) -->
             <div id="pane-sport" class="player-view-section hidden w-full">
-                <div
-                    class="bg-panel rounded-2xl border border-[#212631] w-full min-h-[700px] relative overflow-hidden flex flex-col">
+                <div class="bg-panel rounded-2xl border border-[#212631] w-full min-h-[85vh] relative overflow-hidden flex flex-col">
+                    
+                    <!-- الشريط العلوي للتحكم -->
                     <div class="p-3 bg-[#12151d] border-b border-[#212631] flex justify-between items-center">
-                        <h3 class="text-white font-bold text-sm"><i class="fas fa-futbol text-emerald"></i> Sportsbook
-                        </h3>
-                        <button onclick="switchSection('accueil')"
-                            class="text-gray-400 hover:text-white text-xs bg-[#212631] px-3 py-1 rounded"><i
-                                class="fas fa-times"></i> Fermer</button>
+                        <h3 class="text-white font-bold text-sm"><i class="fas fa-futbol text-emerald"></i> Sportsbook</h3>
+                        <button onclick="setActiveMenuBtn('btn-nav-accueil'); switchSection('accueil')" class="text-gray-400 hover:text-white text-xs bg-[#212631] px-4 py-1.5 rounded-lg transition-all"><i class="fas fa-times"></i> Fermer</button>
                     </div>
 
-                    <div id="casino-loader"
-                        class="absolute inset-0 flex flex-col items-center justify-center bg-[#0f1117] z-[5] hidden">
+                    <!-- شاشة التحميل -->
+                    <div id="casino-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0f1117] z-[5] hidden">
                         <i class="fas fa-futbol text-4xl text-emerald animate-bounce mb-3"></i>
                         <span class="text-emerald font-bold tracking-widest text-xs">CHARGEMENT DU SPORT...</span>
                     </div>
 
-                    <iframe id="sportsbook-iframe" class="w-full flex-grow border-0 relative z-10 hidden"
-                        style="min-height: 700px;"></iframe>
-                    <div id="bettech" class="w-full flex-grow relative z-10 hidden bg-[#0f1117]"
-                        style="min-height: 700px;"></div>
+                    <!-- الإطار المدمج (Iframe) - لاحظ تغيير الطول لـ 85vh -->
+                    <iframe id="sportsbook-iframe" class="w-full flex-grow border-0 relative z-10 hidden" style="min-height: 85vh;"></iframe>
+                    <div id="bettech" class="w-full flex-grow relative z-10 hidden bg-[#0f1117]" style="min-height: 85vh;"></div>
                 </div>
             </div>
-           <!-- PANE: CASINO -->
+            <!-- PANE: CASINO -->
             <div id="pane-casino" class="player-view-section hidden w-full">
                 <div class="flex items-center gap-2 mb-4">
                     <i class="fas fa-slot-machine text-2xl text-emerald"></i>
@@ -523,8 +520,9 @@
         }
 
 
-        // ================= 1. التنقل بين الأقسام =================
+        // ================= 1. التنقل بين الأقسام (مع التمدد الذكي) =================
         function switchSection(sectionId) {
+            // إخفاء كل الأقسام وإظهار القسم المطلوب
             document.querySelectorAll('.player-view-section').forEach(el => {
                 el.classList.add('hidden'); el.classList.remove('block');
             });
@@ -533,9 +531,29 @@
                 panel.classList.remove('hidden');
                 panel.classList.add('block');
             }
+            
+            // 🌟 السحر هنا: تمديد الرياضة لتأخذ كامل الشاشة 🌟
+            const mainTag = document.querySelector('main');
+            if (mainTag && mainTag.children.length >= 2) {
+                const sidebar = mainTag.children[0]; // القائمة الجانبية (Desktop)
+                const centerArea = mainTag.children[1]; // منطقة المحتوى
+                
+                if (sectionId === 'sport') {
+                    // إخفاء القائمة الجانبية وتمديد المنتصف لـ 100%
+                    sidebar.style.display = 'none'; 
+                    centerArea.classList.remove('xl:w-[55%]');
+                    centerArea.style.width = '100%';
+                } else {
+                    // إرجاع التصميم العادي في باقي الصفحات (كازينو، رئيسية...)
+                    sidebar.style.display = ''; 
+                    centerArea.classList.add('xl:w-[55%]');
+                    centerArea.style.width = '';
+                }
+            }
+
+            // الصعود لأعلى الصفحة بسلاسة
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
         // ================= 2. المصادقة والرصيد =================
         function openLoginModal() { document.getElementById('player-login-modal').classList.remove('hidden'); document.getElementById('player-login-modal').classList.add('flex'); }
         function closeLoginModal() { document.getElementById('player-login-modal').classList.add('hidden'); document.getElementById('player-login-modal').classList.remove('flex'); }
