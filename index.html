@@ -526,18 +526,25 @@
         let playerSession = null;
 
        window.onload = () => {
+            // 1. استرجاع بيانات اللاعب إذا كان مسجلاً
             const savedSession = localStorage.getItem('alpha_player_session');
             if (savedSession) {
                 playerSession = JSON.parse(savedSession);
                 setupLoggedInUI();
             }
             
-            // 🌟 استرجاع القسم المحفوظ، وإذا لم يوجد نعود للرئيسية 'accueil'
+            // 2. استرجاع القسم الذي كان فيه اللاعب قبل الريفرش
             const savedSection = localStorage.getItem('active_section') || 'accueil';
             switchSection(savedSection);
             
+            // 3. تشغيل ميزات الصفحة الرئيسية
             loadGamesOfTheDay();
             startLiveJackpots();
+            
+            // 🌟 4. السحر هنا: تشغيل محرك شريط الفائزين! 🌟
+            if (typeof generateLiveWinnersTicker === 'function') {
+                generateLiveWinnersTicker();
+            }
         };
         // ================= محرك الجاكبوت الحي =================
         function startLiveJackpots() {
