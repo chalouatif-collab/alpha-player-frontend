@@ -648,36 +648,54 @@
         let isFetchingGames = false;
         let hasMoreGames = true;
 
-        // 1. جلب المزودين ديناميكياً من السيرفر
+        // 1. جلب المزودين (نظام الطوارئ المزدوج)
         async function initCasinoLobby() {
             const list = document.getElementById('provider-dropdown-list');
             if (window.nexusProviders.length === 0) {
                 if(list) list.innerHTML = '<span class="text-emerald text-xs animate-pulse p-4 text-center block">Chargement des fournisseurs... ⏳</span>';
                 
                 try {
-                    // 👈 تأكد أن هذا الرابط هو الصحيح لجلب المزودين من سيرفرك
+                    // محاولة جلب المزودين من السيرفر الخاص بك
                     const res = await fetch(`${BACKEND_URL}/api/providers`); 
+                    if (!res.ok) throw new Error("Endpoint 404");
                     const data = await res.json();
                     
                     let providers = data.providers || data.data || [];
-                    
                     if (providers.length > 0) {
                         window.nexusProviders = providers;
-                        filterProviders(); // رسم القائمة المنسدلة
-                        
-                        // تحميل ألعاب أول مزود تلقائياً
-                        const firstCode = window.nexusProviders[0].code || window.nexusProviders[0].provider_code;
-                        loadProviderGames(firstCode, window.nexusProviders[0].name);
                     } else {
-                        if(list) list.innerHTML = '<span class="text-gray-500 text-xs p-4 text-center block">Aucun fournisseur trouvé</span>';
+                        throw new Error("No providers");
                     }
                 } catch(e) {
-                    if(list) list.innerHTML = '<span class="text-red-500 text-xs p-4 text-center block">Erreur de connexion</span>';
+                    // 🌟 نظام الطوارئ: إذا كان رابط السيرفر غير جاهز، نستخدم هذه القائمة لكي لا ينكسر الموقع!
+                    console.warn("الرابط غير موجود في السيرفر، تفعيل قائمة الطوارئ...");
+                    window.nexusProviders = [
+                        { code: 'PRAGMATIC', name: 'Pragmatic Play' },
+                        { code: 'EVOLUTION', name: 'Evolution' },
+                        { code: 'HACKSAW', name: 'Hacksaw Gaming' },
+                        { code: 'SPRIBE', name: 'Spribe' },
+                        { code: 'NOLIMIT', name: 'NoLimit City' },
+                        { code: 'PLAYNGO', name: 'Play N Go' },
+                        { code: 'NETENT', name: 'NetEnt' },
+                        { code: 'REDTIGER', name: 'Red Tiger' }
+                    ];
                 }
+
+                // بعد تجهيز المزودين (من السيرفر أو الطوارئ)، نرسمهم ونشغل الألعاب
+                filterProviders(); 
+                if (window.nexusProviders.length > 0) {
+                    const firstCode = window.nexusProviders[0].code || window.nexusProviders[0].provider_code;
+                    loadProviderGames(firstCode, window.nexusProviders[0].name);
+                } else {
+                    if(list) list.innerHTML = '<span class="text-gray-500 text-xs p-4 text-center block">Aucun fournisseur trouvé</span>';
+                }
+
             } else {
                 filterProviders();
-                const firstCode = window.nexusProviders[0].code || window.nexusProviders[0].provider_code;
-                if(window.nexusProviders.length > 0) loadProviderGames(firstCode, window.nexusProviders[0].name);
+                if(window.nexusProviders.length > 0) {
+                    const firstCode = window.nexusProviders[0].code || window.nexusProviders[0].provider_code;
+                    loadProviderGames(firstCode, window.nexusProviders[0].name);
+                }
             }
         }
 
