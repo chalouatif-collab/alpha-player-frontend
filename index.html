@@ -828,27 +828,69 @@ function switchSection(sectionId, fromPopState = false) {
             }
         });
 
+        // ================= محرك ألعاب اليوم (تشكيلة متغيرة يومياً من مزودين مختلفين) =================
         async function loadGamesOfTheDay() {
             const grid = document.getElementById('games-of-the-day-grid');
-            if(grid) grid.innerHTML = '<div class="col-span-full text-emerald text-center py-5 animate-pulse">Chargement... ⚡</div>';
+            if(grid) grid.innerHTML = '<div class="col-span-full text-emerald text-center py-5 animate-pulse font-bold text-xs">Chargement de la sélection du jour... ⚡</div>';
+            
             try {
-                const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
-                    method: 'POST', headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({provider_code: 'PRAGMATIC'}) 
-                });
-                const data = await res.json();
-                let games = data.games || data.data || [];
+                // 1. قائمة أشهر المزودين لنختار منها
+                const topProviders = ['PRAGMATIC', 'HACKSAW', 'PLAYNGO', 'PGSOFT', 'EVOPLAY', 'AMUSNET', 'SPRIBE', 'RUBYPLAY'];
                 
-                if(games.length > 0 && grid) {
-                    grid.innerHTML = games.slice(0, 12).map(g => {
+                // 2. خوارزمية ذكية تعتمد على رقم اليوم في الشهر لاختيار 3 مزودين يتغيرون يومياً!
+                const day = new Date().getDate();
+                const p1 = topProviders[day % topProviders.length];
+                const p2 = topProviders[(day + 2) % topProviders.length];
+                const p3 = topProviders[(day + 4) % topProviders.length];
+                const selectedProviders = [p1, p2, p3];
+
+                let mixedGames = [];
+
+                // 3. جلب الألعاب من المزودين الثلاثة في نفس الوقت (لسرعة صاروخية)
+                const fetchPromises = selectedProviders.map(async (pCode) => {
+                    try {
+                        const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
+                            method: 'POST', headers: {'Content-Type':'application/json'},
+                            body: JSON.stringify({provider_code: pCode}) 
+                        });
+                        const data = await res.json();
+                        let games = data.games || data.data || [];
+                        // إضافة اسم المزود لكل لعبة لكي يعمل زر التشغيل بشكل صحيح
+                        return games.map(g => ({...g, provider: pCode}));
+                    } catch(e) { return []; }
+                });
+
+                // انتظار وصول كل الألعاب
+                const results = await Promise.all(fetchPromises);
+
+                // 4. دمج الألعاب (نأخذ 6 ألعاب من كل مزود لنضمن التنوع)
+                results.forEach(providerGames => {
+                    mixedGames = mixedGames.concat(providerGames.slice(0, 6));
+                });
+
+                // 5. خلط الألعاب عشوائياً (Shuffle)
+                mixedGames = mixedGames.sort(() => 0.5 - Math.random());
+
+                // 6. عرض 12 لعبة فقط في الصفحة
+                const finalGames = mixedGames.slice(0, 12);
+
+                if(finalGames.length > 0 && grid) {
+                    grid.innerHTML = finalGames.map(g => {
                         const title = String(g.game_name || g.name || "Game");
                         const img = g.banner || g.image || g.thumb || `https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}`;
                         const code = g.game_code || g.id;
+                        const pCode = g.provider; // المزود الخاص بهذه اللعبة تحديداً
+
                         return `
-                        <div onclick="playCasinoGame('PRAGMATIC', '${code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg">
+                        <div onclick="playCasinoGame('${pCode}', '${code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg relative">
                             <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
+                                <!-- 🌟 شارة اسم المزود لتبدو فخمة -->
+                                <div class="absolute top-0 right-0 bg-black/80 text-emerald text-[8px] font-black px-2 py-1 rounded-bl-lg z-20 border-b border-l border-[#212631]">
+                                    ${pCode}
+                                </div>
+                                
                                 <img src="${img}" alt="${title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}';">
-                                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
                                     <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
                                 </div>
                             </div>
@@ -856,7 +898,9 @@ function switchSection(sectionId, fromPopState = false) {
                         </div>`;
                     }).join('');
                 }
-            } catch(e) {}
+            } catch(e) {
+                if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-5">Erreur de chargement</div>';
+            }
         }
 
         async function playCasinoGame(providerCode, gameCode) {
