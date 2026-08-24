@@ -160,55 +160,98 @@
         <!-- CENTER: Dynamic Content Area (Panes) -->
         <div class="w-full xl:w-[55%] space-y-6">
 
-            <!-- PANE: ACCUEIL (الصفحة الرئيسية) -->
+            <!-- PANE: ACCUEIL (الصفحة الرئيسية المتكاملة) -->
             <div id="pane-accueil" class="player-view-section block space-y-6 w-full">
+
+                <!-- 🌟 1. شريط الفائزين المباشر (Live Winners Ticker) -->
+                <div class="relative w-full mx-auto mb-2 overflow-hidden">
+                    <div class="bg-[#161922]/80 backdrop-blur-xl border border-emerald/30 rounded-2xl p-2 flex items-center shadow-lg relative overflow-hidden w-full">
+                        <div class="bg-red-500/20 border border-red-500 rounded-lg px-2.5 py-1 flex items-center gap-1.5 z-20 shrink-0">
+                            <div class="w-2 h-2 rounded-full bg-red-500 animate-ping"></div>
+                            <span class="text-red-500 text-[9px] font-black uppercase tracking-wider">Live</span>
+                        </div>
+                        <div class="endless-ticker-container flex-grow h-6 ml-2 w-full overflow-hidden relative">
+                            <div id="winners-ticker-track" class="endless-ticker-track flex gap-4 items-center cursor-pointer animate-[marquee_25s_linear_infinite]" style="display: flex; width: max-content;">
+                                <!-- سيتم تعبئتها أوتوماتيكياً بالجافاسكريبت -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 🌟 2. شريط شعارات المزودين السريع (Providers Quick Bar) -->
+                <div class="flex overflow-x-auto gap-2 hide-scroll py-1">
+                    <button onclick="loadProviderGames('PRAGMATIC'); switchSection('casino');" class="bg-[#161922] border border-[#212631] hover:border-emerald px-4 py-2 rounded-xl text-xs font-bold text-white shrink-0 flex items-center gap-2 transition-all shadow">🎰 Pragmatic</button>
+                    <button onclick="loadProviderGames('HACKSAW'); switchSection('casino');" class="bg-[#161922] border border-[#212631] hover:border-emerald px-4 py-2 rounded-xl text-xs font-bold text-white shrink-0 flex items-center gap-2 transition-all shadow">⚡ Hacksaw</button>
+                    <button onclick="loadProviderGames('PLAYNGO'); switchSection('casino');" class="bg-[#161922] border border-[#212631] hover:border-emerald px-4 py-2 rounded-xl text-xs font-bold text-white shrink-0 flex items-center gap-2 transition-all shadow">👑 Play'n Go</button>
+                    <button onclick="loadProviderGames('PGSOFT'); switchSection('casino');" class="bg-[#161922] border border-[#212631] hover:border-emerald px-4 py-2 rounded-xl text-xs font-bold text-white shrink-0 flex items-center gap-2 transition-all shadow">🍬 PGSoft</button>
+                    <button onclick="loadProviderGames('SPRIBE'); switchSection('casino');" class="bg-[#161922] border border-[#212631] hover:border-emerald px-4 py-2 rounded-xl text-xs font-bold text-white shrink-0 flex items-center gap-2 transition-all shadow">🚀 Spribe</button>
+                    <button onclick="loadProviderGames('EVOPLAY'); switchSection('casino');" class="bg-[#161922] border border-[#212631] hover:border-emerald px-4 py-2 rounded-xl text-xs font-bold text-white shrink-0 flex items-center gap-2 transition-all shadow">🔮 Evoplay</button>
+                </div>
+
                 <!-- 🌟 شريط الجاكبوت المباشر (Live Jackpots) -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 w-full relative z-10">
-                <!-- MINI -->
-                <div class="bg-[#161922] border border-[#212631] rounded-xl p-3 flex flex-col items-center justify-center relative overflow-hidden shadow-lg">
-                    <div class="absolute inset-0 bg-gradient-to-t from-orange-500/5 to-transparent"></div>
-                    <span class="text-orange-500 font-black text-[10px] tracking-widest mb-1">MINI</span>
-                    <span id="jackpot-mini" class="text-white font-extrabold text-sm md:text-base">1,245.50 TND</span>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 w-full relative z-10">
+                    <div class="bg-[#161922] border border-[#212631] rounded-xl p-3 flex flex-col items-center justify-center relative overflow-hidden shadow-lg">
+                        <span class="text-orange-500 font-black text-[10px] tracking-widest mb-1">MINI</span>
+                        <span id="jackpot-mini" class="text-white font-extrabold text-sm md:text-base">1,245.50 TND</span>
+                    </div>
+                    <div class="bg-[#161922] border border-[#212631] rounded-xl p-3 flex flex-col items-center justify-center relative overflow-hidden shadow-lg">
+                        <span class="text-blue-500 font-black text-[10px] tracking-widest mb-1">MINOR</span>
+                        <span id="jackpot-minor" class="text-white font-extrabold text-sm md:text-base">4,890.20 TND</span>
+                    </div>
+                    <div class="bg-[#161922] border border-[#212631] rounded-xl p-3 flex flex-col items-center justify-center relative overflow-hidden shadow-lg">
+                        <span class="text-yellow-500 font-black text-[10px] tracking-widest mb-1">MAJOR</span>
+                        <span id="jackpot-major" class="text-white font-extrabold text-sm md:text-base">15,420.75 TND</span>
+                    </div>
+                    <div class="bg-[#161922] border border-emerald/30 rounded-xl p-3 flex flex-col items-center justify-center relative overflow-hidden shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                        <span class="text-emerald font-black text-[10px] tracking-widest mb-1 animate-pulse">GRAND</span>
+                        <span id="jackpot-grand" class="text-white font-black text-base md:text-lg drop-shadow-md">124,567.80 TND</span>
+                    </div>
                 </div>
-                <!-- MINOR -->
-                <div class="bg-[#161922] border border-[#212631] rounded-xl p-3 flex flex-col items-center justify-center relative overflow-hidden shadow-lg">
-                    <div class="absolute inset-0 bg-gradient-to-t from-blue-500/5 to-transparent"></div>
-                    <span class="text-blue-500 font-black text-[10px] tracking-widest mb-1">MINOR</span>
-                    <span id="jackpot-minor" class="text-white font-extrabold text-sm md:text-base">4,890.20 TND</span>
-                </div>
-                <!-- MAJOR -->
-                <div class="bg-[#161922] border border-[#212631] rounded-xl p-3 flex flex-col items-center justify-center relative overflow-hidden shadow-lg">
-                    <div class="absolute inset-0 bg-gradient-to-t from-yellow-500/10 to-transparent"></div>
-                    <span class="text-yellow-500 font-black text-[10px] tracking-widest mb-1">MAJOR</span>
-                    <span id="jackpot-major" class="text-white font-extrabold text-sm md:text-base">15,420.75 TND</span>
-                </div>
-                <!-- GRAND (المميز) -->
-                <div class="bg-[#161922] border border-emerald/30 rounded-xl p-3 flex flex-col items-center justify-center relative overflow-hidden shadow-[0_0_15px_rgba(16,185,129,0.1)]">
-                    <div class="absolute inset-0 bg-gradient-to-t from-emerald-500/20 to-transparent"></div>
-                    <span class="text-emerald font-black text-[10px] tracking-widest mb-1 animate-pulse">GRAND</span>
-                    <span id="jackpot-grand" class="text-white font-black text-base md:text-lg drop-shadow-md">124,567.80 TND</span>
-                </div>
-            </div>
-                <div
-                    class="bg-panel rounded-2xl p-6 relative overflow-hidden flex items-center justify-between border border-emerald/30">
+
+                <!-- البانر الرئيسي (Bonus) -->
+                <div class="bg-panel rounded-2xl p-6 relative overflow-hidden flex items-center justify-between border border-emerald/30">
                     <div class="relative z-10 max-w-md">
-                        <span
-                            class="bg-emerald/10 text-emerald text-[10px] font-black uppercase px-2.5 py-1 rounded-md mb-3 inline-block">Mega
-                            Bonus</span>
+                        <span class="bg-emerald/10 text-emerald text-[10px] font-black uppercase px-2.5 py-1 rounded-md mb-3 inline-block">Mega Bonus</span>
                         <h2 class="text-3xl font-bold text-white mb-2">200% de Bonus Bienvenue</h2>
                         <p class="text-xs text-gray-400 mb-4">Jouez sur vos sports et slots préférés.</p>
-                        <button onclick="openRegisterModal()"
-                            class="bg-emerald text-black font-bold text-xs uppercase px-5 py-2.5 rounded-xl hover:bg-emerald-600 mt-2">Réclamer</button>
+                        <button onclick="openRegisterModal()" class="bg-emerald text-black font-bold text-xs uppercase px-5 py-2.5 rounded-xl hover:bg-emerald-600 mt-2 transition">Réclamer</button>
                     </div>
                     <i class="fas fa-gift text-7xl text-emerald/20 hidden md:block"></i>
                 </div>
+
+                <!-- 🌟 3 & 4. بطولات الكازينو + الوصول السريع للرياضة (Grid Banner) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- بانر البطولات -->
+                    <div class="bg-gradient-to-r from-purple-900/40 to-[#161922] border border-purple-500/30 rounded-2xl p-5 flex items-center justify-between">
+                        <div>
+                            <span class="bg-purple-500/20 text-purple-400 text-[9px] font-black px-2 py-0.5 rounded uppercase">Tournoi</span>
+                            <h4 class="text-white font-bold text-lg mt-2">Drops & Wins 🏆</h4>
+                            <p class="text-xs text-gray-400 mb-3">2,000,000 TND de prix cash.</p>
+                            <button onclick="switchSection('casino');" class="bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs px-4 py-2 rounded-xl transition">Participer</button>
+                        </div>
+                        <i class="fas fa-trophy text-5xl text-purple-500/30"></i>
+                    </div>
+
+                    <!-- بانر الوصول السريع للرياضة -->
+                    <div class="bg-gradient-to-r from-emerald-900/40 to-[#161922] border border-emerald/30 rounded-2xl p-5 flex items-center justify-between">
+                        <div>
+                            <span class="bg-emerald/20 text-emerald text-[9px] font-black px-2 py-0.5 rounded uppercase">Sportsbook</span>
+                            <h4 class="text-white font-bold text-lg mt-2">Pari en Direct ⚽</h4>
+                            <p class="text-xs text-gray-400 mb-3">Les meilleures cotes du marché.</p>
+                            <button onclick="openSportsbookForProvider('nexus')" class="bg-emerald text-black font-bold text-xs px-4 py-2 rounded-xl transition">Parier Maintenant</button>
+                        </div>
+                        <i class="fas fa-futbol text-5xl text-emerald/30"></i>
+                    </div>
+                </div>
+
+                <!-- اختيار اليوم (الألعاب المتغيرة) -->
                 <div>
-                    <h3 class="font-bold text-white uppercase text-xs tracking-wider mb-3"><i
-                            class="fas fa-star text-emerald"></i> Sélection du Jour</h3>
+                    <h3 class="font-bold text-white uppercase text-xs tracking-wider mb-3 flex items-center gap-2">
+                        <i class="fas fa-star text-emerald animate-pulse"></i> Sélection du Jour (Change chaque 24h)
+                    </h3>
                     <div id="games-of-the-day-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
                 </div>
             </div>
-
             <!-- PANE: CASINO -->
             <div id="pane-casino" class="player-view-section hidden w-full">
                 <div class="flex items-center gap-2 mb-4">
@@ -1273,6 +1316,36 @@ function switchSection(sectionId, fromPopState = false) {
                 return;
             }
         });
+
+      // ================= شريط الفائزين المتحرك =================
+        function generateLiveWinnersTicker() {
+            const track = document.getElementById('winners-ticker-track');
+            if (!track) return;
+
+            const fakeNames = ["Fethi***", "Ahmed***", "Samir***", "Karim***", "Yassine***", "Baya***", "Sarah***", "Rayen***"];
+            const gamesList = ["Aviator 🚀", "Gates of Olympus ⚡", "Sweet Bonanza 🍭", "Wanted Dead 🔥", "Book of Dead 📖"];
+
+            let tickerHTML = '';
+            for (let i = 0; i < 15; i++) {
+                const name = fakeNames[Math.floor(Math.random() * fakeNames.length)];
+                const game = gamesList[Math.floor(Math.random() * gamesList.length)];
+                const amount = (Math.random() * 1200 + 40).toFixed(2);
+
+                tickerHTML += `
+                <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-300 bg-[#0f1117] px-3 py-1 rounded-lg border border-[#212631] shrink-0">
+                    <i class="fas fa-trophy text-yellow-500"></i>
+                    <span class="text-white">${name}</span> 
+                    <span class="text-gray-400">a gagné</span> 
+                    <span class="text-emerald">${amount} TND</span> 
+                    <span class="text-gray-400">sur</span> 
+                    <span class="text-purple-400">${game}</span>
+                </div>`;
+            }
+            track.innerHTML = tickerHTML + tickerHTML; // تكرار لتكون الحركة سلسة
+        }
+
+        // قم باستدعاء هذه الدالة داخل window.onload لتعمل فور فتح الموقع
+        // generateLiveWinnersTicker();  
     </script>
 </body>
 
