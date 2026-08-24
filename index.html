@@ -515,7 +515,7 @@
         }
 
 
-       // ================= 1. التنقل بين الأقسام (إلغاء الفراغات تماماً للرياضة) =================
+      // ================= 1. التنقل بين الأقسام (الالتصاق التام 100%) =================
         function switchSection(sectionId, fromPopState = false) {
             // إخفاء كل الأقسام
             document.querySelectorAll('.player-view-section').forEach(el => {
@@ -529,7 +529,7 @@
                 panel.classList.add('block');
             }
             
-            // التحكم في مساحة الشاشة
+            // التحكم الجذري في مساحة الشاشة
             const mainTag = document.querySelector('main');
             if (mainTag && mainTag.children.length >= 2) {
                 const sidebar = mainTag.children[0]; 
@@ -539,19 +539,25 @@
                     // إخفاء القائمة الجانبية وتمديد المنتصف
                     sidebar.style.display = 'none'; 
                     centerArea.classList.remove('xl:w-[55%]');
-                    centerArea.style.width = '100%';
+                    centerArea.classList.add('w-full');
                     
-                    // 🌟 السحر هنا: إزالة الهوامش والفراغات ليلتصق الإطار بالشريط العلوي تماماً
-                    mainTag.classList.remove('py-6', 'px-4', 'gap-6');
-                    mainTag.classList.add('py-0', 'px-0', 'gap-0');
+                    // 🌟 السحر المدمر للفراغات: إزالة العرض الأقصى، والهوامش، والفراغات تماماً!
+                    mainTag.classList.remove('py-6', 'px-4', 'gap-6', 'max-w-[1700px]');
+                    mainTag.classList.add('p-0', 'm-0', 'max-w-full');
+                    
+                    // سحب الإطار للأعلى بمقدار 1 بيكسل لأكل الخط الفاصل إن وجد!
+                    if(panel) panel.style.marginTop = '-1px';
+                    
                 } else {
                     // إرجاع الهوامش والتصميم العادي في باقي الصفحات
                     sidebar.style.display = ''; 
+                    centerArea.classList.remove('w-full');
                     centerArea.classList.add('xl:w-[55%]');
-                    centerArea.style.width = '';
                     
-                    mainTag.classList.remove('py-0', 'px-0', 'gap-0');
-                    mainTag.classList.add('py-6', 'px-4', 'gap-6');
+                    mainTag.classList.remove('p-0', 'm-0', 'max-w-full');
+                    mainTag.classList.add('py-6', 'px-4', 'gap-6', 'max-w-[1700px]');
+                    
+                    if(panel) panel.style.marginTop = '0';
                 }
             }
 
