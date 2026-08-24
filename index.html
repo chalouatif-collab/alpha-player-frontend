@@ -206,14 +206,19 @@
                 </div>
             </div>
 
-           <!-- PANE: SPORTSBOOK -->
-            <div id="pane-sport" class="player-view-section hidden w-full m-0 p-0">
-                <div class="bg-[#0f1117] w-full h-full relative overflow-hidden flex flex-col">
+           <!-- PANE: SPORTSBOOK (حل مشكلة القص والاندماج التام) -->
+            <div id="pane-sport" class="player-view-section hidden w-full m-0 p-0" style="contain: paint;">
+                <!-- ضبطنا الطول ليكون حجم الشاشة ناقص حجم الشريط العلوي (حوالي 125 بيكسل) -->
+                <div class="bg-[#0f1117] w-full relative overflow-hidden flex flex-col" style="height: calc(100vh - 125px);">
+                    
+                    <!-- شاشة التحميل -->
                     <div id="casino-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0f1117] z-[5] hidden">
                         <i class="fas fa-futbol text-4xl text-emerald animate-bounce mb-3"></i>
                         <span class="text-emerald font-bold tracking-widest text-xs">CHARGEMENT DU SPORT...</span>
                     </div>
-                    <iframe id="sportsbook-iframe" class="w-full h-full flex-grow border-0 relative z-10 hidden" style="display: block;"></iframe>
+
+                    <!-- الإطار المدمج -->
+                    <iframe id="sportsbook-iframe" class="w-full h-full flex-grow border-0 relative z-10 hidden"></iframe>
                     <div id="bettech" class="w-full h-full flex-grow relative z-10 hidden bg-[#0f1117]"></div>
                 </div>
             </div>
@@ -510,11 +515,8 @@
         }
 
 
-      // ================= 1. التنقل بين الأقسام (الحل النهائي لقص الشاشة) =================
+      // ================= 1. التنقل بين الأقسام (الحل النهائي) =================
         function switchSection(sectionId, fromPopState = false) {
-            // 🌟 السر هنا: نجبر الموقع على الصعود لأعلى نقطة *فوراً* وبدون نعومة لكي لا يعلق تحت الشريط!
-            window.scrollTo(0, 0); 
-            
             // إخفاء كل الأقسام
             document.querySelectorAll('.player-view-section').forEach(el => {
                 el.classList.add('hidden'); el.classList.remove('block');
@@ -533,40 +535,44 @@
                 const centerArea = mainTag.children[1]; 
                 
                 if (sectionId === 'sport') {
+                    // تمديد العرض بالكامل
                     sidebar.style.display = 'none'; 
                     centerArea.classList.remove('xl:w-[55%]');
                     centerArea.classList.add('w-full');
                     
-                    mainTag.classList.remove('py-6', 'px-4', 'gap-6', 'max-w-[1700px]');
-                    mainTag.classList.add('p-0', 'm-0', 'max-w-full');
+                    // إزالة هوامش الصفحة
+                    mainTag.classList.remove('py-6', 'px-4', 'gap-6');
+                    mainTag.classList.add('py-0', 'px-0', 'gap-0');
                     
-                    // قفل الشاشة الآن فقط بعد أن تأكدنا أننا في الأعلى 100%
+                    // قفل تمرير الصفحة الأصلية لكي يعمل كالتطبيق
                     document.body.style.overflow = 'hidden'; 
                     
-                    // حساب دقيق لطول الشاشة المتبقي (طول الشريط العلوي + الأزرار هو تقريباً 135 بيكسل)
-                    if (panel) panel.style.height = 'calc(100vh - 135px)';
-                    
                 } else {
+                    // إرجاع الوضع الطبيعي لباقي الصفحات
                     sidebar.style.display = ''; 
                     centerArea.classList.remove('w-full');
                     centerArea.classList.add('xl:w-[55%]');
                     
-                    mainTag.classList.remove('p-0', 'm-0', 'max-w-full');
-                    mainTag.classList.add('py-6', 'px-4', 'gap-6', 'max-w-[1700px]');
+                    mainTag.classList.remove('py-0', 'px-0', 'gap-0');
+                    mainTag.classList.add('py-6', 'px-4', 'gap-6');
                     
-                    // تحرير الشاشة في باقي الأقسام
+                    // إعادة التمرير للصفحة
                     document.body.style.overflow = '';
-                    if (panel) panel.style.height = 'auto';
                 }
             }
 
+            // دعم زر الرجوع في الهاتف
             if (!fromPopState) {
                 history.pushState({ section: sectionId }, "", `#${sectionId}`);
             }
             
+            // تلوين الزر
             if(typeof setActiveMenuBtn === 'function') {
                 setActiveMenuBtn(`btn-nav-${sectionId === 'sport' ? 'sport' : sectionId}`);
             }
+
+            // رفع الصفحة للأعلى فوراً
+            window.scrollTo(0, 0);
         }
         // ================= 2. المصادقة والرصيد =================
         function openLoginModal() { document.getElementById('player-login-modal').classList.remove('hidden'); document.getElementById('player-login-modal').classList.add('flex'); }
