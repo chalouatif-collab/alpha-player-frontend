@@ -260,6 +260,32 @@
                     <div id="games-of-the-day-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
                 </div>
             </div>
+            <!-- 🌟 تذييل الصفحة (الشروط، الخصوصية، والقوانين) -->
+                <div class="mt-8 pt-6 border-t border-[#212631] flex flex-col items-center justify-center text-center space-y-4 pb-8 w-full">
+                    
+                    <!-- روابط الشروط والخصوصية -->
+                    <div class="flex flex-wrap justify-center gap-3 md:gap-6 text-xs font-bold text-gray-400">
+                        <button onclick="alert('Les Termes et Conditions seront affichés ici.')" class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Termes & Conditions</button>
+                        <span class="text-[#212631]">|</span>
+                        <button onclick="alert('La Politique de Confidentialité sera affichée ici.')" class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Politique de Confidentialité</button>
+                        <span class="text-[#212631]">|</span>
+                        <button onclick="alert('Jeu Responsable sera affiché ici.')" class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Jeu Responsable</button>
+                    </div>
+
+                    <!-- ⚠️ قانون الحد الأقصى للربح (مظلل وواضح) -->
+                    <div class="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-2.5 rounded-lg text-[10px] sm:text-xs font-bold flex items-center gap-2 max-w-lg shadow-lg">
+                        <i class="fas fa-exclamation-triangle text-red-500 text-sm animate-pulse"></i>
+                        <span><span class="text-white">Règle importante :</span> Le gain et retrait maximum autorisé par mois est strictement limité à <span class="text-emerald font-black text-sm">30 000 TND</span>.</span>
+                    </div>
+
+                    <!-- نص قانوني قصير وحقوق النشر -->
+                    <p class="text-[9px] text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                        Alphabet216 est une plateforme de divertissement. En utilisant ce site, vous acceptez nos conditions générales d'utilisation. Les jeux d'argent sont strictement interdits aux personnes de moins de 18 ans. Jouez avec modération.
+                    </p>
+                    <div class="text-gray-500 text-[10px] font-black mt-2 tracking-widest uppercase flex items-center gap-2">
+                        <i class="fas fa-bolt text-emerald"></i> © 2026 Alphabet216. Tous droits réservés.
+                    </div>
+                </div>
             <!-- PANE: CASINO -->
             <div id="pane-casino" class="player-view-section hidden w-full">
                 <div class="flex items-center gap-2 mb-4">
