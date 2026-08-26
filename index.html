@@ -545,29 +545,26 @@
             </div>
         </div>
     </div>
-    <!-- Casino Iframe Container -->
-     <!-- ⚽ Sportsbook Overlay (شاشة كاملة مستقلة) -->
+<!-- ⚽ Sportsbook Overlay -->
     <div id="sportsbook-overlay" class="fixed inset-0 z-[300] bg-[#0f1117] hidden flex-col">
-        <!-- شريط علوي خاص بالرياضة يحتوي على زر الإغلاق -->
-        <div class="h-12 bg-[#12151d] flex justify-between items-center px-4 shrink-0 shadow-md z-20">
-            <span class="text-emerald font-bold"><i class="fas fa-futbol"></i> Sportsbook</span>
-            <button onclick="closeSportsbook()" class="text-white bg-[#212631] px-4 py-1.5 rounded text-xs font-bold hover:bg-red-600 transition-colors">Fermer</button>
+        <!-- تركنا الشريط العلوي لاسم الرياضة فقط، وحذفنا زر الإغلاق -->
+        <div class="h-10 bg-[#12151d] flex justify-center items-center px-4 shrink-0 shadow-md z-20">
+            <span class="text-emerald font-bold text-xs"><i class="fas fa-futbol"></i> Sportsbook</span>
         </div>
         
-        <!-- شاشة التحميل -->
         <div id="sport-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0f1117] z-[5] hidden">
             <i class="fas fa-futbol text-4xl text-emerald animate-bounce mb-3"></i>
             <span class="text-emerald font-bold tracking-widest text-xs">CHARGEMENT DU SPORT...</span>
         </div>
-
-        <!-- الإطار المدمج -->
         <iframe id="sportsbook-iframe" class="w-full h-full flex-grow border-0 relative z-10 hidden"></iframe>
         <div id="bettech" class="w-full h-full flex-grow relative z-10 hidden bg-[#0f1117]"></div>
     </div>
+
+    <!-- 🎰 Casino Iframe Container -->
     <div id="casino-iframe-container" class="fixed inset-0 z-[300] bg-black hidden flex-col">
-        <div class="h-12 bg-[#12151d] flex justify-between items-center px-4">
-            <span class="text-emerald font-bold">Alphabet216</span>
-            <button onclick="closeCasinoGame()" class="text-white bg-red-600 px-3 py-1 rounded">Fermer</button>
+        <!-- تركنا الشريط العلوي لاسم المنصة فقط، وحذفنا زر الإغلاق -->
+        <div class="h-10 bg-[#12151d] flex justify-center items-center px-4">
+            <span class="text-emerald font-bold text-xs">Alphabet216</span>
         </div>
         <iframe id="casino-iframe" class="w-full flex-grow border-0"></iframe>
     </div>
@@ -1026,14 +1023,19 @@ function switchSection(sectionId, fromPopState = false) {
             }
         }
 
-        async function playCasinoGame(providerCode, gameCode) {
+       async function playCasinoGame(providerCode, gameCode) {
             if (!playerSession) return openLoginModal();
+            
+            // 🌟 إضافة حالة في سجل هاتف اللاعب لدعم زر الرجوع
+            history.pushState({ modalOpen: true, type: 'casino' }, "", "");
+
             const container = document.getElementById('casino-iframe-container');
             const iframe = document.getElementById('casino-iframe');
             if (!container || !iframe) return;
 
             container.classList.remove('hidden'); container.classList.add('flex');
             iframe.style.opacity = '0';
+            // ... (باقي الكود كما هو بدون تغيير) ...
 
             try {
                 let endpointUrl = `${BACKEND_URL}/api/provider/launch-casino`;
@@ -1068,7 +1070,7 @@ function switchSection(sectionId, fromPopState = false) {
         window.playSMPLGame = playCasinoGame; 
         window.playNexusGame = playCasinoGame;
 
-        function closeCasinoGame() {
+        function closeCasinoGame(fromPopState = false) {
             const container = document.getElementById('casino-iframe-container');
             if(container) { 
                 container.classList.add('hidden'); 
@@ -1079,6 +1081,11 @@ function switchSection(sectionId, fromPopState = false) {
             
             if (typeof refreshBalance === 'function') {
                 refreshBalance();
+            }
+
+            // 🌟 الرجوع خطوة للوراء في الهاتف إذا كان الإغلاق برمجياً وليس من زر الهاتف
+            if (!fromPopState && history.state && history.state.modalOpen) {
+                history.back();
             }
         }
 
@@ -1129,8 +1136,13 @@ function switchSection(sectionId, fromPopState = false) {
 
         async function launchSpecificVirtualGame(uuid) {
             if(!playerSession) return openLoginModal();
+            
+            // 🌟 إضافة حالة في سجل هاتف اللاعب لدعم زر الرجوع
+            history.pushState({ modalOpen: true, type: 'virtual' }, "", "");
+
             const container = document.getElementById('casino-iframe-container');
             const iframe = document.getElementById('casino-iframe');
+            // ... (باقي الكود كما هو) ...
             if(container) { container.classList.remove('hidden'); container.classList.add('flex'); }
             if(iframe) iframe.src = ''; 
             try {
