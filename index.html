@@ -1640,23 +1640,23 @@ function openHistoryModal() {
             loader.classList.remove('hidden');
             emptyState.classList.add('hidden');
 
-            // محاكاة جلب البيانات ريثما نربطها بـ API السيرفر
-            setTimeout(() => {
-                loader.classList.add('hidden');
+            try {
+                // الاتصال بـ API السيرفر الجديد
+                const res = await fetch(`${BACKEND_URL}/api/user/transactions-history`, {
+                    headers: getAuthHeaders()
+                });
+                const result = await res.json();
                 
-                const dummyData = [
-                    { date: "2026-08-28 10:00", type: "Dépôt", method: "Voucher", amount: 50.00, status: "Approuvé" },
-                    { date: "2026-08-27 15:30", type: "Retrait", method: "D17", amount: 150.00, status: "En attente" },
-                    { date: "2026-08-25 09:15", type: "Dépôt", method: "USDT", amount: 100.00, status: "Approuvé" },
-                    { date: "2026-08-22 18:20", type: "Dépôt", method: "Ooredoo", amount: 20.00, status: "Refusé" }
-                ];
+                loader.classList.add('hidden');
 
-                if (dummyData.length === 0) {
+                // التحقق من وجود بيانات
+                if (!res.ok || !result.data || result.data.length === 0) {
                     emptyState.classList.remove('hidden');
                     return;
                 }
 
-                tbody.innerHTML = dummyData.map(tx => {
+                // طباعة البيانات الحقيقية في الجدول
+                tbody.innerHTML = result.data.map(tx => {
                     const isDeposit = tx.type === "Dépôt";
                     const typeColor = isDeposit ? 'text-emerald' : 'text-blue-400';
                     const sign = isDeposit ? '+' : '-';
@@ -1676,7 +1676,12 @@ function openHistoryModal() {
                         </tr>
                     `;
                 }).join('');
-            }, 800);
+
+            } catch(e) {
+                loader.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                showNotification("Erreur de connexion serveur", "error");
+            }
         }
     </script>
 <div id="live-chat-sidebar" class="hidden xl:flex flex-col w-80 bg-[#12151d] border-l border-gray-800 fixed right-0 top-0 h-full z-[150] shadow-2xl transition-transform duration-300 transform translate-x-0">
