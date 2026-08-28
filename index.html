@@ -1017,7 +1017,7 @@ function switchSection(sectionId, fromPopState = false) {
                 if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-5">Erreur de chargement</div>';
             }
         }
-
+closeChat();
        async function playCasinoGame(providerCode, gameCode) {
             if (!playerSession) return openLoginModal();
             
@@ -1128,7 +1128,7 @@ function switchSection(sectionId, fromPopState = false) {
                 if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de chargement</div>';
             }
         }
-
+closeChat();
         async function launchSpecificVirtualGame(uuid) {
             if(!playerSession) return openLoginModal();
             
@@ -1282,6 +1282,7 @@ function switchSection(sectionId, fromPopState = false) {
         }
 
         // ================= 4. الرياضة (نافذة مستقلة بكامل الشاشة) =================
+        closeChat();
         async function openSportsbookForProvider(providerCode) {
             if (!playerSession) return openLoginModal();
             
@@ -1683,6 +1684,38 @@ function openHistoryModal() {
                 showNotification("Erreur de connexion serveur", "error");
             }
         }
+// دالة إضافة الإيموجي
+        function addEmoji(emoji) {
+            const input = document.getElementById('chat-input');
+            if(input) {
+                input.value += emoji;
+                input.focus(); // إبقاء المؤشر في مربع النص
+            }
+        }
+
+        // دالة إغلاق الشات القسري (تُستدعى عند فتح الألعاب)
+        function closeChat() {
+            const chatSidebar = document.getElementById('live-chat-sidebar');
+            if (chatSidebar && !chatSidebar.classList.contains('translate-x-full')) {
+                chatSidebar.classList.add('translate-x-full');
+            }
+        }
+
+        // إغلاق الشات عند الضغط في أي مكان فارغ بالشاشة
+        document.addEventListener('click', function(event) {
+            const chatSidebar = document.getElementById('live-chat-sidebar');
+            const chatBtn = document.getElementById('floating-chat-btn');
+            
+            // التحقق من أن الضغطة ليست داخل الشات أو زر الشات
+            if (chatSidebar && !chatSidebar.classList.contains('translate-x-full') && 
+                !chatSidebar.contains(event.target) && 
+                (!chatBtn || !chatBtn.contains(event.target)) &&
+                !event.target.closest('[onclick*="toggleChat"]')) {
+                
+                chatSidebar.classList.add('translate-x-full');
+            }
+        });
+
     </script>
 <div id="live-chat-sidebar" class="hidden xl:flex flex-col w-80 bg-[#12151d] border-l border-gray-800 fixed right-0 top-0 h-full z-[150] shadow-2xl transition-transform duration-300 transform translate-x-0">
 
@@ -1725,11 +1758,18 @@ function openHistoryModal() {
     </div>
 
     <div class="p-4 bg-[#0f1117] border-t border-gray-800 shrink-0">
-        <div class="text-center text-[10px] text-gray-500 mb-3">Un dépôt est requis pour participer au chat.</div>
+        <!-- شريط الإيموجي السريع -->
+        <div class="flex gap-2 mb-2 px-1 text-lg">
+            <button onclick="addEmoji('🔥')" class="hover:bg-gray-800 rounded p-1 transition cursor-pointer transform hover:scale-125">🔥</button>
+            <button onclick="addEmoji('🚀')" class="hover:bg-gray-800 rounded p-1 transition cursor-pointer transform hover:scale-125">🚀</button>
+            <button onclick="addEmoji('🤑')" class="hover:bg-gray-800 rounded p-1 transition cursor-pointer transform hover:scale-125">🤑</button>
+            <button onclick="addEmoji('😂')" class="hover:bg-gray-800 rounded p-1 transition cursor-pointer transform hover:scale-125">😂</button>
+            <button onclick="addEmoji('❤️')" class="hover:bg-gray-800 rounded p-1 transition cursor-pointer transform hover:scale-125">❤️</button>
+        </div>
         
         <div class="relative">
-            <input type="text" placeholder="Écrivez un message..." class="w-full bg-[#12151d] text-white text-xs rounded-full py-3.5 pl-4 pr-12 outline-none border border-gray-700 focus:border-emerald-500 transition">
-            <button class="absolute right-1.5 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-emerald-500 rounded-full text-[#0f1117] flex items-center justify-center hover:bg-emerald-400 transition shadow-[0_0_10px_rgba(16,185,129,0.4)]">
+            <input type="text" id="chat-input" placeholder="Écrivez un message..." class="w-full bg-[#12151d] text-white text-xs rounded-full py-3.5 pl-4 pr-12 outline-none border border-gray-700 focus:border-emerald-500 transition">
+            <button class="absolute right-1.5 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-emerald-500 rounded-full text-[#0f1117] flex items-center justify-center hover:bg-emerald-400 transition shadow-[0_0_10px_rgba(16,185,129,0.4)] cursor-pointer">
                 <i class="fas fa-paper-plane text-xs"></i>
             </button>
         </div>
@@ -1784,13 +1824,27 @@ function openHistoryModal() {
             <span class="ml-auto bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">NEW</span>
         </a>
     </div>
+    <!-- زر الشات (يظهر في الهاتف فقط) -->
+    <div class="px-4 pt-4 border-t border-gray-800 bg-[#0f1117] xl:hidden">
+        <button onclick="toggleProfileSidebar(); toggleChat();" class="w-full bg-[#1a1d24] hover:bg-gray-800 text-white font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition border border-gray-700">
+            <i class="fas fa-comments text-emerald-500"></i> CHAT EN DIRECT
+        </button>
+    </div>
+
     <!-- تذييل القائمة (زر الخروج) -->
-    <div class="p-4 border-t border-gray-800 bg-[#0f1117]">
-        <button onclick="logout()" class="w-full bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 border border-red-500/30 font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition">
+    <div class="p-4 bg-[#0f1117]">
+        <button onclick="toggleProfileSidebar(); logoutPlayer();" class="w-full bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 border border-red-500/30 font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition">
             <i class="fas fa-sign-out-alt"></i> DÉCONNEXION
         </button>
     </div>
 </div>
+
+<!-- 💬 الزر العائم للشات (يظهر في الكمبيوتر أسفل اليمين) -->
+<button id="floating-chat-btn" onclick="toggleChat()" class="fixed bottom-6 right-6 z-[100] w-14 h-14 bg-emerald-500 hover:bg-emerald-400 rounded-full hidden xl:flex items-center justify-center text-[#0f1117] shadow-[0_0_20px_rgba(16,185,129,0.4)] transition transform hover:scale-110">
+    <i class="fas fa-comments text-2xl"></i>
+    <!-- نقطة الإشعارات الحمراء -->
+    <span class="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-[#12151d] rounded-full animate-pulse"></span>
+</button>
 
 <!-- 📜 نافذة سجل الرهانات (Historique des paris) -->
     <div id="history-modal" class="fixed inset-0 z-[400] bg-black/80 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
