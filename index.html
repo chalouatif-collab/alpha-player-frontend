@@ -1017,8 +1017,9 @@ function switchSection(sectionId, fromPopState = false) {
                 if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-5">Erreur de chargement</div>';
             }
         }
-closeChat();
+
        async function playCasinoGame(providerCode, gameCode) {
+        closeChat();
             if (!playerSession) return openLoginModal();
             
             // 🌟 إضافة حالة في سجل هاتف اللاعب لدعم زر الرجوع
@@ -1128,8 +1129,9 @@ closeChat();
                 if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de chargement</div>';
             }
         }
-closeChat();
+
         async function launchSpecificVirtualGame(uuid) {
+            closeChat();
             if(!playerSession) return openLoginModal();
             
             // 🌟 إضافة حالة في سجل هاتف اللاعب لدعم زر الرجوع
@@ -1282,8 +1284,9 @@ closeChat();
         }
 
         // ================= 4. الرياضة (نافذة مستقلة بكامل الشاشة) =================
-        closeChat();
+        
         async function openSportsbookForProvider(providerCode) {
+            closeChat();
             if (!playerSession) return openLoginModal();
             
             // إظهار النافذة المستقلة
