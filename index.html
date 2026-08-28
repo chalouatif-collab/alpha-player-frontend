@@ -1597,6 +1597,87 @@ function openHistoryModal() {
                 }).join('');
             }, 800); // تأثير تحميل مدته 0.8 ثانية
         }
+        function openTransactionsModal() {
+            // إغلاق الشريط الجانبي أولاً
+            const sidebar = document.getElementById('profile-sidebar');
+            if (!sidebar.classList.contains('translate-x-full')) {
+                toggleProfileSidebar();
+            }
+            
+            const modal = document.getElementById('transactions-modal');
+            const content = document.getElementById('transactions-modal-content');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            setTimeout(() => {
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+
+            fetchTransactionsHistory();
+        }
+
+        function closeTransactionsModal() {
+            const modal = document.getElementById('transactions-modal');
+            const content = document.getElementById('transactions-modal-content');
+            
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 200);
+        }
+
+        async function fetchTransactionsHistory() {
+            const tbody = document.getElementById('transactions-table-body');
+            const loader = document.getElementById('transactions-loader');
+            const emptyState = document.getElementById('transactions-empty');
+
+            tbody.innerHTML = '';
+            loader.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            // محاكاة جلب البيانات ريثما نربطها بـ API السيرفر
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                
+                const dummyData = [
+                    { date: "2026-08-28 10:00", type: "Dépôt", method: "Voucher", amount: 50.00, status: "Approuvé" },
+                    { date: "2026-08-27 15:30", type: "Retrait", method: "D17", amount: 150.00, status: "En attente" },
+                    { date: "2026-08-25 09:15", type: "Dépôt", method: "USDT", amount: 100.00, status: "Approuvé" },
+                    { date: "2026-08-22 18:20", type: "Dépôt", method: "Ooredoo", amount: 20.00, status: "Refusé" }
+                ];
+
+                if (dummyData.length === 0) {
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+
+                tbody.innerHTML = dummyData.map(tx => {
+                    const isDeposit = tx.type === "Dépôt";
+                    const typeColor = isDeposit ? 'text-emerald' : 'text-blue-400';
+                    const sign = isDeposit ? '+' : '-';
+                    
+                    let statusHtml = '';
+                    if(tx.status === "Approuvé") statusHtml = `<span class="bg-emerald-500/10 text-emerald border border-emerald/20 px-2 py-1 rounded text-[9px] font-black uppercase">Approuvé</span>`;
+                    else if(tx.status === "En attente") statusHtml = `<span class="bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 px-2 py-1 rounded text-[9px] font-black uppercase">En attente</span>`;
+                    else statusHtml = `<span class="bg-red-500/10 text-red-500 border border-red-500/20 px-2 py-1 rounded text-[9px] font-black uppercase">Refusé</span>`;
+                    
+                    return `
+                        <tr class="hover:bg-[#1a1e29] transition-colors border-l-2 border-[#212631]">
+                            <td class="p-3 text-gray-400 text-[10px]">${tx.date}</td>
+                            <td class="p-3 font-bold ${typeColor}">${tx.type}</td>
+                            <td class="p-3 text-white text-xs">${tx.method}</td>
+                            <td class="p-3 text-center font-black">${sign}${tx.amount.toFixed(2)} TND</td>
+                            <td class="p-3 text-right">${statusHtml}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }, 800);
+        }
     </script>
 <div id="live-chat-sidebar" class="hidden xl:flex flex-col w-80 bg-[#12151d] border-l border-gray-800 fixed right-0 top-0 h-full z-[150] shadow-2xl transition-transform duration-300 transform translate-x-0">
 
@@ -1687,7 +1768,7 @@ function openHistoryModal() {
             <span class="text-sm font-semibold">Historique des paris</span>
         </a>
         
-        <a href="javascript:void(0)" onclick="toggleProfileSidebar(); toggleCashier();" class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
+        <a href="javascript:void(0)" onclick="openTransactionsModal()" class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
             <i class="fas fa-exchange-alt text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
             <span class="text-sm font-semibold">Transactions</span>
         </a>
@@ -1753,7 +1834,51 @@ function openHistoryModal() {
             </div>
         </div>
     </div>
-
+<!-- 💸 نافذة سجل المعاملات المالية (Transactions) -->
+    <div id="transactions-modal" class="fixed inset-0 z-[400] bg-black/80 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
+        <div class="bg-[#161922] border border-[#212631] rounded-2xl w-full max-w-3xl flex flex-col max-h-[85vh] shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300" id="transactions-modal-content">
+            
+            <!-- رأس النافذة -->
+            <div class="flex justify-between items-center p-5 border-b border-[#212631] bg-[#0f1117]">
+                <h3 class="text-white font-black uppercase tracking-wider text-lg flex items-center gap-2">
+                    <i class="fas fa-exchange-alt text-emerald"></i> Historique des Transactions
+                </h3>
+                <button onclick="closeTransactionsModal()" class="text-gray-400 hover:text-red-500 transition text-xl w-8 h-8 flex items-center justify-center rounded-full bg-[#161922] hover:bg-red-500/10 border border-transparent hover:border-red-500/30">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- محتوى الجدول -->
+            <div class="p-4 overflow-y-auto hide-scroll flex-1 bg-[#0f1117]">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse whitespace-nowrap">
+                        <thead>
+                            <tr class="text-[10px] uppercase tracking-wider text-gray-500 border-b border-[#212631]">
+                                <th class="p-3 font-bold">Date</th>
+                                <th class="p-3 font-bold">Type</th>
+                                <th class="p-3 font-bold">Méthode</th>
+                                <th class="p-3 font-bold text-center">Montant</th>
+                                <th class="p-3 font-bold text-right">Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-table-body" class="text-xs text-gray-300 divide-y divide-[#212631]">
+                            <!-- سيتم حقن البيانات هنا -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="transactions-loader" class="py-12 text-center hidden">
+                    <i class="fas fa-circle-notch fa-spin text-emerald text-4xl mb-4"></i>
+                    <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Chargement...</p>
+                </div>
+                
+                <div id="transactions-empty" class="py-12 text-center hidden">
+                    <i class="fas fa-file-invoice-dollar text-gray-700 text-5xl mb-4"></i>
+                    <p class="text-gray-500 text-xs font-bold uppercase tracking-widest">Aucune transaction trouvée.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
