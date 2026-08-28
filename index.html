@@ -1811,21 +1811,22 @@ function openHistoryModal() {
         </div>
     </div>
 
-    <!-- منطقة الإدخال و الإيموجي -->
-    <div class="p-3 bg-[#0f1117] border-t border-gray-800 shrink-0">
+<!-- منطقة الإدخال و الإيموجي -->
+    <div class="p-3 bg-[#0f1117] border-t border-gray-800 shrink-0 relative z-20">
         <!-- شريط الإيموجي السريع -->
         <div class="flex justify-around mb-3 px-1 text-lg">
-            <button onclick="addEmoji('🔥')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125">🔥</button>
-            <button onclick="addEmoji('🚀')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125">🚀</button>
-            <button onclick="addEmoji('🤑')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125">🤑</button>
-            <button onclick="addEmoji('😂')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125">😂</button>
-            <button onclick="addEmoji('❤️')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125">❤️</button>
+            <button type="button" onclick="addEmoji('🔥')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">🔥</button>
+            <button type="button" onclick="addEmoji('🚀')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">🚀</button>
+            <button type="button" onclick="addEmoji('🤑')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">🤑</button>
+            <button type="button" onclick="addEmoji('😂')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">😂</button>
+            <button type="button" onclick="addEmoji('❤️')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">❤️</button>
         </div>
         
-        <div class="relative">
-            <input type="text" id="chat-input" placeholder="Écrivez un message..." class="w-full bg-[#161922] text-white text-xs rounded-xl py-3 pl-4 pr-12 outline-none border border-gray-700 focus:border-emerald-500 transition shadow-inner">
-            <button class="absolute right-1 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-emerald-500 rounded-lg text-[#0f1117] flex items-center justify-center hover:bg-emerald-400 transition shadow-md cursor-pointer">
-                <i class="fas fa-paper-plane text-xs"></i>
+        <div class="relative w-full z-30">
+            <!-- أضفنا onkeypress ليدعم زر Enter، و pointer-events-auto ليقبل النقرات إجبارياً -->
+            <input type="text" id="chat-input" onkeypress="handleChatEnter(event)" placeholder="Écrivez un message..." class="w-full bg-[#161922] text-white text-xs rounded-xl py-3 pl-4 pr-12 outline-none border border-gray-700 focus:border-emerald-500 transition shadow-inner pointer-events-auto" autocomplete="off">
+            <button type="button" onclick="sendMessage()" class="absolute right-1 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-emerald-500 rounded-lg text-[#0f1117] flex items-center justify-center hover:bg-emerald-400 transition shadow-md cursor-pointer z-40">
+                <i class="fas fa-paper-plane text-xs pointer-events-none"></i>
             </button>
         </div>
     </div>
