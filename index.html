@@ -1728,42 +1728,52 @@ function openHistoryModal() {
             }
         });
 
-        // تفعيل الإرسال بالضغط على زر Enter في لوحة المفاتيح
+        // تفعيل الإرسال بالضغط على زر Enter
         function handleChatEnter(event) {
             if (event.key === 'Enter') {
-                event.preventDefault(); // منع أي تحديث للصفحة
+                event.preventDefault();
                 sendMessage();
             }
         }
 
-        // محرك إرسال الرسالة وطباعتها في الشاشة
+        // محرك إرسال الرسالة القوي
         function sendMessage() {
-            const input = document.getElementById('chat-input');
+            // البحث عن كل مربعات الإدخال في حال وجود نسخ قديمة وأخذ المرئي منها
+            const inputs = document.querySelectorAll('#chat-input');
+            let input = inputs[inputs.length - 1]; // نأخذ الأحدث
+            
+            const chatBoxes = document.querySelectorAll('#chat-messages');
+            let chatBox = chatBoxes[chatBoxes.length - 1]; // نأخذ الأحدث
+
+            if (!input || !chatBox) return;
+
             const message = input.value.trim();
-            const chatBox = document.getElementById('chat-messages');
             
             if (message !== "") {
-                // جلب اسم اللاعب أو وضع اسم افتراضي
+                // جلب اسم اللاعب
                 const playerName = (typeof playerSession !== 'undefined' && playerSession && playerSession.username) ? playerSession.username : "Moi";
                 
-                // تصميم الرسالة الجديدة
-                const msgHTML = `
-                <div class="flex flex-col mt-4">
+                // إنشاء عنصر الرسالة الجديد بطريقة احترافية لا تسبب أي أخطاء
+                const msgDiv = document.createElement('div');
+                msgDiv.className = "flex flex-col mt-4 transform transition-all duration-300 translate-y-4 opacity-0";
+                msgDiv.innerHTML = `
                     <span class="text-emerald-400 font-bold text-[11px] mb-1">${playerName}</span>
                     <span class="text-gray-300 bg-[#161922] border border-emerald-500/30 p-2.5 rounded-xl rounded-tr-none text-xs break-words shadow-md">${message}</span>
-                </div>`;
+                `;
                 
-                // طباعتها في الشاشة
-                chatBox.innerHTML += msgHTML;
+                // إضافة الرسالة للشات
+                chatBox.appendChild(msgDiv);
                 
-                // مسح المربع بعد الإرسال استعداداً لرسالة جديدة
+                // مسح المربع فوراً
                 input.value = "";
                 
-                // التمرير التلقائي للأسفل لرؤية الرسالة الجديدة فوراً
-                chatBox.scrollTop = chatBox.scrollHeight;
+                // تشغيل حركة الظهور (Animation) والتمرير للأسفل
+                setTimeout(() => {
+                    msgDiv.classList.remove('translate-y-4', 'opacity-0');
+                    chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
+                }, 50);
             }
         }
-
     </script>
 <!-- 💬 مربع الشات العائم (Floating Chat Box) -->
 <div id="live-chat-sidebar" class="fixed bottom-24 right-4 md:right-8 w-[320px] md:w-[350px] h-[500px] max-h-[75vh] bg-[#12151d] border border-gray-700 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.8)] z-[500] flex-col hidden overflow-hidden">
