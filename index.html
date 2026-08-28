@@ -1511,7 +1511,17 @@ function toggleProfileSidebar() {
         overlay.classList.add('hidden');
     }
 }
+function openHistoryModal() {
+            toggleProfileSidebar();
+            // مؤقتاً نعرض إشعار حتى نبرمج النافذة
+            showNotification("L'historique sera bientôt disponible", "success");
+        }
 
+        function openBonusModal() {
+            toggleProfileSidebar();
+            // مؤقتاً نعرض إشعار أنه لا توجد بونص
+            showNotification("Aucun bonus actif pour le moment", "error");
+        }
     </script>
 <div id="live-chat-sidebar" class="hidden xl:flex flex-col w-80 bg-[#12151d] border-l border-gray-800 fixed right-0 top-0 h-full z-[150] shadow-2xl transition-transform duration-300 transform translate-x-0">
 
@@ -1597,25 +1607,22 @@ function toggleProfileSidebar() {
     <div class="flex-1 overflow-y-auto p-3 space-y-1">
         <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2 ml-2 mt-2">Mon Compte</div>
         
-        <a href="#" class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group">
-            <i class="fas fa-history text-gray-500 group-hover:text-emerald-400 w-5 text-center transition"></i>
+        <a href="javascript:void(0)" onclick="openHistoryModal()" class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
+            <i class="fas fa-history text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
             <span class="text-sm font-semibold">Historique des paris</span>
         </a>
-        <a href="#" class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group">
-            <i class="fas fa-exchange-alt text-gray-500 group-hover:text-emerald-400 w-5 text-center transition"></i>
+        
+        <a href="javascript:void(0)" onclick="toggleProfileSidebar(); toggleCashier();" class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
+            <i class="fas fa-exchange-alt text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
             <span class="text-sm font-semibold">Transactions</span>
         </a>
-        <a href="#" class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group">
-            <i class="fas fa-gift text-gray-500 group-hover:text-emerald-400 w-5 text-center transition"></i>
+        
+        <a href="javascript:void(0)" onclick="openBonusModal()" class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
+            <i class="fas fa-gift text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
             <span class="text-sm font-semibold">Bonus & Offres</span>
             <span class="ml-auto bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">NEW</span>
         </a>
-        <a href="#" class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group">
-            <i class="fas fa-cog text-gray-500 group-hover:text-emerald-400 w-5 text-center transition"></i>
-            <span class="text-sm font-semibold">Paramètres du compte</span>
-        </a>
     </div>
-
     <!-- تذييل القائمة (زر الخروج) -->
     <div class="p-4 border-t border-gray-800 bg-[#0f1117]">
         <button onclick="logout()" class="w-full bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 border border-red-500/30 font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition">
