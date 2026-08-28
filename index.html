@@ -75,23 +75,18 @@
                     <button onclick="openRegisterModal()" class="bg-emerald text-black font-extrabold text-[10px] md:text-xs uppercase px-3 md:px-4 py-1.5 md:py-2 rounded-lg md:rounded-xl transition shadow-md">S'inscrire</button>
                 </div>
 
-                <!-- بروفايل اللاعب (الرصيد والخروج) -->
-                <div id="top-user-profile" class="hidden items-center gap-1.5 md:gap-3">
-                    <!-- مربع الرصيد الأنيق والمصغر للهاتف -->
-                    <div class="bg-[#0f1117] border border-[#212631] rounded-lg md:rounded-xl py-1 px-2 md:px-3 flex items-center justify-center">
-                        <div class="text-center md:text-left leading-tight">
-                            <span class="text-[8px] md:text-[9px] text-gray-500 font-bold uppercase block mb-0.5" id="player-name-display">User</span>
-                            <span class="font-bold text-emerald text-[10px] md:text-xs"><span id="player-balance-val">0.00</span> TND</span>
-                        </div>
+                <!-- بروفايل اللاعب (الزر الجديد الذي يفتح الشريط الجانبي) -->
+                <div id="top-user-profile" class="hidden items-center gap-2 cursor-pointer hover:opacity-80 transition bg-[#1a1d24] p-1 pr-3 md:p-1.5 md:pr-4 rounded-full border border-gray-700 shadow-sm" onclick="toggleProfileSidebar()">
+                    <!-- أيقونة اللاعب -->
+                    <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center text-sm border border-emerald-500/30">
+                        <i class="fas fa-user-astronaut"></i>
                     </div>
-
-                    <!-- زر الإيداع (يختفي في الهاتف ليترك مساحة) -->
-                    <button onclick="toggleCashier()" class="bg-emerald hover:bg-emerald-600 text-black font-extrabold uppercase text-xs px-5 py-2.5 rounded-xl transition shadow-lg hidden sm:block">Dépôt</button>
-                    
-                    <!-- زر تسجيل الخروج المصغر -->
-                    <div onclick="logoutPlayer()" class="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-500 hover:text-white hover:bg-red-500 cursor-pointer transition text-xs md:text-base">
-                        <i class="fas fa-sign-out-alt"></i>
+                    <!-- الرصيد والاسم -->
+                    <div class="text-right">
+                        <div class="text-[9px] text-gray-400 font-bold uppercase tracking-wider" id="player-name-display">User</div>
+                        <div class="font-extrabold text-emerald-400 text-xs md:text-sm leading-tight"><span id="player-balance-val">0.00</span> TND</div>
                     </div>
+                    <i class="fas fa-chevron-down text-gray-500 text-xs ml-1 hidden md:block"></i>
                 </div>
             </div>
         </div>
@@ -1502,6 +1497,21 @@ function switchSection(sectionId, fromPopState = false) {
     const chatSidebar = document.getElementById('live-chat-sidebar');
     chatSidebar.classList.toggle('translate-x-full');
 }
+function toggleProfileSidebar() {
+    const sidebar = document.getElementById('profile-sidebar');
+    const overlay = document.getElementById('profile-overlay');
+
+    if (sidebar.classList.contains('translate-x-full')) {
+        // فتح الشريط
+        sidebar.classList.remove('translate-x-full');
+        overlay.classList.remove('hidden');
+    } else {
+        // إغلاق الشريط
+        sidebar.classList.add('translate-x-full');
+        overlay.classList.add('hidden');
+    }
+}
+
     </script>
 <div id="live-chat-sidebar" class="hidden xl:flex flex-col w-80 bg-[#12151d] border-l border-gray-800 fixed right-0 top-0 h-full z-[150] shadow-2xl transition-transform duration-300 transform translate-x-0">
 
@@ -1552,6 +1562,65 @@ function switchSection(sectionId, fromPopState = false) {
                 <i class="fas fa-paper-plane text-xs"></i>
             </button>
         </div>
+    </div>
+</div>
+
+<!-- 👤 قائمة الملف الشخصي (Profile Sidebar) -->
+<!-- خلفية ضبابية عند فتح القائمة -->
+<div id="profile-overlay" onclick="toggleProfileSidebar()" class="fixed inset-0 bg-black/60 z-[190] hidden backdrop-blur-sm transition-opacity"></div>
+
+<div id="profile-sidebar" class="fixed right-0 top-0 h-full w-80 bg-[#12151d] border-l border-gray-800 z-[200] shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+    <!-- رأس القائمة -->
+    <div class="p-5 border-b border-gray-800 flex justify-between items-center bg-[#0f1117]">
+        <div class="flex items-center gap-3">
+             <div class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center text-xl border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
+                <i class="fas fa-user-astronaut"></i>
+             </div>
+             <div>
+                 <h3 class="text-white font-bold text-base uppercase" id="sidebar-username">TEST1</h3>
+                 <p class="text-emerald-400 font-black text-sm" id="sidebar-balance">313.28 TND</p>
+             </div>
+        </div>
+        <button onclick="toggleProfileSidebar()" class="text-gray-400 hover:text-white transition w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- زر الإيداع البارز -->
+    <div class="p-5 border-b border-gray-800">
+        <button onclick="toggleProfileSidebar(); openDepositModal();" class="w-full bg-emerald-500 hover:bg-emerald-400 text-[#0f1117] font-black py-3.5 rounded-lg flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition transform hover:scale-[1.02]">
+            <i class="fas fa-wallet text-lg"></i> FAIRE UN DÉPÔT
+        </button>
+    </div>
+
+    <!-- روابط التحكم في الحساب -->
+    <div class="flex-1 overflow-y-auto p-3 space-y-1">
+        <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2 ml-2 mt-2">Mon Compte</div>
+        
+        <a href="#" class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group">
+            <i class="fas fa-history text-gray-500 group-hover:text-emerald-400 w-5 text-center transition"></i>
+            <span class="text-sm font-semibold">Historique des paris</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group">
+            <i class="fas fa-exchange-alt text-gray-500 group-hover:text-emerald-400 w-5 text-center transition"></i>
+            <span class="text-sm font-semibold">Transactions</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group">
+            <i class="fas fa-gift text-gray-500 group-hover:text-emerald-400 w-5 text-center transition"></i>
+            <span class="text-sm font-semibold">Bonus & Offres</span>
+            <span class="ml-auto bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">NEW</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group">
+            <i class="fas fa-cog text-gray-500 group-hover:text-emerald-400 w-5 text-center transition"></i>
+            <span class="text-sm font-semibold">Paramètres du compte</span>
+        </a>
+    </div>
+
+    <!-- تذييل القائمة (زر الخروج) -->
+    <div class="p-4 border-t border-gray-800 bg-[#0f1117]">
+        <button onclick="logout()" class="w-full bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 border border-red-500/30 font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition">
+            <i class="fas fa-sign-out-alt"></i> DÉCONNEXION
+        </button>
     </div>
 </div>
 
