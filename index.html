@@ -252,7 +252,7 @@
                 <!-- اختيار اليوم (الألعاب المتغيرة) -->
                 <div>
                     <h3 class="font-bold text-white uppercase text-xs tracking-wider mb-3 flex items-center gap-2">
-                        <i class="fas fa-star text-emerald animate-pulse"></i> Sélection du Jour (Change chaque 24h)
+                        <i class="fas fa-star text-emerald animate-pulse"></i> Sélection du Jour 
                     </h3>
                     <div id="games-of-the-day-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
                 </div>
@@ -1775,59 +1775,59 @@ function openHistoryModal() {
             }
         }
     </script>
-<!-- 💬 مربع الشات العائم (Floating Chat Box) -->
-<div id="live-chat-sidebar" class="fixed bottom-24 right-4 md:right-8 w-[320px] md:w-[350px] h-[500px] max-h-[75vh] bg-[#12151d] border border-gray-700 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.8)] z-[500] flex-col hidden overflow-hidden">
+<!-- 💬 مربع الشات (Modal في الهاتف، عائم في الكمبيوتر) -->
+<div id="live-chat-sidebar" class="fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-4 md:right-8 z-[500] hidden items-center justify-center p-4 sm:p-0 bg-black/80 sm:bg-transparent backdrop-blur-sm sm:backdrop-blur-none">
+    
+    <!-- الحاوية الداخلية للشات -->
+    <div class="w-full max-w-[350px] h-[75vh] sm:h-[500px] bg-[#12151d] border border-gray-700 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden relative">
+        
+        <!-- رأس الشات -->
+        <div class="h-16 bg-[#0f1117] flex justify-between items-center px-4 border-b border-gray-800 shrink-0">
+            <div class="flex items-center gap-3">
+                <span class="relative flex h-3 w-3">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                </span>
+                <div>
+                    <h3 class="text-white font-bold text-sm tracking-wide">CHAT EN DIRECT</h3>
+                    <p class="text-emerald-500 text-[10px] font-semibold"><i class="fas fa-users"></i> 142 en ligne</p>
+                </div>
+            </div>
+            <!-- زر إغلاق الشات يدوياً -->
+            <button onclick="toggleChat()" class="text-gray-400 hover:text-red-500 transition cursor-pointer w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
 
-    <!-- رأس الشات -->
-    <div class="h-16 bg-[#0f1117] flex justify-between items-center px-4 border-b border-gray-800 shrink-0">
-        <div class="flex items-center gap-3">
-            <span class="relative flex h-3 w-3">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-            </span>
-            <div>
-                <h3 class="text-white font-bold text-sm tracking-wide">CHAT EN DIRECT</h3>
-                <p class="text-emerald-500 text-[10px] font-semibold"><i class="fas fa-users"></i> 142 en ligne</p>
+        <!-- رسائل الشات -->
+        <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-5 text-sm bg-[#12151d] hide-scroll">
+            <div class="bg-emerald-900/20 border border-emerald-500/30 rounded p-3 text-emerald-400 text-xs shadow-sm">
+                🚀 <strong>[SYSTÈME]</strong> Sarah*** vient de gagner <strong>693.97 TND</strong> sur Aviator !
+            </div>
+            <div class="flex flex-col mt-4">
+                <span class="text-yellow-400 font-bold text-[11px] mb-1">👑 [VIP] Chalo</span>
+                <span class="text-gray-300 bg-[#161922] border border-emerald-500/30 p-2.5 rounded-xl rounded-tr-none text-xs break-words shadow-md">C'est le feu aujourd'hui 🔥 Qui joue avec moi ?</span>
             </div>
         </div>
-        <!-- زر إغلاق الشات يدوياً -->
-        <button onclick="toggleChat()" class="text-gray-400 hover:text-red-500 transition cursor-pointer w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
 
-    <!-- رسائل الشات -->
-    <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-5 text-sm bg-[#12151d] hide-scroll">
-        <div class="bg-emerald-900/20 border border-emerald-500/30 rounded p-3 text-emerald-400 text-xs shadow-sm">
-            🚀 <strong>[SYSTÈME]</strong> Sarah*** vient de gagner <strong>693.97 TND</strong> sur Aviator !
-        </div>
-        <div class="flex flex-col">
-            <span class="text-yellow-400 font-bold text-[11px] mb-1">👑 [VIP] Chalo</span>
-            <span class="text-gray-300 bg-[#1a1e29] border border-[#2e3648] p-2.5 rounded-xl rounded-tr-none text-xs">C'est le feu aujourd'hui 🔥 Qui joue avec moi ?</span>
-        </div>
-        <div class="flex flex-col">
-            <span class="text-blue-400 font-bold text-[11px] mb-1">Ahmed99</span>
-            <span class="text-gray-300 bg-[#1a1e29] border border-[#2e3648] p-2.5 rounded-xl rounded-tr-none text-xs">Moi, je viens de retirer 300 TND 🤑</span>
-        </div>
-    </div>
-
-<!-- منطقة الإدخال و الإيموجي -->
-    <div class="p-3 bg-[#0f1117] border-t border-gray-800 shrink-0 relative z-20">
-        <!-- شريط الإيموجي السريع -->
-        <div class="flex justify-around mb-3 px-1 text-lg">
-            <button type="button" onclick="addEmoji('🔥')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">🔥</button>
-            <button type="button" onclick="addEmoji('🚀')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">🚀</button>
-            <button type="button" onclick="addEmoji('🤑')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">🤑</button>
-            <button type="button" onclick="addEmoji('😂')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">😂</button>
-            <button type="button" onclick="addEmoji('❤️')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">❤️</button>
-        </div>
-        
-        <div class="relative w-full z-30">
-            <!-- أضفنا onkeypress ليدعم زر Enter، و pointer-events-auto ليقبل النقرات إجبارياً -->
-            <input type="text" id="chat-input" onkeypress="handleChatEnter(event)" placeholder="Écrivez un message..." class="w-full bg-[#161922] text-white text-xs rounded-xl py-3 pl-4 pr-12 outline-none border border-gray-700 focus:border-emerald-500 transition shadow-inner pointer-events-auto" autocomplete="off">
-            <button type="button" onclick="sendMessage()" class="absolute right-1 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-emerald-500 rounded-lg text-[#0f1117] flex items-center justify-center hover:bg-emerald-400 transition shadow-md cursor-pointer z-40">
-                <i class="fas fa-paper-plane text-xs pointer-events-none"></i>
-            </button>
+        <!-- منطقة الإدخال و الإيموجي -->
+        <div class="p-3 bg-[#0f1117] border-t border-gray-800 shrink-0 relative z-20">
+            <!-- شريط الإيموجي السريع -->
+            <div class="flex justify-around mb-3 px-1 text-lg">
+                <button type="button" onclick="addEmoji('🔥')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">🔥</button>
+                <button type="button" onclick="addEmoji('🚀')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">🚀</button>
+                <button type="button" onclick="addEmoji('🤑')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">🤑</button>
+                <button type="button" onclick="addEmoji('😂')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">😂</button>
+                <button type="button" onclick="addEmoji('❤️')" class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">❤️</button>
+            </div>
+            
+            <div class="relative w-full z-30">
+                <!-- تم إضافة maxlength="25" ومنع النسخ واللصق -->
+                <input type="text" id="chat-input" maxlength="25" oncopy="return false" onpaste="return false" oncut="return false" onkeypress="handleChatEnter(event)" placeholder="Écrivez (Max 25)..." class="w-full bg-[#161922] text-white text-xs rounded-xl py-3 pl-4 pr-12 outline-none border border-gray-700 focus:border-emerald-500 transition shadow-inner pointer-events-auto select-none" autocomplete="off">
+                <button type="button" onclick="sendMessage()" class="absolute right-1 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-emerald-500 rounded-lg text-[#0f1117] flex items-center justify-center hover:bg-emerald-400 transition shadow-md cursor-pointer z-40">
+                    <i class="fas fa-paper-plane text-xs pointer-events-none"></i>
+                </button>
+            </div>
         </div>
     </div>
 </div>
