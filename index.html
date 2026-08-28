@@ -1512,15 +1512,90 @@ function toggleProfileSidebar() {
     }
 }
 function openHistoryModal() {
-            toggleProfileSidebar();
-            // مؤقتاً نعرض إشعار حتى نبرمج النافذة
-            showNotification("L'historique sera bientôt disponible", "success");
+            // 1. إغلاق الشريط الجانبي أولاً
+            const sidebar = document.getElementById('profile-sidebar');
+            if (!sidebar.classList.contains('translate-x-full')) {
+                toggleProfileSidebar();
+            }
+            
+            // 2. إظهار النافذة
+            const modal = document.getElementById('history-modal');
+            const content = document.getElementById('history-modal-content');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            setTimeout(() => {
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+
+            // 3. تشغيل دالة جلب البيانات
+            fetchBetHistory();
         }
 
-        function openBonusModal() {
-            toggleProfileSidebar();
-            // مؤقتاً نعرض إشعار أنه لا توجد بونص
-            showNotification("Aucun bonus actif pour le moment", "error");
+        function closeHistoryModal() {
+            const modal = document.getElementById('history-modal');
+            const content = document.getElementById('history-modal-content');
+            
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 200);
+        }
+
+        async function fetchBetHistory() {
+            const tbody = document.getElementById('history-table-body');
+            const loader = document.getElementById('history-loader');
+            const emptyState = document.getElementById('history-empty');
+
+            tbody.innerHTML = '';
+            loader.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            // 🌟 محاكاة جلب البيانات من السيرفر (ببيانات وهمية أنيقة ريثما نربطها بـ API السيرفر الفعلي)
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                
+                // هذه البيانات سنقوم بتغييرها لاحقاً لـ fetch من السيرفر
+                const dummyData = [
+                    { date: "2026-08-28 12:15", game: "Sweet Bonanza", provider: "Pragmatic", amount: 10.00, multiplier: 2.5, win: 25.00 },
+                    { date: "2026-08-28 11:30", game: "Aviator", provider: "Spribe", amount: 5.00, multiplier: 0, win: -5.00 },
+                    { date: "2026-08-27 20:45", game: "Gates of Olympus", provider: "Pragmatic", amount: 20.00, multiplier: 15.2, win: 304.00 },
+                    { date: "2026-08-27 19:20", game: "Swift League", provider: "EuroVirtuals", amount: 10.00, multiplier: 2.0, win: 20.00 },
+                    { date: "2026-08-26 15:10", game: "Wanted Dead or a Wild", provider: "Hacksaw", amount: 2.00, multiplier: 0, win: -2.00 }
+                ];
+
+                if (dummyData.length === 0) {
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+
+                tbody.innerHTML = dummyData.map(bet => {
+                    const isWin = bet.win > 0;
+                    const colorClass = isWin ? 'text-emerald' : 'text-red-500';
+                    const sign = isWin ? '+' : '';
+                    const bgColor = isWin ? 'bg-emerald-500/10' : 'bg-red-500/10';
+                    
+                    return `
+                        <tr class="hover:bg-[#1a1e29] transition-colors border-l-2 ${isWin ? 'border-emerald' : 'border-red-500'}">
+                            <td class="p-3 text-gray-400 text-[10px]">${bet.date}</td>
+                            <td class="p-3">
+                                <div class="font-bold text-white">${bet.game}</div>
+                                <div class="text-[9px] text-gray-500 uppercase">${bet.provider}</div>
+                            </td>
+                            <td class="p-3 text-center font-semibold">${bet.amount.toFixed(2)} TND</td>
+                            <td class="p-3 text-center text-gray-500 font-mono">${bet.multiplier > 0 ? 'x'+bet.multiplier : '-'}</td>
+                            <td class="p-3 text-right">
+                                <span class="${bgColor} ${colorClass} font-black px-2 py-1 rounded shadow-sm">${sign}${bet.win.toFixed(2)} TND</span>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }, 800); // تأثير تحميل مدته 0.8 ثانية
         }
     </script>
 <div id="live-chat-sidebar" class="hidden xl:flex flex-col w-80 bg-[#12151d] border-l border-gray-800 fixed right-0 top-0 h-full z-[150] shadow-2xl transition-transform duration-300 transform translate-x-0">
@@ -1630,6 +1705,54 @@ function openHistoryModal() {
         </button>
     </div>
 </div>
+
+<!-- 📜 نافذة سجل الرهانات (Historique des paris) -->
+    <div id="history-modal" class="fixed inset-0 z-[400] bg-black/80 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
+        <div class="bg-[#161922] border border-[#212631] rounded-2xl w-full max-w-4xl flex flex-col max-h-[85vh] shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300" id="history-modal-content">
+            
+            <!-- رأس النافذة -->
+            <div class="flex justify-between items-center p-5 border-b border-[#212631] bg-[#0f1117]">
+                <h3 class="text-white font-black uppercase tracking-wider text-lg flex items-center gap-2">
+                    <i class="fas fa-history text-emerald"></i> Historique des paris
+                </h3>
+                <button onclick="closeHistoryModal()" class="text-gray-400 hover:text-red-500 transition text-xl w-8 h-8 flex items-center justify-center rounded-full bg-[#161922] hover:bg-red-500/10 border border-transparent hover:border-red-500/30">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- محتوى الجدول -->
+            <div class="p-4 overflow-y-auto hide-scroll flex-1 bg-[#0f1117]">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse whitespace-nowrap">
+                        <thead>
+                            <tr class="text-[10px] uppercase tracking-wider text-gray-500 border-b border-[#212631]">
+                                <th class="p-3 font-bold">Date</th>
+                                <th class="p-3 font-bold">Jeu / Provider</th>
+                                <th class="p-3 font-bold text-center">Montant (Mise)</th>
+                                <th class="p-3 font-bold text-center">Multiplicateur</th>
+                                <th class="p-3 font-bold text-right">Gain / Perte</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body" class="text-xs text-gray-300 divide-y divide-[#212631]">
+                            <!-- سيتم حقن البيانات هنا برمجياً -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- حالة التحميل -->
+                <div id="history-loader" class="py-12 text-center hidden">
+                    <i class="fas fa-circle-notch fa-spin text-emerald text-4xl mb-4"></i>
+                    <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Chargement de l'historique...</p>
+                </div>
+                
+                <!-- حالة لا توجد بيانات -->
+                <div id="history-empty" class="py-12 text-center hidden">
+                    <i class="fas fa-ghost text-gray-700 text-5xl mb-4"></i>
+                    <p class="text-gray-500 text-xs font-bold uppercase tracking-widest">Aucun pari trouvé.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 
