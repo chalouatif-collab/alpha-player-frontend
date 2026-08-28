@@ -1881,7 +1881,7 @@ function openHistoryModal() {
     </div>
     <!-- زر الشات (يظهر في الهاتف فقط) -->
     <div class="px-4 pt-4 border-t border-gray-800 bg-[#0f1117] xl:hidden">
-        <button onclick="toggleProfileSidebar(); toggleChat();" class="w-full bg-[#1a1d24] hover:bg-gray-800 text-white font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition border border-gray-700">
+        <button onclick="toggleProfileSidebar(); setTimeout(toggleChat, 200);" class="w-full bg-[#1a1d24] hover:bg-gray-800 text-white font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition border border-gray-700">
             <i class="fas fa-comments text-emerald-500"></i> CHAT EN DIRECT
         </button>
     </div>
