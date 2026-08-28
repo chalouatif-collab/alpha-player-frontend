@@ -1776,7 +1776,7 @@ function openHistoryModal() {
         }
     </script>
 <!-- 💬 مربع الشات (Modal في الهاتف، عائم في الكمبيوتر) -->
-<div id="live-chat-sidebar" class="fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-4 md:right-8 z-[500] hidden items-center justify-center p-4 sm:p-0 bg-black/80 sm:bg-transparent backdrop-blur-sm sm:backdrop-blur-none">
+<div id="live-chat-sidebar" onclick="if(event.target === this) closeChat()" class="fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-4 md:right-8 z-[500] hidden items-center justify-center p-4 sm:p-0 bg-black/80 sm:bg-transparent backdrop-blur-sm sm:backdrop-blur-none">
     
     <!-- الحاوية الداخلية للشات -->
     <div class="w-full max-w-[350px] h-[75vh] sm:h-[500px] bg-[#12151d] border border-gray-700 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden relative">
