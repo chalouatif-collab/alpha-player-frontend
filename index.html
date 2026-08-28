@@ -933,15 +933,28 @@ function switchSection(sectionId, fromPopState = false) {
             const sentinel = document.getElementById('games-scroll-sentinel');
             if (sentinel) sentinel.remove();
         }
-
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('provider-dropdown');
-            const button = dropdown ? dropdown.previousElementSibling : null;
-            if (dropdown && !dropdown.classList.contains('hidden') && !dropdown.contains(event.target) && button && !button.contains(event.target)) {
-                dropdown.classList.add('hidden');
-                dropdown.classList.remove('flex');
+// فتح وإغلاق الشات 
+        function toggleChat() {
+            const chatBox = document.getElementById('live-chat-sidebar');
+            if (!chatBox) return;
+            
+            if (chatBox.classList.contains('hidden')) {
+                chatBox.classList.remove('hidden');
+                chatBox.classList.add('flex');
+            } else {
+                chatBox.classList.add('hidden');
+                chatBox.classList.remove('flex');
             }
-        });
+        }
+
+        // إغلاق الشات حصراً 
+        function closeChat() {
+            const chatBox = document.getElementById('live-chat-sidebar');
+            if (chatBox && !chatBox.classList.contains('hidden')) {
+                chatBox.classList.add('hidden');
+                chatBox.classList.remove('flex');
+            }
+        }
 
         // ================= محرك ألعاب اليوم (تشكيلة متغيرة يومياً من مزودين مختلفين) =================
         async function loadGamesOfTheDay() {
@@ -1713,20 +1726,7 @@ function openHistoryModal() {
             }
         }
 
-        // إغلاق الشات عند الضغط في أي مكان فارغ بالشاشة
-        document.addEventListener('click', function(event) {
-            const chatSidebar = document.getElementById('live-chat-sidebar');
-            const chatBtn = document.getElementById('floating-chat-btn');
-            
-            // التحقق من أن الضغطة ليست داخل الشات أو زر الشات
-            if (chatSidebar && !chatSidebar.classList.contains('translate-x-full') && 
-                !chatSidebar.contains(event.target) && 
-                (!chatBtn || !chatBtn.contains(event.target)) &&
-                !event.target.closest('[onclick*="toggleChat"]')) {
-                
-                chatSidebar.classList.add('translate-x-full');
-            }
-        });
+        
 
         // تفعيل الإرسال بالضغط على زر Enter
         function handleChatEnter(event) {
