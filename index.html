@@ -325,18 +325,15 @@
 
         </div>
 
-        <!-- PANE: SPORT ) 
-        <div id="pane-sport" class="player-view-section hidden w-full relative bg-[#0f1117]" style="height: calc(100dvh - 110px);">
-            <div id="sport-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0f1117] z-[5] hidden">
+        <!-- PANE: SPORT (NEXUS INTEGRATION) -->
+        <div id="pane-sport" class="player-view-section hidden fixed left-0 right-0 bottom-0 z-[40] bg-[#0f1117]" style="top: 115px;">
+            <div id="sport-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0f1117] z-[45] hidden">
                 <i class="fas fa-futbol text-4xl text-emerald animate-bounce mb-3"></i>
                 <span class="text-emerald font-bold tracking-widest text-xs">CHARGEMENT...</span>
             </div>
-        
+            <!-- إطار مدمج كلياً بدون حواف ولا هوامش -->
             <iframe id="sportsbook-iframe" class="w-full h-full border-0 block m-0 p-0" allowfullscreen></iframe>
         </div>
-       
-       
-    </main>
     <!-- 🌟 تذييل الصفحة (الشروط، الخصوصية، والقوانين) -->
                 <div class="mt-8 pt-6 border-t border-[#212631] flex flex-col items-center justify-center text-center space-y-4 pb-8 w-full">
                     
@@ -627,7 +624,7 @@
         }
 function switchSection(sectionId, fromPopState = false) {
             localStorage.setItem('active_section', sectionId);
-            window.scrollTo(0, 0);
+            window.scrollTo(0, 0); // الصعود للأعلى لضمان محاذاة الشريط العلوي
             
             document.querySelectorAll('.player-view-section').forEach(el => {
                 el.classList.add('hidden'); el.classList.remove('block');
@@ -639,34 +636,11 @@ function switchSection(sectionId, fromPopState = false) {
                 panel.classList.add('block');
             }
             
-            const mainTag = document.querySelector('main');
-            if (mainTag && mainTag.children.length >= 2) {
-                const sidebar = mainTag.children[0]; 
-                const centerArea = mainTag.children[1]; 
-                
-                if (sectionId === 'sport') {
-                    sidebar.style.display = 'none'; 
-                    sidebar.classList.remove('xl:flex'); 
-                    
-                    // 🛡️ التعديل هنا: إزالة space-y-6 التي كانت تصنع فراغات
-                    centerArea.classList.remove('xl:w-[55%]', 'space-y-6');
-                    centerArea.classList.add('w-full', 'xl:w-full');
-                    
-                    mainTag.classList.remove('py-6', 'px-4', 'gap-6', 'max-w-[1700px]');
-                    mainTag.classList.add('p-0', 'm-0', 'gap-0', 'w-full', 'max-w-full');
-                    // 🛡️ قفل تمرير الصفحة الأساسية ليصبح التمرير داخل السبور بوك فقط
-                    document.body.style.overflow = 'hidden'; 
-                } else {
-                    sidebar.style.display = ''; 
-                    sidebar.classList.add('xl:flex'); 
-                    
-                    centerArea.classList.remove('w-full', 'xl:w-full');
-                    centerArea.classList.add('xl:w-[55%]', 'space-y-6');
-                    
-                    mainTag.classList.remove('p-0', 'm-0', 'gap-0', 'w-full', 'max-w-full');
-                    mainTag.classList.add('py-6', 'px-4', 'gap-6', 'max-w-[1700px]');
-                    document.body.style.overflow = '';
-                }
+            // قفل التمرير الخارجي ليعمل التمرير داخل السبور بوك فقط بمرونة
+            if (sectionId === 'sport') {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
             }
 
             if (!fromPopState) {
