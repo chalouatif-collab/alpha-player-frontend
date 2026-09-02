@@ -133,7 +133,17 @@
 
         </div>
     </div>
+<!-- ⚽ قسم الرياضة: يجب أن يكون هنا خارج الـ main بالكامل -->
+    <div id="pane-sport" class="player-view-section hidden w-full bg-[#0f1117]" style="height: calc(100vh - 110px);">
+        <div id="sport-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0f1117] z-[5] hidden">
+            <i class="fas fa-futbol text-4xl text-emerald animate-bounce mb-3"></i>
+            <span class="text-emerald font-bold tracking-widest text-xs">CHARGEMENT...</span>
+        </div>
+        <iframe id="sportsbook-iframe" class="w-full h-full border-0 block m-0 p-0" allowfullscreen></iframe>
+    </div>
 
+    <!-- المحتوى الرئيسي للمنصة -->
+    <main class="max-w-[1700px] mx-auto px-4 py-6 w-full flex-grow flex flex-col xl:flex-row gap-6">
     <!-- 3. المحتوى الرئيسي للمنصة -->
     <main class="max-w-[1700px] mx-auto px-4 py-6 w-full flex-grow flex flex-col xl:flex-row gap-6">
 
@@ -378,18 +388,10 @@
 
         </div>
 
-        <!-- ⚽ قسم الرياضة: يجب أن يكون هنا خارج الـ main بالكامل -->
-    <div id="pane-sport" class="player-view-section hidden w-full bg-[#0f1117]" style="height: calc(100vh - 110px);">
-        <div id="sport-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0f1117] z-[5] hidden">
-            <i class="fas fa-futbol text-4xl text-emerald animate-bounce mb-3"></i>
-            <span class="text-emerald font-bold tracking-widest text-xs">CHARGEMENT...</span>
-        </div>
-        <iframe id="sportsbook-iframe" class="w-full h-full border-0 block m-0 p-0" allowfullscreen></iframe>
-    </div>
+       
 
     <!-- المحتوى الرئيسي للمنصة -->
-    <main class="max-w-[1700px] mx-auto px-4 py-6 w-full flex-grow flex flex-col xl:flex-row gap-6">    <!-- 🌟 تذييل الصفحة (الشروط، الخصوصية، والقوانين) -->
-            <div
+           <div
                 class="mt-8 pt-6 border-t border-[#212631] flex flex-col items-center justify-center text-center space-y-4 pb-8 w-full">
 
                 <!-- روابط الشروط والخصوصية -->
