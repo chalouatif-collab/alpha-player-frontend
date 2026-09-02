@@ -639,6 +639,39 @@
                     );
                 }
 
+                // ================= دوال التحكم في النوافذ والإشعارات المفقودة =================
+        function openLoginModal() {
+            const modal = document.getElementById('player-login-modal');
+            if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+        }
+
+        function closeLoginModal() {
+            const modal = document.getElementById('player-login-modal');
+            if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+        }
+
+        function openRegisterModal() {
+            showNotification("Veuillez contacter l'administration pour vous inscrire.", "info");
+        }
+
+        function showNotification(message, type = "success") {
+            const container = document.getElementById('toast-container');
+            if (!container) { alert(message); return; }
+            
+            const toast = document.createElement('div');
+            toast.className = `px-4 py-3 rounded-xl font-bold text-sm shadow-xl transform transition-all translate-x-full flex items-center gap-2 ${
+                type === 'error' ? 'bg-red-500 text-white' : 'bg-emerald text-black'
+            }`;
+            toast.innerHTML = type === 'error' ? `<i class="fas fa-exclamation-circle"></i> ${message}` : `<i class="fas fa-check-circle"></i> ${message}`;
+            
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.remove('translate-x-full'), 10);
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
                 window.onload = () => {
                     // 1. استرجاع بيانات اللاعب إذا كان مسجلاً
                     const savedSession = localStorage.getItem('alpha_player_session');
