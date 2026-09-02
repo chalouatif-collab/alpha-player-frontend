@@ -613,12 +613,7 @@
 
             <!-- ================= JAVASCRIPT (محرك الألفابت الشامل) ================= -->
             <script>
-                function escapeHTML(str) {
-                    if (!str) return '';
-                    return str.toString().replace(/[&<>'"]/g,
-                        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-                    );
-                }
+               
 
                 function openBonusModal() {
                     showNotification("Aucun bonus disponible pour le moment.", "error");
@@ -626,6 +621,12 @@
 
                 const BACKEND_URL = "https://alpha-backend-server.onrender.com";
                 let playerSession = null;
+                 function escapeHTML(str) {
+                    if (!str) return '';
+                    return str.toString().replace(/[&<>'"]/g,
+                        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+                    );
+                }
 
                 window.onload = () => {
                     // 1. استرجاع بيانات اللاعب إذا كان مسجلاً
