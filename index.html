@@ -388,25 +388,13 @@
 
        
 </main>
-    <div class="mt-8 pt-6 border-t border-[#212631] flex flex-col items-center justify-center text-center space-y-4 pb-8 w-full">
-        
-        <div class="flex flex-wrap justify-center gap-3 md:gap-6 text-xs font-bold text-gray-400">
-            <button onclick="openPolicyModal('termes')" class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Termes & Conditions</button>
-            <span class="text-[#212631]">|</span>
-            <button onclick="openPolicyModal('confidentialite')" class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Politique de Confidentialité</button>
-            <span class="text-[#212631]">|</span>
-            <button onclick="openPolicyModal('responsable')" class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Jeu Responsable</button>
+    <!-- ⚽ PANE: SPORT -->
+    <div id="pane-sport" class="player-view-section hidden w-full bg-[#0f1117]" style="height: calc(100dvh - 130px);">
+        <div id="sport-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0f1117] z-[5] hidden">
+            <i class="fas fa-futbol text-4xl text-emerald animate-bounce mb-3"></i>
+            <span class="text-emerald font-bold tracking-widest text-xs">CHARGEMENT...</span>
         </div>
-
-        <p class="text-[9px] text-gray-600 max-w-2xl mx-auto leading-relaxed px-4">
-            Alphabet216 est une plateforme de divertissement. En utilisant ce site, vous acceptez nos conditions générales d'utilisation. Les jeux d'argent sont strictement interdits aux personnes de moins de 18 ans. Jouez avec modération.
-            <br>
-            <span class="text-gray-700 mt-1 block">* Note légale : Le gain et le retrait maximum autorisés par joueur sont limités à 30 000 TND par mois.</span>
-        </p>
-        
-        <div class="text-gray-500 text-[10px] font-black mt-1 tracking-widest uppercase flex items-center gap-2">
-            <i class="fas fa-bolt text-emerald/50"></i> © 2026 Alphabet216. Tous droits réservés.
-        </div>
+        <iframe id="sportsbook-iframe" class="w-full h-full border-0 block m-0 p-0" allowfullscreen></iframe>
     </div>
 
             <!-- ================= CAISSE (DÉPÔT & RETRAIT) MODAL ================= -->
@@ -685,9 +673,8 @@
                         if (elMini) elMini.innerText = mini.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TND';
                     }, 2500); // تتحدث كل ثانيتين ونصف
                 }
-                function switchSection(sectionId, fromPopState = false) {
+               function switchSection(sectionId, fromPopState = false) {
             localStorage.setItem('active_section', sectionId);
-            window.scrollTo(0, 0); 
             
             // إخفاء كل الأقسام
             document.querySelectorAll('.player-view-section').forEach(el => {
@@ -702,20 +689,22 @@
                 panel.classList.add('block');
             }
             
-            // التقاط الحاويات لتعطيلها
+            // التقاط حاوية الموقع والفوتر
             const mainTag = document.querySelector('main');
-            const footerTag = document.querySelector('.mt-8.pt-6'); // التقاط الفوتر بدقة
+            const footerTag = document.querySelector('.mt-8.pt-6'); 
             
             if (sectionId === 'sport') {
-                // إخفاء الموقع بالكامل وترك السبور بوك فقط
+                // إخفاء الموقع وترك السبور بوك
                 if (mainTag) mainTag.style.display = 'none';
                 if (footerTag) footerTag.style.display = 'none';
-                document.body.style.overflow = 'hidden'; // منع التمرير المزدوج
+                document.body.style.overflow = 'hidden'; 
+                window.scrollTo(0, 0); // الصعود للأعلى بعد إخفاء المحتوى لضمان ظهور اللوغو
             } else {
-                // إرجاع الموقع لشكله الطبيعي في باقي الأقسام
+                // إرجاع الموقع لشكله الطبيعي
                 if (mainTag) mainTag.style.display = 'flex'; 
                 if (footerTag) footerTag.style.display = 'flex';
                 document.body.style.overflow = '';
+                window.scrollTo(0, 0);
             }
 
             if (!fromPopState) {
@@ -730,17 +719,6 @@
             else if (sectionId === 'live-casino' && typeof openLiveCasino === 'function') openLiveCasino();
             else if (sectionId === 'virtuals' && typeof initVirtualsLobby === 'function') initVirtualsLobby();
         }
-                // ================= 2. المصادقة والرصيد =================
-                function openLoginModal() { document.getElementById('player-login-modal').classList.remove('hidden'); document.getElementById('player-login-modal').classList.add('flex'); }
-                function closeLoginModal() { document.getElementById('player-login-modal').classList.add('hidden'); document.getElementById('player-login-modal').classList.remove('flex'); }
-
-                function showNotification(msg, type = 'success') {
-                    const toast = document.createElement('div');
-                    toast.className = `p-3 rounded-xl text-white text-xs font-bold ${type === 'success' ? 'bg-emerald-600' : 'bg-red-600'} mb-2 shadow-lg z-[999]`;
-                    toast.innerText = msg;
-                    document.getElementById('toast-container').appendChild(toast);
-                    setTimeout(() => toast.remove(), 3000);
-                }
 
                 async function handlePlayerAuth() {
                     const username = document.getElementById('p-auth-username').value.trim();
