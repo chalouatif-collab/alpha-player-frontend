@@ -142,9 +142,7 @@
         <iframe id="sportsbook-iframe" class="w-full h-full border-0 block m-0 p-0" allowfullscreen></iframe>
     </div>
 
-    <!-- المحتوى الرئيسي للمنصة -->
-    <main class="max-w-[1700px] mx-auto px-4 py-6 w-full flex-grow flex flex-col xl:flex-row gap-6">
-    <!-- 3. المحتوى الرئيسي للمنصة -->
+
     <main class="max-w-[1700px] mx-auto px-4 py-6 w-full flex-grow flex flex-col xl:flex-row gap-6">
 
         <!-- LEFT: Sidebar Menu (Desktop) -->
@@ -309,7 +307,7 @@
                     <div id="games-of-the-day-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
                 </div>
             </div>
-
+       
             <!-- PANE: CASINO -->
             <div id="pane-casino" class="player-view-section hidden w-full">
                 <div class="flex items-center gap-2 mb-4">
@@ -389,41 +387,27 @@
         </div>
 
        
+</main>
+    <div class="mt-8 pt-6 border-t border-[#212631] flex flex-col items-center justify-center text-center space-y-4 pb-8 w-full">
+        
+        <div class="flex flex-wrap justify-center gap-3 md:gap-6 text-xs font-bold text-gray-400">
+            <button onclick="openPolicyModal('termes')" class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Termes & Conditions</button>
+            <span class="text-[#212631]">|</span>
+            <button onclick="openPolicyModal('confidentialite')" class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Politique de Confidentialité</button>
+            <span class="text-[#212631]">|</span>
+            <button onclick="openPolicyModal('responsable')" class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Jeu Responsable</button>
+        </div>
 
-    <!-- المحتوى الرئيسي للمنصة -->
-           <div
-                class="mt-8 pt-6 border-t border-[#212631] flex flex-col items-center justify-center text-center space-y-4 pb-8 w-full">
-
-                <!-- روابط الشروط والخصوصية -->
-                <div class="flex flex-wrap justify-center gap-3 md:gap-6 text-xs font-bold text-gray-400">
-                    <button onclick="openPolicyModal('termes')"
-                        class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Termes &
-                        Conditions</button>
-                    <span class="text-[#212631]">|</span>
-                    <button onclick="openPolicyModal('confidentialite')"
-                        class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Politique
-                        de Confidentialité</button>
-                    <span class="text-[#212631]">|</span>
-                    <button onclick="openPolicyModal('responsable')"
-                        class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Jeu
-                        Responsable</button>
-                </div>>
-
-                <!-- نص قانوني قصير (مدمج معه شرط الحد الأقصى بخط صغير جداً) -->
-                <p class="text-[9px] text-gray-600 max-w-2xl mx-auto leading-relaxed px-4">
-                    Alphabet216 est une plateforme de divertissement. En utilisant ce site, vous acceptez nos conditions
-                    générales d'utilisation. Les jeux d'argent sont strictement interdits aux personnes de moins de 18
-                    ans. Jouez avec modération.
-                    <br>
-                    <span class="text-gray-700 mt-1 block">* Note légale : Le gain et le retrait maximum autorisés par
-                        joueur sont limités à 30 000 TND par mois.</span>
-                </p>
-
-                <div
-                    class="text-gray-500 text-[10px] font-black mt-1 tracking-widest uppercase flex items-center gap-2">
-                    <i class="fas fa-bolt text-emerald/50"></i> © 2026 Alphabet216. Tous droits réservés.
-                </div>
-            </div>
+        <p class="text-[9px] text-gray-600 max-w-2xl mx-auto leading-relaxed px-4">
+            Alphabet216 est une plateforme de divertissement. En utilisant ce site, vous acceptez nos conditions générales d'utilisation. Les jeux d'argent sont strictement interdits aux personnes de moins de 18 ans. Jouez avec modération.
+            <br>
+            <span class="text-gray-700 mt-1 block">* Note légale : Le gain et le retrait maximum autorisés par joueur sont limités à 30 000 TND par mois.</span>
+        </p>
+        
+        <div class="text-gray-500 text-[10px] font-black mt-1 tracking-widest uppercase flex items-center gap-2">
+            <i class="fas fa-bolt text-emerald/50"></i> © 2026 Alphabet216. Tous droits réservés.
+        </div>
+    </div>
 
             <!-- ================= CAISSE (DÉPÔT & RETRAIT) MODAL ================= -->
             <div id="cashier-modal"
