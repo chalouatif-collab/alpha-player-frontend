@@ -325,16 +325,15 @@
 
         </div>
 
-        <!-- PANE: SPORT (NEXUS INTEGRATION) -->
-        <div id="pane-sport" class="player-view-section hidden w-full h-[85vh] min-h-[800px] relative rounded-2xl overflow-hidden border border-[#212631]">
-            <div id="sport-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#161922] z-[5] hidden">
+        <!-- PANE: SPORT ) 
+        <div id="pane-sport" class="player-view-section hidden w-full relative bg-[#0f1117]" style="height: calc(100dvh - 110px);">
+            <div id="sport-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#0f1117] z-[5] hidden">
                 <i class="fas fa-futbol text-4xl text-emerald animate-bounce mb-3"></i>
-                <span class="text-emerald font-bold tracking-widest text-xs">CHARGEMENT DU SPORT...</span>
+                <span class="text-emerald font-bold tracking-widest text-xs">CHARGEMENT...</span>
             </div>
-            <!-- دمج الـ Iframe داخل الصفحة بشكل أصيل بدون حواف -->
-            <iframe id="sportsbook-iframe" class="w-full h-full border-0 relative z-10 hidden rounded-2xl" allowfullscreen></iframe>
+        
+            <iframe id="sportsbook-iframe" class="w-full h-full border-0 block m-0 p-0" allowfullscreen></iframe>
         </div>
-
        
        
     </main>
@@ -626,12 +625,9 @@
                 if(elMini) elMini.innerText = mini.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' TND';
             }, 2500); // تتحدث كل ثانيتين ونصف
         }
-
 function switchSection(sectionId, fromPopState = false) {
-            // 🌟 حفظ القسم الحالي في الذاكرة ليبقى اللاعب فيه عند عمل Refresh
             localStorage.setItem('active_section', sectionId);
-
-            window.scrollTo(0, 0); // الصعود للأعلى فوراً
+            window.scrollTo(0, 0);
             
             document.querySelectorAll('.player-view-section').forEach(el => {
                 el.classList.add('hidden'); el.classList.remove('block');
@@ -650,20 +646,26 @@ function switchSection(sectionId, fromPopState = false) {
                 
                 if (sectionId === 'sport') {
                     sidebar.style.display = 'none'; 
-                    centerArea.classList.remove('xl:w-[55%]');
-                    centerArea.classList.add('w-full');
+                    sidebar.classList.remove('xl:flex'); 
                     
-                    mainTag.classList.remove('py-6', 'px-4', 'gap-6');
-                    mainTag.classList.add('p-0', 'm-0', 'gap-0');
-                    document.body.style.overflow = 'hidden'; // منع التمرير
+                    // 🛡️ التعديل هنا: إزالة space-y-6 التي كانت تصنع فراغات
+                    centerArea.classList.remove('xl:w-[55%]', 'space-y-6');
+                    centerArea.classList.add('w-full', 'xl:w-full');
+                    
+                    mainTag.classList.remove('py-6', 'px-4', 'gap-6', 'max-w-[1700px]');
+                    mainTag.classList.add('p-0', 'm-0', 'gap-0', 'w-full', 'max-w-full');
+                    // 🛡️ قفل تمرير الصفحة الأساسية ليصبح التمرير داخل السبور بوك فقط
+                    document.body.style.overflow = 'hidden'; 
                 } else {
                     sidebar.style.display = ''; 
-                    centerArea.classList.remove('w-full');
-                    centerArea.classList.add('xl:w-[55%]');
+                    sidebar.classList.add('xl:flex'); 
                     
-                    mainTag.classList.remove('p-0', 'm-0', 'gap-0');
-                    mainTag.classList.add('py-6', 'px-4', 'gap-6');
-                    document.body.style.overflow = ''; // إعادة التمرير
+                    centerArea.classList.remove('w-full', 'xl:w-full');
+                    centerArea.classList.add('xl:w-[55%]', 'space-y-6');
+                    
+                    mainTag.classList.remove('p-0', 'm-0', 'gap-0', 'w-full', 'max-w-full');
+                    mainTag.classList.add('py-6', 'px-4', 'gap-6', 'max-w-[1700px]');
+                    document.body.style.overflow = '';
                 }
             }
 
@@ -675,14 +677,9 @@ function switchSection(sectionId, fromPopState = false) {
                 setActiveMenuBtn(`btn-nav-${sectionId === 'sport' ? 'sport' : sectionId}`);
             }
 
-            // تفعيل محركات الأقسام تلقائياً عند الحاجة
-            if (sectionId === 'casino' && typeof initCasinoLobby === 'function') {
-                initCasinoLobby();
-            } else if (sectionId === 'live-casino' && typeof openLiveCasino === 'function') {
-                openLiveCasino();
-            } else if (sectionId === 'virtuals' && typeof initVirtualsLobby === 'function') {
-                initVirtualsLobby();
-            }
+            if (sectionId === 'casino' && typeof initCasinoLobby === 'function') initCasinoLobby();
+            else if (sectionId === 'live-casino' && typeof openLiveCasino === 'function') openLiveCasino();
+            else if (sectionId === 'virtuals' && typeof initVirtualsLobby === 'function') initVirtualsLobby();
         }
         // ================= 2. المصادقة والرصيد =================
         function openLoginModal() { document.getElementById('player-login-modal').classList.remove('hidden'); document.getElementById('player-login-modal').classList.add('flex'); }
