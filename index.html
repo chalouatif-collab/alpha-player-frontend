@@ -1346,6 +1346,7 @@ async function loadGamesOfTheDay() {
                 }
 
                 async function launchSpecificVirtualGame(uuid) {
+                    console.log("🖱️ Clicked game with UUID:", uuid);
                     closeChat();
                     if (!playerSession) return openLoginModal();
 
@@ -1354,7 +1355,6 @@ async function loadGamesOfTheDay() {
 
                     const container = document.getElementById('casino-iframe-container');
                     const iframe = document.getElementById('casino-iframe');
-                    // ... (باقي الكود كما هو) ...
                     if (container) { container.classList.remove('hidden'); container.classList.add('flex'); }
                     if (iframe) iframe.src = '';
                     try {
