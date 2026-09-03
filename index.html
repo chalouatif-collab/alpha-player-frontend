@@ -832,6 +832,7 @@
             switchSection(savedSection);
             // 3. تشغيل ميزات الصفحة الرئيسية
             loadGamesOfTheDay();
+            loadFeaturedProvidersBlocks();
             startLiveJackpots();
 
             // 🌟 4. السحر هنا: تشغيل محرك شريط الفائزين! 🌟
@@ -2145,10 +2146,12 @@ async function deleteNotification(id) {
 // تحديث الإشعارات كل 15 ثانية
 setInterval(fetchNotifications, 10000);
 
-// دالة لجلب 3 ألعاب لكل مزود من مكتبة الألعاب (API) وعرض صورها الأصلية
-function renderFeaturedProviders(allGames) {
+async function loadFeaturedProvidersBlocks() {
     const container = document.getElementById('dynamic-featured-providers');
-    if (!container || !allGames || allGames.length === 0) return;
+    if (!container) return;
+
+    // إذا كانت الألعاب موجودة بالفعل، لا تقم بإعادة تحميلها لتسريع الموقع ومنع اختفائها
+    if (container.innerHTML.trim() !== '') return;
 
     const featured = [
         { name: "Pragmatic Play", code: "PRAGMATIC", color: "bg-emerald-500", hover: "hover:border-emerald-500" },
@@ -2158,49 +2161,58 @@ function renderFeaturedProviders(allGames) {
 
     let html = '';
 
-    featured.forEach(provider => {
-        // البحث عن ألعاب المزود
-        const providerGames = allGames.filter(g => 
-            g.provider && g.provider.toUpperCase().includes(provider.code)
-        ).slice(0, 3);
-        
-        if (providerGames.length > 0) {
-            html += `
-            <div>
-                <div class="flex justify-between items-center mb-3 px-1">
-                    <h3 class="text-white font-extrabold text-xs md:text-sm uppercase flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full ${provider.color}"></span> ${provider.name}
-                    </h3>
-                    <button onclick="loadProviderGames('${provider.code}'); switchSection('casino');" class="text-[10px] md:text-xs font-bold text-gray-400 hover:text-white transition bg-[#161922] px-3 py-1 rounded-full border border-[#212631]">
-                        Voir plus <i class="fas fa-chevron-right ml-1 text-[8px]"></i>
-                    </button>
-                </div>
-                <div class="grid grid-cols-3 gap-2 md:gap-4">
-            `;
-
-            providerGames.forEach(game => {
-                // جلب اسم اللعبة، الكود، والصورة بناءً على الـ API الخاص بك
-                const gameName = escapeHTML(String(game.game_name || game.name || "Game"));
-                const imageUrl = game.banner || game.image || game.thumb || `https://placehold.co/400x300/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
-                const gameCode = game.game_code || game.id;
-
-                // استخدام دالة playCasinoGame وتمرير الـ Provider أولاً ثم الكود
-                html += `
-                    <div class="relative group rounded-lg md:rounded-xl overflow-hidden cursor-pointer border border-[#212631] ${provider.hover} transition aspect-[4/3] shadow-lg" onclick="playCasinoGame('${provider.code}', '${gameCode}')">
-                        <img src="${imageUrl}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy" alt="${gameName}">
-                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center backdrop-blur-sm">
-                            <i class="fas fa-play text-white text-xl md:text-3xl drop-shadow-lg"></i>
-                        </div>
-                    </div>
-                `;
+    for (let provider of featured) {
+        try {
+            // جلب ألعاب المزود من السيرفر مباشرة
+            const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ provider_code: provider.code })
             });
+            const data = await res.json();
+            let games = data.games || data.data || [];
+            
+            // أخذ أول 3 ألعاب فقط
+            games = games.slice(0, 3);
 
-            html += `
+            if (games.length > 0) {
+                html += `
+                <div>
+                    <div class="flex justify-between items-center mb-3 px-1">
+                        <h3 class="text-white font-extrabold text-xs md:text-sm uppercase flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full ${provider.color}"></span> ${provider.name}
+                        </h3>
+                        <button onclick="loadProviderGames('${provider.code}'); switchSection('casino');" class="text-[10px] md:text-xs font-bold text-gray-400 hover:text-white transition bg-[#161922] px-3 py-1 rounded-full border border-[#212631]">
+                            Voir plus <i class="fas fa-chevron-right ml-1 text-[8px]"></i>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 md:gap-4">
+                `;
+
+                games.forEach(game => {
+                    const gameName = escapeHTML(String(game.game_name || game.name || "Game"));
+                    const imageUrl = game.banner || game.image || game.thumb || `https://placehold.co/400x300/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
+                    const gameCode = game.game_code || game.id;
+
+                    html += `
+                        <div class="relative group rounded-lg md:rounded-xl overflow-hidden cursor-pointer border border-[#212631] ${provider.hover} transition aspect-[4/3] shadow-lg" onclick="playCasinoGame('${provider.code}', '${gameCode}')">
+                            <img src="${imageUrl}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy" alt="${gameName}">
+                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center backdrop-blur-sm">
+                                <i class="fas fa-play text-white text-xl md:text-3xl drop-shadow-lg"></i>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `
+                    </div>
                 </div>
-            </div>
-            `;
+                `;
+            }
+        } catch (e) {
+            console.error("Erreur chargement provider", e);
         }
-    });
+    }
 
     container.innerHTML = html;
 }
