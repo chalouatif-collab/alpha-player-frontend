@@ -1037,7 +1037,7 @@
             }
         }
 
-        async function loadProviderGames(providerCode, providerName = null) {
+       async function loadProviderGames(providerCode, providerName = null) {
             currentActiveProviderCode = providerCode;
             currentDisplayLimit = 50;
 
@@ -1058,15 +1058,28 @@
                     body: JSON.stringify({ provider_code: providerCode })
                 });
 
+                if (!res.ok) throw new Error("HTTP Status: " + res.status);
+                
                 const data = await res.json();
-                window.currentProviderGames = data.games || data.data || [];
-                renderFeaturedProviders(window.currentProviderGames);
+                
+                // قراءة البيانات بذكاء حسب هيكل الـ API
+                if (data.status === 1 && data.games) {
+                    window.currentProviderGames = data.games;
+                } else if (data.data) {
+                    window.currentProviderGames = data.data;
+                } else if (Array.isArray(data)) {
+                    window.currentProviderGames = data;
+                } else {
+                    throw new Error("Format de données inattendu du serveur");
+                }
+
                 renderCasinoGrid();
             } catch (e) {
-                if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de connexion</div>';
+                // إجبار الكونسول والشاشة على عرض الخطأ الحقيقي!
+                console.error("=== خطأ جلب الألعاب ===", e);
+                if (grid) grid.innerHTML = `<div class="col-span-full text-red-500 text-center py-10 font-bold">Erreur de connexion<br><span class="text-xs text-gray-500 font-mono mt-2 block">${e.message}</span></div>`;
             }
         }
-
         function renderCasinoGrid() {
             const container = document.getElementById('games-grid');
             if (!container) return;
