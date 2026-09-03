@@ -988,7 +988,7 @@
             location.reload();
         }
 
-        async function refreshBalance() {
+       async function refreshBalance() {
             if (!playerSession) return;
             try {
                 const res = await fetch(`${BACKEND_URL}/gold_api`, {
@@ -998,8 +998,19 @@
                 const data = await res.json();
                 if (data.user_balance !== undefined) {
                     playerSession.balance = data.user_balance;
+                    const formattedBalance = parseFloat(data.user_balance).toFixed(2);
+                    
+                    // 1. تحديث الرصيد في الشريط العلوي المخفي
                     const balDisplay = document.getElementById('player-balance-val');
-                    if (balDisplay) balDisplay.innerText = parseFloat(data.user_balance).toFixed(2);
+                    if (balDisplay) balDisplay.innerText = formattedBalance;
+
+                    // 2. تحديث الرصيد في القائمة الجانبية (Sidebar)
+                    const sidebarBalDisplay = document.getElementById('sidebar-balance');
+                    if (sidebarBalDisplay) sidebarBalDisplay.innerText = formattedBalance + ' TND';
+
+                    // 3. تحديث الرصيد في نافذة السحب (Cashier)
+                    const modalBalDisplay = document.getElementById('modal-balance');
+                    if (modalBalDisplay) modalBalDisplay.innerText = formattedBalance;
                 }
             } catch (e) { }
         }
