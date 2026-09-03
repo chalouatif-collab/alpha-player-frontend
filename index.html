@@ -1062,20 +1062,22 @@
                 
                 const data = await res.json();
                 
-                // قراءة البيانات بذكاء حسب هيكل الـ API
+                let gamesList = [];
                 if (data.status === 1 && data.games) {
-                    window.currentProviderGames = data.games;
+                    gamesList = data.games;
                 } else if (data.data) {
-                    window.currentProviderGames = data.data;
+                    gamesList = data.data;
                 } else if (Array.isArray(data)) {
-                    window.currentProviderGames = data;
+                    gamesList = data;
                 } else {
                     throw new Error("Format de données inattendu du serveur");
                 }
 
+                // 💡 السر هنا: عكس المصفوفة لتظهر الألعاب المضافة حديثاً في أعلى الصفحة
+                window.currentProviderGames = gamesList.reverse();
+
                 renderCasinoGrid();
             } catch (e) {
-                // إجبار الكونسول والشاشة على عرض الخطأ الحقيقي!
                 console.error("=== خطأ جلب الألعاب ===", e);
                 if (grid) grid.innerHTML = `<div class="col-span-full text-red-500 text-center py-10 font-bold">Erreur de connexion<br><span class="text-xs text-gray-500 font-mono mt-2 block">${e.message}</span></div>`;
             }
