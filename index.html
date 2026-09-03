@@ -130,23 +130,23 @@
                 onclick="setActiveMenuBtn('btn-nav-aviator'); playCasinoGame('SPRIBE', 'aviator')"
                 class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
                     class="fas fa-plane text-red-500"></i> Aviator</button>
-                    <!-- 🚀 Mini Jeux (ألعاب سريعة) -->
-            <button id="btn-nav-mini-jeux" onclick="setActiveMenuBtn('btn-nav-mini-jeux'); switchSection('casino');" class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
+                    <!-- 🚀 Mini Jeux -->
+            <button id="btn-nav-mini-jeux" onclick="setActiveMenuBtn('btn-nav-mini-jeux'); loadMiniJeux();" class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
                 <i class="fas fa-rocket text-purple-400"></i> Mini Jeux
             </button>
 
-            <!-- 🎮 E-Sports (رياضات إلكترونية) -->
-            <button id="btn-nav-esports" onclick="setActiveMenuBtn('btn-nav-esports'); openSportsbookForProvider('nexus');" class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
+            <!-- 🎮 E-Sports -->
+            <button id="btn-nav-esports" onclick="setActiveMenuBtn('btn-nav-esports'); openSportsbookForProvider('nexus'); showNotification('E-Sports filtré', 'success');" class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
                 <i class="fas fa-headset text-orange-500"></i> E-Sports
             </button>
 
-            <!-- 📺 Jeux TV (ألعاب التلفاز المباشرة) -->
-            <button id="btn-nav-tvbet" onclick="setActiveMenuBtn('btn-nav-tvbet'); showNotification('Jeux TV en cours d\'intégration', 'info');" class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
+            <!-- 📺 Jeux TV -->
+            <button id="btn-nav-tvbet" onclick="setActiveMenuBtn('btn-nav-tvbet'); loadTVGames();" class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
                 <i class="fas fa-tv text-blue-400"></i> Jeux TV
             </button>
 
-            <!-- 📊 Résultats (نتائج وإحصائيات) -->
-            <button id="btn-nav-resultats" onclick="setActiveMenuBtn('btn-nav-resultats'); showNotification('Page des résultats sportifs', 'info');" class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
+            <!-- 📊 Résultats -->
+            <button id="btn-nav-resultats" onclick="setActiveMenuBtn('btn-nav-resultats'); openResultsModal();" class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
                 <i class="fas fa-chart-bar text-emerald"></i> Résultats
             </button>
         </div>
@@ -1111,6 +1111,63 @@
                     }
                 }
 
+
+// ================= ربط الأزرار الجديدة =================
+        
+        // 1. تشغيل الـ Mini Jeux (يجلب ألعاب Spribe أو ألعاب الكراش فوراً)
+        async function loadMiniJeux() {
+            switchSection('casino');
+            const grid = document.getElementById('games-grid');
+            const label = document.getElementById('current-provider-label');
+            if(label) label.innerText = "Mini Jeux";
+            if(grid) grid.innerHTML = '<div class="col-span-full text-purple-400 text-center py-10 animate-pulse text-lg font-bold">Chargement des mini jeux... 🚀</div>';
+            
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider_code: "SPRIBE" }) 
+                });
+                const data = await res.json();
+                window.currentProviderGames = data.games || data.data || [];
+                currentActiveProviderCode = "SPRIBE";
+                renderCasinoGrid();
+            } catch(e) {
+                if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de chargement</div>';
+            }
+        }
+
+        // 2. تشغيل الـ Jeux TV (يجلب مزود ألعاب التلفاز المباشرة)
+        async function loadTVGames() {
+            switchSection('casino');
+            const grid = document.getElementById('games-grid');
+            const label = document.getElementById('current-provider-label');
+            if(label) label.innerText = "Jeux TV";
+            if(grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10 animate-pulse text-lg font-bold">Chargement Jeux TV... 📺</div>';
+            
+            try {
+                // يفترض وجود مزود TVBET أو BetGames في الـ API الخاص بك
+                const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider_code: "TVBET" }) 
+                });
+                const data = await res.json();
+                window.currentProviderGames = data.games || data.data || [];
+                currentActiveProviderCode = "TVBET";
+                renderCasinoGrid();
+            } catch(e) {
+                if(grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Fournisseur non disponible</div>';
+            }
+        }
+
+        // 3. نافذة النتائج (مجهزة للربط مع API أو Iframe رياضي)
+        function openResultsModal() {
+            showNotification("L'intégration du widget de résultats est en cours.", "info");
+            // هنا يمكنك لاحقاً فتح نافذة Iframe تحتوي على موقع Livescore أو خدمة النتائج الخاصة بمزود الرياضة لديك
+        }
+
+        
                 // ================= محرك ألعاب اليوم (نسخة محصنة ومضمونة 100%) =================
 async function loadGamesOfTheDay() {
     const grid = document.getElementById('games-of-the-day-grid');
