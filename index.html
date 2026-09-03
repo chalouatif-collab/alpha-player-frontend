@@ -74,16 +74,17 @@
                     <button onclick="openRegisterModal()" class="bg-emerald text-black font-extrabold text-[10px] md:text-xs uppercase px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition shadow-md">S'inscrire</button>
                 </div>
 
-                <!-- 1️⃣ بروفايل الرصيد (مخفي للسرية - يظهر بوضوح عند التمرير عليه) -->
+                <!-- 1️⃣ بروفايل الرصيد (واضح وأبيض على الهاتف، ومخفي للسرية على الكمبيوتر) -->
                 <div id="top-user-profile" class="hidden items-center gap-2 cursor-pointer group shrink-0" onclick="toggleProfileSidebar()">
-                    <!-- أيقونة مصغرة جداً وداكنة -->
-                    <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] text-emerald-600 flex items-center justify-center text-[10px] md:text-xs border border-[#212631] group-hover:border-emerald-500 transition shrink-0">
+                    <!-- أيقونة المحفظة -->
+                    <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] text-emerald-500 md:text-emerald-600 flex items-center justify-center text-[10px] md:text-xs border border-emerald-500/30 md:border-[#212631] group-hover:border-emerald-500 transition shrink-0 shadow-sm md:shadow-none">
                         <i class="fas fa-wallet"></i>
                     </div>
-                    <!-- الرصيد (بدون إطار وبدون اسم، وباهت للسرية) -->
-                    <div class="text-right opacity-50 group-hover:opacity-100 transition-opacity duration-300">
-                        <div class="font-mono text-gray-300 text-[10px] md:text-xs leading-none font-bold">
-                            <span id="player-balance-val" class="tracking-tight">0.00</span> <span class="text-emerald-500 text-[8px] md:text-[9px]">TND</span>
+                    <!-- الرصيد (opacity-100 للهاتف، و md:opacity-50 للكمبيوتر) -->
+                    <div class="text-right opacity-100 md:opacity-50 group-hover:opacity-100 transition-opacity duration-300">
+                        <!-- text-white للهاتف، و md:text-gray-300 للكمبيوتر -->
+                        <div class="font-mono text-white md:text-gray-300 text-[11px] md:text-xs leading-none font-bold">
+                            <span id="player-balance-val" class="tracking-tight">0.00</span> <span class="text-emerald-400 md:text-emerald-500 text-[8px] md:text-[9px]">TND</span>
                         </div>
                     </div>
                 </div>
