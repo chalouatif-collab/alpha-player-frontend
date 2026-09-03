@@ -1438,26 +1438,49 @@ async function loadGamesOfTheDay() {
                 }
 
                 async function submitDeposit(method) {
-                    if (!playerSession) return;
-                    const codeInput = document.getElementById(method + "-code");
-                    const fileInput = document.getElementById(method + "-file");
-                    let pinCode = codeInput ? codeInput.value : "";
-                    if (!pinCode && (!fileInput || fileInput.files.length === 0)) return showNotification("Données manquantes", "error");
+    if (!playerSession) return;
+    const codeInput = document.getElementById(method + "-code");
+    const fileInput = document.getElementById(method + "-file");
+    let pinCode = codeInput ? codeInput.value : "";
+    
+    if (!pinCode && (!fileInput || fileInput.files.length === 0)) {
+        return showNotification("Données manquantes", "error");
+    }
 
-                    try {
-                        let receiptBase64 = null;
-                        if (fileInput && fileInput.files.length > 0) receiptBase64 = await getBase64(fileInput.files[0]);
-                        const response = await fetch(`${BACKEND_URL}/api/deposit`, {
-                            method: 'POST', headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ player: playerSession.username, method: method.toUpperCase(), amount: 0, code: pinCode, receipt_image: receiptBase64 })
-                        });
-                        if (response.ok) {
-                            showNotification("Demande envoyée ! ⏳");
-                            toggleCashier();
-                            if (codeInput) codeInput.value = "";
-                        } else showNotification("Erreur", "error");
-                    } catch (error) { showNotification("Erreur réseau", "error"); }
-                }
+    try {
+        // استخدام FormData لدعم رفع الصور والنصوص معاً إلى مسار SQL الموحد
+        const formData = new FormData();
+        formData.append("target_username", playerSession.username);
+        formData.append("action", "deposit_request");
+        formData.append("amount", 1); // قيمة مؤقتة لتخطي شرط (المبلغ > 0) في الباك إند، المالك سيحدد المبلغ الحقيقي لاحقاً
+        
+        // دمج نوع الطريقة مع الكود (أو كلمة FILE إذا كان صورة فقط) في حقل tx_id
+        const details = pinCode ? `${method.toUpperCase()}-${pinCode}` : `${method.toUpperCase()}-FILE`;
+        formData.append("tx_id", details);
+
+        if (fileInput && fileInput.files.length > 0) {
+            formData.append("file", fileInput.files[0]);
+        }
+
+        const response = await fetch(`${BACKEND_URL}/api/admin/request-transaction`, {
+            method: 'POST',
+            // لا نستخدم getAuthHeaders() هنا لأن FormData يحتاج أن يحدد المتصفح الـ Content-Type بنفسه
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+            body: formData
+        });
+
+        if (response.ok) {
+            showNotification("Demande envoyée ! ⏳");
+            toggleCashier();
+            if (codeInput) codeInput.value = "";
+        } else {
+            const err = await response.json();
+            showNotification(err.detail || "Erreur", "error");
+        }
+    } catch (error) { 
+        showNotification("Erreur réseau", "error"); 
+    }
+}
 
                 function showWithdrawForm(formId) {
                     document.querySelectorAll('.withdraw-form').forEach(f => f.classList.add('hidden'));
