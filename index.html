@@ -1275,7 +1275,6 @@
         }
 
 
-        // ================= محرك ألعاب اليوم (نسخة محصنة ومضمونة 100%) =================
         async function loadGamesOfTheDay() {
             const grid = document.getElementById('games-of-the-day-grid');
             if (!grid) return;
@@ -1296,16 +1295,23 @@
 
                         if (res.ok) {
                             const data = await res.json();
-                            let games = data.games || data.data || [];
-                            games.slice(0, 4).forEach(g => mixedGames.push({ ...g, provider: pCode }));
+                            
+                            // قراءة البيانات بذكاء لتعمل مع الـ API الخاص بك
+                            let games = [];
+                            if (data.status === 1 && data.games) games = data.games;
+                            else if (data.data) games = data.data;
+                            else if (Array.isArray(data)) games = data;
+
+                            if (games && games.length > 0) {
+                                games.slice(0, 4).forEach(g => mixedGames.push({ ...g, provider: pCode }));
+                            }
                         }
                     } catch (err) {
-                        console.warn(`Impossible de charger le fournisseur: ${pCode}`);
+                        console.warn(`Impossible de charger le fournisseur: ${pCode}`, err);
                     }
                 }
 
                 mixedGames = mixedGames.sort(() => 0.5 - Math.random());
-                renderFeaturedProviders(mixedGames);
 
                 if (mixedGames.length > 0) {
                     grid.innerHTML = mixedGames.map(g => {
@@ -1334,7 +1340,8 @@
                     grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-5 font-bold">Aucun jeu disponible pour le moment.</div>';
                 }
             } catch (e) {
-                grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-5 font-bold">Erreur de chargement</div>';
+                console.error("=== خطأ ألعاب اليوم ===", e);
+                grid.innerHTML = `<div class="col-span-full text-red-500 text-center py-5 font-bold">Erreur de chargement<br><span class="text-xs text-gray-500 font-mono mt-2 block">${e.message}</span></div>`;
             }
         }
 // ================= تشغيل الألعاب =================
@@ -2163,7 +2170,6 @@ async function loadFeaturedProvidersBlocks() {
     const container = document.getElementById('dynamic-featured-providers');
     if (!container) return;
 
-    // إذا كانت الألعاب موجودة بالفعل، لا تقم بإعادة تحميلها لتسريع الموقع ومنع اختفائها
     if (container.innerHTML.trim() !== '') return;
 
     const featured = [
@@ -2176,16 +2182,19 @@ async function loadFeaturedProvidersBlocks() {
 
     for (let provider of featured) {
         try {
-            // جلب ألعاب المزود من السيرفر مباشرة
             const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ provider_code: provider.code })
             });
             const data = await res.json();
-            let games = data.games || data.data || [];
             
-            // أخذ أول 3 ألعاب فقط
+            // قراءة الألعاب بنفس الطريقة الموثوقة
+            let games = [];
+            if (data.status === 1 && data.games) games = data.games;
+            else if (data.data) games = data.data;
+            else if (Array.isArray(data)) games = data;
+            
             games = games.slice(0, 3);
 
             if (games.length > 0) {
@@ -2223,7 +2232,7 @@ async function loadFeaturedProvidersBlocks() {
                 `;
             }
         } catch (e) {
-            console.error("Erreur chargement provider", e);
+            console.error("Erreur chargement provider " + provider.code, e);
         }
     }
 
