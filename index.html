@@ -2151,17 +2151,17 @@ function renderFeaturedProviders(allGames) {
     if (!container || !allGames || allGames.length === 0) return;
 
     const featured = [
-        { name: "Pragmatic Play", code: "Pragmatic", color: "bg-emerald-500", hover: "hover:border-emerald-500" },
-        { name: "Amatic", code: "Amatic", color: "bg-blue-500", hover: "hover:border-blue-500" },
-        { name: "Hacksaw", code: "Hacksaw", color: "bg-purple-500", hover: "hover:border-purple-500" }
+        { name: "Pragmatic Play", code: "PRAGMATIC", color: "bg-emerald-500", hover: "hover:border-emerald-500" },
+        { name: "Amatic", code: "AMATIC", color: "bg-blue-500", hover: "hover:border-blue-500" },
+        { name: "Hacksaw", code: "HACKSAW", color: "bg-purple-500", hover: "hover:border-purple-500" }
     ];
 
     let html = '';
 
     featured.forEach(provider => {
-        // البحث في قائمة ألعابك عن ألعاب هذا المزود، وأخذ أول 3 ألعاب فقط
+        // البحث عن ألعاب المزود
         const providerGames = allGames.filter(g => 
-            g.provider && g.provider.toLowerCase().includes(provider.code.toLowerCase())
+            g.provider && g.provider.toUpperCase().includes(provider.code)
         ).slice(0, 3);
         
         if (providerGames.length > 0) {
@@ -2171,7 +2171,7 @@ function renderFeaturedProviders(allGames) {
                     <h3 class="text-white font-extrabold text-xs md:text-sm uppercase flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full ${provider.color}"></span> ${provider.name}
                     </h3>
-                    <button onclick="filterByProvider('${provider.code}')" class="text-[10px] md:text-xs font-bold text-gray-400 hover:text-white transition bg-[#161922] px-3 py-1 rounded-full border border-[#212631]">
+                    <button onclick="loadProviderGames('${provider.code}'); switchSection('casino');" class="text-[10px] md:text-xs font-bold text-gray-400 hover:text-white transition bg-[#161922] px-3 py-1 rounded-full border border-[#212631]">
                         Voir plus <i class="fas fa-chevron-right ml-1 text-[8px]"></i>
                     </button>
                 </div>
@@ -2179,13 +2179,15 @@ function renderFeaturedProviders(allGames) {
             `;
 
             providerGames.forEach(game => {
-                // 💡 هنا نأخذ الصورة الأصلية من المزود (تأكد أن اسم المتغير يطابق ما يرسله الـ API، مثلا image أو image_url)
-                const imageUrl = game.image || game.image_url || game.thumbnail || '';
-                const gameId = game.id || game.game_id || game.name;
+                // جلب اسم اللعبة، الكود، والصورة بناءً على الـ API الخاص بك
+                const gameName = escapeHTML(String(game.game_name || game.name || "Game"));
+                const imageUrl = game.banner || game.image || game.thumb || `https://placehold.co/400x300/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
+                const gameCode = game.game_code || game.id;
 
+                // استخدام دالة playCasinoGame وتمرير الـ Provider أولاً ثم الكود
                 html += `
-                    <div class="relative group rounded-lg md:rounded-xl overflow-hidden cursor-pointer border border-[#212631] ${provider.hover} transition aspect-[4/3]" onclick="openGame('${gameId}', '${provider.code}')">
-                        <img src="${imageUrl}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy" alt="${game.name}">
+                    <div class="relative group rounded-lg md:rounded-xl overflow-hidden cursor-pointer border border-[#212631] ${provider.hover} transition aspect-[4/3] shadow-lg" onclick="playCasinoGame('${provider.code}', '${gameCode}')">
+                        <img src="${imageUrl}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy" alt="${gameName}">
                         <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center backdrop-blur-sm">
                             <i class="fas fa-play text-white text-xl md:text-3xl drop-shadow-lg"></i>
                         </div>
