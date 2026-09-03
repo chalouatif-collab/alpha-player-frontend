@@ -959,18 +959,25 @@
             closeLoginModal();
             const authBtns = document.getElementById('auth-buttons-container');
             if (authBtns) authBtns.classList.add('hidden');
+            
             const userProfile = document.getElementById('top-user-profile');
             if (userProfile) { userProfile.classList.remove('hidden'); userProfile.classList.add('flex'); }
+
+            // 🔔 إظهار جرس الإشعارات
+            const notifBell = document.getElementById('top-notification-bell');
+            if (notifBell) { notifBell.classList.remove('hidden'); notifBell.classList.add('flex'); }
 
             const nameDisplay = document.getElementById('player-name-display');
             if (nameDisplay) nameDisplay.innerText = playerSession.username;
 
-            // تحديث اسم اللاعب في الشريط الجانبي
             const sidebarName = document.getElementById('sidebar-username');
             if (sidebarName) sidebarName.innerText = playerSession.username;
 
             refreshBalance();
             setInterval(refreshBalance, 5000);
+            
+            // جلب الإشعارات مباشرة عند الدخول
+            if(typeof fetchNotifications === 'function') fetchNotifications();
         }
 
         function logoutPlayer() {
