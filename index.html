@@ -1343,6 +1343,7 @@
                 console.error("=== خطأ ألعاب اليوم ===", e);
                 grid.innerHTML = `<div class="col-span-full text-red-500 text-center py-5 font-bold">Erreur de chargement<br><span class="text-xs text-gray-500 font-mono mt-2 block">${e.message}</span></div>`;
             }
+            loadFeaturedProvidersBlocks();
         }
 // ================= تشغيل الألعاب =================
         async function playCasinoGame(providerCode, gameCode) {
@@ -2168,17 +2169,19 @@ setInterval(fetchNotifications, 10000);
 
 async function loadFeaturedProvidersBlocks() {
     const container = document.getElementById('dynamic-featured-providers');
-    if (!container) return;
+    if (!container) {
+        console.error("Container introuvable !");
+        return;
+    }
 
-    if (container.innerHTML.trim() !== '') return;
+    // إفراغ الحاوية قبل البدء لضمان عدم التكرار
+    container.innerHTML = '';
 
     const featured = [
         { name: "Pragmatic Play", code: "PRAGMATIC", color: "bg-emerald-500", hover: "hover:border-emerald-500" },
         { name: "Amatic", code: "AMATIC", color: "bg-blue-500", hover: "hover:border-blue-500" },
         { name: "Hacksaw", code: "HACKSAW", color: "bg-purple-500", hover: "hover:border-purple-500" }
     ];
-
-    let html = '';
 
     for (let provider of featured) {
         try {
@@ -2187,56 +2190,59 @@ async function loadFeaturedProvidersBlocks() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ provider_code: provider.code })
             });
-            const data = await res.json();
             
-            // قراءة الألعاب بنفس الطريقة الموثوقة
-            let games = [];
-            if (data.status === 1 && data.games) games = data.games;
-            else if (data.data) games = data.data;
-            else if (Array.isArray(data)) games = data;
-            
-            games = games.slice(0, 3);
+            if (res.ok) {
+                const data = await res.json();
+                
+                let games = [];
+                if (data.status === 1 && data.games) games = data.games;
+                else if (data.data) games = data.data;
+                else if (Array.isArray(data)) games = data;
+                
+                games = games.slice(0, 3);
 
-            if (games.length > 0) {
-                html += `
-                <div>
-                    <div class="flex justify-between items-center mb-3 px-1">
-                        <h3 class="text-white font-extrabold text-xs md:text-sm uppercase flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full ${provider.color}"></span> ${provider.name}
-                        </h3>
-                        <button onclick="loadProviderGames('${provider.code}'); switchSection('casino');" class="text-[10px] md:text-xs font-bold text-gray-400 hover:text-white transition bg-[#161922] px-3 py-1 rounded-full border border-[#212631]">
-                            Voir plus <i class="fas fa-chevron-right ml-1 text-[8px]"></i>
-                        </button>
-                    </div>
-                    <div class="grid grid-cols-3 gap-2 md:gap-4">
-                `;
-
-                games.forEach(game => {
-                    const gameName = escapeHTML(String(game.game_name || game.name || "Game"));
-                    const imageUrl = game.banner || game.image || game.thumb || `https://placehold.co/400x300/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
-                    const gameCode = game.game_code || game.id;
-
-                    html += `
-                        <div class="relative group rounded-lg md:rounded-xl overflow-hidden cursor-pointer border border-[#212631] ${provider.hover} transition aspect-[4/3] shadow-lg" onclick="playCasinoGame('${provider.code}', '${gameCode}')">
-                            <img src="${imageUrl}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy" alt="${gameName}">
-                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center backdrop-blur-sm">
-                                <i class="fas fa-play text-white text-xl md:text-3xl drop-shadow-lg"></i>
-                            </div>
+                if (games.length > 0) {
+                    let providerHtml = `
+                    <div>
+                        <div class="flex justify-between items-center mb-3 px-1">
+                            <h3 class="text-white font-extrabold text-xs md:text-sm uppercase flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full ${provider.color}"></span> ${provider.name}
+                            </h3>
+                            <button onclick="loadProviderGames('${provider.code}'); switchSection('casino');" class="text-[10px] md:text-xs font-bold text-gray-400 hover:text-white transition bg-[#161922] px-3 py-1 rounded-full border border-[#212631]">
+                                Voir plus <i class="fas fa-chevron-right ml-1 text-[8px]"></i>
+                            </button>
                         </div>
+                        <div class="grid grid-cols-3 gap-2 md:gap-4">
                     `;
-                });
 
-                html += `
+                    games.forEach(game => {
+                        const gameName = escapeHTML(String(game.game_name || game.name || "Game"));
+                        const imageUrl = game.banner || game.image || game.thumb || `https://placehold.co/400x300/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
+                        const gameCode = game.game_code || game.id;
+
+                        providerHtml += `
+                            <div class="relative group rounded-lg md:rounded-xl overflow-hidden cursor-pointer border border-[#212631] ${provider.hover} transition aspect-[4/3] shadow-lg" onclick="playCasinoGame('${provider.code}', '${gameCode}')">
+                                <img src="${imageUrl}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy" alt="${gameName}">
+                                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center backdrop-blur-sm">
+                                    <i class="fas fa-play text-white text-xl md:text-3xl drop-shadow-lg"></i>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    providerHtml += `
+                        </div>
                     </div>
-                </div>
-                `;
+                    `;
+                    
+                    // السر هنا: إضافة القسم فور وصول ألعابه مباشرة دون انتظار البقية
+                    container.innerHTML += providerHtml;
+                }
             }
         } catch (e) {
-            console.error("Erreur chargement provider " + provider.code, e);
+            console.error("Erreur chargement provider: " + provider.code, e);
         }
     }
-
-    container.innerHTML = html;
 }
     </script>
     <!-- 💬 مربع الشات (Modal في الهاتف، عائم في الكمبيوتر) -->
