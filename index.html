@@ -1059,6 +1059,7 @@
 
                 const data = await res.json();
                 window.currentProviderGames = data.games || data.data || [];
+                renderFeaturedProviders(window.currentProviderGames);
                 renderCasinoGrid();
             } catch (e) {
                 if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de connexion</div>';
@@ -1119,7 +1120,7 @@
                 sentinel.remove();
             }
         }
-
+// ================= 
         function toggleProviderDropdown() {
             const dropdown = document.getElementById('provider-dropdown');
             if (dropdown) {
@@ -1127,7 +1128,7 @@
                 dropdown.classList.toggle('flex');
             }
         }
-
+// ================= البحث عن المزودين والألعاب =================
         function filterProviders() {
             const input = document.getElementById('provider-search-input');
             const list = document.getElementById('provider-dropdown-list');
@@ -1142,7 +1143,7 @@
                 `<button onclick="loadProviderGames('${p.code}', '${p.name}'); toggleProviderDropdown();" class="text-left px-4 py-3 text-xs font-bold text-gray-300 hover:text-emerald hover:bg-[#212631] rounded-xl transition-all border border-transparent hover:border-[#2e3648]">${p.name}</button>`
             ).join('');
         }
-
+// ================ البحث عن الألعاب =================
         function filterGames() {
             const input = document.getElementById('game-search-input');
             if (!input || !window.currentProviderGames) return;
@@ -1290,6 +1291,7 @@
                 }
 
                 mixedGames = mixedGames.sort(() => 0.5 - Math.random());
+                renderFeaturedProviders(mixedGames);
 
                 if (mixedGames.length > 0) {
                     grid.innerHTML = mixedGames.map(g => {
@@ -1321,7 +1323,7 @@
                 grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-5 font-bold">Erreur de chargement</div>';
             }
         }
-
+// ================= تشغيل الألعاب =================
         async function playCasinoGame(providerCode, gameCode) {
             closeChat();
             if (!playerSession) return openLoginModal();
@@ -1369,7 +1371,7 @@
 
         window.playSMPLGame = playCasinoGame;
         window.playNexusGame = playCasinoGame;
-
+// ================= إغلاق نافذة اللعبة =================
         function closeCasinoGame(fromPopState = false) {
             const container = document.getElementById('casino-iframe-container');
             if (container) {
