@@ -465,57 +465,51 @@
                     </div>
 
                 </div>
-<!-- 🚀 Bannières Promotionnelles (Élégantes et Fixes) -->
-<div class="w-full my-6 mb-8">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 w-full">
+<!-- 🚀 Bannières Promotionnelles (Slider Auto sur Mobile / Grille sur Desktop) -->
+<div class="w-full my-6 mb-8 relative">
+    <!-- حاوية السحب (تخفي شريط التمرير وتدعم السحب باليد) -->
+    <div id="promo-slider" class="flex md:grid md:grid-cols-3 gap-4 w-full overflow-x-auto snap-x snap-mandatory hide-scroll pb-2 scroll-smooth">
         
         <!-- Promo 1: Welcome Bonus (Thème Emerald) -->
-        <div class="relative bg-[#161922] border border-[#212631] hover:border-emerald-500/50 rounded-2xl p-5 overflow-hidden group transition-all duration-300 shadow-lg flex flex-col justify-between min-h-[150px]">
-            <!-- إضاءة خلفية خافتة -->
-            <div class="absolute -right-8 -top-8 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
-            
+        <div class="snap-center shrink-0 w-[85%] md:w-auto relative bg-gradient-to-br from-[#0f1117] via-[#161922] to-emerald-900/20 border border-[#212631] hover:border-emerald-500/50 rounded-2xl p-5 overflow-hidden shadow-xl flex flex-col justify-between min-h-[160px]">
+            <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/20 rounded-full blur-2xl"></div>
             <div class="relative z-10">
-                <span class="inline-block bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-black uppercase px-2 py-0.5 rounded-md mb-2 tracking-wider">Bonus de Bienvenue</span>
-                <h3 class="text-white text-base md:text-lg font-black leading-tight mb-1">100% jusqu'à 500 TND</h3>
-                <p class="text-gray-400 text-[11px] md:text-xs">Doublez votre premier dépôt instantanément.</p>
+                <span class="inline-block bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-black uppercase px-2 py-0.5 rounded-md mb-2">Bonus de Bienvenue</span>
+                <h3 class="text-white text-lg font-black leading-tight mb-1">100% jusqu'à 500 TND</h3>
+                <p class="text-gray-400 text-[11px]">Doublez votre premier dépôt instantanément.</p>
             </div>
-            
             <div class="relative z-10 mt-4">
-                <button onclick="if(typeof openCashierModal === 'function') openCashierModal(); else switchSection('accueil');" class="bg-[#0f1117] hover:bg-emerald text-gray-300 hover:text-black border border-[#212631] hover:border-emerald font-bold px-4 py-2 rounded-xl text-xs transition-all w-max shadow-sm">
+                <button onclick="if(typeof openCashierModal === 'function') openCashierModal(); else switchSection('accueil');" class="bg-emerald hover:bg-emerald-400 text-black font-extrabold px-5 py-2 rounded-xl text-xs transition-all shadow-[0_0_10px_rgba(16,185,129,0.3)]">
                     Réclamer 🎁
                 </button>
             </div>
         </div>
 
-        <!-- Promo 2: Jackpot (Thème Gold/Yellow) -->
-        <div class="relative bg-[#161922] border border-[#212631] hover:border-yellow-500/50 rounded-2xl p-5 overflow-hidden group transition-all duration-300 shadow-lg flex flex-col justify-between min-h-[150px]">
-            <div class="absolute -right-8 -top-8 w-32 h-32 bg-yellow-500/10 rounded-full blur-2xl group-hover:bg-yellow-500/20 transition-all"></div>
-            
+        <!-- Promo 2: Jackpot (Thème Gold) -->
+        <div class="snap-center shrink-0 w-[85%] md:w-auto relative bg-gradient-to-br from-[#0f1117] via-[#161922] to-yellow-900/20 border border-[#212631] hover:border-yellow-500/50 rounded-2xl p-5 overflow-hidden shadow-xl flex flex-col justify-between min-h-[160px]">
+            <div class="absolute -right-4 -top-4 w-24 h-24 bg-yellow-500/20 rounded-full blur-2xl"></div>
             <div class="relative z-10">
-                <span class="inline-block bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 text-[9px] font-black uppercase px-2 py-0.5 rounded-md mb-2 tracking-wider">Grand Jackpot</span>
-                <h3 class="text-white text-base md:text-lg font-black leading-tight mb-1">Drop Quotidien Actif</h3>
-                <p class="text-gray-400 text-[11px] md:text-xs">Jouez à vos slots préférés pour gagner.</p>
+                <span class="inline-block bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 text-[9px] font-black uppercase px-2 py-0.5 rounded-md mb-2">Grand Jackpot</span>
+                <h3 class="text-white text-lg font-black leading-tight mb-1">Drop Quotidien Actif</h3>
+                <p class="text-gray-400 text-[11px]">Jouez à vos slots préférés pour gagner.</p>
             </div>
-            
             <div class="relative z-10 mt-4">
-                <button onclick="switchSection('casino'); if(typeof initCasinoLobby === 'function') initCasinoLobby();" class="bg-[#0f1117] hover:bg-yellow-500 text-gray-300 hover:text-black border border-[#212631] hover:border-yellow-500 font-bold px-4 py-2 rounded-xl text-xs transition-all w-max shadow-sm">
+                <button onclick="switchSection('casino'); if(typeof initCasinoLobby === 'function') initCasinoLobby();" class="bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold px-5 py-2 rounded-xl text-xs transition-all shadow-[0_0_10px_rgba(234,179,8,0.3)]">
                     Jouer Maintenant 🎰
                 </button>
             </div>
         </div>
 
-        <!-- Promo 3: Tournaments / Virtuals (Thème Blue) -->
-        <div class="relative bg-[#161922] border border-[#212631] hover:border-blue-500/50 rounded-2xl p-5 overflow-hidden group transition-all duration-300 shadow-lg flex flex-col justify-between min-h-[150px]">
-            <div class="absolute -right-8 -top-8 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all"></div>
-            
+        <!-- Promo 3: Tournaments (Thème Blue) -->
+        <div class="snap-center shrink-0 w-[85%] md:w-auto relative bg-gradient-to-br from-[#0f1117] via-[#161922] to-blue-900/20 border border-[#212631] hover:border-blue-500/50 rounded-2xl p-5 overflow-hidden shadow-xl flex flex-col justify-between min-h-[160px]">
+            <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/20 rounded-full blur-2xl"></div>
             <div class="relative z-10">
-                <span class="inline-block bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[9px] font-black uppercase px-2 py-0.5 rounded-md mb-2 tracking-wider">Tournoi Exclusif</span>
-                <h3 class="text-white text-base md:text-lg font-black leading-tight mb-1">Championnat Virtuel</h3>
-                <p class="text-gray-400 text-[11px] md:text-xs">Grimpez dans le classement aujourd'hui.</p>
+                <span class="inline-block bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[9px] font-black uppercase px-2 py-0.5 rounded-md mb-2">Tournoi Exclusif</span>
+                <h3 class="text-white text-lg font-black leading-tight mb-1">Championnat Virtuel</h3>
+                <p class="text-gray-400 text-[11px]">Grimpez dans le classement aujourd'hui.</p>
             </div>
-            
             <div class="relative z-10 mt-4">
-                <button onclick="switchSection('virtuals'); if(typeof initVirtualsLobby === 'function') initVirtualsLobby();" class="bg-[#0f1117] hover:bg-blue-500 text-gray-300 hover:text-black border border-[#212631] hover:border-blue-500 font-bold px-4 py-2 rounded-xl text-xs transition-all w-max shadow-sm">
+                <button onclick="switchSection('virtuals'); if(typeof initVirtualsLobby === 'function') initVirtualsLobby();" class="bg-blue-500 hover:bg-blue-400 text-white font-extrabold px-5 py-2 rounded-xl text-xs transition-all shadow-[0_0_10px_rgba(59,130,246,0.3)]">
                     Rejoindre 🏆
                 </button>
             </div>
@@ -2532,7 +2526,35 @@ function handleLiveSearch(query) {
     dropdown.classList.remove('hidden');
 }
 
-        // استدعِ loadRecentGamesUI() داخل window.onload ليتم تحميلها فور فتح المنصة
+
+
+// ================= نظام التمرير التلقائي لبانرات الهاتف =================
+function startPromoAutoScroll() {
+    const slider = document.getElementById('promo-slider');
+    if (!slider) return;
+
+    let scrollIndex = 0;
+    const cards = slider.children;
+    const totalCards = cards.length;
+
+    setInterval(() => {
+        // العمل فقط في شاشات الهاتف (حيث يعمل الـ scroll)
+        if (window.innerWidth < 768) {
+            scrollIndex++;
+            if (scrollIndex >= totalCards) {
+                scrollIndex = 0; // العودة للبانر الأول
+            }
+            
+            // حساب مسافة التمرير بناءً على حجم البطاقة
+            const scrollPosition = cards[scrollIndex].offsetLeft - slider.offsetLeft;
+            slider.scrollTo({ left: scrollPosition, behavior: 'smooth' });
+        }
+    }, 2500); // يمرر كل ثانيتين ونصف (2500ms) - يمكنك تقليلها إلى 1500 إن أردتها أسرع
+}
+
+// استدعاء الدالة
+startPromoAutoScroll();
+
     </script>
     <!-- 💬 مربع الشات (Modal في الهاتف، عائم في الكمبيوتر) -->
     <div id="live-chat-sidebar" onclick="if(event.target === this) closeChat()"
