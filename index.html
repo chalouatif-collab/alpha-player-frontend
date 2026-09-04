@@ -463,38 +463,38 @@
                     </div>
 
                 </div>
-<!-- Full-Width Continuous Moving Ads Banner -->
+<!-- Full-Width Continuous Moving Ads Banner with Active Links -->
 <div class="w-full bg-[#12151d] border-y border-[#212631] py-4 overflow-hidden relative shadow-2xl my-4">
     <div class="marquee-track flex gap-6 whitespace-nowrap">
         
-        <!-- Ad Card 1 -->
+        <!-- Ad Card 1: Welcome Bonus (Links to Deposit / Cashier or Accueil) -->
         <div class="min-w-[350px] bg-gradient-to-r from-emerald-900/60 to-[#192231] border border-emerald-500/30 rounded-xl p-4 flex items-center justify-between shadow-md shrink-0">
             <div>
                 <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-full">EXCLUSIVE</span>
                 <h3 class="text-white text-sm font-bold mt-1">Welcome Bonus 100% Up to 500 TND</h3>
                 <p class="text-gray-400 text-xs">Deposit now and boost your balance instantly.</p>
             </div>
-            <button class="bg-emerald-500 hover:bg-emerald-600 text-black font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">Claim</button>
+            <button onclick="if(typeof openCashierModal === 'function') openCashierModal(); else switchSection('accueil');" class="bg-emerald-500 hover:bg-emerald-600 text-black font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">Claim</button>
         </div>
 
-        <!-- Ad Card 2 -->
+        <!-- Ad Card 2: Jackpot (Links to Casino Lobby) -->
         <div class="min-w-[350px] bg-gradient-to-r from-indigo-900/60 to-[#192231] border border-indigo-500/30 rounded-xl p-4 flex items-center justify-between shadow-md shrink-0">
             <div>
                 <span class="bg-indigo-500/20 text-indigo-400 text-[10px] font-bold px-2 py-0.5 rounded-full">JACKPOT</span>
                 <h3 class="text-white text-sm font-bold mt-1">Grand Jackpot Drop Active</h3>
                 <p class="text-gray-400 text-xs">Play any slot to win massive daily prizes.</p>
             </div>
-            <button class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">Play</button>
+            <button onclick="switchSection('casino'); if(typeof initCasinoLobby === 'function') initCasinoLobby();" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">Play</button>
         </div>
 
-        <!-- Ad Card 3 -->
+        <!-- Ad Card 3: Virtual Sports (Links to Virtuals Section) -->
         <div class="min-w-[350px] bg-gradient-to-r from-amber-900/60 to-[#192231] border border-amber-500/30 rounded-xl p-4 flex items-center justify-between shadow-md shrink-0">
             <div>
                 <span class="bg-amber-500/20 text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded-full">TOURNAMENT</span>
                 <h3 class="text-white text-sm font-bold mt-1">Virtual Sports Championship</h3>
                 <p class="text-gray-400 text-xs">Compete and climb the leaderboard now.</p>
             </div>
-            <button class="bg-amber-500 hover:bg-amber-600 text-black font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">Join</button>
+            <button onclick="switchSection('virtuals'); if(typeof initVirtualsLobby === 'function') initVirtualsLobby();" class="bg-amber-500 hover:bg-amber-600 text-black font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">Join</button>
         </div>
 
         <!-- Duplicate Ad Card 1 (for seamless infinite loop) -->
@@ -504,7 +504,7 @@
                 <h3 class="text-white text-sm font-bold mt-1">Welcome Bonus 100% Up to 500 TND</h3>
                 <p class="text-gray-400 text-xs">Deposit now and boost your balance instantly.</p>
             </div>
-            <button class="bg-emerald-500 hover:bg-emerald-600 text-black font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">Claim</button>
+            <button onclick="if(typeof openCashierModal === 'function') openCashierModal(); else switchSection('accueil');" class="bg-emerald-500 hover:bg-emerald-600 text-black font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">Claim</button>
         </div>
 
         <!-- Duplicate Ad Card 2 (for seamless infinite loop) -->
@@ -514,7 +514,7 @@
                 <h3 class="text-white text-sm font-bold mt-1">Grand Jackpot Drop Active</h3>
                 <p class="text-gray-400 text-xs">Play any slot to win massive daily prizes.</p>
             </div>
-            <button class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">Play</button>
+            <button onclick="switchSection('casino'); if(typeof initCasinoLobby === 'function') initCasinoLobby();" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">Play</button>
         </div>
 
     </div>
@@ -526,7 +526,6 @@
         transform: translateX(0);
     }
     100% {
-        /* Moves exactly across the width of the first set of 3 cards + gaps */
         transform: translateX(calc(-350px * 3 - 1.5rem * 3));
     }
 }
@@ -537,7 +536,6 @@
     animation: continuousScroll 25s linear infinite;
 }
 
-/* Pause animation when user hovers over the banner */
 .marquee-track:hover {
     animation-play-state: paused;
 }
