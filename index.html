@@ -189,6 +189,26 @@
             </button>
         </div>
     </div>
+    <!-- 🌟 شريط الفائزين المباشر (من الحافة للحافة) -->
+<div class="w-full bg-[#12151d] border-b border-[#212631] py-1.5 overflow-hidden relative flex items-center">
+    
+    <!-- علامة Live الثابتة مع تدرج لوني لإخفاء خروج الكروت -->
+    <div class="absolute left-0 top-0 bottom-0 z-20 bg-gradient-to-r from-[#12151d] via-[#12151d] to-transparent w-24 flex items-center pl-4 pointer-events-none">
+        <div class="bg-red-500/20 border border-red-500 rounded px-2 py-0.5 flex items-center gap-1.5 shadow-sm">
+            <div class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></div>
+            <span class="text-red-500 text-[8px] font-black uppercase tracking-wider">Live</span>
+        </div>
+    </div>
+    <!-- مسار التيكر المتحرك -->
+    <div class="flex-grow w-full overflow-hidden flex items-center h-7 pl-24">
+        <div id="winners-ticker-track" class="flex gap-4 items-center cursor-pointer marquee-edge-to-edge whitespace-nowrap">
+            <!-- سيتم تعبئتها أوتوماتيكياً بالجافاسكريبت -->
+        </div>
+    </div>
+    
+    <!-- تدرج لوني على اليمين لإخفاء دخول الكروت بنعومة -->
+    <div class="absolute right-0 top-0 bottom-0 z-20 bg-gradient-to-l from-[#12151d] to-transparent w-16 pointer-events-none"></div>
+</div>
 
     <main class="max-w-[1700px] mx-auto px-4 py-6 w-full flex-grow flex flex-col xl:flex-row gap-6">
 
@@ -223,46 +243,28 @@
         <!-- CENTER: Dynamic Content Area (Panes) -->
         <div class="w-full xl:w-[55%] space-y-6">
             <style>
-                /* محرك حركة شريط الفائزين */
-                @keyframes scroll-ticker {
-                    0% {
-                        transform: translateX(0);
-                    }
+                @keyframes slide-edge-to-edge {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        /* يتم إزاحة نصف المحتوى المكرر لضمان دوران غير منقطع */
+        transform: translateX(calc(-50% - 1rem)); 
+    }
+}
 
-                    100% {
-                        transform: translateX(-50%);
-                    }
-                }
+.marquee-edge-to-edge {
+    width: max-content;
+    animation: slide-edge-to-edge 35s linear infinite;
+}
 
-                .ticker-move {
-                    animation: scroll-ticker 25s linear infinite;
-                }
-
-                .ticker-move:hover {
-                    animation-play-state: paused;
-                    /* يتوقف الشريط عند وضع الفأرة عليه */
-                }
+.marquee-edge-to-edge:hover {
+    animation-play-state: paused;
+}
             </style>
             <!-- PANE: ACCUEIL (الصفحة الرئيسية المتكاملة) -->
             <div id="pane-accueil" class="player-view-section block space-y-6 w-full">
 
-                <!-- 🌟 1. شريط الفائزين المباشر (Live Winners Ticker) -->
-                <div class="relative w-full mx-auto mb-2 overflow-hidden">
-                    <div
-                        class="bg-[#161922]/80 backdrop-blur-xl border border-emerald/30 rounded-2xl p-2 flex items-center shadow-lg relative overflow-hidden w-full">
-                        <div
-                            class="bg-red-500/20 border border-red-500 rounded-lg px-2.5 py-1 flex items-center gap-1.5 z-20 shrink-0">
-                            <div class="w-2 h-2 rounded-full bg-red-500 animate-ping"></div>
-                            <span class="text-red-500 text-[9px] font-black uppercase tracking-wider">Live</span>
-                        </div>
-                        <div class="endless-ticker-container flex-grow h-6 ml-2 w-full overflow-hidden relative">
-                            <div id="winners-ticker-track" class="flex gap-4 items-center cursor-pointer ticker-move"
-                                style="width: max-content;">
-                                <!-- سيتم تعبئتها أوتوماتيكياً بالجافاسكريبت -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <!-- 🌟 2. شريط شعارات المزودين السريع (مصغرة وفي سطر واحد) -->
                 <div class="flex overflow-x-auto flex-nowrap gap-2 py-2 hide-scroll w-full">
 
