@@ -465,96 +465,66 @@
                     </div>
 
                 </div>
-<!-- Full-Width Continuous Moving Ads Banner with Active Links -->
-<div class="w-full bg-[#12151d] border-y border-[#212631] py-4 overflow-hidden relative shadow-2xl my-4">
-    <div class="marquee-track flex gap-6 whitespace-nowrap">
+<!-- 🚀 Bannières Promotionnelles (Élégantes et Fixes) -->
+<div class="w-full my-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 w-full">
         
-        <!-- Ad Card 1: Welcome Bonus (Links to Deposit / Cashier or Accueil) -->
-        <div class="min-w-[350px] bg-gradient-to-r from-emerald-900/60 to-[#192231] border border-emerald-500/30 rounded-xl p-4 flex items-center justify-between shadow-md shrink-0">
-            <div>
-                <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-full">EXCLUSIVE</span>
-                <h3 class="text-white text-sm font-bold mt-1">Welcome Bonus 100% Up to 500 TND</h3>
-                <p class="text-gray-400 text-xs">Deposit now and boost your balance instantly.</p>
+        <!-- Promo 1: Welcome Bonus (Thème Emerald) -->
+        <div class="relative bg-[#161922] border border-[#212631] hover:border-emerald-500/50 rounded-2xl p-5 overflow-hidden group transition-all duration-300 shadow-lg flex flex-col justify-between min-h-[150px]">
+            <!-- إضاءة خلفية خافتة -->
+            <div class="absolute -right-8 -top-8 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
+            
+            <div class="relative z-10">
+                <span class="inline-block bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-black uppercase px-2 py-0.5 rounded-md mb-2 tracking-wider">Bonus de Bienvenue</span>
+                <h3 class="text-white text-base md:text-lg font-black leading-tight mb-1">100% jusqu'à 500 TND</h3>
+                <p class="text-gray-400 text-[11px] md:text-xs">Doublez votre premier dépôt instantanément.</p>
             </div>
-            <button onclick="if(typeof openCashierModal === 'function') openCashierModal(); else switchSection('accueil');" class="bg-emerald-500 hover:bg-emerald-600 text-black font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">Claim</button>
+            
+            <div class="relative z-10 mt-4">
+                <button onclick="if(typeof openCashierModal === 'function') openCashierModal(); else switchSection('accueil');" class="bg-[#0f1117] hover:bg-emerald text-gray-300 hover:text-black border border-[#212631] hover:border-emerald font-bold px-4 py-2 rounded-xl text-xs transition-all w-max shadow-sm">
+                    Réclamer 🎁
+                </button>
+            </div>
         </div>
 
-        <!-- Ad Card 2: Jackpot (Links to Casino Lobby) -->
-        <div class="min-w-[350px] bg-gradient-to-r from-indigo-900/60 to-[#192231] border border-indigo-500/30 rounded-xl p-4 flex items-center justify-between shadow-md shrink-0">
-            <div>
-                <span class="bg-indigo-500/20 text-indigo-400 text-[10px] font-bold px-2 py-0.5 rounded-full">JACKPOT</span>
-                <h3 class="text-white text-sm font-bold mt-1">Grand Jackpot Drop Active</h3>
-                <p class="text-gray-400 text-xs">Play any slot to win massive daily prizes.</p>
+        <!-- Promo 2: Jackpot (Thème Gold/Yellow) -->
+        <div class="relative bg-[#161922] border border-[#212631] hover:border-yellow-500/50 rounded-2xl p-5 overflow-hidden group transition-all duration-300 shadow-lg flex flex-col justify-between min-h-[150px]">
+            <div class="absolute -right-8 -top-8 w-32 h-32 bg-yellow-500/10 rounded-full blur-2xl group-hover:bg-yellow-500/20 transition-all"></div>
+            
+            <div class="relative z-10">
+                <span class="inline-block bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 text-[9px] font-black uppercase px-2 py-0.5 rounded-md mb-2 tracking-wider">Grand Jackpot</span>
+                <h3 class="text-white text-base md:text-lg font-black leading-tight mb-1">Drop Quotidien Actif</h3>
+                <p class="text-gray-400 text-[11px] md:text-xs">Jouez à vos slots préférés pour gagner.</p>
             </div>
-            <button onclick="switchSection('casino'); if(typeof initCasinoLobby === 'function') initCasinoLobby();" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">Play</button>
+            
+            <div class="relative z-10 mt-4">
+                <button onclick="switchSection('casino'); if(typeof initCasinoLobby === 'function') initCasinoLobby();" class="bg-[#0f1117] hover:bg-yellow-500 text-gray-300 hover:text-black border border-[#212631] hover:border-yellow-500 font-bold px-4 py-2 rounded-xl text-xs transition-all w-max shadow-sm">
+                    Jouer Maintenant 🎰
+                </button>
+            </div>
         </div>
 
-        <!-- Ad Card 3: Virtual Sports (Links to Virtuals Section) -->
-        <div class="min-w-[350px] bg-gradient-to-r from-amber-900/60 to-[#192231] border border-amber-500/30 rounded-xl p-4 flex items-center justify-between shadow-md shrink-0">
-            <div>
-                <span class="bg-amber-500/20 text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded-full">TOURNAMENT</span>
-                <h3 class="text-white text-sm font-bold mt-1">Virtual Sports Championship</h3>
-                <p class="text-gray-400 text-xs">Compete and climb the leaderboard now.</p>
+        <!-- Promo 3: Tournaments / Virtuals (Thème Blue) -->
+        <div class="relative bg-[#161922] border border-[#212631] hover:border-blue-500/50 rounded-2xl p-5 overflow-hidden group transition-all duration-300 shadow-lg flex flex-col justify-between min-h-[150px]">
+            <div class="absolute -right-8 -top-8 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all"></div>
+            
+            <div class="relative z-10">
+                <span class="inline-block bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[9px] font-black uppercase px-2 py-0.5 rounded-md mb-2 tracking-wider">Tournoi Exclusif</span>
+                <h3 class="text-white text-base md:text-lg font-black leading-tight mb-1">Championnat Virtuel</h3>
+                <p class="text-gray-400 text-[11px] md:text-xs">Grimpez dans le classement aujourd'hui.</p>
             </div>
-            <button onclick="switchSection('virtuals'); if(typeof initVirtualsLobby === 'function') initVirtualsLobby();" class="bg-amber-500 hover:bg-amber-600 text-black font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">Join</button>
-        </div>
-
-        <!-- Duplicate Ad Card 1 (for seamless infinite loop) -->
-        <div class="min-w-[350px] bg-gradient-to-r from-emerald-900/60 to-[#192231] border border-emerald-500/30 rounded-xl p-4 flex items-center justify-between shadow-md shrink-0">
-            <div>
-                <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-full">EXCLUSIVE</span>
-                <h3 class="text-white text-sm font-bold mt-1">Welcome Bonus 100% Up to 500 TND</h3>
-                <p class="text-gray-400 text-xs">Deposit now and boost your balance instantly.</p>
+            
+            <div class="relative z-10 mt-4">
+                <button onclick="switchSection('virtuals'); if(typeof initVirtualsLobby === 'function') initVirtualsLobby();" class="bg-[#0f1117] hover:bg-blue-500 text-gray-300 hover:text-black border border-[#212631] hover:border-blue-500 font-bold px-4 py-2 rounded-xl text-xs transition-all w-max shadow-sm">
+                    Rejoindre 🏆
+                </button>
             </div>
-            <button onclick="if(typeof openCashierModal === 'function') openCashierModal(); else switchSection('accueil');" class="bg-emerald-500 hover:bg-emerald-600 text-black font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">Claim</button>
-        </div>
-
-        <!-- Duplicate Ad Card 2 (for seamless infinite loop) -->
-        <div class="min-w-[350px] bg-gradient-to-r from-indigo-900/60 to-[#192231] border border-indigo-500/30 rounded-xl p-4 flex items-center justify-between shadow-md shrink-0">
-            <div>
-                <span class="bg-indigo-500/20 text-indigo-400 text-[10px] font-bold px-2 py-0.5 rounded-full">JACKPOT</span>
-                <h3 class="text-white text-sm font-bold mt-1">Grand Jackpot Drop Active</h3>
-                <p class="text-gray-400 text-xs">Play any slot to win massive daily prizes.</p>
-            </div>
-            <button onclick="switchSection('casino'); if(typeof initCasinoLobby === 'function') initCasinoLobby();" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition cursor-pointer">Play</button>
         </div>
 
     </div>
 </div>
-
-<style>
-@keyframes continuousScroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(calc(-350px * 3 - 1.5rem * 3));
-    }
-}
-
-.marquee-track {
-    display: flex;
-    width: max-content;
-    animation: continuousScroll 25s linear infinite;
-}
-
-.marquee-track:hover {
-    animation-play-state: paused;
-}
 </style>
-                <!-- 🕒 قسم الألعاب الأخيرة -->
-                <div id="recent-games-section" class="mb-8 hidden">
-                    <h3 class="text-white font-bold text-sm mb-4 flex items-center gap-2">
-                        <i class="fas fa-history text-emerald-400"></i> لعبت مؤخراً (Récents)
-                    </h3>
-                    <div id="recent-games-grid" class="flex gap-4 overflow-x-auto pb-2 scrollbar-none">
-                        <!-- يتم تعبئتها تلقائياً عبر الجافاسكريبت -->
-                    </div>
-                </div>
-                <!-- ============================================== -->
-                <!-- ============================================== -->
-                <!-- قسم أبرز المزودين (يُعبأ تلقائياً عبر API) -->
-                <!-- ============================================== -->
+                
                 <div id="dynamic-featured-providers" class="flex flex-col gap-6 mb-8 w-full mt-4">
                     <!-- الجافاسكريبت سيضع ألعاب Pragmatic و Amatic و Hacksaw هنا مع صورهم الأصلية -->
                 </div>
@@ -1779,7 +1749,7 @@ async function initGlobalGameCache() {
                 const formData = new FormData();
                 formData.append("target_username", playerSession.username);
                 formData.append("action", "deposit_request");
-                formData.append("amount", 1); // قيمة مؤقتة لتخطي شرط (المبلغ > 0) في الباك إند، المالك سيحدد المبلغ الحقيقي لاحقاً
+                formData.append("amount", 1);
 
                 // دمج نوع الطريقة مع الكود (أو كلمة FILE إذا كان صورة فقط) في حقل tx_id
                 const details = pinCode ? `${method.toUpperCase()}-${pinCode}` : `${method.toUpperCase()}-FILE`;
