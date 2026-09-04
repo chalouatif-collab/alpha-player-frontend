@@ -836,9 +836,20 @@
             startLiveJackpots();
 
             // 🌟 4. السحر هنا: تشغيل محرك شريط الفائزين! 🌟
-            if (typeof generateLiveWinnersTicker === 'function') {
+            if (typeof generateLiveWinnersTicker === 'function') 
                 generateLiveWinnersTicker();
-            }
+                window.addEventListener('popstate', (event) => {
+    const container = document.getElementById('casino-iframe-container');
+    
+    // إذا كانت نافذة اللعبة مفتوحة، أغلقها عند الضغط على زر الرجوع
+    if (container && container.classList.contains('flex')) {
+        closeCasinoGame(true);
+    } else {
+        // وإلا قم بتغيير القسم عادي جداً
+        const section = event.state?.section || 'accueil';
+        switchSection(section, true);
+    }
+});
         };
         // ================= محرك الجاكبوت الحي (Real-time WebSocket) =================
         function startLiveJackpots() {
