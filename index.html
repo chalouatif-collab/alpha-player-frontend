@@ -2465,16 +2465,17 @@ function handleLiveSearch(query) {
     let matches = [];
     const seenNames = new Set();
 
-    // البحث في أي عنصر يحتوي على أمر تشغيل لعبة وصورة
-    const elements = document.querySelectorAll('div[onclick*="play"], div[onclick*="launch"], div[onclick*="Game"]');
+    // البحث في جميع بطاقات الألعاب المعروضة في الصفحة حالياً
+    const gameCards = document.querySelectorAll('div[onclick*="playCasinoGame"], div[onclick*="launchSpecificVirtualGame"], div[onclick*="play"]');
 
-    elements.forEach(el => {
+    gameCards.forEach(el => {
         const onclickAttr = el.getAttribute('onclick');
         const imgEl = el.querySelector('img');
-        const textEl = el.querySelector('p') || el.querySelector('span');
-
+        // استخراج اسم اللعبة من الـ div الخاص بالعنوان داخل البطاقة
+        const titleDiv = el.querySelector('.text-white.font-bold') || el.querySelector('p') || el.querySelector('span');
+        
         if (onclickAttr && imgEl) {
-            const name = textEl ? textEl.innerText.trim() : (imgEl.alt || "Jeu Casino");
+            const name = titleDiv ? titleDiv.innerText.trim() : (imgEl.alt || "Jeu Casino");
             const img = imgEl.src;
 
             if (name && name.length > 1 && !seenNames.has(name)) {
@@ -2492,7 +2493,7 @@ function handleLiveSearch(query) {
         return;
     }
 
-    // عرض النتائج المتاحة في القائمة المنسدلة
+    // عرض النتائج في القائمة المنسدلة بشكل أنيق
     dropdown.innerHTML = matches.slice(0, 6).map(m => `
         <div onclick="${m.onclick}; document.getElementById('search-dropdown').classList.add('hidden'); document.getElementById('header-search-input').value='';" 
              class="flex items-center gap-2.5 p-2 hover:bg-[#1a1f2c] cursor-pointer border-b border-[#212631] last:border-none transition">
