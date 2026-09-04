@@ -2508,19 +2508,61 @@ async function initGlobalGameCache() {
     `).join('');
         }
 
-// ================= نظام البحث الفوري الشامل =================
+// ================= نظام البحث الفوري الشامل والمضمون =================
 function handleLiveSearch(query) {
     const dropdown = document.getElementById('search-dropdown');
     const term = query.trim().toLowerCase();
 
-    if (!term || !window.isCacheLoaded) {
+    if (!term) {
         dropdown.classList.add('hidden');
         dropdown.innerHTML = '';
         return;
     }
 
-    // فلترة الألعاب من الذاكرة الشاملة التي تضم كل المنصة
-    const matches = window.globalGameDictionary.filter(g => g.name.toLowerCase().includes(term));
+    let matches = [];
+    const seenNames = new Set();
+
+    // 1. البحث الفوري في الواجهة (الألعاب المعروضة حالياً)
+    const gameCards = document.querySelectorAll('div[onclick*="playCasinoGame"], div[onclick*="launchSpecificVirtualGame"], div[onclick*="play"]');
+    gameCards.forEach(el => {
+        const onclickAttr = el.getAttribute('onclick');
+        const imgEl = el.querySelector('img');
+        const titleDiv = el.querySelector('.text-white.font-bold') || el.querySelector('p') || el.querySelector('span');
+        
+        if (onclickAttr && imgEl) {
+            const name = titleDiv ? titleDiv.innerText.trim() : (imgEl.alt || "Jeu");
+            const img = imgEl.src;
+
+            if (name && name.length > 1 && !seenNames.has(name)) {
+                if (name.toLowerCase().includes(term)) {
+                    seenNames.add(name);
+                    matches.push({ name, img, onclick: onclickAttr });
+                }
+            }
+        }
+    });
+
+    // 2. البحث في الذاكرة الشاملة (لجلب الألعاب المخفية أو الأقسام الأخرى)
+    if (window.globalGameDictionary && window.globalGameDictionary.length > 0) {
+        window.globalGameDictionary.forEach(g => {
+            if (g.name.toLowerCase().includes(term) && !seenNames.has(g.name)) {
+                seenNames.add(g.name);
+                matches.push(g);
+            }
+        });
+    } else if (window.currentProviderGames && window.currentProviderGames.length > 0) {
+        // 3. بديل آمن: البحث في الكازينو النشط في حال فشل تحميل الذاكرة الشاملة
+        window.currentProviderGames.forEach(g => {
+            const name = String(g.game_name || g.name || "").trim();
+            if (name.toLowerCase().includes(term) && !seenNames.has(name)) {
+                seenNames.add(name);
+                const img = g.banner || g.image || g.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(name.substring(0, 15))}`;
+                const code = g.game_code || g.id;
+                const provider = typeof currentActiveProviderCode !== 'undefined' ? currentActiveProviderCode : 'PRAGMATIC';
+                matches.push({ name, img, onclick: `playCasinoGame('${provider}', '${code}')` });
+            }
+        });
+    }
 
     if (matches.length === 0) {
         dropdown.innerHTML = '<div class="p-3 text-xs text-gray-400 text-center">Aucun jeu trouvé</div>';
@@ -2528,7 +2570,7 @@ function handleLiveSearch(query) {
         return;
     }
 
-    // عرض أول 8 نتائج فقط للحفاظ على جمالية القائمة
+    // عرض أول 8 نتائج في القائمة المنسدلة
     dropdown.innerHTML = matches.slice(0, 8).map(m => `
         <div onclick="${m.onclick}; document.getElementById('search-dropdown').classList.add('hidden'); document.getElementById('header-search-input').value='';" 
              class="flex items-center gap-2.5 p-2 hover:bg-[#1a1f2c] cursor-pointer border-b border-[#212631] last:border-none transition">
