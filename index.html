@@ -949,7 +949,63 @@
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
+        // ================= محرك الذاكرة الشاملة للبحث (Global Game Cache) =================
+window.globalGameDictionary = [];
+window.isCacheLoaded = false;
 
+async function initGlobalGameCache() {
+    if (window.isCacheLoaded) return;
+
+    // 1. جلب وتخزين الألعاب الافتراضية (Virtuals)
+    try {
+        const resV = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games`);
+        const dataV = await resV.json();
+        const virtuals = dataV.games || dataV.data || dataV || [];
+        virtuals.forEach(g => {
+            const name = String(g.game_name || g.name || "").trim();
+            if (name) {
+                window.globalGameDictionary.push({
+                    name: name,
+                    img: g.banner || g.image || g.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(name.substring(0, 15))}`,
+                    onclick: `launchSpecificVirtualGame('${g.uuid || g.game_uuid || g.id || g.game_code}')`
+                });
+            }
+        });
+    } catch (e) { console.warn("Erreur chargement Virtuals cache"); }
+
+    // 2. جلب وتخزين ألعاب الكازينو لأهم المزودين في الخلفية
+    // يمكنك إضافة أي مزود آخر هنا مثل AMATIC أو PLAYNGO
+    const topProviders = ['PRAGMATIC', 'HACKSAW', 'SPRIBE', 'EVOPLAY', 'PGSOFT'];
+    
+    for (let pCode of topProviders) {
+        try {
+            const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ provider_code: pCode })
+            });
+            const data = await res.json();
+            let games = data.games || data.data || data || [];
+            
+            games.forEach(g => {
+                const name = String(g.game_name || g.name || "").trim();
+                if (name) {
+                    window.globalGameDictionary.push({
+                        name: name,
+                        img: g.banner || g.image || g.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(name.substring(0, 15))}`,
+                        onclick: `playCasinoGame('${pCode}', '${g.game_code || g.id}')`
+                    });
+                }
+            });
+        } catch (e) { console.warn(`Erreur chargement ${pCode} cache`); }
+    }
+    
+    window.isCacheLoaded = true;
+    console.log("✅ Global Game Cache Prêt:", window.globalGameDictionary.length, "Jeux");
+}
+
+
+//-------------------------------------------------------------------------
         window.onload = () => {
             // 1. استرجاع بيانات اللاعب إذا كان مسجلاً
             const savedSession = localStorage.getItem('alpha_player_session');
@@ -980,6 +1036,7 @@
                     const section = event.state?.section || 'accueil';
                     switchSection(section, true);
                 }
+                initGlobalGameCache();
             });
         };
         // ================= محرك الجاكبوت الحي (Real-time WebSocket) =================
@@ -2451,41 +2508,19 @@
     `).join('');
         }
 
-// ================= نظام البحث الفوري الذكي والشامل =================
+// ================= نظام البحث الفوري الشامل =================
 function handleLiveSearch(query) {
     const dropdown = document.getElementById('search-dropdown');
     const term = query.trim().toLowerCase();
 
-    if (!term) {
+    if (!term || !window.isCacheLoaded) {
         dropdown.classList.add('hidden');
         dropdown.innerHTML = '';
         return;
     }
 
-    let matches = [];
-    const seenNames = new Set();
-
-    // البحث في جميع بطاقات الألعاب المعروضة في الصفحة حالياً
-    const gameCards = document.querySelectorAll('div[onclick*="playCasinoGame"], div[onclick*="launchSpecificVirtualGame"], div[onclick*="play"]');
-
-    gameCards.forEach(el => {
-        const onclickAttr = el.getAttribute('onclick');
-        const imgEl = el.querySelector('img');
-        // استخراج اسم اللعبة من الـ div الخاص بالعنوان داخل البطاقة
-        const titleDiv = el.querySelector('.text-white.font-bold') || el.querySelector('p') || el.querySelector('span');
-        
-        if (onclickAttr && imgEl) {
-            const name = titleDiv ? titleDiv.innerText.trim() : (imgEl.alt || "Jeu Casino");
-            const img = imgEl.src;
-
-            if (name && name.length > 1 && !seenNames.has(name)) {
-                if (name.toLowerCase().includes(term)) {
-                    seenNames.add(name);
-                    matches.push({ name, img, onclick: onclickAttr });
-                }
-            }
-        }
-    });
+    // فلترة الألعاب من الذاكرة الشاملة التي تضم كل المنصة
+    const matches = window.globalGameDictionary.filter(g => g.name.toLowerCase().includes(term));
 
     if (matches.length === 0) {
         dropdown.innerHTML = '<div class="p-3 text-xs text-gray-400 text-center">Aucun jeu trouvé</div>';
@@ -2493,26 +2528,17 @@ function handleLiveSearch(query) {
         return;
     }
 
-    // عرض النتائج في القائمة المنسدلة بشكل أنيق
-    dropdown.innerHTML = matches.slice(0, 6).map(m => `
+    // عرض أول 8 نتائج فقط للحفاظ على جمالية القائمة
+    dropdown.innerHTML = matches.slice(0, 8).map(m => `
         <div onclick="${m.onclick}; document.getElementById('search-dropdown').classList.add('hidden'); document.getElementById('header-search-input').value='';" 
              class="flex items-center gap-2.5 p-2 hover:bg-[#1a1f2c] cursor-pointer border-b border-[#212631] last:border-none transition">
-            <img src="${m.img}" class="w-8 h-8 object-cover rounded-md shrink-0">
+            <img src="${m.img}" class="w-8 h-8 object-cover rounded-md shrink-0 shadow-sm" onerror="this.src='https://placehold.co/400x400/12151d/10b981?text=Jeu'">
             <span class="text-xs text-white truncate font-medium">${m.name}</span>
         </div>
     `).join('');
 
     dropdown.classList.remove('hidden');
 }
-
-// إغلاق القائمة المنسدلة عند الضغط في أي مكان خارجها
-document.addEventListener('click', (e) => {
-    const searchInput = document.getElementById('header-search-input');
-    const dropdown = document.getElementById('search-dropdown');
-    if (searchInput && dropdown && !searchInput.contains(e.target) && !dropdown.contains(e.target)) {
-        dropdown.classList.add('hidden');
-    }
-});
 
         // استدعِ loadRecentGamesUI() داخل window.onload ليتم تحميلها فور فتح المنصة
     </script>
