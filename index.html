@@ -1411,38 +1411,42 @@ function applySidebarFilter(filterType, filterValue, clickedButton) {
             }
         }
         function renderCasinoGrid() {
-            const container = document.getElementById('games-grid');
-            if (!container) return;
+    const grid = document.getElementById('games-grid');
+    if (!grid) return;
 
-            if (window.currentProviderGames.length === 0) {
-                container.innerHTML = '<div class="col-span-full text-gray-500 text-center py-10">Aucun jeu trouvé.</div>';
-                return;
-            }
-            const filteredGames = (window.currentProviderGames || []).filter(game => {
-                const name = String(game.game_name || game.name || "").toLowerCase();
-                const searchInput = document.getElementById('game-search-input');
-                const searchTerm = searchInput ? searchInput.value.toLowerCase() : "";
-                return name.includes(searchTerm);
-            });
+    // 1. تطبيق الفلتر على الألعاب قبل رسمها
+    const filteredGames = (window.currentProviderGames || []).filter(game => {
+        // تأكد أن الباك إند يرسل خصائص 'category' و 'volatility' مع كل لعبة
+        const matchCategory = (currentCategory === 'All') || (game.category === currentCategory);
+        const matchVolatility = (currentVolatility === 'All') || (game.volatility === currentVolatility);
+        
+        return matchCategory && matchVolatility;
+    });
 
-            const gamesToDisplay = filteredGames.slice(0, currentDisplayLimit);
+    // 2. التحقق من وجود ألعاب بعد الفلترة
+    if (filteredGames.length === 0) {
+        grid.innerHTML = '<div class="col-span-full text-gray-400 text-center py-10">Aucun jeu trouvé pour ce filtre</div>';
+        return;
+    }
 
-            container.innerHTML = gamesToDisplay.map(g => {
-                const title = escapeHTML(String(g.game_name || g.name || "Game"));
-                const img = g.banner || g.image || g.thumb || `https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}`;
-                const code = g.game_code || g.id;
-
-                return `
-                <div onclick="playCasinoGame('${currentActiveProviderCode}', '${code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg">
-                    <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
-                        <img src="${img}" alt="${title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}';">
-                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-                            <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
-                        </div>
-                    </div>
-                    <div class="p-2 text-[10px] text-white font-bold truncate text-center">${title}</div>
-                </div>`;
-            }).join('');
+    // 3. رسم الألعاب المفلترة فقط (لاحظ استخدام filteredGames هنا)
+    grid.innerHTML = filteredGames.map(game => {
+        const gameCode = game.game_code || game.id;
+        const pCode = game.provider_code || currentActiveProviderCode;
+        const safeName = escapeHTML(game.game_name || game.name || "Casino Game");
+        const imageSrc = game.banner || game.image || 'https://placehold.co/400x400/180A2B/FFF';
+        
+        // كود تصميم البطاقة (استبدله بتصميم البطاقة الفعلي الموجود لديك في الدالة القديمة إذا كان مختلفاً)
+        return `
+        <div onclick="playCasinoGame('${pCode}', '${gameCode}')" class="bg-[#0f1117] border border-[#2b2d35] rounded-xl cursor-pointer group hover:-translate-y-1 transition-all overflow-hidden shadow-lg">
+            <div class="relative w-full aspect-square overflow-hidden bg-black/50">
+                <img src="${imageSrc}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="${safeName}">
+            </div>
+            <div class="p-2 text-[10px] text-white font-bold truncate text-center">${safeName}</div>
+        </div>
+        `;
+    }).join('');
+}
 
             let sentinel = document.getElementById('games-scroll-sentinel');
 
@@ -1469,7 +1473,7 @@ function applySidebarFilter(filterType, filterValue, clickedButton) {
             } else if (sentinel) {
                 sentinel.remove();
             }
-        }
+        
         // ================= 
         function toggleProviderDropdown() {
             const dropdown = document.getElementById('provider-dropdown');
