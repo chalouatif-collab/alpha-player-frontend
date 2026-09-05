@@ -41,7 +41,10 @@
                     <span class="font-extrabold text-xl tracking-tight text-white">Alphabet<span class="text-emerald-400">216</span></span>
                 </div>
 
-            </div>
+                <div class="relative hidden md:block">
+                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" id="top-search-input" onkeyup="filterGames()" placeholder="Rechercher un jeu..." autocomplete="new-password" class="bg-[#161922] border border-[#212631] rounded-xl py-2 pl-10 pr-4 text-white text-sm outline-none focus:border-emerald transition-all shadow-md font-bold w-64">
+                </div>
             <!-- معلومات اللاعب (الرصيد والإشعارات) -->
             <div class="flex items-center gap-3">
                 <div id="auth-buttons-container" class="flex items-center gap-2">
@@ -100,15 +103,13 @@
     <main class="max-w-[1700px] mx-auto px-4 pt-6 pb-10 w-full flex-grow flex flex-col gap-6"><!-- PANE: ACCUEIL (نسخة الهاتف المحمول والحاسوب المتطورة - صور حقيقية من المزود) -->
 <div id="pane-accueil" class="player-view-section w-full animate-fade-in block space-y-6 pb-12">
 
-    <!-- PANE: ACCUEIL (النسخة النهائية الفخمة - خلفيات بصرية حية والألعاب تعمل فوراً) -->
-<div id="pane-accueil" class="player-view-section w-full animate-fade-in block space-y-6 pb-12">
-
-    <!-- 1. البانر الرئيسي الفخم والمضغوط -->
+    <!-- 1. البانر الرئيسي (مصغر ومرن على الهاتف لكي لا يملأ الشاشة) -->
     <div class="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-[#0a0f1d] border border-emerald-500/30 shadow-xl p-5 sm:p-8 md:p-12">
         <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
         
         <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="text-left space-y-3 sm:space-y-4 max-w-xl">
+                
                 <div class="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
                     <span class="text-emerald-300 text-[10px] font-black uppercase tracking-wider">VIP B2B Casino & Sports</span>
@@ -151,62 +152,58 @@
         </div>
     </div>
 
-    <!-- 2. الخانات الأربع بروح وخلفيات بصرية جذابة (Sport, Casino, Aviator, Live Casino) -->
+    <!-- 2. بطاقات الأقسام السريعة (Bento Grid متجاوبة تماماً مع الهاتف) -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         
-        <!-- Sport Card -->
-        <button onclick="switchSection('sport'); openSportsbookForProvider('nexus');" class="group relative overflow-hidden rounded-2xl border border-white/10 hover:border-emerald-500/60 p-5 transition-all text-left flex flex-col justify-between h-36 sm:h-40 shadow-xl bg-cover bg-center" style="background-image: linear-gradient(to bottom, rgba(13,19,34,0.85), rgba(13,19,34,0.95)), url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80');">
-            <div class="flex justify-between items-start relative z-10">
-                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-base shadow">
+        <button onclick="switchSection('sport'); openSportsbookForProvider('nexus');" class="group rounded-2xl bg-[#131b2e] border border-white/10 hover:border-emerald-500/60 p-4 transition-all text-left flex flex-col justify-between h-32 sm:h-36 shadow-md">
+            <div class="flex justify-between items-start">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-base">
                     <i class="fas fa-futbol"></i>
                 </div>
-                <span class="text-[8px] font-black uppercase bg-red-500 text-white px-2 py-0.5 rounded-full animate-pulse shadow">LIVE</span>
+                <span class="text-[8px] font-black uppercase bg-red-500/20 text-red-400 px-2 py-0.5 rounded animate-pulse">LIVE</span>
             </div>
-            <div class="relative z-10">
+            <div>
                 <h3 class="text-white font-black text-sm sm:text-base group-hover:text-emerald-400 transition-colors">Sport</h3>
-                <p class="text-gray-300 text-[10px]">Cotes en direct</p>
+                <p class="text-gray-400 text-[10px]">Cotes en direct</p>
             </div>
         </button>
 
-        <!-- Casino Card -->
-        <button onclick="switchSection('casino'); initCasinoLobby();" class="group relative overflow-hidden rounded-2xl border border-white/10 hover:border-cyan-500/60 p-5 transition-all text-left flex flex-col justify-between h-36 sm:h-40 shadow-xl bg-cover bg-center" style="background-image: linear-gradient(to bottom, rgba(13,19,34,0.85), rgba(13,19,34,0.95)), url('https://images.unsplash.com/photo-1596838132731-3301c3fd4317?auto=format&fit=crop&w=600&q=80');">
-            <div class="flex justify-between items-start relative z-10">
-                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 text-base shadow">
+        <button onclick="switchSection('casino'); initCasinoLobby();" class="group rounded-2xl bg-[#131b2e] border border-white/10 hover:border-cyan-500/60 p-4 transition-all text-left flex flex-col justify-between h-32 sm:h-36 shadow-md">
+            <div class="flex justify-between items-start">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-base">
                     <i class="fas fa-slot-machine"></i>
                 </div>
-                <span class="text-[8px] font-black uppercase bg-cyan-500 text-black px-2 py-0.5 rounded-full shadow">SLOTS</span>
+                <span class="text-[8px] font-black uppercase bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded">Slots</span>
             </div>
-            <div class="relative z-10">
+            <div>
                 <h3 class="text-white font-black text-sm sm:text-base group-hover:text-cyan-400 transition-colors">Casino</h3>
-                <p class="text-gray-300 text-[10px]">+5000 Jeux</p>
+                <p class="text-gray-400 text-[10px]">+5000 Jeux</p>
             </div>
         </button>
 
-        <!-- Aviator Card -->
-        <button onclick="playCasinoGame('SPRIBE', 'aviator')" class="group relative overflow-hidden rounded-2xl border border-white/10 hover:border-red-500/60 p-5 transition-all text-left flex flex-col justify-between h-36 sm:h-40 shadow-xl bg-cover bg-center" style="background-image: linear-gradient(to bottom, rgba(13,19,34,0.85), rgba(13,19,34,0.95)), url('https://images.unsplash.com/photo-1519074069444-1ba4ea16d66c?auto=format&fit=crop&w=600&q=80');">
-            <div class="flex justify-between items-start relative z-10">
-                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-red-500/20 border border-red-500/40 flex items-center justify-center text-red-500 text-base shadow">
+        <button onclick="playCasinoGame('SPRIBE', 'aviator')" class="group rounded-2xl bg-[#131b2e] border border-white/10 hover:border-red-500/60 p-4 transition-all text-left flex flex-col justify-between h-32 sm:h-36 shadow-md">
+            <div class="flex justify-between items-start">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-500 text-base">
                     <i class="fas fa-plane"></i>
                 </div>
-                <span class="text-[8px] font-black uppercase bg-yellow-400 text-black px-2 py-0.5 rounded-full shadow">HOT</span>
+                <span class="text-[8px] font-black uppercase bg-yellow-500/20 text-yellow-300 px-2 py-0.5 rounded">Hot</span>
             </div>
-            <div class="relative z-10">
+            <div>
                 <h3 class="text-white font-black text-sm sm:text-base group-hover:text-red-400 transition-colors">Aviator</h3>
-                <p class="text-gray-300 text-[10px]">Jeu de crash</p>
+                <p class="text-gray-400 text-[10px]">Jeu de crash</p>
             </div>
         </button>
 
-        <!-- Live Casino Card -->
-        <button onclick="switchSection('live-casino'); openLiveCasino();" class="group relative overflow-hidden rounded-2xl border border-white/10 hover:border-purple-500/60 p-5 transition-all text-left flex flex-col justify-between h-36 sm:h-40 shadow-xl bg-cover bg-center" style="background-image: linear-gradient(to bottom, rgba(13,19,34,0.85), rgba(13,19,34,0.95)), url('https://images.unsplash.com/photo-1511193311914-0346f16efe90?auto=format&fit=crop&w=600&q=80');">
-            <div class="flex justify-between items-start relative z-10">
-                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 text-base shadow">
+        <button onclick="switchSection('live-casino'); openLiveCasino();" class="group rounded-2xl bg-[#131b2e] border border-white/10 hover:border-purple-500/60 p-4 transition-all text-left flex flex-col justify-between h-32 sm:h-36 shadow-md">
+            <div class="flex justify-between items-start">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-base">
                     <i class="fas fa-video"></i>
                 </div>
-                <span class="text-[8px] font-black uppercase bg-purple-600 text-white px-2 py-0.5 rounded-full shadow">24/7</span>
+                <span class="text-[8px] font-black uppercase bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded">Live</span>
             </div>
-            <div class="relative z-10">
+            <div>
                 <h3 class="text-white font-black text-sm sm:text-base group-hover:text-purple-400 transition-colors">Live Casino</h3>
-                <p class="text-gray-300 text-[10px]">Croupiers en direct</p>
+                <p class="text-gray-400 text-[10px]">Croupiers 24/7</p>
             </div>
         </button>
 
@@ -289,6 +286,7 @@
 
         </div>
     </div>
+
 <!-- سكربت صغير لجلب ألعاب المزود الحقيقية وعرضها في الصفحة الرئيسية -->
 <script>
 async function loadHomeTrendingGames() {
