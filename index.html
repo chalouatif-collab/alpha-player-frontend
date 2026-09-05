@@ -929,8 +929,8 @@ function applySidebarFilter(filterType, filterValue, clickedButton) {
 
     // 3. استدعاء دالة تحديث الألعاب
     // استبدل 'renderCasino' باسم الدالة الحقيقية المسؤولة عن رسم ألعاب الكازينو في موقعك
-    if (typeof renderCasino === "function") {
-        renderCasino(); 
+    if (typeof renderCasinoGrid === "function") {
+        renderCasinoGrid(); 
     } else {
         console.log("تم تغيير الفلتر إلى:", currentCategory, currentVolatility);
     }
@@ -964,7 +964,7 @@ function applySidebarFilter(filterType, filterValue, clickedButton) {
     clickedButton.className = clickedButton.className.replace('text-gray-400 hover:bg-[#1a1c24]', 'text-white bg-blue-600');
 
     // 3. استدعاء دالة رسم الكازينو لتطبيق الفلاتر الجديدة
-    // renderCasino(); // قم بتفعيل هذا السطر وربطه بدالة رسم الكازينو الخاصة بك
+    // renderCasinoGrid(); // قم بتفعيل هذا السطر وربطه بدالة رسم الكازينو الخاصة بك
 }
 
 
@@ -1418,8 +1418,14 @@ function applySidebarFilter(filterType, filterValue, clickedButton) {
                 container.innerHTML = '<div class="col-span-full text-gray-500 text-center py-10">Aucun jeu trouvé.</div>';
                 return;
             }
+            const filteredGames = (window.currentProviderGames || []).filter(game => {
+                const name = String(game.game_name || game.name || "").toLowerCase();
+                const searchInput = document.getElementById('game-search-input');
+                const searchTerm = searchInput ? searchInput.value.toLowerCase() : "";
+                return name.includes(searchTerm);
+            });
 
-            const gamesToDisplay = window.currentProviderGames.slice(0, currentDisplayLimit);
+            const gamesToDisplay = filteredGames.slice(0, currentDisplayLimit);
 
             container.innerHTML = gamesToDisplay.map(g => {
                 const title = escapeHTML(String(g.game_name || g.name || "Game"));
