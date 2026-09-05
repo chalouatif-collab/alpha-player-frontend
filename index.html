@@ -900,6 +900,42 @@
     <!-- ================= JAVASCRIPT (محرك الألفابت الشامل) ================= -->
     <script>
 
+       
+// 2. دالة التحكم في أزرار القائمة الجانبية
+function applySidebarFilter(filterType, filterValue, clickedButton) {
+    // تحديث المتغيرات بناءً على نوع الفلتر
+    if (filterType === 'category') {
+        currentCategory = filterValue;
+    } else if (filterType === 'volatility') {
+        currentVolatility = filterValue;
+    }
+
+    // تلوين الزر النشط داخل نفس المجموعة وإعادة البقية للون الداكن
+    const parentDiv = clickedButton.closest('ul');
+    const allButtonsInGroup = parentDiv.querySelectorAll('.sidebar-filter-btn');
+    
+    allButtonsInGroup.forEach(btn => {
+        // إعادة اللون الافتراضي
+        btn.className = "sidebar-filter-btn w-full text-left text-gray-400 hover:text-white hover:bg-[#1c212d] px-3 py-2 rounded-xl text-xs font-bold transition-colors";
+        
+        // الحفاظ على تنسيق أيقونة النار لزر التقلب العالي إن وجدت
+        if(btn.innerHTML.includes('fa-fire')) {
+            btn.className = "sidebar-filter-btn w-full flex items-center justify-between text-gray-400 hover:text-white hover:bg-[#1c212d] px-3 py-2 rounded-xl text-xs font-bold transition-colors";
+        }
+    });
+
+    // تحويل الزر المضغوط إلى اللون الأخضر الزمردي
+    clickedButton.className = clickedButton.className.replace('text-gray-400 hover:bg-[#1c212d]', 'text-white bg-emerald-600');
+
+    // 3. استدعاء دالة تحديث الألعاب
+    // استبدل 'renderCasino' باسم الدالة الحقيقية المسؤولة عن رسم ألعاب الكازينو في موقعك
+    if (typeof renderCasino === "function") {
+        renderCasino(); 
+    } else {
+        console.log("تم تغيير الفلتر إلى:", currentCategory, currentVolatility);
+    }
+}
+
         // متغيرات لحفظ حالة الفلتر الجانبي
 let currentCategory = 'All';
 let currentVolatility = 'All';
@@ -954,42 +990,39 @@ function applySidebarFilter(filterType, filterValue, clickedButton) {
             renderLiveCasino();
         }
         function renderLiveCasino() {
-            const grid = document.getElementById('live-games-grid');
-            setTimeout(() => {
-                const searchInput = document.getElementById('live-casino-search');
-                if (searchInput) searchInput.value = '';
-                currentLiveSearch = '';
-            }, 100);
-            if (!grid) return;
+    const grid = document.getElementById('live-games-grid');
+    if (!grid) return;
 
-            // إجبار مربع البحث على التفريغ إذا كان المتصفح قد ملأه خطأً بكلمة test1
-            const searchInput = document.getElementById('live-casino-search');
-            if (searchInput && currentLiveSearch === '') {
-                searchInput.value = '';
-            }
+    // التفريغ المسموح به هنا هو فقط تصحيح الخطأ إذا كان المتغير فارغاً
+    const searchInput = document.getElementById('live-casino-search');
+    if (searchInput && currentLiveSearch === '') {
+        searchInput.value = ''; 
+    }
 
-            const filteredGames = allLiveGames.filter(game => {
-                // المطابقة تتم الآن عبر provider_code
-                const gameProvider = game.provider_code || game.provider || 'PP_LIVE_PRO';
-                const matchProvider = (currentLiveProvider === 'All') || (gameProvider === currentLiveProvider);
+    const filteredGames = allLiveGames.filter(game => {
+        // المطابقة
+        const gameProvider = game.provider_code || game.provider || game._provider_code_filter || 'PP_LIVE_PRO'; 
+        const matchProvider = (currentLiveProvider === 'All') || (gameProvider === currentLiveProvider);
+        
+        const gameName = game.name || game.game_name || "Live Game";
+        const matchSearch = gameName.toLowerCase().includes(currentLiveSearch);
+        
+        return matchProvider && matchSearch;
+    });
 
-                const gameName = game.name || game.game_name || "Live Game";
-                const matchSearch = gameName.toLowerCase().includes(currentLiveSearch);
+    if (filteredGames.length === 0) {
+        grid.innerHTML = '<div class="col-span-full text-gray-400 text-center py-10">Aucun jeu trouvé</div>';
+        return;
+    }
 
-                return matchProvider && matchSearch;
-            });
-
-            if (filteredGames.length === 0) {
-                grid.innerHTML = '<div class="col-span-full text-gray-400 text-center py-10">Aucun jeu trouvé</div>';
-                return;
-            }
-
-            grid.innerHTML = filteredGames.reverse().map(g => {
-                const gameCode = g.game_code || g.id;
-                const pCode = g.provider_code || g.provider || 'PP_LIVE_PRO';
-                const safeName = escapeHTML(g.game_name || g.name || "Live Game");
-
-                return `
+    // ⚠️ انتبه: لقد أزلت reverse() من هنا. 
+    // كما اتفقنا سابقاً، يجب وضع allLiveGames.reverse() في دالة الجلب الأساسية فقط
+    grid.innerHTML = filteredGames.map(g => {
+        const gameCode = g.game_code || g.id;
+        const pCode = g.provider_code || g.provider || g._provider_code_filter || 'PP_LIVE_PRO'; 
+        const safeName = escapeHTML(g.game_name || g.name || "Live Game");
+        
+        return `
         <div onclick="playCasinoGame('${pCode}', '${gameCode}')" class="bg-[#0f1117] border border-[#2b2d35] rounded-xl cursor-pointer group hover:-translate-y-1 transition-all overflow-hidden shadow-lg relative">
             <div class="absolute top-0 right-0 bg-red-600 text-white text-[8px] font-black px-2 py-1 z-10 rounded-bl-lg shadow-md">LIVE</div>
             <div class="relative w-full aspect-square overflow-hidden bg-black/50">
@@ -998,8 +1031,8 @@ function applySidebarFilter(filterType, filterValue, clickedButton) {
             <div class="p-2 text-[10px] text-white font-bold truncate text-center">${safeName}</div>
         </div>
         `;
-            }).join('');
-        }
+    }).join('');
+}
 
         function openBonusModal() {
             showNotification("Aucun bonus disponible pour le moment.", "error");
