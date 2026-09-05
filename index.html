@@ -967,7 +967,7 @@
                 return;
             }
 
-            grid.innerHTML = filteredGames.map(g => {
+            grid.innerHTML = filteredGames.reverse().map(g => {
                 const gameCode = g.game_code || g.id;
                 const pCode = g.provider_code || g.provider || 'PP_LIVE_PRO';
                 const safeName = escapeHTML(g.game_name || g.name || "Live Game");
