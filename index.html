@@ -112,207 +112,219 @@
 
     <!-- 🌟 المساحة المركزية الممتدة (النظيفة والخالية من التكرار) -->
     <main class="max-w-[1700px] mx-auto px-4 pt-6 pb-10 w-full flex-grow flex flex-col gap-6">
-        <!-- PANE: ACCUEIL (الواجهة الرئيسية الجديدة - نابضة بالحياة وفخمة) -->
-<div id="pane-accueil" class="player-view-section w-full animate-fade-in block space-y-8 pb-12">
+        <!-- PANE: ACCUEIL (الواجهة المشتعلة والنابضة بالحياة - Neon Cyber-Casino Style) -->
+<div id="pane-accueil" class="player-view-section w-full animate-fade-in block space-y-8 pb-16">
 
-    <!-- 1. البانر الرئيسي الفخم (Hero Section) مع تأثيرات إضاءة خلفية -->
-    <div class="relative w-full rounded-3xl overflow-hidden bg-gradient-to-br from-[#161922] via-[#12151d] to-[#0b0e14] border border-[#212631] shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+    <!-- 1. البانر الرئيسي الفخم (Hero Section) - إثارة بصرية بنيون مزدوج -->
+    <div class="relative w-full rounded-3xl overflow-hidden bg-[#0a0f1d] border border-emerald-500/30 shadow-[0_0_60px_rgba(16,185,129,0.15)]">
         
-        <!-- إضاءة خلفية جمالية (Glow Effects) -->
-        <div class="absolute -top-24 -left-24 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <!-- خلفية نيون متحركة ومضيئة -->
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-emerald-500/20 via-teal-500/10 to-transparent rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-purple-600/20 via-pink-500/10 to-transparent rounded-full blur-[100px] pointer-events-none"></div>
 
-        <div class="relative p-6 sm:p-10 md:p-14 flex flex-col lg:flex-row items-center justify-between gap-8 z-10">
-            <div class="text-left space-y-5 max-w-2xl">
-                <div class="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 px-3.5 py-1.5 rounded-full">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                    <span class="text-emerald-400 text-[10px] md:text-xs font-black uppercase tracking-widest">Plateforme B2B Ultra-Rapide</span>
+        <div class="relative p-6 sm:p-10 md:p-16 flex flex-col lg:flex-row items-center justify-between gap-8 z-10">
+            <div class="text-left space-y-6 max-w-2xl">
+                
+                <!-- شارة حية متوهجة -->
+                <div class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 border border-emerald-500/40 px-4 py-1.5 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span class="text-emerald-300 text-xs font-black uppercase tracking-widest">VIP B2B Casino & Sports</span>
                 </div>
                 
-                <h1 class="text-3xl sm:text-4xl md:text-6xl font-black text-white tracking-tight leading-none">
-                    L'Émotion du Jeu <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-200">Sans Limites</span>
+                <!-- عنوان رئيسي صارخ ومشرق -->
+                <h1 class="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-[1.1]">
+                    Gagnez en Grand, <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 drop-shadow-[0_0_35px_rgba(52,211,153,0.4)]">
+                        Vivez l'Ultime Frisson
+                    </span>
                 </h1>
                 
-                <p class="text-xs sm:text-sm md:text-base text-gray-400 font-medium leading-relaxed">
-                    Découvrez une sélection exclusive de +5000 jeux de casino, des retransmissions en direct et les meilleures cotes du marché tunisien et international.
+                <p class="text-xs sm:text-sm md:text-base text-gray-300 font-medium leading-relaxed max-w-xl">
+                    Plus de 5,000 machines à sous, croupiers en direct 24/7 et des cotes sportives explosives. Le sommet du divertissement numérique à portée de main.
                 </p>
 
-                <div class="flex flex-wrap items-center gap-3 pt-2">
-                    <button onclick="toggleCashier()" class="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-black font-extrabold text-xs md:text-sm px-8 py-3.5 rounded-xl transition-all shadow-[0_0_25px_rgba(16,185,129,0.3)] hover:shadow-[0_0_35px_rgba(16,185,129,0.5)] transform hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-2">
-                        <i class="fas fa-wallet"></i> DÉPOSER MAINTENANT
+                <!-- أزرار التفاعل البارزة مع تأثيرات نبض وحركة -->
+                <div class="flex flex-wrap items-center gap-4 pt-3">
+                    <button onclick="toggleCashier()" class="relative group overflow-hidden bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500 text-black font-black text-xs md:text-sm px-8 py-4 rounded-2xl transition-all duration-300 shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:shadow-[0_0_50px_rgba(52,211,153,0.8)] transform hover:-scale-105 active:scale-95 flex items-center gap-3">
+                        <span class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+                        <i class="fas fa-bolt text-black text-base relative z-10"></i> 
+                        <span class="relative z-10 tracking-wider">DÉPOSER & JOUER</span>
                     </button>
-                    <button onclick="switchSection('casino'); initCasinoLobby();" class="bg-[#1a1e29] hover:bg-[#212631] border border-[#2e3648] text-white font-bold text-xs md:text-sm px-6 py-3.5 rounded-xl transition-all hover:border-emerald-500/50 flex items-center gap-2">
-                        <i class="fas fa-dice text-emerald-400"></i> Explorer le Casino
+                    
+                    <button onclick="switchSection('casino'); initCasinoLobby();" class="bg-[#131b2e] hover:bg-[#1a253f] border border-cyan-500/40 hover:border-cyan-400 text-white font-bold text-xs md:text-sm px-7 py-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-[0_0_20px_rgba(6,182,212,0.3)] flex items-center gap-2.5">
+                        <i class="fas fa-dice text-cyan-400"></i> 
+                        <span>LOBBY CASINO</span>
                     </button>
                 </div>
             </div>
 
-            <!-- بطاقة إحصائيات أو بانر مصغر تفاعلي على اليمين -->
-            <div class="w-full lg:w-auto flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
-                <div class="flex-1 bg-[#1a1e29]/80 backdrop-blur-md border border-[#2e3648] p-4 rounded-2xl flex items-center gap-4 shadow-lg">
-                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl font-black">
-                        <i class="fas fa-bolt"></i>
+            <!-- بطاقة الجاكبوت أو المكافأة الحية الجذابة على اليمين -->
+            <div class="w-full lg:w-[340px] bg-gradient-to-b from-[#131b2e]/90 to-[#0b101c]/90 backdrop-blur-xl border border-emerald-500/30 p-6 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.8)] relative overflow-hidden group">
+                <div class="absolute -top-12 -right-12 w-32 h-32 bg-emerald-500/20 rounded-full blur-2xl"></div>
+                
+                <div class="relative z-10 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-black uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">Mega Jackpot</span>
+                        <i class="fas fa-trophy text-yellow-400 animate-bounce"></i>
                     </div>
-                    <div>
-                        <div class="text-white font-black text-base">Paiement Instantané</div>
-                        <div class="text-gray-400 text-[11px]">D17, Mandat & Vouchers 24/7</div>
+                    
+                    <div class="space-y-1">
+                        <div class="text-gray-400 text-xs font-semibold">Cagnotte en Direct</div>
+                        <div class="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-emerald-300 to-cyan-300 font-mono tracking-tight">
+                            148,295.50 <span class="text-sm text-emerald-400">TND</span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="flex-1 bg-[#1a1e29]/80 backdrop-blur-md border border-[#2e3648] p-4 rounded-2xl flex items-center gap-4 shadow-lg">
-                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xl font-black">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <div>
-                        <div class="text-white font-black text-base">Sécurité Maximale</div>
-                        <div class="text-gray-400 text-[11px]">Chiffrement SSL & Équitable</div>
+                    <div class="pt-2 border-t border-white/10 flex items-center justify-between text-xs text-gray-400">
+                        <span>Paiement Instantané</span>
+                        <span class="text-emerald-400 font-bold flex items-center gap-1"><i class="fas fa-check-circle"></i> 100% Sécurisé</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 2. بطاقات الأقسام السريعة (Quick Access Bento Grid) - تصميم عصري حيوي -->
+    <!-- 2. بطاقات الأقسام السريعة (Bento Grid المتوهجة) -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <!-- كارد الرياضة -->
-        <button onclick="switchSection('sport'); openSportsbookForProvider('nexus');" class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#161922] to-[#10131a] border border-[#212631] p-5 md:p-6 hover:border-emerald-500/50 transition-all duration-300 hover:-translate-y-1 shadow-xl text-left flex flex-col justify-between h-40">
-            <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-emerald-500/10 rounded-full blur-2xl transition-all group-hover:scale-150"></div>
+        <!-- الرياضة -->
+        <button onclick="switchSection('sport'); openSportsbookForProvider('nexus');" class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#131b2e] to-[#0d1322] border border-white/10 hover:border-emerald-500/60 p-6 transition-all duration-300 hover:-translate-y-1.5 shadow-xl text-left flex flex-col justify-between h-44">
+            <div class="absolute inset-0 bg-gradient-to-tr from-emerald-500/0 via-emerald-500/0 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div class="flex justify-between items-start relative z-10">
-                <div class="w-11 h-11 rounded-xl bg-[#0f1117] border border-[#212631] flex items-center justify-center text-emerald-400 text-lg group-hover:scale-110 transition-transform shadow-inner">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(16,185,129,0.3)]">
                     <i class="fas fa-futbol"></i>
                 </div>
-                <span class="text-[10px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded">Live Live</span>
+                <span class="text-[9px] font-black uppercase tracking-wider bg-red-500/20 text-red-400 border border-red-500/30 px-2.5 py-1 rounded-full animate-pulse">LIVE</span>
             </div>
-            <div class="relative z-10">
-                <h3 class="text-white font-black text-base md:text-lg group-hover:text-emerald-400 transition-colors">Paris Sportifs</h3>
-                <p class="text-gray-400 text-[11px] mt-0.5">Cotes en direct & Matchs</p>
+            <div class="relative z-10 space-y-1">
+                <h3 class="text-white font-black text-lg group-hover:text-emerald-400 transition-colors">Paris Sportifs</h3>
+                <p class="text-gray-400 text-xs">Cotes en direct & Événements</p>
             </div>
         </button>
 
-        <!-- كارد الكازينو -->
-        <button onclick="switchSection('casino'); initCasinoLobby();" class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#161922] to-[#10131a] border border-[#212631] p-5 md:p-6 hover:border-blue-500/50 transition-all duration-300 hover:-translate-y-1 shadow-xl text-left flex flex-col justify-between h-40">
-            <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-blue-500/10 rounded-full blur-2xl transition-all group-hover:scale-150"></div>
+        <!-- الكازينو -->
+        <button onclick="switchSection('casino'); initCasinoLobby();" class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#131b2e] to-[#0d1322] border border-white/10 hover:border-cyan-500/60 p-6 transition-all duration-300 hover:-translate-y-1.5 shadow-xl text-left flex flex-col justify-between h-44">
+            <div class="absolute inset-0 bg-gradient-to-tr from-cyan-500/0 via-cyan-500/0 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div class="flex justify-between items-start relative z-10">
-                <div class="w-11 h-11 rounded-xl bg-[#0f1117] border border-[#212631] flex items-center justify-center text-blue-400 text-lg group-hover:scale-110 transition-transform shadow-inner">
+                <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(6,182,212,0.3)]">
                     <i class="fas fa-slot-machine"></i>
                 </div>
-                <span class="text-[10px] font-black uppercase tracking-wider bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded">Slots</span>
+                <span class="text-[9px] font-black uppercase tracking-wider bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 px-2.5 py-1 rounded-full">+5000 Jeux</span>
             </div>
-            <div class="relative z-10">
-                <h3 class="text-white font-black text-base md:text-lg group-hover:text-blue-400 transition-colors">Casino & Slots</h3>
-                <p class="text-gray-400 text-[11px] mt-0.5">+5000 Jeux disponibles</p>
+            <div class="relative z-10 space-y-1">
+                <h3 class="text-white font-black text-lg group-hover:text-cyan-400 transition-colors">Casino & Slots</h3>
+                <p class="text-gray-400 text-xs">Fournisseurs mondiaux</p>
             </div>
         </button>
 
-        <!-- كارد أفياتور -->
-        <button onclick="playCasinoGame('SPRIBE', 'aviator')" class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#161922] to-[#10131a] border border-[#212631] p-5 md:p-6 hover:border-red-500/50 transition-all duration-300 hover:-translate-y-1 shadow-xl text-left flex flex-col justify-between h-40">
-            <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-red-500/10 rounded-full blur-2xl transition-all group-hover:scale-150"></div>
+        <!-- أفياتور -->
+        <button onclick="playCasinoGame('SPRIBE', 'aviator')" class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#131b2e] to-[#0d1322] border border-white/10 hover:border-red-500/60 p-6 transition-all duration-300 hover:-translate-y-1.5 shadow-xl text-left flex flex-col justify-between h-44">
+            <div class="absolute inset-0 bg-gradient-to-tr from-red-500/0 via-red-500/0 to-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div class="flex justify-between items-start relative z-10">
-                <div class="w-11 h-11 rounded-xl bg-[#0f1117] border border-[#212631] flex items-center justify-center text-red-500 text-lg group-hover:scale-110 transition-transform shadow-inner">
+                <div class="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-500 text-xl group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(239,68,68,0.3)]">
                     <i class="fas fa-plane"></i>
                 </div>
-                <span class="text-[10px] font-black uppercase tracking-wider bg-red-500/10 text-red-500 px-2 py-0.5 rounded">Crash</span>
+                <span class="text-[9px] font-black uppercase tracking-wider bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 px-2.5 py-1 rounded-full">Tendance</span>
             </div>
-            <div class="relative z-10">
-                <h3 class="text-white font-black text-base md:text-lg group-hover:text-red-400 transition-colors">Aviator</h3>
-                <p class="text-gray-400 text-[11px] mt-0.5">Le jeu de crash fétiche</p>
+            <div class="relative z-10 space-y-1">
+                <h3 class="text-white font-black text-lg group-hover:text-red-400 transition-colors">Aviator</h3>
+                <p class="text-gray-400 text-xs">Multipliez vos gains instantanément</p>
             </div>
         </button>
 
-        <!-- كارد الكازينو المباشر -->
-        <button onclick="switchSection('live-casino'); openLiveCasino();" class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#161922] to-[#10131a] border border-[#212631] p-5 md:p-6 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-1 shadow-xl text-left flex flex-col justify-between h-40">
-            <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-purple-500/10 rounded-full blur-2xl transition-all group-hover:scale-150"></div>
+        <!-- الكازينو المباشر -->
+        <button onclick="switchSection('live-casino'); openLiveCasino();" class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#131b2e] to-[#0d1322] border border-white/10 hover:border-purple-500/60 p-6 transition-all duration-300 hover:-translate-y-1.5 shadow-xl text-left flex flex-col justify-between h-44">
+            <div class="absolute inset-0 bg-gradient-to-tr from-purple-500/0 via-purple-500/0 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             <div class="flex justify-between items-start relative z-10">
-                <div class="w-11 h-11 rounded-xl bg-[#0f1117] border border-[#212631] flex items-center justify-center text-purple-400 text-lg group-hover:scale-110 transition-transform shadow-inner">
+                <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xl group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(168,85,247,0.3)]">
                     <i class="fas fa-video"></i>
                 </div>
-                <span class="text-[10px] font-black uppercase tracking-wider bg-purple-500/10 text-purple-400 px-2 py-0.5 rounded">24/7</span>
+                <span class="text-[9px] font-black uppercase tracking-wider bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2.5 py-1 rounded-full">24/7 Live</span>
             </div>
-            <div class="relative z-10">
-                <h3 class="text-white font-black text-base md:text-lg group-hover:text-purple-400 transition-colors">Casino Live</h3>
-                <p class="text-gray-400 text-[11px] mt-0.5">Croupiers en direct</p>
+            <div class="relative z-10 space-y-1">
+                <h3 class="text-white font-black text-lg group-hover:text-purple-400 transition-colors">Casino Live</h3>
+                <p class="text-gray-400 text-xs">Croupiers professionnels</p>
             </div>
         </button>
 
     </div>
 
-    <!-- 3. قسم الألعاب الرائجة (Trending Games Showcase) -->
-    <div class="bg-[#161922] border border-[#212631] rounded-3xl p-6 md:p-8 shadow-xl">
+    <!-- 3. قسم الألعاب الرائجة بتصميم مذهل وعصري -->
+    <div class="bg-[#111827] border border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-orange-500">
-                    <i class="fas fa-fire text-lg"></i>
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/40 flex items-center justify-center text-orange-400 shadow-[0_0_20px_rgba(249,115,22,0.2)]">
+                    <i class="fas fa-fire text-xl animate-pulse"></i>
                 </div>
                 <div>
-                    <h3 class="text-white font-black text-lg md:text-xl">Jeux Populaires & Tendances</h3>
-                    <p class="text-gray-400 text-xs">Les favoris absolus de nos joueurs cette semaine</p>
+                    <h3 class="text-white font-black text-xl tracking-wide">Jeux Populaires & Tendances</h3>
+                    <p class="text-gray-400 text-xs">Les coups de cœur incontournables des joueurs</p>
                 </div>
             </div>
-            <button onclick="switchSection('casino'); initCasinoLobby();" class="bg-[#0f1117] hover:bg-[#1a1e29] border border-[#212631] hover:border-emerald-500 text-gray-300 hover:text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all flex items-center gap-2">
+            <button onclick="switchSection('casino'); initCasinoLobby();" class="bg-[#1a2234] hover:bg-[#232d47] border border-white/10 hover:border-emerald-500 text-gray-200 hover:text-white text-xs font-bold px-5 py-3 rounded-2xl transition-all shadow-md flex items-center gap-2 group">
                 <span>Voir Tout Le Catalogue</span>
-                <i class="fas fa-arrow-right text-[10px]"></i>
+                <i class="fas fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
             </button>
         </div>
 
-        <!-- شبكة عرض الألعاب الفاخرة -->
+        <!-- شبكة الألعاب الرائجة -->
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
             
-            <div onclick="switchSection('casino'); initCasinoLobby();" class="group bg-[#0f1117] rounded-2xl overflow-hidden border border-[#212631] hover:border-emerald-500 transition-all duration-300 cursor-pointer shadow-lg relative flex flex-col">
-                <div class="absolute top-2.5 right-2.5 bg-orange-500 text-white text-[9px] font-black px-2 py-0.5 rounded-md z-10 shadow">HOT</div>
-                <div class="aspect-square bg-black/50 relative overflow-hidden">
+            <div onclick="switchSection('casino'); initCasinoLobby();" class="group bg-[#0d1322] rounded-2xl overflow-hidden border border-white/10 hover:border-emerald-400 transition-all duration-300 cursor-pointer shadow-xl relative flex flex-col hover:-translate-y-1">
+                <div class="absolute top-2.5 right-2.5 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[9px] font-black px-2.5 py-0.5 rounded-md z-10 shadow-md">HOT</div>
+                <div class="aspect-square bg-black/60 relative overflow-hidden">
                     <img src="https://placehold.co/400x400/180A2B/FFF?text=Gates+Of+Olympus" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                 </div>
-                <div class="p-3 bg-[#12151d] border-t border-[#212631]">
-                    <div class="text-white text-xs font-bold truncate text-center">Gates of Olympus</div>
+                <div class="p-3 bg-[#131b2e] border-t border-white/5">
+                    <div class="text-white text-xs font-bold truncate text-center group-hover:text-emerald-400 transition-colors">Gates of Olympus</div>
                 </div>
             </div>
 
-            <div onclick="switchSection('casino'); initCasinoLobby();" class="group bg-[#0f1117] rounded-2xl overflow-hidden border border-[#212631] hover:border-emerald-500 transition-all duration-300 cursor-pointer shadow-lg relative flex flex-col">
-                <div class="absolute top-2.5 right-2.5 bg-blue-500 text-white text-[9px] font-black px-2 py-0.5 rounded-md z-10 shadow">POPULAR</div>
-                <div class="aspect-square bg-black/50 relative overflow-hidden">
+            <div onclick="switchSection('casino'); initCasinoLobby();" class="group bg-[#0d1322] rounded-2xl overflow-hidden border border-white/10 hover:border-cyan-400 transition-all duration-300 cursor-pointer shadow-xl relative flex flex-col hover:-translate-y-1">
+                <div class="absolute top-2.5 right-2.5 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-[9px] font-black px-2.5 py-0.5 rounded-md z-10 shadow-md">TOP</div>
+                <div class="aspect-square bg-black/60 relative overflow-hidden">
                     <img src="https://placehold.co/400x400/180A2B/FFF?text=Sweet+Bonanza" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                 </div>
-                <div class="p-3 bg-[#12151d] border-t border-[#212631]">
-                    <div class="text-white text-xs font-bold truncate text-center">Sweet Bonanza</div>
+                <div class="p-3 bg-[#131b2e] border-t border-white/5">
+                    <div class="text-white text-xs font-bold truncate text-center group-hover:text-cyan-400 transition-colors">Sweet Bonanza</div>
                 </div>
             </div>
 
-            <div onclick="playCasinoGame('SPRIBE', 'aviator')" class="group bg-[#0f1117] rounded-2xl overflow-hidden border border-[#212631] hover:border-emerald-500 transition-all duration-300 cursor-pointer shadow-lg relative flex flex-col">
-                <div class="absolute top-2.5 right-2.5 bg-red-600 text-white text-[9px] font-black px-2 py-0.5 rounded-md z-10 shadow">CRASH</div>
-                <div class="aspect-square bg-black/50 relative overflow-hidden">
+            <div onclick="playCasinoGame('SPRIBE', 'aviator')" class="group bg-[#0d1322] rounded-2xl overflow-hidden border border-white/10 hover:border-red-400 transition-all duration-300 cursor-pointer shadow-xl relative flex flex-col hover:-translate-y-1">
+                <div class="absolute top-2.5 right-2.5 bg-gradient-to-r from-red-600 to-pink-600 text-white text-[9px] font-black px-2.5 py-0.5 rounded-md z-10 shadow-md">CRASH</div>
+                <div class="aspect-square bg-black/60 relative overflow-hidden">
                     <img src="https://placehold.co/400x400/180A2B/FFF?text=Aviator" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                 </div>
-                <div class="p-3 bg-[#12151d] border-t border-[#212631]">
-                    <div class="text-white text-xs font-bold truncate text-center">Aviator Spribe</div>
+                <div class="p-3 bg-[#131b2e] border-t border-white/5">
+                    <div class="text-white text-xs font-bold truncate text-center group-hover:text-red-400 transition-colors">Aviator Spribe</div>
                 </div>
             </div>
 
-            <div onclick="switchSection('live-casino'); openLiveCasino();" class="group bg-[#0f1117] rounded-2xl overflow-hidden border border-[#212631] hover:border-emerald-500 transition-all duration-300 cursor-pointer shadow-lg relative flex flex-col">
-                <div class="absolute top-2.5 right-2.5 bg-purple-600 text-white text-[9px] font-black px-2 py-0.5 rounded-md z-10 shadow">LIVE</div>
-                <div class="aspect-square bg-black/50 relative overflow-hidden">
+            <div onclick="switchSection('live-casino'); openLiveCasino();" class="group bg-[#0d1322] rounded-2xl overflow-hidden border border-white/10 hover:border-purple-400 transition-all duration-300 cursor-pointer shadow-xl relative flex flex-col hover:-translate-y-1">
+                <div class="absolute top-2.5 right-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-[9px] font-black px-2.5 py-0.5 rounded-md z-10 shadow-md">LIVE</div>
+                <div class="aspect-square bg-black/60 relative overflow-hidden">
                     <img src="https://placehold.co/400x400/180A2B/FFF?text=Crazy+Time" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                 </div>
-                <div class="p-3 bg-[#12151d] border-t border-[#212631]">
-                    <div class="text-white text-xs font-bold truncate text-center">Crazy Time Live</div>
+                <div class="p-3 bg-[#131b2e] border-t border-white/5">
+                    <div class="text-white text-xs font-bold truncate text-center group-hover:text-purple-400 transition-colors">Crazy Time Live</div>
                 </div>
             </div>
 
-            <div onclick="switchSection('casino'); initCasinoLobby();" class="group bg-[#0f1117] rounded-2xl overflow-hidden border border-[#212631] hover:border-emerald-500 transition-all duration-300 cursor-pointer shadow-lg relative flex flex-col hidden sm:flex">
-                <div class="aspect-square bg-black/50 relative overflow-hidden">
+            <div onclick="switchSection('casino'); initCasinoLobby();" class="group bg-[#0d1322] rounded-2xl overflow-hidden border border-white/10 hover:border-emerald-400 transition-all duration-300 cursor-pointer shadow-xl relative flex flex-col hover:-translate-y-1 hidden sm:flex">
+                <div class="aspect-square bg-black/60 relative overflow-hidden">
                     <img src="https://placehold.co/400x400/180A2B/FFF?text=Book+Of+Dead" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                 </div>
-                <div class="p-3 bg-[#12151d] border-t border-[#212631]">
-                    <div class="text-white text-xs font-bold truncate text-center">Book of Dead</div>
+                <div class="p-3 bg-[#131b2e] border-t border-white/5">
+                    <div class="text-white text-xs font-bold truncate text-center group-hover:text-emerald-400 transition-colors">Book of Dead</div>
                 </div>
             </div>
 
-            <div onclick="switchSection('casino'); initCasinoLobby();" class="group bg-[#0f1117] rounded-2xl overflow-hidden border border-[#212631] hover:border-emerald-500 transition-all duration-300 cursor-pointer shadow-lg relative flex flex-col hidden md:flex">
-                <div class="aspect-square bg-black/50 relative overflow-hidden">
+            <div onclick="switchSection('casino'); initCasinoLobby();" class="group bg-[#0d1322] rounded-2xl overflow-hidden border border-white/10 hover:border-cyan-400 transition-all duration-300 cursor-pointer shadow-xl relative flex flex-col hover:-translate-y-1 hidden md:flex">
+                <div class="aspect-square bg-black/60 relative overflow-hidden">
                     <img src="https://placehold.co/400x400/180A2B/FFF?text=Sugar+Rush" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                 </div>
-                <div class="p-3 bg-[#12151d] border-t border-[#212631]">
-                    <div class="text-white text-xs font-bold truncate text-center">Sugar Rush</div>
+                <div class="p-3 bg-[#131b2e] border-t border-white/5">
+                    <div class="text-white text-xs font-bold truncate text-center group-hover:text-cyan-400 transition-colors">Sugar Rush</div>
                 </div>
             </div>
 
