@@ -41,10 +41,7 @@
                     <span class="font-extrabold text-xl tracking-tight text-white">Alphabet<span class="text-emerald-400">216</span></span>
                 </div>
 
-                <div class="relative hidden md:block">
-                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                    <input type="text" id="top-search-input" onkeyup="filterGames()" placeholder="Rechercher un jeu..." autocomplete="new-password" class="bg-[#161922] border border-[#212631] rounded-xl py-2 pl-10 pr-4 text-white text-sm outline-none focus:border-emerald transition-all shadow-md font-bold w-64">
-                </div>
+                
             <!-- معلومات اللاعب (الرصيد والإشعارات) -->
             <div class="flex items-center gap-3">
                 <div id="auth-buttons-container" class="flex items-center gap-2">
@@ -209,7 +206,7 @@
 
     </div>
 
-    <!-- 3. قسم الألعاب الرائجة (يظهر فوراً وبثبات تام دون أخطاء) -->
+    <!-- 3. قسم الألعاب الرائجة (يتم جلب صور الألعاب الحقيقية تلقائياً من المزود عبر الجافاسكريبت) -->
     <div class="bg-[#111827] border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-xl">
         <div class="flex justify-between items-center mb-4">
             <div class="flex items-center gap-2.5">
@@ -223,69 +220,14 @@
             </button>
         </div>
 
-        <!-- شبكة الألعاب الثابتة والمضمونة 100% -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-            
-            <div onclick="playCasinoGame('PRAGMATIC', 'vs20olympgate')" class="group bg-[#0d1322] rounded-xl overflow-hidden border border-white/10 hover:border-emerald-400 transition-all duration-300 cursor-pointer shadow-md flex flex-col hover:-translate-y-1">
-                <div class="aspect-square bg-black/60 relative overflow-hidden">
-                    <img src="https://placehold.co/400x400/180A2B/FFF?text=Gates+Of+Olympus" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                    <div class="absolute top-2 right-2 bg-orange-500 text-white text-[8px] font-black px-1.5 py-0.5 rounded">HOT</div>
-                </div>
-                <div class="p-2.5 bg-[#131b2e] border-t border-white/5">
-                    <div class="text-white text-[11px] font-bold truncate text-center group-hover:text-emerald-400">Gates of Olympus</div>
-                </div>
-            </div>
-
-            <div onclick="playCasinoGame('PRAGMATIC', 'vs20sweetbon')" class="group bg-[#0d1322] rounded-xl overflow-hidden border border-white/10 hover:border-emerald-400 transition-all duration-300 cursor-pointer shadow-md flex flex-col hover:-translate-y-1">
-                <div class="aspect-square bg-black/60 relative overflow-hidden">
-                    <img src="https://placehold.co/400x400/180A2B/FFF?text=Sweet+Bonanza" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                    <div class="absolute top-2 right-2 bg-cyan-500 text-black text-[8px] font-black px-1.5 py-0.5 rounded">TOP</div>
-                </div>
-                <div class="p-2.5 bg-[#131b2e] border-t border-white/5">
-                    <div class="text-white text-[11px] font-bold truncate text-center group-hover:text-emerald-400">Sweet Bonanza</div>
-                </div>
-            </div>
-
-            <div onclick="playCasinoGame('SPRIBE', 'aviator')" class="group bg-[#0d1322] rounded-xl overflow-hidden border border-white/10 hover:border-emerald-400 transition-all duration-300 cursor-pointer shadow-md flex flex-col hover:-translate-y-1">
-                <div class="aspect-square bg-black/60 relative overflow-hidden">
-                    <img src="https://placehold.co/400x400/180A2B/FFF?text=Aviator" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                    <div class="absolute top-2 right-2 bg-red-600 text-white text-[8px] font-black px-1.5 py-0.5 rounded">CRASH</div>
-                </div>
-                <div class="p-2.5 bg-[#131b2e] border-t border-white/5">
-                    <div class="text-white text-[11px] font-bold truncate text-center group-hover:text-emerald-400">Aviator Spribe</div>
-                </div>
-            </div>
-
-            <div onclick="playCasinoGame('EVO_LIVE', 'crazytime000001')" class="group bg-[#0d1322] rounded-xl overflow-hidden border border-white/10 hover:border-emerald-400 transition-all duration-300 cursor-pointer shadow-md flex flex-col hover:-translate-y-1">
-                <div class="aspect-square bg-black/60 relative overflow-hidden">
-                    <img src="https://placehold.co/400x400/180A2B/FFF?text=Crazy+Time" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                    <div class="absolute top-2 right-2 bg-purple-600 text-white text-[8px] font-black px-1.5 py-0.5 rounded">LIVE</div>
-                </div>
-                <div class="p-2.5 bg-[#131b2e] border-t border-white/5">
-                    <div class="text-white text-[11px] font-bold truncate text-center group-hover:text-emerald-400">Crazy Time</div>
-                </div>
-            </div>
-
-            <div onclick="playCasinoGame('PLAYNGON', 'bookofdead')" class="group bg-[#0d1322] rounded-xl overflow-hidden border border-white/10 hover:border-emerald-400 transition-all duration-300 cursor-pointer shadow-md flex flex-col hover:-translate-y-1 hidden sm:flex">
-                <div class="aspect-square bg-black/60 relative overflow-hidden">
-                    <img src="https://placehold.co/400x400/180A2B/FFF?text=Book+Of+Dead" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                </div>
-                <div class="p-2.5 bg-[#131b2e] border-t border-white/5">
-                    <div class="text-white text-[11px] font-bold truncate text-center group-hover:text-emerald-400">Book of Dead</div>
-                </div>
-            </div>
-
-            <div onclick="playCasinoGame('PRAGMATIC', 'vs20sugarrush')" class="group bg-[#0d1322] rounded-xl overflow-hidden border border-white/10 hover:border-emerald-400 transition-all duration-300 cursor-pointer shadow-md flex flex-col hover:-translate-y-1 hidden md:flex">
-                <div class="aspect-square bg-black/60 relative overflow-hidden">
-                    <img src="https://placehold.co/400x400/180A2B/FFF?text=Sugar+Rush" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                </div>
-                <div class="p-2.5 bg-[#131b2e] border-t border-white/5">
-                    <div class="text-white text-[11px] font-bold truncate text-center group-hover:text-emerald-400">Sugar Rush</div>
-                </div>
-            </div>
-
+        <!-- الشبكة التي ستستقبل صور الألعاب الحقيقية من الـ API -->
+        <div id="home-trending-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+            <!-- سيتم تعبئتها أوتوماتيكياً بألعاب المزود الحقيقية -->
+            <div class="col-span-full text-center py-8 text-gray-500 text-xs">Chargement des jeux...</div>
         </div>
     </div>
+
+</div>
 
 <!-- سكربت صغير لجلب ألعاب المزود الحقيقية وعرضها في الصفحة الرئيسية -->
 <script>
