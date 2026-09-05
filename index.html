@@ -210,7 +210,7 @@
     <div class="absolute right-0 top-0 bottom-0 z-20 bg-gradient-to-l from-[#12151d] to-transparent w-16 pointer-events-none"></div>
 </div>
 
-    <main class="max-w-[1700px] mx-auto px-4 py-6 w-full flex-grow flex flex-col xl:flex-row gap-6">
+    <main class="max-w-[1700px] mx-auto px-4 pt-2 pb-6 md:pt-6 w-full flex-grow flex flex-col xl:flex-row gap-6">
 
         <!-- LEFT: Sidebar Menu (Desktop) -->
         <div class="w-full xl:w-[20%] sticky-column hidden xl:flex flex-col gap-4">
@@ -548,6 +548,7 @@
                     <div class="relative flex-1">
                         <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                         <input type="text" id="game-search-input" onkeyup="filterGames()"
+                            autocomplete="new-password"
                             placeholder="Rechercher un jeu (ex: Sweet Bonanza)..."
                             class="w-full bg-[#161922] border border-[#212631] rounded-xl py-3 pl-11 pr-4 text-white text-sm outline-none focus:border-emerald transition-all shadow-md font-bold">
                     </div>
