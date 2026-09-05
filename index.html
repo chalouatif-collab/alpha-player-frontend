@@ -901,45 +901,32 @@
     <script>
 
        
-// 2. دالة التحكم في أزرار القائمة الجانبية
-function applySidebarFilter(filterType, filterValue, clickedButton) {
-    // تحديث المتغيرات بناءً على نوع الفلتر
-    if (filterType === 'category') {
-        currentCategory = filterValue;
-    } else if (filterType === 'volatility') {
-        currentVolatility = filterValue;
-    }
+window.applySidebarFilter = function(filterType, filterValue, clickedButton) {
+    console.log("1. تم الضغط على الزر:", filterValue);
+    
+    if (filterType === 'category') currentCategory = filterValue;
+    else if (filterType === 'volatility') currentVolatility = filterValue;
 
-    // تلوين الزر النشط داخل نفس المجموعة وإعادة البقية للون الداكن
     const parentDiv = clickedButton.closest('ul');
     const allButtonsInGroup = parentDiv.querySelectorAll('.sidebar-filter-btn');
     
     allButtonsInGroup.forEach(btn => {
-        // إعادة اللون الافتراضي
         btn.className = "sidebar-filter-btn w-full text-left text-gray-400 hover:text-white hover:bg-[#1c212d] px-3 py-2 rounded-xl text-xs font-bold transition-colors";
-        
-        // الحفاظ على تنسيق أيقونة النار لزر التقلب العالي إن وجدت
         if(btn.innerHTML.includes('fa-fire')) {
             btn.className = "sidebar-filter-btn w-full flex items-center justify-between text-gray-400 hover:text-white hover:bg-[#1c212d] px-3 py-2 rounded-xl text-xs font-bold transition-colors";
         }
     });
 
-    // تحويل الزر المضغوط إلى اللون الأخضر الزمردي
     clickedButton.className = clickedButton.className.replace('text-gray-400 hover:bg-[#1c212d]', 'text-white bg-emerald-600');
+    console.log("2. تم تلوين الزر بنجاح.");
 
-    // 3. استدعاء دالة تحديث الألعاب
-    // استبدل 'renderCasino' باسم الدالة الحقيقية المسؤولة عن رسم ألعاب الكازينو في موقعك
     if (typeof renderCasinoGrid === "function") {
+        console.log("3. جاري استدعاء دالة الرسم renderCasinoGrid...");
         renderCasinoGrid(); 
     } else {
-        console.log("تم تغيير الفلتر إلى:", currentCategory, currentVolatility);
+        console.error("خطأ: دالة renderCasinoGrid غير موجودة أو غير مقروءة!");
     }
-}
-
-        // متغيرات لحفظ حالة الفلتر الجانبي
-let currentCategory = 'All';
-let currentVolatility = 'All';
-
+};
 function applySidebarFilter(filterType, filterValue, clickedButton) {
     // 1. تحديث المتغيرات بناءً على نوع الفلتر
     if (filterType === 'category') {
