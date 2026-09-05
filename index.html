@@ -900,34 +900,6 @@
     <!-- ================= JAVASCRIPT (محرك الألفابت الشامل) ================= -->
     <script>
 
-       
-// تعريف المتغيرات في الذاكرة العامة للمتصفح
-window.currentCategory = 'All';
-window.currentVolatility = 'All';
-
-// إجبار الدالة على الظهور لأزرار HTML
-window.applySidebarFilter = function(filterType, filterValue, clickedButton) {
-    if (filterType === 'category') window.currentCategory = filterValue;
-    else if (filterType === 'volatility') window.currentVolatility = filterValue;
-
-    // تلوين الزر النشط وإعادة البقية للون الافتراضي
-    const parentDiv = clickedButton.closest('ul');
-    const allButtonsInGroup = parentDiv.querySelectorAll('.sidebar-filter-btn');
-    
-    allButtonsInGroup.forEach(btn => {
-        btn.className = "sidebar-filter-btn w-full text-left text-gray-400 hover:text-white hover:bg-[#1c212d] px-3 py-2 rounded-xl text-xs font-bold transition-colors";
-        if(btn.innerHTML.includes('fa-fire')) {
-            btn.className = "sidebar-filter-btn w-full flex items-center justify-between text-gray-400 hover:text-white hover:bg-[#1c212d] px-3 py-2 rounded-xl text-xs font-bold transition-colors";
-        }
-    });
-
-    clickedButton.className = clickedButton.className.replace('text-gray-400 hover:bg-[#1c212d]', 'text-white bg-emerald-600');
-
-    // استدعاء دالة رسم الألعاب
-    if (typeof renderCasinoGrid === "function") {
-        renderCasinoGrid(); 
-    }
-};
 function applySidebarFilter(filterType, filterValue, clickedButton) {
     // 1. تحديث المتغيرات بناءً على نوع الفلتر
     if (filterType === 'category') {
@@ -2845,6 +2817,34 @@ function applySidebarFilter(filterType, filterValue, clickedButton) {
 
         // استدعاء الدالة
         startPromoAutoScroll();
+
+        // تعريف المتغيرات في الذاكرة العامة للمتصفح
+window.currentCategory = 'All';
+window.currentVolatility = 'All';
+
+// إجبار الدالة على الظهور لأزرار HTML
+window.applySidebarFilter = function(filterType, filterValue, clickedButton) {
+    if (filterType === 'category') window.currentCategory = filterValue;
+    else if (filterType === 'volatility') window.currentVolatility = filterValue;
+
+    // تلوين الزر النشط وإعادة البقية للون الافتراضي
+    const parentDiv = clickedButton.closest('ul');
+    const allButtonsInGroup = parentDiv.querySelectorAll('.sidebar-filter-btn');
+    
+    allButtonsInGroup.forEach(btn => {
+        btn.className = "sidebar-filter-btn w-full text-left text-gray-400 hover:text-white hover:bg-[#1c212d] px-3 py-2 rounded-xl text-xs font-bold transition-colors";
+        if(btn.innerHTML.includes('fa-fire')) {
+            btn.className = "sidebar-filter-btn w-full flex items-center justify-between text-gray-400 hover:text-white hover:bg-[#1c212d] px-3 py-2 rounded-xl text-xs font-bold transition-colors";
+        }
+    });
+
+    clickedButton.className = clickedButton.className.replace('text-gray-400 hover:bg-[#1c212d]', 'text-white bg-emerald-600');
+
+    // استدعاء دالة رسم الألعاب
+    if (typeof renderCasinoGrid === "function") {
+        renderCasinoGrid(); 
+    }
+};
 
     </script>
     <!-- 💬 مربع الشات (Modal في الهاتف، عائم في الكمبيوتر) -->
