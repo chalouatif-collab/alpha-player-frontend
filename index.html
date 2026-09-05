@@ -901,12 +901,16 @@
     <script>
 
        
-window.applySidebarFilter = function(filterType, filterValue, clickedButton) {
-    console.log("1. تم الضغط على الزر:", filterValue);
-    
-    if (filterType === 'category') currentCategory = filterValue;
-    else if (filterType === 'volatility') currentVolatility = filterValue;
+// تعريف المتغيرات في الذاكرة العامة للمتصفح
+window.currentCategory = 'All';
+window.currentVolatility = 'All';
 
+// إجبار الدالة على الظهور لأزرار HTML
+window.applySidebarFilter = function(filterType, filterValue, clickedButton) {
+    if (filterType === 'category') window.currentCategory = filterValue;
+    else if (filterType === 'volatility') window.currentVolatility = filterValue;
+
+    // تلوين الزر النشط وإعادة البقية للون الافتراضي
     const parentDiv = clickedButton.closest('ul');
     const allButtonsInGroup = parentDiv.querySelectorAll('.sidebar-filter-btn');
     
@@ -918,13 +922,10 @@ window.applySidebarFilter = function(filterType, filterValue, clickedButton) {
     });
 
     clickedButton.className = clickedButton.className.replace('text-gray-400 hover:bg-[#1c212d]', 'text-white bg-emerald-600');
-    console.log("2. تم تلوين الزر بنجاح.");
 
+    // استدعاء دالة رسم الألعاب
     if (typeof renderCasinoGrid === "function") {
-        console.log("3. جاري استدعاء دالة الرسم renderCasinoGrid...");
         renderCasinoGrid(); 
-    } else {
-        console.error("خطأ: دالة renderCasinoGrid غير موجودة أو غير مقروءة!");
     }
 };
 function applySidebarFilter(filterType, filterValue, clickedButton) {
