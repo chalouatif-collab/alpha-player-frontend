@@ -1797,7 +1797,7 @@
         results.forEach(gamesArray => {
             allLiveGames = allLiveGames.concat(gamesArray);
         });
-        
+        allLiveGames.reverse();
         // تفريغ مربع البحث من أي إكمال تلقائي للمتصفح
         setTimeout(() => {
             const searchInput = document.getElementById('live-casino-search');
