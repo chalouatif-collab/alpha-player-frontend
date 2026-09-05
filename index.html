@@ -892,7 +892,12 @@
 function filterLiveGames(providerCode) {
     currentLiveProvider = providerCode;
     
-    // تحديث ألوان الأزرار بناءً على الكود المرسل
+    // 🛡️ إفراغ مربع البحث بالقوة وتصفير ذاكرة البحث
+    const searchInput = document.getElementById('live-casino-search');
+    if (searchInput) searchInput.value = '';
+    currentLiveSearch = ''; 
+
+    // تحديث ألوان الأزرار
     document.querySelectorAll('.live-provider-btn').forEach(btn => {
         if(btn.getAttribute('onclick').includes(providerCode)) {
             btn.className = "live-provider-btn bg-blue-600 text-white px-4 py-2 rounded-lg whitespace-nowrap font-bold text-sm transition-transform active:scale-95";
@@ -903,9 +908,13 @@ function filterLiveGames(providerCode) {
 
     renderLiveCasino();
 }
-
 function renderLiveCasino() {
     const grid = document.getElementById('live-games-grid');
+    setTimeout(() => {
+    const searchInput = document.getElementById('live-casino-search');
+    if (searchInput) searchInput.value = '';
+    currentLiveSearch = '';
+}, 100);
     if (!grid) return;
 
     // إجبار مربع البحث على التفريغ إذا كان المتصفح قد ملأه خطأً بكلمة test1
