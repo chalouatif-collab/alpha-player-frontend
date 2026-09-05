@@ -2467,6 +2467,58 @@ window.applySidebarFilter = function(filterType, filterValue, clickedButton) {
     }
 };
 
+
+// تفعيل شريط الفائزين الحي والمتحرك
+document.addEventListener("DOMContentLoaded", function() {
+    const track = document.getElementById('winners-ticker-track');
+    if (!track) return;
+
+    // قائمة الفائزين (يمكنك لاحقاً ربطها بالـ API الخاص بالسيرفر)
+    const sampleWinners = [
+        { name: "Samir***", amount: "1,182.03", game: "Aviator", icon: "🚀" },
+        { name: "Yassine***", amount: "1,129.08", game: "Sweet Bonanza", icon: "🍬" },
+        { name: "Ahmed***", amount: "1,174.37", game: "Wanted Dead", icon: "🔥" },
+        { name: "Sarah***", amount: "721.26", game: "Gates of Olympus", icon: "⚡" },
+        { name: "Fethi***", amount: "396.21", game: "Sugar Rush", icon: "🍭" },
+        { name: "Mehdi***", amount: "2,450.00", game: "Book of Dead", icon: "📖" }
+    ];
+
+    // بناء الكروت وتكرارها لضمان استمرارية التمرير اللانهائي
+    function renderTicker() {
+        const itemsHTML = sampleWinners.map(w => `
+            <div class="inline-flex items-center gap-2 bg-[#161922] border border-[#212631] px-3 py-1 rounded-xl shadow-sm shrink-0">
+                <span class="text-yellow-400">🏆</span>
+                <span class="text-white font-bold">${w.name}</span>
+                <span class="text-gray-400 text-[11px]">a gagné</span>
+                <span class="text-emerald-400 font-black font-mono">${w.amount} TND</span>
+                <span class="text-gray-400 text-[11px]">sur</span>
+                <span class="text-purple-400 font-bold">${w.game} ${w.icon}</span>
+            </div>
+        `).join('');
+
+        // نكرر المحتوى 3 مرات لعمل حلقة لا نهائية ناعمة
+        track.innerHTML = itemsHTML + itemsHTML + itemsHTML;
+    }
+
+    renderTicker();
+
+    // تشغيل الحركة الأفقية السلسة
+    let scrollPos = 0;
+    function animateTicker() {
+        scrollPos += 0.6; // سرعة التمرير (كلما زاد الرقم زادت السرعة)
+        
+        // إعادة تعيين الموقع بسلاسة عندما ينتهي الثلث الأول
+        if (scrollPos >= track.scrollWidth / 3) {
+            scrollPos = 0;
+        }
+        
+        track.style.transform = `translateX(-${scrollPos}px)`;
+        requestAnimationFrame(animateTicker);
+    }
+
+    requestAnimationFrame(animateTicker);
+});
+</script>
     </script>
     <!-- 💬 مربع الشات (Modal في الهاتف، عائم في الكمبيوتر) -->
     <div id="live-chat-sidebar" onclick="if(event.target === this) closeChat()"
