@@ -1728,23 +1728,45 @@ function renderLiveCasino() {
     }).join('');
 }
 
-// 5. دالة جلب الألعاب المحدثة (تحفظ البيانات في الذاكرة أولاً)
 async function openLiveCasino() {
     const grid = document.getElementById('live-games-grid');
-    if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Chargement...</div>';
+    if (grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10">Chargement des jeux live...</div>';
     
     try {
-        // ⚠️ مهم: لجلب كل الألعاب، أزلنا 'PP_LIVE_PRO' واستبدلناها بطلب كل ألعاب الكازينو المباشر
-        // قد تحتاج لتعديل { category: 'live' } حسب ما يقبله الباك إند الخاص بك لجلب جميع المزودين
-        const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
-            method: 'POST', 
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ category: "live" }) // جرب هذا، أو اتركه فارغاً {} ليجلب كل شيء
+        // 1. ضع هنا الأكواد البرمجية الحقيقية للمزودين كما هي مسجلة في الباك إند الخاص بك
+        const liveProviderCodes = [
+            'PP_LIVE_PRO', // Pragmatic Live
+            'EVO_LIVE',    // استبدله بكود Evolution الصحيح لديك
+            'EZUGI_LIVE',  // استبدله بكود Ezugi الصحيح لديك
+            'VIVO_LIVE'    // استبدله بكود Vivo الصحيح لديك
+        ];
+
+        // 2. إرسال جميع الطلبات للباك إند في نفس اللحظة لتوفير الوقت
+        const fetchPromises = liveProviderCodes.map(code => 
+            fetch(`${BACKEND_URL}/api/get-providers`, {
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ provider_code: code })
+            })
+            .then(res => res.json())
+            .catch(err => {
+                console.warn(`Erreur de chargement pour ${code}:`, err);
+                return { games: [] }; // تجاهل المزود الذي يفشل حتى لا تتعطل بقية الألعاب
+            })
+        );
+
+        // 3. انتظار عودة جميع البيانات
+        const results = await Promise.all(fetchPromises);
+        
+        // 4. تفريغ الذاكرة ودمج كل الألعاب القادمة من كل المزودين في قائمة واحدة
+        allLiveGames = [];
+        results.forEach(data => {
+            if (data && (data.games || data.data)) {
+                allLiveGames = allLiveGames.concat(data.games || data.data);
+            }
         });
-        const data = await res.json();
         
-        allLiveGames = data.games || data.data || [];
-        
+        // 5. رسم الألعاب وتفعيل الفلتر
         renderLiveCasino();
         
     } catch (e) {
