@@ -216,13 +216,26 @@
             class="absolute right-0 top-0 bottom-0 z-20 bg-gradient-to-l from-[#12151d] to-transparent w-16 pointer-events-none">
         </div>
     </div>
+<!-- المساحة المركزية الجديدة الممتدة (بدون قوائم جانبية) -->
+<main class="max-w-[1700px] mx-auto px-4 pt-6 pb-10 w-full flex-grow flex flex-col gap-6">
+    
+    <!-- قسم ألعاب الكازينو -->
+    <div id="casino-section" class="w-full animate-fade-in">
+        <!-- شبكة الألعاب: تمتد حتى 8 أعمدة في الشاشات العملاقة -->
+        <div id="games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 gap-4 w-full">
+            <!-- جافاسكريبت سيضخ بطاقات الألعاب هنا -->
+        </div>
+    </div>
 
-    <main class="max-w-[1700px] mx-auto px-4 pt-0 pb-6 md:pt-6 w-full flex-grow flex flex-col xl:flex-row gap-6">
+    <!-- قسم الكازينو المباشر (مخفي افتراضياً حتى يطلبه المستخدم) -->
+    <div id="live-casino-section" class="w-full hidden animate-fade-in">
+        <div id="live-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 gap-4 w-full">
+            <!-- جافاسكريبت سيضخ الألعاب المباشرة هنا -->
+        </div>
+    </div>
 
-                    </style>
-            <!-- PANE: ACCUEIL (الصفحة الرئيسية المتكاملة) -->
-            <div id="pane-accueil" class="player-view-section block space-y-6 w-full">
-
+</main>
+                    
     <style>
 
 
