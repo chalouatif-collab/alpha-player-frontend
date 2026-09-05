@@ -221,27 +221,52 @@
 
         <!-- LEFT: Sidebar Menu (Desktop) -->
         <div class="w-full xl:w-[20%] sticky-column hidden xl:flex flex-col gap-4">
-            <div class="bg-panel rounded-2xl p-4 space-y-2 text-xs font-semibold">
-                <a href="javascript:void(0)" onclick="openSportsbookForProvider('nexus');"
-                    class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-white transition border border-emerald/30 bg-emerald/10"><i
-                        class="fas fa-futbol text-emerald text-lg"></i> Sports Betting</a>
-                <a href="javascript:void(0)" onclick="switchSection('casino'); initCasinoLobby();"
-                    class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
-                        class="fas fa-slot-machine text-emerald text-lg"></i> Casino & Slots</a>
-                <a href="javascript:void(0)" onclick="switchSection('live-casino'); openLiveCasino();"
-                    class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
-                        class="fas fa-video text-red-500 text-lg"></i> Live Casino</a>
-                <a href="javascript:void(0)" onclick="switchSection('virtuals'); initVirtualsLobby();"
-                    class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
-                        class="fas fa-gamepad text-blue-400 text-lg"></i> Jeux Virtuels</a>
-            </div>
+            <!-- فلاتر الكازينو الجديدة (بديلة للقائمة القديمة) -->
+<div id="contextual-sidebar" class="bg-panel rounded-2xl p-4 space-y-6">
+    <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Filtres de Jeux</h3>
+    
+    <!-- فلتر أنواع الألعاب -->
+    <div>
+        <h4 class="text-white text-[13px] font-semibold mb-3">Catégories</h4>
+        <ul class="space-y-1">
+            <li>
+                <button onclick="applySidebarFilter('category', 'All', this)" class="sidebar-filter-btn w-full text-left text-white bg-emerald-600 px-3 py-2 rounded-xl text-xs font-bold transition-colors">Tout les jeux</button>
+            </li>
+            <li>
+                <button onclick="applySidebarFilter('category', 'Slots', this)" class="sidebar-filter-btn w-full text-left text-gray-400 hover:text-white hover:bg-[#1c212d] px-3 py-2 rounded-xl text-xs font-bold transition-colors">Machines à sous</button>
+            </li>
+            <li>
+                <button onclick="applySidebarFilter('category', 'Table', this)" class="sidebar-filter-btn w-full text-left text-gray-400 hover:text-white hover:bg-[#1c212d] px-3 py-2 rounded-xl text-xs font-bold transition-colors">Jeux de Table</button>
+            </li>
+            <li>
+                <button onclick="applySidebarFilter('category', 'BonusBuy', this)" class="sidebar-filter-btn w-full text-left text-gray-400 hover:text-white hover:bg-[#1c212d] px-3 py-2 rounded-xl text-xs font-bold transition-colors">Achat de Bonus</button>
+            </li>
+        </ul>
+    </div>
+
+    <!-- فلتر مستوى التقلب (Volatility) -->
+    <div>
+        <h4 class="text-white text-[13px] font-semibold mb-3">Volatilité</h4>
+        <ul class="space-y-1">
+            <li>
+                <button onclick="applySidebarFilter('volatility', 'High', this)" class="sidebar-filter-btn w-full flex items-center justify-between text-gray-400 hover:text-white hover:bg-[#1c212d] px-3 py-2 rounded-xl text-xs font-bold transition-colors">
+                    <span>Haute</span>
+                    <i class="fas fa-fire text-red-500 text-xs"></i>
+                </button>
+            </li>
+            <li>
+                <button onclick="applySidebarFilter('volatility', 'Low', this)" class="sidebar-filter-btn w-full text-left text-gray-400 hover:text-white hover:bg-[#1c212d] px-3 py-2 rounded-xl text-xs font-bold transition-colors">Basse</button>
+            </li>
+        </ul>
+    </div>
+</div>
 
             <!-- Ad Widget -->
             <div
                 class="bg-gradient-to-br from-[#1b2230] to-[#161922] border border-yellow-500/30 rounded-2xl p-4 text-center">
                 <h4 class="font-bold text-yellow-500 text-sm mt-2 mb-1">JACKPOT DROP</h4>
                 <p class="text-[11px] text-gray-400 mb-2">Gagnez jusqu'à <span
-                        class="text-white font-bold">124,567</span> TND</p>
+                        class="text-white font-bold">7,567</span> TND</p>
                 <button
                     class="w-full bg-yellow-500 text-black font-extrabold text-xs py-2 rounded-xl transition shadow">Participer</button>
             </div>
@@ -273,45 +298,6 @@
             <!-- PANE: ACCUEIL (الصفحة الرئيسية المتكاملة) -->
             <div id="pane-accueil" class="player-view-section block space-y-6 w-full">
 
-                <!-- 🌟 2. شريط شعارات المزودين السريع (مصغرة وفي سطر واحد) -->
-                <div class="flex overflow-x-auto flex-nowrap gap-2 py-2 hide-scroll w-full">
-
-                    <button onclick="loadProviderGames('PRAGMATIC'); switchSection('casino');"
-                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
-                        <i class="fas fa-slot-machine text-emerald/70 text-xs"></i> Pragmatic
-                    </button>
-
-                    <button onclick="loadProviderGames('HACKSAW'); switchSection('casino');"
-                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
-                        <i class="fas fa-bolt text-yellow-500/70 text-xs"></i> Hacksaw
-                    </button>
-
-                    <button onclick="loadProviderGames('PLAYNGO'); switchSection('casino');"
-                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
-                        <i class="fas fa-crown text-purple-500/70 text-xs"></i> Play'n Go
-                    </button>
-
-                    <button onclick="loadProviderGames('PGSOFT'); switchSection('casino');"
-                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
-                        <i class="fas fa-gamepad text-blue-500/70 text-xs"></i> PGSoft
-                    </button>
-
-                    <button onclick="loadProviderGames('SPRIBE'); switchSection('casino');"
-                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
-                        <i class="fas fa-plane text-red-500/70 text-xs"></i> Spribe
-                    </button>
-
-                    <button onclick="loadProviderGames('EVOPLAY'); switchSection('casino');"
-                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
-                        <i class="fas fa-dice text-orange-500/70 text-xs"></i> Evoplay
-                    </button>
-
-                    <button onclick="loadProviderGames('AMATIC'); switchSection('casino');"
-                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
-                        <i class="fas fa-gem text-cyan-500/70 text-xs"></i> Amatic
-                    </button>
-
-                </div>
 
                 <!-- 🌟 شريط الجاكبوت المباشر (Pure CSS Energy Fire) -->
                 <style>
@@ -913,6 +899,37 @@
 
     <!-- ================= JAVASCRIPT (محرك الألفابت الشامل) ================= -->
     <script>
+
+        // متغيرات لحفظ حالة الفلتر الجانبي
+let currentCategory = 'All';
+let currentVolatility = 'All';
+
+function applySidebarFilter(filterType, filterValue, clickedButton) {
+    // 1. تحديث المتغيرات بناءً على نوع الفلتر
+    if (filterType === 'category') {
+        currentCategory = filterValue;
+    } else if (filterType === 'volatility') {
+        currentVolatility = filterValue;
+    }
+
+    // 2. تلوين الزر النشط داخل نفس المجموعة فقط وإعادة البقية للون الرمادي
+    const parentDiv = clickedButton.closest('ul');
+    const allButtonsInGroup = parentDiv.querySelectorAll('.sidebar-filter-btn');
+    
+    allButtonsInGroup.forEach(btn => {
+        btn.className = "sidebar-filter-btn w-full text-left text-gray-400 hover:text-white hover:bg-[#1a1c24] px-3 py-2 rounded-lg text-sm transition-colors";
+        // الحفاظ على أيقونة النار إن وجدت
+        if(btn.innerHTML.includes('fa-fire')) {
+            btn.className = "sidebar-filter-btn w-full flex items-center justify-between text-gray-400 hover:text-white hover:bg-[#1a1c24] px-3 py-2 rounded-lg text-sm transition-colors";
+        }
+    });
+
+    // تلوين الزر المضغوط باللون الأزرق
+    clickedButton.className = clickedButton.className.replace('text-gray-400 hover:bg-[#1a1c24]', 'text-white bg-blue-600');
+
+    // 3. استدعاء دالة رسم الكازينو لتطبيق الفلاتر الجديدة
+    // renderCasino(); // قم بتفعيل هذا السطر وربطه بدالة رسم الكازينو الخاصة بك
+}
 
 
 
