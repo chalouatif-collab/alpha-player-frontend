@@ -590,18 +590,44 @@
             </div>
 
             <!-- PANE: LIVE CASINO -->
-            <div id="pane-live-casino" class="player-view-section hidden w-full">
-                <div class="flex items-center gap-2 mb-2">
-                    <i class="fas fa-video text-xl text-red-500"></i>
-                    <h2 class="text-white font-bold text-lg">Live Casino</h2>
-                </div>
-                <!-- وهذا شريط اللايف كازينو! 👇 -->
-                <div id="live-providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4"></div>
+<div id="pane-live-casino" class="player-view-section hidden w-full">
+    
+    <!-- قسم العنوان ومحرك البحث -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+        <div class="flex items-center gap-2">
+            <i class="fas fa-video text-xl text-red-500"></i>
+            <h2 class="text-white font-bold text-lg">Live Casino</h2>
+        </div>
+        
+        <!-- مربع البحث -->
+        <div class="relative w-full md:w-72">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <input 
+                type="text" 
+                id="live-casino-search" 
+                oninput="searchLiveGames()" 
+                placeholder="Rechercher un jeu live..." 
+                autocomplete="new-password"
+                class="w-full bg-[#1a1c24] border border-[#2b2d35] text-white pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:border-blue-500 text-sm transition-colors shadow-inner"
+            >
+        </div>
+    </div>
 
-                <div id="live-games-grid"
-                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10">
-                </div>
-            </div>
+    <!-- شريط المزودين المتعددين -->
+    <div id="live-providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4 scrollbar-hide">
+        <button onclick="filterLiveGames('All')" class="live-provider-btn bg-blue-600 text-white px-4 py-2 rounded-lg whitespace-nowrap font-bold text-sm transition-transform active:scale-95">Tout</button>
+        <button onclick="filterLiveGames('Pragmatic Live')" class="live-provider-btn bg-[#1a1c24] border border-[#2b2d35] hover:border-blue-500 text-white px-4 py-2 rounded-lg whitespace-nowrap text-sm transition-transform active:scale-95">Pragmatic Live</button>
+        <button onclick="filterLiveGames('Evolution')" class="live-provider-btn bg-[#1a1c24] border border-[#2b2d35] hover:border-blue-500 text-white px-4 py-2 rounded-lg whitespace-nowrap text-sm transition-transform active:scale-95">Evolution</button>
+        <button onclick="filterLiveGames('Ezugi')" class="live-provider-btn bg-[#1a1c24] border border-[#2b2d35] hover:border-blue-500 text-white px-4 py-2 rounded-lg whitespace-nowrap text-sm transition-transform active:scale-95">Ezugi</button>
+        <button onclick="filterLiveGames('Vivo Gaming')" class="live-provider-btn bg-[#1a1c24] border border-[#2b2d35] hover:border-blue-500 text-white px-4 py-2 rounded-lg whitespace-nowrap text-sm transition-transform active:scale-95">Vivo Gaming</button>
+    </div>
+
+    <!-- شبكة الألعاب -->
+    <div id="live-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10">
+        <!-- يتم حقن الألعاب هنا عبر الجافاسكريبت -->
+    </div>
+
+</div>
 
             <!-- PANE: VIRTUALS -->
             <div id="pane-virtuals" class="player-view-section hidden w-full">
@@ -860,6 +886,65 @@
 
     <!-- ================= JAVASCRIPT (محرك الألفابت الشامل) ================= -->
     <script>
+
+        // متغيرات لحفظ حالة الفلتر الحالية
+let currentLiveProvider = 'All';
+let currentLiveSearch = '';
+let allLiveGames = []; // افترض أن هذه المصفوفة تحتوي على كل ألعاب الكازينو المباشر المجلوبة من الباك إند
+
+// دالة لتحديث المزود النشط
+function filterLiveGames(providerName) {
+    currentLiveProvider = providerName;
+    
+    // تحديث شكل الأزرار (تلوين الزر النشط)
+    document.querySelectorAll('.live-provider-btn').forEach(btn => {
+        if(btn.innerText === providerName || (providerName === 'All' && btn.innerText === 'Tout')) {
+            btn.className = "live-provider-btn bg-blue-600 text-white px-4 py-2 rounded-lg whitespace-nowrap font-bold text-sm";
+        } else {
+            btn.className = "live-provider-btn bg-[#1a1c24] border border-[#2b2d35] hover:border-blue-500 text-white px-4 py-2 rounded-lg whitespace-nowrap text-sm";
+        }
+    });
+
+    renderLiveCasino();
+}
+
+// دالة لالتقاط نص البحث
+function searchLiveGames() {
+    currentLiveSearch = document.getElementById('live-casino-search').value.toLowerCase();
+    renderLiveCasino();
+}
+
+// دالة الرسم الرئيسية التي تدمج الفلترين معاً
+function renderLiveCasino() {
+    const grid = document.getElementById('live-games-grid');
+    if (!grid) return;
+
+    const filteredGames = allLiveGames.filter(game => {
+        // التحقق من تطابق المزود
+        const matchProvider = (currentLiveProvider === 'All') || (game.provider === currentLiveProvider);
+        // التحقق من تطابق نص البحث
+        const matchSearch = game.name.toLowerCase().includes(currentLiveSearch);
+        
+        return matchProvider && matchSearch;
+    });
+
+    if (filteredGames.length === 0) {
+        grid.innerHTML = '<div class="col-span-full text-gray-400 text-center py-10">Aucun jeu trouvé</div>';
+        return;
+    }
+
+    // رسم الكروت بناء على النتيجة المفلترة
+    grid.innerHTML = filteredGames.map(g => {
+        return `
+        <div onclick="launchSpecificVirtualGame('${g.uuid}')" class="bg-[#0f1117] border border-[#2b2d35] rounded-xl cursor-pointer group hover:-translate-y-1 transition-all overflow-hidden shadow-lg">
+            <div class="relative w-full aspect-square overflow-hidden bg-black/50">
+                <img src="${g.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="${g.name}">
+            </div>
+            <div class="p-2 text-[10px] text-white font-bold truncate text-center">${g.name}</div>
+        </div>
+        `;
+    }).join('');
+}
 
 
         function openBonusModal() {
