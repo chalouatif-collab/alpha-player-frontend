@@ -65,16 +65,6 @@
                             class="text-emerald">216</span></span>
                 </div>
 
-                <!-- 🔍 شريط البحث المصغر بجانب الشعار مع القائمة المنسدلة -->
-                <div class="relative hidden sm:block">
-                    <input type="text" id="header-search-input" oninput="handleLiveSearch(this.value)" 
-                        placeholder="Rechercher un jeu..." 
-                        class="bg-[#12151d] border border-[#212631] text-white text-xs px-3 py-1.5 pl-8 rounded-lg focus:outline-none focus:border-emerald-500 w-36 md:w-52 transition">
-                    <i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400 text-xs"></i>
-                    
-                    <!-- القائمة المنسدلة لنتائج البحث الفورية -->
-                    <div id="search-dropdown" class="absolute left-0 right-0 mt-1 bg-[#12151d] border border-[#212631] rounded-lg shadow-2xl max-h-60 overflow-y-auto hidden z-[100]"></div>
-                </div>
             </div>
 
             <!-- أزرار الدخول أو رصيد اللاعب -->
@@ -305,167 +295,98 @@
 
                 </div>
                 
-                <!-- 🌟 شريط الجاكبوت المباشر (Pure CSS Energy Fire) -->
-                <style>
-                    /* محرك النيران والنبض باستخدام CSS فقط */
-                    @keyframes pure-fire-mini {
+                <!-- 🌟 شريط الجاكبوت المباشر (Pure CSS Energy Fire - Thin & Wide) -->
+<style>
+    /* محرك النيران والنبض باستخدام CSS فقط */
+    @keyframes pure-fire-mini {
+        0%, 100% { box-shadow: 0 0 10px rgba(234, 88, 12, 0.4), inset 0 -5px 15px rgba(234, 88, 12, 0.3); border-color: #ea580c; }
+        50% { box-shadow: 0 0 20px rgba(249, 115, 22, 0.6), inset 0 -10px 25px rgba(234, 88, 12, 0.5); border-color: #fdba74; }
+    }
+    @keyframes pure-fire-minor {
+        0%, 100% { box-shadow: 0 0 10px rgba(37, 99, 235, 0.4), inset 0 -5px 15px rgba(37, 99, 235, 0.3); border-color: #2563eb; }
+        50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.6), inset 0 -10px 25px rgba(37, 99, 235, 0.5); border-color: #93c5fd; }
+    }
+    @keyframes pure-fire-major {
+        0%, 100% { box-shadow: 0 0 12px rgba(202, 138, 4, 0.4), inset 0 -8px 20px rgba(202, 138, 4, 0.3); border-color: #ca8a04; }
+        50% { box-shadow: 0 0 25px rgba(234, 179, 8, 0.6), inset 0 -12px 30px rgba(202, 138, 4, 0.5); border-color: #fef08a; }
+    }
+    @keyframes pure-fire-grand {
+        0%, 100% { box-shadow: 0 0 15px rgba(5, 150, 105, 0.5), inset 0 -10px 25px rgba(5, 150, 105, 0.4); border-color: #059669; }
+        50% { box-shadow: 0 0 35px rgba(16, 185, 129, 0.7), inset 0 -15px 35px rgba(5, 150, 105, 0.6); border-color: #6ee7b7; }
+    }
 
-                        0%,
-                        100% {
-                            box-shadow: 0 0 10px rgba(234, 88, 12, 0.4), inset 0 -15px 30px rgba(234, 88, 12, 0.3);
-                            border-color: #ea580c;
-                        }
+    /* حركة سراب الحرارة للنصوص */
+    @keyframes heat-wave {
+        0% { transform: translateY(0) scale(1); }
+        100% { transform: translateY(-0.5px) scale(1.01); }
+    }
 
-                        50% {
-                            box-shadow: 0 0 25px rgba(249, 115, 22, 0.7), inset 0 -35px 50px rgba(234, 88, 12, 0.6);
-                            border-color: #fdba74;
-                        }
-                    }
+    /* إعدادات بطاقات الجاكبوت الرقيقة */
+    .pure-jackpot-card {
+        background: linear-gradient(90deg, #0f1117 0%, #0a0c10 100%);
+        border: 1px solid;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+    .pure-jackpot-card:hover {
+        transform: translateY(-2px);
+    }
+    .anim-mini { animation: pure-fire-mini 1s infinite alternate ease-in-out; }
+    .anim-minor { animation: pure-fire-minor 1.2s infinite alternate ease-in-out; }
+    .anim-major { animation: pure-fire-major 0.9s infinite alternate ease-in-out; }
+    .anim-grand { animation: pure-fire-grand 0.7s infinite alternate ease-in-out; }
+    .text-heat { animation: heat-wave 0.15s infinite alternate linear; }
+</style>
 
-                    @keyframes pure-fire-minor {
+<!-- حاوية تمتد بكامل العرض (w-full) مع مسافات صغيرة -->
+<div class="grid grid-cols-4 gap-1 md:gap-3 w-full relative z-10 mb-4 mt-2">
 
-                        0%,
-                        100% {
-                            box-shadow: 0 0 10px rgba(37, 99, 235, 0.4), inset 0 -15px 30px rgba(37, 99, 235, 0.3);
-                            border-color: #2563eb;
-                        }
+    <!-- MINI -->
+    <div class="pure-jackpot-card anim-mini rounded-md md:rounded-lg py-1 px-1.5 md:py-1.5 md:px-4 flex flex-col xl:flex-row items-center justify-center xl:justify-between w-full">
+        <div class="absolute inset-0 bg-gradient-to-r from-orange-600/10 to-transparent"></div>
+        <span class="text-orange-300 font-black text-[6px] md:text-[10px] xl:text-xs tracking-widest flex items-center gap-1 relative z-10 mb-0.5 xl:mb-0">
+            <i class="fas fa-fire text-orange-500 text-[8px] md:text-xs hidden sm:block"></i> MINI
+        </span>
+        <span id="jackpot-mini" class="text-heat text-white font-extrabold text-[7px] sm:text-[9px] md:text-sm drop-shadow-[0_0_5px_rgba(249,115,22,0.8)] relative z-10 whitespace-nowrap">
+            0.00 TND
+        </span>
+    </div>
 
-                        50% {
-                            box-shadow: 0 0 25px rgba(59, 130, 246, 0.7), inset 0 -35px 50px rgba(37, 99, 235, 0.6);
-                            border-color: #93c5fd;
-                        }
-                    }
+    <!-- MINOR -->
+    <div class="pure-jackpot-card anim-minor rounded-md md:rounded-lg py-1 px-1.5 md:py-1.5 md:px-4 flex flex-col xl:flex-row items-center justify-center xl:justify-between w-full">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-transparent"></div>
+        <span class="text-blue-300 font-black text-[6px] md:text-[10px] xl:text-xs tracking-widest flex items-center gap-1 relative z-10 mb-0.5 xl:mb-0">
+            <i class="fas fa-fire text-blue-500 text-[8px] md:text-xs hidden sm:block"></i> MINOR
+        </span>
+        <span id="jackpot-minor" class="text-heat text-white font-extrabold text-[7px] sm:text-[9px] md:text-sm drop-shadow-[0_0_5px_rgba(59,130,246,0.8)] relative z-10 whitespace-nowrap">
+            0.00 TND
+        </span>
+    </div>
 
-                    @keyframes pure-fire-major {
+    <!-- MAJOR -->
+    <div class="pure-jackpot-card anim-major rounded-md md:rounded-lg py-1 px-1.5 md:py-1.5 md:px-4 flex flex-col xl:flex-row items-center justify-center xl:justify-between w-full">
+        <div class="absolute inset-0 bg-gradient-to-r from-yellow-600/10 to-transparent"></div>
+        <span class="text-yellow-300 font-black text-[6px] md:text-[10px] xl:text-xs tracking-widest flex items-center gap-1 relative z-10 mb-0.5 xl:mb-0">
+            <i class="fas fa-fire-alt text-yellow-500 text-[8px] md:text-xs hidden sm:block"></i> MAJOR
+        </span>
+        <span id="jackpot-major" class="text-heat text-white font-extrabold text-[7px] sm:text-[9px] md:text-sm drop-shadow-[0_0_8px_rgba(234,179,8,0.9)] relative z-10 whitespace-nowrap">
+            0.00 TND
+        </span>
+    </div>
 
-                        0%,
-                        100% {
-                            box-shadow: 0 0 15px rgba(202, 138, 4, 0.4), inset 0 -20px 40px rgba(202, 138, 4, 0.3);
-                            border-color: #ca8a04;
-                        }
+    <!-- GRAND -->
+    <div class="pure-jackpot-card anim-grand rounded-md md:rounded-lg py-1 px-1.5 md:py-1.5 md:px-4 flex flex-col xl:flex-row items-center justify-center xl:justify-between w-full">
+        <div class="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-transparent"></div>
+        <span class="text-emerald-300 font-black text-[7px] md:text-[11px] xl:text-sm tracking-widest flex items-center gap-1 relative z-10 mb-0.5 xl:mb-0">
+            <i class="fas fa-fire-alt text-emerald-400 text-[9px] md:text-sm hidden sm:block"></i> GRAND
+        </span>
+        <span id="jackpot-grand" class="text-heat text-white font-black text-[8px] sm:text-[10px] md:text-base drop-shadow-[0_0_10px_rgba(16,185,129,0.9)] relative z-10 whitespace-nowrap">
+            0.00 TND
+        </span>
+    </div>
 
-                        50% {
-                            box-shadow: 0 0 35px rgba(234, 179, 8, 0.7), inset 0 -45px 60px rgba(202, 138, 4, 0.6);
-                            border-color: #fef08a;
-                        }
-                    }
-
-                    @keyframes pure-fire-grand {
-
-                        0%,
-                        100% {
-                            box-shadow: 0 0 20px rgba(5, 150, 105, 0.5), inset 0 -25px 50px rgba(5, 150, 105, 0.4);
-                            border-color: #059669;
-                        }
-
-                        50% {
-                            box-shadow: 0 0 45px rgba(16, 185, 129, 0.8), inset 0 -55px 75px rgba(5, 150, 105, 0.7);
-                            border-color: #6ee7b7;
-                        }
-                    }
-
-                    /* حركة سراب الحرارة للنصوص */
-                    @keyframes heat-wave {
-                        0% {
-                            transform: translateY(0) scale(1);
-                        }
-
-                        100% {
-                            transform: translateY(-1px) scale(1.01);
-                        }
-                    }
-
-                    /* إعدادات بطاقات الجاكبوت */
-                    .pure-jackpot-card {
-                        background: linear-gradient(180deg, #0f1117 0%, #0a0c10 100%);
-                        border: 2px solid;
-                        border-radius: 0.75rem;
-                        padding: 0.75rem;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        justify-content: center;
-                        position: relative;
-                        overflow: hidden;
-                        transition: transform 0.3s ease;
-                    }
-
-                    .pure-jackpot-card:hover {
-                        transform: translateY(-4px) scale(1.03);
-                    }
-
-                    /* ربط الأنيميشن بالبطاقات */
-                    .anim-mini {
-                        animation: pure-fire-mini 1s infinite alternate ease-in-out;
-                    }
-
-                    .anim-minor {
-                        animation: pure-fire-minor 1.2s infinite alternate ease-in-out;
-                    }
-
-                    .anim-major {
-                        animation: pure-fire-major 0.9s infinite alternate ease-in-out;
-                    }
-
-                    .anim-grand {
-                        animation: pure-fire-grand 0.7s infinite alternate ease-in-out;
-                    }
-
-                    .text-heat {
-                        animation: heat-wave 0.15s infinite alternate linear;
-                    }
-                </style>
-
-                <div class="grid grid-cols-4 gap-1.5 md:gap-4 w-full relative z-10 mb-4 mt-2">
-
-                    <!-- MINI -->
-                    <div
-                        class="pure-jackpot-card anim-mini !p-1 md:!p-3 !border md:!border-2 !rounded-md md:!rounded-xl">
-                        <div class="absolute inset-0 bg-gradient-to-t from-orange-600/20 to-transparent"></div>
-                        <span
-                            class="text-orange-300 font-black text-[6px] md:text-[10px] tracking-widest mb-0.5 md:mb-1 flex items-center gap-0.5 md:gap-1.5 relative z-10"><i
-                                class="fas fa-fire text-orange-500 text-[8px] md:text-sm"></i> MINI</span>
-                        <span id="jackpot-mini"
-                            class="text-heat text-white font-extrabold text-[7px] sm:text-[9px] md:text-base drop-shadow-[0_0_8px_rgba(249,115,22,0.9)] relative z-10 whitespace-nowrap">0.00
-                            TND</span>
-                    </div>
-
-                    <!-- MINOR -->
-                    <div
-                        class="pure-jackpot-card anim-minor !p-1 md:!p-3 !border md:!border-2 !rounded-md md:!rounded-xl">
-                        <div class="absolute inset-0 bg-gradient-to-t from-blue-600/20 to-transparent"></div>
-                        <span
-                            class="text-blue-300 font-black text-[6px] md:text-[10px] tracking-widest mb-0.5 md:mb-1 flex items-center gap-0.5 md:gap-1.5 relative z-10"><i
-                                class="fas fa-fire text-blue-500 text-[8px] md:text-sm"></i> MINOR</span>
-                        <span id="jackpot-minor"
-                            class="text-heat text-white font-extrabold text-[7px] sm:text-[9px] md:text-base drop-shadow-[0_0_8px_rgba(59,130,246,0.9)] relative z-10 whitespace-nowrap">0.00
-                            TND</span>
-                    </div>
-
-                    <!-- MAJOR -->
-                    <div
-                        class="pure-jackpot-card anim-major !p-1 md:!p-3 !border md:!border-2 !rounded-md md:!rounded-xl">
-                        <div class="absolute inset-0 bg-gradient-to-t from-yellow-600/20 to-transparent"></div>
-                        <span
-                            class="text-yellow-300 font-black text-[6px] md:text-[10px] tracking-widest mb-0.5 md:mb-1 flex items-center gap-0.5 md:gap-1.5 relative z-10"><i
-                                class="fas fa-fire-alt text-yellow-500 text-[8px] md:text-lg"></i> MAJOR</span>
-                        <span id="jackpot-major"
-                            class="text-heat text-white font-extrabold text-[7px] sm:text-[9px] md:text-lg drop-shadow-[0_0_12px_rgba(234,179,8,1)] relative z-10 whitespace-nowrap">0.00
-                            TND</span>
-                    </div>
-
-                    <!-- GRAND -->
-                    <div
-                        class="pure-jackpot-card anim-grand transform md:scale-105 !p-1 md:!p-3 !border md:!border-2 !rounded-md md:!rounded-xl">
-                        <div class="absolute inset-0 bg-gradient-to-t from-emerald-600/20 to-transparent"></div>
-                        <span
-                            class="text-emerald-300 font-black text-[7px] md:text-[11px] tracking-widest mb-0.5 md:mb-1 flex items-center gap-0.5 md:gap-1.5 relative z-10"><i
-                                class="fas fa-fire-alt text-emerald-400 text-[9px] md:text-xl"></i> GRAND</span>
-                        <span id="jackpot-grand"
-                            class="text-heat text-white font-black text-[8px] sm:text-[10px] md:text-xl drop-shadow-[0_0_15px_rgba(16,185,129,1)] relative z-10 tracking-wide whitespace-nowrap">0.00
-                            TND</span>
-                    </div>
-
+</div>
                 </div>
 <!-- 🚀 Bannières Promotionnelles (Slider Auto sur Mobile / Grille sur Desktop) -->
 <div class="w-full my-6 mb-8 relative">
