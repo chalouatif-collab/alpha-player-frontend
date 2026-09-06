@@ -300,44 +300,45 @@
                     </button>
 
                 </div>
-
-               <!-- 🌟 شريط الجاكبوت المباشر (Pure CSS Energy Fire - Thin & Wide) -->
+<!-- 🌟 شريط الجاكبوت الرقيق والمتجاوب (سطر واحد دائماً دون قطع) 🌟 -->
 <style>
-    /* محرك النيران والنبض باستخدام CSS فقط */
+    /* محركات النيران والأنيميشن */
     @keyframes pure-fire-mini {
-        0%, 100% { box-shadow: 0 0 10px rgba(234, 88, 12, 0.4), inset 0 -5px 15px rgba(234, 88, 12, 0.3); border-color: #ea580c; }
-        50% { box-shadow: 0 0 20px rgba(249, 115, 22, 0.6), inset 0 -10px 25px rgba(234, 88, 12, 0.5); border-color: #fdba74; }
+        0%, 100% { box-shadow: 0 0 8px rgba(234, 88, 12, 0.4), inset 0 -5px 10px rgba(234, 88, 12, 0.3); border-color: #ea580c; }
+        50% { box-shadow: 0 0 15px rgba(249, 115, 22, 0.6), inset 0 -8px 15px rgba(234, 88, 12, 0.5); border-color: #fdba74; }
     }
     @keyframes pure-fire-minor {
-        0%, 100% { box-shadow: 0 0 10px rgba(37, 99, 235, 0.4), inset 0 -5px 15px rgba(37, 99, 235, 0.3); border-color: #2563eb; }
-        50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.6), inset 0 -10px 25px rgba(37, 99, 235, 0.5); border-color: #93c5fd; }
+        0%, 100% { box-shadow: 0 0 8px rgba(37, 99, 235, 0.4), inset 0 -5px 10px rgba(37, 99, 235, 0.3); border-color: #2563eb; }
+        50% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.6), inset 0 -8px 15px rgba(37, 99, 235, 0.5); border-color: #93c5fd; }
     }
     @keyframes pure-fire-major {
-        0%, 100% { box-shadow: 0 0 12px rgba(202, 138, 4, 0.4), inset 0 -8px 20px rgba(202, 138, 4, 0.3); border-color: #ca8a04; }
-        50% { box-shadow: 0 0 25px rgba(234, 179, 8, 0.6), inset 0 -12px 30px rgba(202, 138, 4, 0.5); border-color: #fef08a; }
+        0%, 100% { box-shadow: 0 0 10px rgba(202, 138, 4, 0.4), inset 0 -6px 12px rgba(202, 138, 4, 0.3); border-color: #ca8a04; }
+        50% { box-shadow: 0 0 20px rgba(234, 179, 8, 0.6), inset 0 -10px 18px rgba(202, 138, 4, 0.5); border-color: #fef08a; }
     }
     @keyframes pure-fire-grand {
-        0%, 100% { box-shadow: 0 0 15px rgba(5, 150, 105, 0.5), inset 0 -10px 25px rgba(5, 150, 105, 0.4); border-color: #059669; }
-        50% { box-shadow: 0 0 35px rgba(16, 185, 129, 0.7), inset 0 -15px 35px rgba(5, 150, 105, 0.6); border-color: #6ee7b7; }
+        0%, 100% { box-shadow: 0 0 12px rgba(5, 150, 105, 0.5), inset 0 -8px 15px rgba(5, 150, 105, 0.4); border-color: #059669; }
+        50% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.7), inset 0 -12px 20px rgba(5, 150, 105, 0.6); border-color: #6ee7b7; }
     }
-
-    /* حركة سراب الحرارة للنصوص */
     @keyframes heat-wave {
-        0% { transform: translateY(0) scale(1); }
-        100% { transform: translateY(-0.5px) scale(1.01); }
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-0.5px); }
     }
 
-    /* إعدادات بطاقات الجاكبوت الرقيقة */
+    /* بنية المربعات הרقيقة */
     .pure-jackpot-card {
-        background: linear-gradient(90deg, #0f1117 0%, #0a0c10 100%);
+        background: linear-gradient(180deg, #0f1117 0%, #0a0c10 100%);
         border: 1px solid;
         position: relative;
         overflow: hidden;
-        transition: transform 0.3s ease;
+        transition: transform 0.2s ease;
+        display: flex;
+        flex-direction: column; /* جعل الكلمة فوق الرقم لتجنب القطع */
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
     }
-    .pure-jackpot-card:hover {
-        transform: translateY(-2px);
-    }
+    .pure-jackpot-card:hover { transform: translateY(-2px); }
     .anim-mini { animation: pure-fire-mini 1s infinite alternate ease-in-out; }
     .anim-minor { animation: pure-fire-minor 1.2s infinite alternate ease-in-out; }
     .anim-major { animation: pure-fire-major 0.9s infinite alternate ease-in-out; }
@@ -345,50 +346,46 @@
     .text-heat { animation: heat-wave 0.15s infinite alternate linear; }
 </style>
 
-<!-- حاوية تمتد بكامل العرض (w-full) مع مسافات صغيرة -->
-<div class="grid grid-cols-4 gap-1 md:gap-3 w-full relative z-10 mb-4 mt-2">
+<!-- 4 مربعات في سطر واحد -->
+<div class="grid grid-cols-4 gap-1 md:gap-3 w-full relative z-10 mb-6 mt-2">
 
     <!-- MINI -->
-    <div class="pure-jackpot-card anim-mini rounded-md md:rounded-lg py-1 px-1.5 md:py-1.5 md:px-4 flex flex-col xl:flex-row items-center justify-center xl:justify-between w-full">
-        <div class="absolute inset-0 bg-gradient-to-r from-orange-600/10 to-transparent"></div>
-        <span class="text-orange-300 font-black text-[6px] md:text-[10px] xl:text-xs tracking-widest flex items-center gap-1 relative z-10 mb-0.5 xl:mb-0">
-            <i class="fas fa-fire text-orange-500 text-[8px] md:text-xs hidden sm:block"></i> MINI
+    <div class="pure-jackpot-card anim-mini rounded-md py-1.5 px-0.5 md:py-2">
+        <span class="text-orange-300 font-black text-[7px] sm:text-[9px] md:text-xs tracking-widest uppercase leading-none mb-1 flex items-center justify-center gap-1 w-full">
+            <i class="fas fa-fire text-orange-500 hidden sm:block text-[8px]"></i> Mini
         </span>
-        <span id="jackpot-mini" class="text-heat text-white font-extrabold text-[7px] sm:text-[9px] md:text-sm drop-shadow-[0_0_5px_rgba(249,115,22,0.8)] relative z-10 whitespace-nowrap">
-            0.00 TND
+        <span id="jackpot-mini" class="text-heat text-white font-extrabold text-[8px] sm:text-[11px] md:text-sm lg:text-base leading-none drop-shadow-[0_0_5px_rgba(249,115,22,0.8)] w-full truncate">
+            10.00 <span class="text-[5px] sm:text-[7px] md:text-[9px] text-gray-400 font-normal">TND</span>
         </span>
     </div>
 
     <!-- MINOR -->
-    <div class="pure-jackpot-card anim-minor rounded-md md:rounded-lg py-1 px-1.5 md:py-1.5 md:px-4 flex flex-col xl:flex-row items-center justify-center xl:justify-between w-full">
-        <div class="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-transparent"></div>
-        <span class="text-blue-300 font-black text-[6px] md:text-[10px] xl:text-xs tracking-widest flex items-center gap-1 relative z-10 mb-0.5 xl:mb-0">
-            <i class="fas fa-fire text-blue-500 text-[8px] md:text-xs hidden sm:block"></i> MINOR
+    <div class="pure-jackpot-card anim-minor rounded-md py-1.5 px-0.5 md:py-2">
+        <span class="text-blue-300 font-black text-[7px] sm:text-[9px] md:text-xs tracking-widest uppercase leading-none mb-1 flex items-center justify-center gap-1 w-full">
+            <i class="fas fa-fire text-blue-500 hidden sm:block text-[8px]"></i> Minor
         </span>
-        <span id="jackpot-minor" class="text-heat text-white font-extrabold text-[7px] sm:text-[9px] md:text-sm drop-shadow-[0_0_5px_rgba(59,130,246,0.8)] relative z-10 whitespace-nowrap">
-            0.00 TND
+        <span id="jackpot-minor" class="text-heat text-white font-extrabold text-[8px] sm:text-[11px] md:text-sm lg:text-base leading-none drop-shadow-[0_0_5px_rgba(59,130,246,0.8)] w-full truncate">
+            20.00 <span class="text-[5px] sm:text-[7px] md:text-[9px] text-gray-400 font-normal">TND</span>
         </span>
     </div>
 
     <!-- MAJOR -->
-    <div class="pure-jackpot-card anim-major rounded-md md:rounded-lg py-1 px-1.5 md:py-1.5 md:px-4 flex flex-col xl:flex-row items-center justify-center xl:justify-between w-full">
-        <div class="absolute inset-0 bg-gradient-to-r from-yellow-600/10 to-transparent"></div>
-        <span class="text-yellow-300 font-black text-[6px] md:text-[10px] xl:text-xs tracking-widest flex items-center gap-1 relative z-10 mb-0.5 xl:mb-0">
-            <i class="fas fa-fire-alt text-yellow-500 text-[8px] md:text-xs hidden sm:block"></i> MAJOR
+    <div class="pure-jackpot-card anim-major rounded-md py-1.5 px-0.5 md:py-2">
+        <span class="text-yellow-300 font-black text-[7px] sm:text-[9px] md:text-xs tracking-widest uppercase leading-none mb-1 flex items-center justify-center gap-1 w-full">
+            <i class="fas fa-fire-alt text-yellow-500 hidden sm:block text-[8px]"></i> Major
         </span>
-        <span id="jackpot-major" class="text-heat text-white font-extrabold text-[7px] sm:text-[9px] md:text-sm drop-shadow-[0_0_8px_rgba(234,179,8,0.9)] relative z-10 whitespace-nowrap">
-            0.00 TND
+        <span id="jackpot-major" class="text-heat text-white font-extrabold text-[8px] sm:text-[11px] md:text-sm lg:text-base leading-none drop-shadow-[0_0_8px_rgba(234,179,8,0.9)] w-full truncate">
+            50.00 <span class="text-[5px] sm:text-[7px] md:text-[9px] text-gray-400 font-normal">TND</span>
         </span>
     </div>
 
     <!-- GRAND -->
-    <div class="pure-jackpot-card anim-grand rounded-md md:rounded-lg py-1 px-1.5 md:py-1.5 md:px-4 flex flex-col xl:flex-row items-center justify-center xl:justify-between w-full">
-        <div class="absolute inset-0 bg-gradient-to-r from-emerald-600/10 to-transparent"></div>
-        <span class="text-emerald-300 font-black text-[7px] md:text-[11px] xl:text-sm tracking-widest flex items-center gap-1 relative z-10 mb-0.5 xl:mb-0">
-            <i class="fas fa-fire-alt text-emerald-400 text-[9px] md:text-sm hidden sm:block"></i> GRAND
+    <div class="pure-jackpot-card anim-grand rounded-md py-1.5 px-0.5 md:py-2">
+        <span class="text-emerald-300 font-black text-[7px] sm:text-[9px] md:text-xs tracking-widest uppercase leading-none mb-1 flex items-center justify-center gap-1 w-full">
+            <i class="fas fa-fire-alt text-emerald-400 hidden sm:block text-[8px]"></i> Grand
         </span>
-        <span id="jackpot-grand" class="text-heat text-white font-black text-[8px] sm:text-[10px] md:text-base drop-shadow-[0_0_10px_rgba(16,185,129,0.9)] relative z-10 whitespace-nowrap">
-            0.00 TND
+        <span id="jackpot-grand" class="text-heat text-white font-extrabold text-[8px] sm:text-[11px] md:text-sm lg:text-base leading-none drop-shadow-[0_0_10px_rgba(16,185,129,0.9)] w-full truncate">
+            100.00 <span class="text-[5px] sm:text-[7px] md:text-[9px] text-gray-400 font-normal">TND</span>
         </span>
     </div>
 
