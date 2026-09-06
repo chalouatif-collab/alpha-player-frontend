@@ -344,6 +344,7 @@
     .anim-major { animation: pure-fire-major 0.9s infinite alternate ease-in-out; }
     .anim-grand { animation: pure-fire-grand 0.7s infinite alternate ease-in-out; }
     .text-heat { animation: heat-wave 0.15s infinite alternate linear; }
+    .mask-image-left { -webkit-mask-image: linear-gradient(to right, transparent, black 80%); }
 </style>
 
 <!-- 4 مربعات في سطر واحد -->
@@ -2707,6 +2708,83 @@
 
         // استدعاء الدالة
         startPromoAutoScroll();
+
+        // نظام تحكم السلايدر الترويجي
+let currentPromo = 0;
+const totalPromos = 3;
+let promoInterval;
+
+function updatePromoSlider() {
+    const slider = document.getElementById('promo-slider');
+    if (!slider) return;
+    
+    // تحريك السلايدر
+    slider.style.transform = `translateX(-${currentPromo * 100}%)`;
+    
+    // تحديث النقاط (Dots)
+    const dots = document.querySelectorAll('.promo-dot');
+    dots.forEach((dot, index) => {
+        if (index === currentPromo) {
+            dot.classList.remove('bg-white/30');
+            dot.classList.add('bg-white', 'w-6');
+        } else {
+            dot.classList.add('bg-white/30');
+            dot.classList.remove('bg-white', 'w-6');
+        }
+    });
+}
+
+function nextPromoSlide() {
+    currentPromo = (currentPromo + 1) % totalPromos;
+    updatePromoSlider();
+    resetPromoInterval();
+}
+
+function prevPromoSlide() {
+    currentPromo = (currentPromo - 1 + totalPromos) % totalPromos;
+    updatePromoSlider();
+    resetPromoInterval();
+}
+
+function goToPromoSlide(index) {
+    currentPromo = index;
+    updatePromoSlider();
+    resetPromoInterval();
+}
+
+function startPromoInterval() {
+    promoInterval = setInterval(nextPromoSlide, 5000); // يتغير كل 5 ثوانٍ
+}
+
+function resetPromoInterval() {
+    clearInterval(promoInterval);
+    startPromoInterval();
+}
+
+// تفعيل ميزة السحب باللمس (Swipe) للهواتف
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener("DOMContentLoaded", () => {
+    updatePromoSlider();
+    startPromoInterval();
+
+    const sliderContainer = document.getElementById('promo-slider-container');
+    if (sliderContainer) {
+        sliderContainer.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        sliderContainer.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+    }
+});
+
+function handleSwipe() {
+    if (touchEndX < touchStartX - 40) nextPromoSlide(); // سحب لليسار
+    if (touchEndX > touchStartX + 40) prevPromoSlide(); // سحب لليمين
+}
 
     </script>
     <!-- 💬 مربع الشات (Modal في الهاتف، عائم في الكمبيوتر) -->
