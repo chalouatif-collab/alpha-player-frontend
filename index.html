@@ -390,77 +390,72 @@
     </div>
 
 </div>
-                <!-- 🚀 Bannières Promotionnelles (Slider Auto sur Mobile / Grille sur Desktop) -->
-                <div class="w-full my-6 mb-8 relative">
-                    <!-- حاوية السحب (تخفي شريط التمرير وتدعم السحب باليد) -->
-                    <div id="promo-slider"
-                        class="flex md:grid md:grid-cols-3 gap-4 w-full overflow-x-auto snap-x snap-mandatory hide-scroll pb-2 scroll-smooth">
+                <!-- 🌟 شريط الإعلانات الدوار (Carousel / Slider) قابل للسحب 🌟 -->
+<div id="promo-slider-container" class="relative w-full rounded-2xl overflow-hidden mb-8 bg-[#0f1117] border border-[#212631] group shadow-xl">
+    
+    <!-- حاوية الشرائح (تتحرك برمجياً) -->
+    <div id="promo-slider" class="flex transition-transform duration-500 ease-out h-full">
+        
+        <!-- الشريحة 1: بونص الترحيب -->
+        <div class="w-full flex-shrink-0 flex items-center justify-between p-6 md:p-12 bg-gradient-to-r from-[#0a1e16] to-[#0f1117] relative overflow-hidden min-h-[200px]">
+            <!-- زخرفة خلفية -->
+            <div class="absolute right-0 top-0 bottom-0 w-full md:w-1/2 bg-[url('https://images.unsplash.com/photo-1623844665487-eb9513e8a760?auto=format&fit=crop&w=800&q=80')] bg-cover bg-center opacity-10 md:opacity-20 mask-image-left"></div>
+            
+            <div class="relative z-10 max-w-xl space-y-3">
+                <span class="text-emerald-400 font-black text-[10px] uppercase tracking-widest bg-emerald-500/10 px-3 py-1.5 rounded-md border border-emerald-500/20">Bonus de Bienvenue</span>
+                <h2 class="text-2xl md:text-4xl font-black text-white leading-tight">100% jusqu'à 500 TND</h2>
+                <p class="text-xs md:text-sm text-gray-400">Doublez votre premier dépôt instantanément et profitez de nos meilleurs jeux sans limites.</p>
+                <button class="mt-2 bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs px-6 py-3 rounded-xl transition shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                    Réclamer le Bonus <i class="fas fa-gift ml-1"></i>
+                </button>
+            </div>
+        </div>
 
-                        <!-- Promo 1: Welcome Bonus (Thème Emerald) -->
-                        <div
-                            class="snap-center shrink-0 w-[85%] md:w-auto relative bg-gradient-to-br from-[#0f1117] via-[#161922] to-emerald-900/20 border border-[#212631] hover:border-emerald-500/50 rounded-2xl p-5 overflow-hidden shadow-xl flex flex-col justify-between min-h-[160px]">
-                            <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/20 rounded-full blur-2xl">
-                            </div>
-                            <div class="relative z-10">
-                                <span
-                                    class="inline-block bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-black uppercase px-2 py-0.5 rounded-md mb-2">Bonus
-                                    de Bienvenue</span>
-                                <h3 class="text-white text-lg font-black leading-tight mb-1">100% jusqu'à 500 TND</h3>
-                                <p class="text-gray-400 text-[11px]">Doublez votre premier dépôt instantanément.</p>
-                            </div>
-                            <div class="relative z-10 mt-4">
-                                <button
-                                    onclick="if(typeof openCashierModal === 'function') openCashierModal(); else switchSection('accueil');"
-                                    class="bg-emerald hover:bg-emerald-400 text-black font-extrabold px-5 py-2 rounded-xl text-xs transition-all shadow-[0_0_10px_rgba(16,185,129,0.3)]">
-                                    Réclamer 🎁
-                                </button>
-                            </div>
-                        </div>
+        <!-- الشريحة 2: الجاكبوت -->
+        <div class="w-full flex-shrink-0 flex items-center justify-between p-6 md:p-12 bg-gradient-to-r from-[#2a1a08] to-[#0f1117] relative overflow-hidden min-h-[200px]">
+            <div class="absolute right-0 top-0 bottom-0 w-full md:w-1/2 bg-[url('https://images.unsplash.com/photo-1596838132731-3301c3fd4317?auto=format&fit=crop&w=800&q=80')] bg-cover bg-center opacity-10 md:opacity-20 mask-image-left"></div>
+            
+            <div class="relative z-10 max-w-xl space-y-3">
+                <span class="text-yellow-400 font-black text-[10px] uppercase tracking-widest bg-yellow-500/10 px-3 py-1.5 rounded-md border border-yellow-500/20">Grand Jackpot</span>
+                <h2 class="text-2xl md:text-4xl font-black text-white leading-tight">Drop Quotidien Actif</h2>
+                <p class="text-xs md:text-sm text-gray-400">Jouez à vos machines à sous préférées pour avoir une chance de gagner d'énormes cagnottes tous les jours.</p>
+                <button class="mt-2 bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold text-xs px-6 py-3 rounded-xl transition shadow-[0_0_15px_rgba(234,179,8,0.3)]">
+                    Jouer Maintenant <i class="fas fa-coins ml-1"></i>
+                </button>
+            </div>
+        </div>
 
-                        <!-- Promo 2: Jackpot (Thème Gold) -->
-                        <div
-                            class="snap-center shrink-0 w-[85%] md:w-auto relative bg-gradient-to-br from-[#0f1117] via-[#161922] to-yellow-900/20 border border-[#212631] hover:border-yellow-500/50 rounded-2xl p-5 overflow-hidden shadow-xl flex flex-col justify-between min-h-[160px]">
-                            <div class="absolute -right-4 -top-4 w-24 h-24 bg-yellow-500/20 rounded-full blur-2xl">
-                            </div>
-                            <div class="relative z-10">
-                                <span
-                                    class="inline-block bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 text-[9px] font-black uppercase px-2 py-0.5 rounded-md mb-2">Grand
-                                    Jackpot</span>
-                                <h3 class="text-white text-lg font-black leading-tight mb-1">Drop Quotidien Actif</h3>
-                                <p class="text-gray-400 text-[11px]">Jouez à vos slots préférés pour gagner.</p>
-                            </div>
-                            <div class="relative z-10 mt-4">
-                                <button
-                                    onclick="switchSection('casino'); if(typeof initCasinoLobby === 'function') initCasinoLobby();"
-                                    class="bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold px-5 py-2 rounded-xl text-xs transition-all shadow-[0_0_10px_rgba(234,179,8,0.3)]">
-                                    Jouer Maintenant 🎰
-                                </button>
-                            </div>
-                        </div>
+        <!-- الشريحة 3: البطولة -->
+        <div class="w-full flex-shrink-0 flex items-center justify-between p-6 md:p-12 bg-gradient-to-r from-[#0a152e] to-[#0f1117] relative overflow-hidden min-h-[200px]">
+            <div class="absolute right-0 top-0 bottom-0 w-full md:w-1/2 bg-[url('https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80')] bg-cover bg-center opacity-10 md:opacity-20 mask-image-left"></div>
+            
+            <div class="relative z-10 max-w-xl space-y-3">
+                <span class="text-blue-400 font-black text-[10px] uppercase tracking-widest bg-blue-500/10 px-3 py-1.5 rounded-md border border-blue-500/20">Tournoi Exclusif</span>
+                <h2 class="text-2xl md:text-4xl font-black text-white leading-tight">Championnat Virtuel</h2>
+                <p class="text-xs md:text-sm text-gray-400">Grimpez dans le classement aujourd'hui et remportez votre part des 10 000 TND mis en jeu.</p>
+                <button class="mt-2 bg-blue-500 hover:bg-blue-400 text-white font-extrabold text-xs px-6 py-3 rounded-xl transition shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+                    Rejoindre <i class="fas fa-trophy ml-1"></i>
+                </button>
+            </div>
+        </div>
 
-                        <!-- Promo 3: Tournaments (Thème Blue) -->
-                        <div
-                            class="snap-center shrink-0 w-[85%] md:w-auto relative bg-gradient-to-br from-[#0f1117] via-[#161922] to-blue-900/20 border border-[#212631] hover:border-blue-500/50 rounded-2xl p-5 overflow-hidden shadow-xl flex flex-col justify-between min-h-[160px]">
-                            <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/20 rounded-full blur-2xl"></div>
-                            <div class="relative z-10">
-                                <span
-                                    class="inline-block bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[9px] font-black uppercase px-2 py-0.5 rounded-md mb-2">Tournoi
-                                    Exclusif</span>
-                                <h3 class="text-white text-lg font-black leading-tight mb-1">Championnat Virtuel</h3>
-                                <p class="text-gray-400 text-[11px]">Grimpez dans le classement aujourd'hui.</p>
-                            </div>
-                            <div class="relative z-10 mt-4">
-                                <button
-                                    onclick="switchSection('virtuals'); if(typeof initVirtualsLobby === 'function') initVirtualsLobby();"
-                                    class="bg-blue-500 hover:bg-blue-400 text-white font-extrabold px-5 py-2 rounded-xl text-xs transition-all shadow-[0_0_10px_rgba(59,130,246,0.3)]">
-                                    Rejoindre 🏆
-                                </button>
-                            </div>
-                        </div>
+    </div>
 
-                    </div>
-                </div>
-                </style>
+    <!-- أزرار التحكم بالأسهم (تظهر عند تمرير الماوس) -->
+    <button onclick="prevPromoSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 rounded-full bg-black/60 border border-white/10 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black z-20">
+        <i class="fas fa-chevron-left text-xs md:text-sm"></i>
+    </button>
+    <button onclick="nextPromoSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 md:w-10 md:h-10 rounded-full bg-black/60 border border-white/10 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black z-20">
+        <i class="fas fa-chevron-right text-xs md:text-sm"></i>
+    </button>
+
+    <!-- نقاط المؤشر (Dots) -->
+    <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+        <button onclick="goToPromoSlide(0)" class="promo-dot w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-white transition-all w-6"></button>
+        <button onclick="goToPromoSlide(1)" class="promo-dot w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-white/30 transition-all"></button>
+        <button onclick="goToPromoSlide(2)" class="promo-dot w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-white/30 transition-all"></button>
+    </div>
+</div>
 
                 <div id="dynamic-featured-providers" class="flex flex-col gap-6 mb-8 w-full mt-4">
                     <!-- الجافاسكريبت سيضع ألعاب Pragmatic و Amatic و Hacksaw هنا مع صورهم الأصلية -->
