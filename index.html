@@ -1,683 +1,865 @@
 <!DOCTYPE html>
 <html lang="fr" dir="ltr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alphabet216 | Premium Arcade & Sports</title>
+    <title>Alphabet216 | Premium Casino & Sports</title>
+    <!-- مكتبات التصميم -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- مكتبة عرض الرياضة SMPL -->
     <script src="https://ui.invisiblesport.com/bt-renderer.min.js"></script>
-    
+
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0f1117; color: #94a3b8; }
-        .bg-panel { background-color: #161922; border: 1px solid #212631; }
-        .text-emerald { color: #10b981; }
-        .bg-emerald { background-color: #10b981; color: #000; }
-        .text-gold { color: #f59e0b; }
-        .bg-gold { background-color: #f59e0b; color: #000; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0f1117;
+            color: #94a3b8;
+        }
 
-        /* Odds buttons */
-        .odds-btn { background-color: #1e2330; border: 1px solid #2e3648; color: #e2e8f0; transition: all 0.2s ease; cursor: pointer; }
-        .odds-btn:hover { background-color: #10b981; border-color: #10b981; color: #000; }
-        .odds-btn:hover .odd-value { color: #000; }
-        .odd-value { color: #f59e0b; font-weight: 700; }
+        .bg-panel {
+            background-color: #161922;
+            border: 1px solid #212631;
+        }
 
-        /* Slot Card */
-        .slot-card { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid #212631; transition: all 0.3s ease; cursor: pointer; }
-        .slot-card:hover { transform: translateY(-5px); border-color: #10b981; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2); }
-        .slot-card img { transition: transform 0.5s ease; width: 100%; height: 100%; object-fit: cover; }
-        .slot-card:hover img { transform: scale(1.1); filter: brightness(0.4); }
-        .slot-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 8px; opacity: 0; background: rgba(15, 17, 23, 0.75); backdrop-filter: blur(2px); transition: opacity 0.3s ease; }
-        .slot-card:hover .slot-overlay { opacity: 1; }
+        .text-emerald {
+            color: #10b981;
+        }
 
-        .blink { animation: blinker 1.5s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0.4; } }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0f1117; }
-        ::-webkit-scrollbar-thumb { background: #2e3648; border-radius: 3px; }
-        .sticky-column { position: sticky; top: 90px; height: calc(100vh - 100px); overflow-y: auto; }
-        
-        .hide-scroll::-webkit-scrollbar { display: none; }
+        .bg-emerald {
+            background-color: #10b981;
+            color: #000;
+        }
+
+        .hide-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .player-view-section {
+            display: none;
+        }
+
+        .player-view-section.block {
+            display: block;
+        }
     </style>
 </head>
-<body class="antialiased text-sm">
 
-    <!-- TOP NAVBAR -->
+<body class="antialiased text-sm flex flex-col min-h-screen">
+<!-- 1. الشريط العلوي (الرصيد وتسجيل الدخول - متجاوب وأنيق للهاتف) -->
     <header class="bg-[#161922] border-b border-[#212631] sticky top-0 z-50">
-        <div class="max-w-[1700px] mx-auto px-4 h-18 flex justify-between items-center py-3">
-            
-            <div class="flex items-center gap-4 md:gap-6">
-                <!-- زر القائمة للهاتف (Mobile Menu Toggle) -->
-                <button onclick="toggleMobileMenu()" class="xl:hidden text-gray-300 hover:text-white text-xl">
-                    <i class="fas fa-bars"></i>
-                </button>
+        <div class="max-w-[1700px] mx-auto px-3 md:px-4 h-16 md:h-18 flex justify-between items-center py-2 md:py-3">
 
-                <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.reload()">
-                    <div class="w-9 h-9 rounded-xl bg-emerald flex items-center justify-center text-black font-black text-xl shadow-md">
+            <!-- القسم الأيسر: الشعار + شريط البحث المصغر والذكي -->
+            <div class="flex items-center gap-4 md:gap-6">
+                <div class="flex items-center gap-1.5 md:gap-2 cursor-pointer shrink-0" onclick="switchSection('accueil')">
+                    <!-- تصغير الشعار في الهاتف -->
+                    <div
+                        class="w-7 h-7 md:w-9 md:h-9 rounded-lg md:rounded-xl bg-emerald flex items-center justify-center text-black font-black text-sm md:text-xl shadow-md">
                         <i class="fas fa-bolt"></i>
                     </div>
-                    <span class="font-extrabold text-xl md:text-2xl tracking-tight text-white">ALPHABET<span class="text-emerald">216</span></span>
+                    <span class="font-extrabold text-lg md:text-2xl tracking-tight text-white">Alphabet<span
+                            class="text-emerald">216</span></span>
                 </div>
-                
-                <nav class="hidden xl:flex gap-1 font-semibold text-xs uppercase tracking-wider">
-                    <a href="#" class="px-3.5 py-2 rounded-lg text-white bg-[#212631]">Sports</a>
-                    <a href="#" class="px-3.5 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-[#1c212d] transition">En Direct</a>
-                    <a href="#" class="px-3.5 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-[#1c212d] transition text-emerald"><i class="fas fa-gem mr-1"></i> Casino & Slots</a>
-                    <a href="#" class="px-3.5 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-[#1c212d] transition text-gold"><i class="fas fa-gift mr-1"></i> Promos</a>
-                </nav>
+
+                <!-- 🔍 شريط البحث المصغر بجانب الشعار مع القائمة المنسدلة -->
+                <div class="relative hidden sm:block">
+                    <input type="text" id="header-search-input" oninput="handleLiveSearch(this.value)" 
+                        placeholder="Rechercher un jeu..." 
+                        class="bg-[#12151d] border border-[#212631] text-white text-xs px-3 py-1.5 pl-8 rounded-lg focus:outline-none focus:border-emerald-500 w-36 md:w-52 transition">
+                    <i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400 text-xs"></i>
+                    
+                    <!-- القائمة المنسدلة لنتائج البحث الفورية -->
+                    <div id="search-dropdown" class="absolute left-0 right-0 mt-1 bg-[#12151d] border border-[#212631] rounded-lg shadow-2xl max-h-60 overflow-y-auto hidden z-[100]"></div>
+                </div>
             </div>
 
-            <!-- User Balance & Actions -->
+            <!-- أزرار الدخول أو رصيد اللاعب -->
             <div class="flex items-center gap-2 md:gap-3">
-                <div class="bg-[#0f1117] border border-[#212631] rounded-xl p-1 px-3 hidden sm:flex items-center gap-4">
-                    <div>
-                        <span class="text-[9px] text-gray-500 font-bold uppercase block">Solde</span>
-                        <span class="font-bold text-white text-xs"><span id="player-balance-val">0.00</span> TND</span>
+
+                <!-- أزرار تسجيل الدخول -->
+                <div id="auth-buttons-container" class="flex items-center gap-2">
+                    <button onclick="openLoginModal()"
+                        class="text-[10px] md:text-xs font-bold text-gray-300 hover:text-white uppercase px-2 md:px-3 py-2">Connexion</button>
+                    <button onclick="openRegisterModal()"
+                        class="bg-emerald text-black font-extrabold text-[10px] md:text-xs uppercase px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition shadow-md">S'inscrire</button>
+                </div>
+
+                <!-- 1️⃣ بروفايل الرصيد (واضح وأبيض على الهاتف، ومخفي للسرية على الكمبيوتر) -->
+                <div id="top-user-profile" class="hidden items-center gap-2 cursor-pointer group shrink-0"
+                    onclick="toggleProfileSidebar()">
+                    <!-- أيقونة المحفظة -->
+                    <div
+                        class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] text-emerald-500 md:text-emerald-600 flex items-center justify-center text-[10px] md:text-xs border border-emerald-500/30 md:border-[#212631] group-hover:border-emerald-500 transition shrink-0 shadow-sm md:shadow-none">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <!-- الرصيد (opacity-100 للهاتف، و md:opacity-50 للكمبيوتر) -->
+                    <div
+                        class="text-right opacity-100 md:opacity-50 group-hover:opacity-100 transition-opacity duration-300">
+                        <!-- text-white للهاتف، و md:text-gray-300 للكمبيوتر -->
+                        <div
+                            class="font-mono text-white md:text-gray-300 text-[11px] md:text-xs leading-none font-bold">
+                            <span id="player-balance-val" class="tracking-tight">0.00</span> <span
+                                class="text-emerald-400 md:text-emerald-500 text-[8px] md:text-[9px]">TND</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- زر الإيداع يفتح الصندوق المالي -->
-                <button onclick="toggleCashier()" class="bg-emerald hover:bg-emerald-600 text-black font-extrabold uppercase text-[10px] md:text-xs px-3 md:px-5 py-2 md:py-2.5 rounded-xl transition shadow-lg">
-                    Dépôt
-                </button>
-
-                <div onclick="openLoginModal()" class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-[#212631] flex items-center justify-center text-gray-300 hover:text-white cursor-pointer transition">
-                    <i class="fas fa-user"></i>
+                <!-- 2️⃣ جرس الإشعارات (دائري وصغير أقصى اليمين) -->
+                <div id="top-notification-bell"
+                    class="hidden relative cursor-pointer items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] border border-[#212631] hover:border-emerald-500 hover:text-white transition shrink-0 ml-1"
+                    onclick="toggleNotificationsPanel()">
+                    <i class="fas fa-bell text-gray-400 text-[10px] md:text-xs transition"></i>
+                    <span id="notif-badge"
+                        class="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold px-1 py-0.5 rounded-full hidden leading-none shadow-md">0</span>
                 </div>
-            </div>
 
+                <!-- النافذة المنسدلة للإشعارات -->
+                <div id="notifications-panel"
+                    class="absolute top-12 md:top-14 right-2 md:right-4 w-[280px] md:w-80 bg-[#161922] border border-[#212631] rounded-2xl shadow-2xl hidden flex-col z-[100] overflow-hidden">
+                    <div class="p-3 border-b border-[#212631] bg-[#0f1117] flex justify-between items-center">
+                        <h3 class="text-white font-bold text-sm"> notifications🔔</h3>
+                    </div>
+                    <div id="notifs-list" class="max-h-[300px] overflow-y-auto hide-scroll p-2 flex flex-col gap-1">
+                        <!-- الإشعارات ستظهر هنا -->
+                    </div>
+                </div>
+
+            </div>
         </div>
     </header>
 
-    <!-- MOBILE SLIDE MENU -->
-    <div id="mobile-menu" class="fixed inset-0 bg-black/90 z-[100] hidden flex-col backdrop-blur-sm transition-opacity">
-        <div class="p-4 border-b border-[#212631] flex justify-between items-center bg-[#161922]">
-            <span class="font-extrabold text-xl text-white">ALPHABET<span class="text-emerald">216</span></span>
-            <button onclick="toggleMobileMenu()" class="text-gray-400 hover:text-white text-2xl"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="flex flex-col p-4 gap-2 overflow-y-auto">
-            <a href="#" class="p-3 bg-[#212631] text-white rounded-xl font-bold"><i class="fas fa-futbol mr-2 text-emerald"></i> Sports</a>
-            <a href="#" class="p-3 bg-[#161922] border border-[#212631] text-gray-300 rounded-xl font-bold"><i class="fas fa-video mr-2 text-red-500"></i> En Direct</a>
-            <a href="#" class="p-3 bg-[#161922] border border-[#212631] text-gray-300 rounded-xl font-bold"><i class="fas fa-slot-machine mr-2 text-emerald"></i> Casino & Slots</a>
-            <a href="#" class="p-3 bg-[#161922] border border-[#212631] text-gray-300 rounded-xl font-bold"><i class="fas fa-plane mr-2 text-red-400"></i> Aviator</a>
-            <div class="my-2 border-t border-[#212631]"></div>
-            
-            <!-- Mobile Sidebar Filters copied from desktop -->
-            <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 mt-2">Fournisseurs Slots</h3>
-            <div class="space-y-1 text-xs font-semibold">
-                <a href="#" class="flex justify-between items-center p-3 rounded-xl bg-[#212631] text-white"><span class="flex items-center gap-2"><i class="fas fa-star text-gold"></i> Pragmatic Play</span></a>
-                <a href="#" class="flex justify-between items-center p-3 rounded-xl border border-[#212631] text-gray-300"><span class="flex items-center gap-2"><i class="fas fa-gamepad"></i> Evolution Gaming</span></a>
-                <a href="#" class="flex justify-between items-center p-3 rounded-xl border border-[#212631] text-gray-300"><span class="flex items-center gap-2"><i class="fas fa-bolt"></i> Spribe</span></a>
-            </div>
-        </div>
-    </div>
-
-    <!-- QUICK CATEGORY PILLS BAR -->
+    <!-- 2. شريط التصنيفات السريع الذكي -->
     <div class="bg-[#12151d] border-b border-[#212631] py-2.5">
         <div class="max-w-[1700px] mx-auto px-4 flex gap-2 overflow-x-auto text-xs font-bold text-gray-300 hide-scroll">
-            <button class="bg-emerald text-black px-4 py-1.5 rounded-xl flex items-center gap-2 flex-shrink-0 shadow"><i class="fas fa-fire"></i> Tendances</button>
-            <button class="bg-[#1a1e29] hover:bg-[#212631] px-4 py-1.5 rounded-xl border border-[#2e3648] flex items-center gap-2 flex-shrink-0"><i class="fas fa-slot-machine text-emerald"></i> Machines à sous</button>
-            <button class="bg-[#1a1e29] hover:bg-[#212631] px-4 py-1.5 rounded-xl border border-[#2e3648] flex items-center gap-2 flex-shrink-0"><i class="fas fa-dice text-gold"></i> Roulette Live</button>
-            <button class="bg-[#1a1e29] hover:bg-[#212631] px-4 py-1.5 rounded-xl border border-[#2e3648] flex items-center gap-2 flex-shrink-0"><i class="fas fa-plane-departure text-blue-400"></i> Aviator</button>
-            <button class="bg-[#1a1e29] hover:bg-[#212631] px-4 py-1.5 rounded-xl border border-[#2e3648] flex items-center gap-2 flex-shrink-0"><i class="fas fa-shield-alt text-purple-400"></i> Bonus Buy</button>
+
+            <button id="btn-nav-accueil" onclick="setActiveMenuBtn('btn-nav-accueil'); switchSection('accueil')"
+                class="main-nav-btn bg-emerald text-black px-4 py-1.5 rounded-xl border border-emerald flex items-center gap-2 flex-shrink-0 transition-all shadow"><i
+                    class="fas fa-home"></i> Accueil</button>
+
+            <button id="btn-nav-sport" onclick="setActiveMenuBtn('btn-nav-sport'); openSportsbookForProvider('nexus')"
+                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
+                    class="fas fa-futbol text-emerald"></i> Sport</button>
+
+            <button id="btn-nav-casino"
+                onclick="setActiveMenuBtn('btn-nav-casino'); switchSection('casino'); initCasinoLobby();"
+                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
+                    class="fas fa-slot-machine text-emerald"></i> Casino</button>
+
+            <button id="btn-nav-live"
+                onclick="setActiveMenuBtn('btn-nav-live'); switchSection('live-casino'); openLiveCasino();"
+                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
+                    class="fas fa-video text-red-500"></i> Casino Live</button>
+
+            <button id="btn-nav-virtuals"
+                onclick="setActiveMenuBtn('btn-nav-virtuals'); switchSection('virtuals'); initVirtualsLobby();"
+                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
+                    class="fas fa-gamepad text-blue-400"></i> Virtuels</button>
+
+            <button id="btn-nav-aviator"
+                onclick="setActiveMenuBtn('btn-nav-aviator'); playCasinoGame('SPRIBE', 'aviator')"
+                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
+                    class="fas fa-plane text-red-500"></i> Aviator</button>
+            <!-- 🚀 Mini Jeux -->
+            <button id="btn-nav-mini-jeux" onclick="setActiveMenuBtn('btn-nav-mini-jeux'); loadMiniJeux();"
+                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
+                <i class="fas fa-rocket text-purple-400"></i> Mini Jeux
+            </button>
+
+            <!-- 🎮 E-Sports -->
+            <button id="btn-nav-esports"
+                onclick="setActiveMenuBtn('btn-nav-esports'); openSportsbookForProvider('nexus'); showNotification('E-Sports filtré', 'success');"
+                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
+                <i class="fas fa-headset text-orange-500"></i> E-Sports
+            </button>
+
+            <!-- 📺 Jeux TV -->
+            <button id="btn-nav-tvbet" onclick="setActiveMenuBtn('btn-nav-tvbet'); loadTVGames();"
+                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
+                <i class="fas fa-tv text-blue-400"></i> Jeux TV
+            </button>
+
+            <!-- 📊 Résultats -->
+            <button id="btn-nav-resultats" onclick="setActiveMenuBtn('btn-nav-resultats'); openResultsModal();"
+                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
+                <i class="fas fa-chart-bar text-emerald"></i> Résultats
+            </button>
         </div>
     </div>
+    <!-- 🌟 شريط الفائزين المباشر (من الحافة للحافة) -->
+<div class="w-full bg-[#12151d] border-b border-[#212631] py-1.5 overflow-hidden relative flex items-center">
+    
+    <!-- علامة Live الثابتة مع تدرج لوني لإخفاء خروج الكروت -->
+    <div class="absolute left-0 top-0 bottom-0 z-20 bg-gradient-to-r from-[#12151d] via-[#12151d] to-transparent w-24 flex items-center pl-4 pointer-events-none">
+        <div class="bg-red-500/20 border border-red-500 rounded px-2 py-0.5 flex items-center gap-1.5 shadow-sm">
+            <div class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></div>
+            <span class="text-red-500 text-[8px] font-black uppercase tracking-wider">Live</span>
+        </div>
+    </div>
+    <!-- مسار التيكر المتحرك -->
+    <div class="flex-grow w-full overflow-hidden flex items-center h-7 pl-24">
+        <div id="winners-ticker-track" class="flex gap-4 items-center cursor-pointer marquee-edge-to-edge whitespace-nowrap">
+            <!-- سيتم تعبئتها أوتوماتيكياً بالجافاسكريبت -->
+        </div>
+    </div>
+    
+    <!-- تدرج لوني على اليمين لإخفاء دخول الكروت بنعومة -->
+    <div class="absolute right-0 top-0 bottom-0 z-20 bg-gradient-to-l from-[#12151d] to-transparent w-16 pointer-events-none"></div>
+</div>
 
-    <!-- MAIN LAYOUT -->
-    <div class="max-w-[1700px] mx-auto px-4 py-6 flex flex-col xl:flex-row gap-6">
-        
-        <!-- LEFT: Sports & Slots Menu Sidebar (Hidden on Mobile) -->
+    <main class="max-w-[1700px] mx-auto px-4 py-6 w-full flex-grow flex flex-col xl:flex-row gap-6">
+
+        <!-- LEFT: Sidebar Menu (Desktop) -->
         <div class="w-full xl:w-[20%] sticky-column hidden xl:flex flex-col gap-4">
-            <!-- Search & Filter Box -->
-            <div class="bg-panel rounded-2xl p-4">
-                <div class="relative mb-3">
-                    <input type="text" placeholder="Rechercher jeu ou match..." class="w-full bg-[#0f1117] border border-[#2e3648] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald">
-                    <i class="fas fa-search absolute right-3 top-2.5 text-gray-500 text-xs"></i>
-                </div>
-                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Fournisseurs</h3>
-                <div class="space-y-1 text-xs font-semibold">
-                    <a href="#" class="flex justify-between items-center p-2 rounded-xl bg-[#212631] text-white"><span class="flex items-center gap-2"><i class="fas fa-star text-gold"></i> Pragmatic Play</span></a>
-                    <a href="#" class="flex justify-between items-center p-2 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><span class="flex items-center gap-2"><i class="fas fa-gamepad"></i> Evolution</span></a>
-                    <a href="#" class="flex justify-between items-center p-2 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><span class="flex items-center gap-2"><i class="fas fa-bolt"></i> Spribe</span></a>
-                    <a href="#" class="flex justify-between items-center p-2 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><span class="flex items-center gap-2"><i class="fas fa-gem"></i> Hacksaw</span></a>
-                </div>
+            <div class="bg-panel rounded-2xl p-4 space-y-2 text-xs font-semibold">
+                <a href="javascript:void(0)" onclick="openSportsbookForProvider('nexus');"
+                    class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-white transition border border-emerald/30 bg-emerald/10"><i
+                        class="fas fa-futbol text-emerald text-lg"></i> Sports Betting</a>
+                <a href="javascript:void(0)" onclick="switchSection('casino'); initCasinoLobby();"
+                    class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
+                        class="fas fa-slot-machine text-emerald text-lg"></i> Casino & Slots</a>
+                <a href="javascript:void(0)" onclick="switchSection('live-casino'); openLiveCasino();"
+                    class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
+                        class="fas fa-video text-red-500 text-lg"></i> Live Casino</a>
+                <a href="javascript:void(0)" onclick="switchSection('virtuals'); initVirtualsLobby();"
+                    class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
+                        class="fas fa-gamepad text-blue-400 text-lg"></i> Jeux Virtuels</a>
             </div>
 
-            <!-- Mini Ad Widget -->
-            <div class="bg-gradient-to-br from-[#1b2230] to-[#161922] border border-emerald/30 rounded-2xl p-4 text-center">
-                <span class="bg-red-500 text-white text-[9px] font-black uppercase px-2 py-0.5 rounded blink">Exclusif</span>
-                <h4 class="font-bold text-white text-sm mt-2 mb-1">Roue de la Fortune</h4>
-                <p class="text-[11px] text-gray-400 mb-3">Gagnez jusqu'à 1 Bitcoin chaque jour gratuitement !</p>
-                <button class="w-full bg-emerald text-black font-extrabold text-xs py-2 rounded-xl hover:bg-emerald-600 transition shadow">Tourner</button>
+            <!-- Ad Widget -->
+            <div
+                class="bg-gradient-to-br from-[#1b2230] to-[#161922] border border-yellow-500/30 rounded-2xl p-4 text-center">
+                <h4 class="font-bold text-yellow-500 text-sm mt-2 mb-1">JACKPOT DROP</h4>
+                <p class="text-[11px] text-gray-400 mb-2">Gagnez jusqu'à <span
+                        class="text-white font-bold">124,567</span> TND</p>
+                <button
+                    class="w-full bg-yellow-500 text-black font-extrabold text-xs py-2 rounded-xl transition shadow">Participer</button>
             </div>
         </div>
 
-        <!-- CENTER: Banners, Slot Grid & Matches -->
+        <!-- CENTER: Dynamic Content Area (Panes) -->
         <div class="w-full xl:w-[55%] space-y-6">
+            <style>
+                @keyframes slide-edge-to-edge {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        /* يتم إزاحة نصف المحتوى المكرر لضمان دوران غير منقطع */
+        transform: translateX(calc(-50% - 1rem)); 
+    }
+}
 
-            <!-- 🌟 شريط الجاكبوت الرفيع (الطلب الخاص بك) 🌟 -->
-            <div class="grid grid-cols-4 gap-1 md:gap-3 w-full">
-                <div class="bg-gradient-to-r from-emerald-800 to-emerald-950 rounded-lg py-1.5 flex flex-col items-center justify-center border border-emerald-500/30 shadow-sm">
-                    <span class="text-[7px] md:text-[9px] font-black uppercase text-emerald-300 tracking-wider">Mini</span>
-                    <span class="text-[9px] md:text-xs font-black text-white">450.25</span>
+.marquee-edge-to-edge {
+    width: max-content;
+    animation: slide-edge-to-edge 35s linear infinite;
+}
+
+.marquee-edge-to-edge:hover {
+    animation-play-state: paused;
+}
+            </style>
+            <!-- PANE: ACCUEIL (الصفحة الرئيسية المتكاملة) -->
+            <div id="pane-accueil" class="player-view-section block space-y-6 w-full">
+
+                <!-- 🌟 2. شريط شعارات المزودين السريع (مصغرة وفي سطر واحد) -->
+                <div class="flex overflow-x-auto flex-nowrap gap-2 py-2 hide-scroll w-full">
+
+                    <button onclick="loadProviderGames('PRAGMATIC'); switchSection('casino');"
+                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
+                        <i class="fas fa-slot-machine text-emerald/70 text-xs"></i> Pragmatic
+                    </button>
+
+                    <button onclick="loadProviderGames('HACKSAW'); switchSection('casino');"
+                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
+                        <i class="fas fa-bolt text-yellow-500/70 text-xs"></i> Hacksaw
+                    </button>
+
+                    <button onclick="loadProviderGames('PLAYNGO'); switchSection('casino');"
+                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
+                        <i class="fas fa-crown text-purple-500/70 text-xs"></i> Play'n Go
+                    </button>
+
+                    <button onclick="loadProviderGames('PGSOFT'); switchSection('casino');"
+                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
+                        <i class="fas fa-gamepad text-blue-500/70 text-xs"></i> PGSoft
+                    </button>
+
+                    <button onclick="loadProviderGames('SPRIBE'); switchSection('casino');"
+                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
+                        <i class="fas fa-plane text-red-500/70 text-xs"></i> Spribe
+                    </button>
+
+                    <button onclick="loadProviderGames('EVOPLAY'); switchSection('casino');"
+                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
+                        <i class="fas fa-dice text-orange-500/70 text-xs"></i> Evoplay
+                    </button>
+
+                    <button onclick="loadProviderGames('AMATIC'); switchSection('casino');"
+                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
+                        <i class="fas fa-gem text-cyan-500/70 text-xs"></i> Amatic
+                    </button>
+
                 </div>
-                <div class="bg-gradient-to-r from-blue-800 to-blue-950 rounded-lg py-1.5 flex flex-col items-center justify-center border border-blue-500/30 shadow-sm">
-                    <span class="text-[7px] md:text-[9px] font-black uppercase text-blue-300 tracking-wider">Minor</span>
-                    <span class="text-[9px] md:text-xs font-black text-white">2,140.50</span>
+                
+                <!-- 🌟 شريط الجاكبوت المباشر (Pure CSS Energy Fire) -->
+                <style>
+                    /* محرك النيران والنبض باستخدام CSS فقط */
+                    @keyframes pure-fire-mini {
+
+                        0%,
+                        100% {
+                            box-shadow: 0 0 10px rgba(234, 88, 12, 0.4), inset 0 -15px 30px rgba(234, 88, 12, 0.3);
+                            border-color: #ea580c;
+                        }
+
+                        50% {
+                            box-shadow: 0 0 25px rgba(249, 115, 22, 0.7), inset 0 -35px 50px rgba(234, 88, 12, 0.6);
+                            border-color: #fdba74;
+                        }
+                    }
+
+                    @keyframes pure-fire-minor {
+
+                        0%,
+                        100% {
+                            box-shadow: 0 0 10px rgba(37, 99, 235, 0.4), inset 0 -15px 30px rgba(37, 99, 235, 0.3);
+                            border-color: #2563eb;
+                        }
+
+                        50% {
+                            box-shadow: 0 0 25px rgba(59, 130, 246, 0.7), inset 0 -35px 50px rgba(37, 99, 235, 0.6);
+                            border-color: #93c5fd;
+                        }
+                    }
+
+                    @keyframes pure-fire-major {
+
+                        0%,
+                        100% {
+                            box-shadow: 0 0 15px rgba(202, 138, 4, 0.4), inset 0 -20px 40px rgba(202, 138, 4, 0.3);
+                            border-color: #ca8a04;
+                        }
+
+                        50% {
+                            box-shadow: 0 0 35px rgba(234, 179, 8, 0.7), inset 0 -45px 60px rgba(202, 138, 4, 0.6);
+                            border-color: #fef08a;
+                        }
+                    }
+
+                    @keyframes pure-fire-grand {
+
+                        0%,
+                        100% {
+                            box-shadow: 0 0 20px rgba(5, 150, 105, 0.5), inset 0 -25px 50px rgba(5, 150, 105, 0.4);
+                            border-color: #059669;
+                        }
+
+                        50% {
+                            box-shadow: 0 0 45px rgba(16, 185, 129, 0.8), inset 0 -55px 75px rgba(5, 150, 105, 0.7);
+                            border-color: #6ee7b7;
+                        }
+                    }
+
+                    /* حركة سراب الحرارة للنصوص */
+                    @keyframes heat-wave {
+                        0% {
+                            transform: translateY(0) scale(1);
+                        }
+
+                        100% {
+                            transform: translateY(-1px) scale(1.01);
+                        }
+                    }
+
+                    /* إعدادات بطاقات الجاكبوت */
+                    .pure-jackpot-card {
+                        background: linear-gradient(180deg, #0f1117 0%, #0a0c10 100%);
+                        border: 2px solid;
+                        border-radius: 0.75rem;
+                        padding: 0.75rem;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        position: relative;
+                        overflow: hidden;
+                        transition: transform 0.3s ease;
+                    }
+
+                    .pure-jackpot-card:hover {
+                        transform: translateY(-4px) scale(1.03);
+                    }
+
+                    /* ربط الأنيميشن بالبطاقات */
+                    .anim-mini {
+                        animation: pure-fire-mini 1s infinite alternate ease-in-out;
+                    }
+
+                    .anim-minor {
+                        animation: pure-fire-minor 1.2s infinite alternate ease-in-out;
+                    }
+
+                    .anim-major {
+                        animation: pure-fire-major 0.9s infinite alternate ease-in-out;
+                    }
+
+                    .anim-grand {
+                        animation: pure-fire-grand 0.7s infinite alternate ease-in-out;
+                    }
+
+                    .text-heat {
+                        animation: heat-wave 0.15s infinite alternate linear;
+                    }
+                </style>
+
+                <div class="grid grid-cols-4 gap-1.5 md:gap-4 w-full relative z-10 mb-4 mt-2">
+
+                    <!-- MINI -->
+                    <div
+                        class="pure-jackpot-card anim-mini !p-1 md:!p-3 !border md:!border-2 !rounded-md md:!rounded-xl">
+                        <div class="absolute inset-0 bg-gradient-to-t from-orange-600/20 to-transparent"></div>
+                        <span
+                            class="text-orange-300 font-black text-[6px] md:text-[10px] tracking-widest mb-0.5 md:mb-1 flex items-center gap-0.5 md:gap-1.5 relative z-10"><i
+                                class="fas fa-fire text-orange-500 text-[8px] md:text-sm"></i> MINI</span>
+                        <span id="jackpot-mini"
+                            class="text-heat text-white font-extrabold text-[7px] sm:text-[9px] md:text-base drop-shadow-[0_0_8px_rgba(249,115,22,0.9)] relative z-10 whitespace-nowrap">0.00
+                            TND</span>
+                    </div>
+
+                    <!-- MINOR -->
+                    <div
+                        class="pure-jackpot-card anim-minor !p-1 md:!p-3 !border md:!border-2 !rounded-md md:!rounded-xl">
+                        <div class="absolute inset-0 bg-gradient-to-t from-blue-600/20 to-transparent"></div>
+                        <span
+                            class="text-blue-300 font-black text-[6px] md:text-[10px] tracking-widest mb-0.5 md:mb-1 flex items-center gap-0.5 md:gap-1.5 relative z-10"><i
+                                class="fas fa-fire text-blue-500 text-[8px] md:text-sm"></i> MINOR</span>
+                        <span id="jackpot-minor"
+                            class="text-heat text-white font-extrabold text-[7px] sm:text-[9px] md:text-base drop-shadow-[0_0_8px_rgba(59,130,246,0.9)] relative z-10 whitespace-nowrap">0.00
+                            TND</span>
+                    </div>
+
+                    <!-- MAJOR -->
+                    <div
+                        class="pure-jackpot-card anim-major !p-1 md:!p-3 !border md:!border-2 !rounded-md md:!rounded-xl">
+                        <div class="absolute inset-0 bg-gradient-to-t from-yellow-600/20 to-transparent"></div>
+                        <span
+                            class="text-yellow-300 font-black text-[6px] md:text-[10px] tracking-widest mb-0.5 md:mb-1 flex items-center gap-0.5 md:gap-1.5 relative z-10"><i
+                                class="fas fa-fire-alt text-yellow-500 text-[8px] md:text-lg"></i> MAJOR</span>
+                        <span id="jackpot-major"
+                            class="text-heat text-white font-extrabold text-[7px] sm:text-[9px] md:text-lg drop-shadow-[0_0_12px_rgba(234,179,8,1)] relative z-10 whitespace-nowrap">0.00
+                            TND</span>
+                    </div>
+
+                    <!-- GRAND -->
+                    <div
+                        class="pure-jackpot-card anim-grand transform md:scale-105 !p-1 md:!p-3 !border md:!border-2 !rounded-md md:!rounded-xl">
+                        <div class="absolute inset-0 bg-gradient-to-t from-emerald-600/20 to-transparent"></div>
+                        <span
+                            class="text-emerald-300 font-black text-[7px] md:text-[11px] tracking-widest mb-0.5 md:mb-1 flex items-center gap-0.5 md:gap-1.5 relative z-10"><i
+                                class="fas fa-fire-alt text-emerald-400 text-[9px] md:text-xl"></i> GRAND</span>
+                        <span id="jackpot-grand"
+                            class="text-heat text-white font-black text-[8px] sm:text-[10px] md:text-xl drop-shadow-[0_0_15px_rgba(16,185,129,1)] relative z-10 tracking-wide whitespace-nowrap">0.00
+                            TND</span>
+                    </div>
+
                 </div>
-                <div class="bg-gradient-to-r from-purple-800 to-purple-950 rounded-lg py-1.5 flex flex-col items-center justify-center border border-purple-500/30 shadow-sm">
-                    <span class="text-[7px] md:text-[9px] font-black uppercase text-purple-300 tracking-wider">Major</span>
-                    <span class="text-[9px] md:text-xs font-black text-white">15,890.75</span>
-                </div>
-                <div class="bg-gradient-to-r from-yellow-600 to-amber-900 rounded-lg py-1.5 flex flex-col items-center justify-center border border-yellow-500/50 shadow-sm">
-                    <span class="text-[7px] md:text-[9px] font-black uppercase text-yellow-200 tracking-wider flex items-center gap-1">Mega <i class="fas fa-crown hidden sm:block text-[8px]"></i></span>
-                    <span class="text-[9px] md:text-xs font-black text-white">148,295.50</span>
-                </div>
+<!-- 🚀 Bannières Promotionnelles (Slider Auto sur Mobile / Grille sur Desktop) -->
+<div class="w-full my-6 mb-8 relative">
+    <!-- حاوية السحب (تخفي شريط التمرير وتدعم السحب باليد) -->
+    <div id="promo-slider" class="flex md:grid md:grid-cols-3 gap-4 w-full overflow-x-auto snap-x snap-mandatory hide-scroll pb-2 scroll-smooth">
+        
+        <!-- Promo 1: Welcome Bonus (Thème Emerald) -->
+        <div class="snap-center shrink-0 w-[85%] md:w-auto relative bg-gradient-to-br from-[#0f1117] via-[#161922] to-emerald-900/20 border border-[#212631] hover:border-emerald-500/50 rounded-2xl p-5 overflow-hidden shadow-xl flex flex-col justify-between min-h-[160px]">
+            <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/20 rounded-full blur-2xl"></div>
+            <div class="relative z-10">
+                <span class="inline-block bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-black uppercase px-2 py-0.5 rounded-md mb-2">Bonus de Bienvenue</span>
+                <h3 class="text-white text-lg font-black leading-tight mb-1">100% jusqu'à 500 TND</h3>
+                <p class="text-gray-400 text-[11px]">Doublez votre premier dépôt instantanément.</p>
             </div>
-            
-            <!-- Promotional Ad Banner -->
-            <div class="bg-panel rounded-2xl p-6 relative overflow-hidden flex items-center justify-between border-emerald/30">
-                <div class="relative z-10 max-w-md">
-                    <span class="bg-emerald/10 text-emerald text-[10px] font-black uppercase px-2.5 py-1 rounded-md mb-3 inline-block">Mega Bonus de Bienvenue</span>
-                    <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">200% de Bonus + 100 Tours Gratuits</h2>
-                    <p class="text-xs text-gray-400 mb-4">Valable sur tous les jeux de machines à sous et paris sportifs.</p>
-                    <div class="flex gap-2">
-                        <button onclick="toggleCashier()" class="bg-emerald text-black font-bold text-xs uppercase px-5 py-2.5 rounded-xl hover:bg-emerald-600 transition shadow">Dépôt</button>
-                        <button onclick="openPolicyModal('termes')" class="bg-[#1e2330] hover:bg-[#2e3648] text-white font-bold text-xs uppercase px-4 py-2.5 rounded-xl transition">Conditions</button>
-                    </div>
-                </div>
-                <div class="hidden md:block">
-                    <i class="fas fa-gift text-7xl text-emerald/20"></i>
-                </div>
-            </div>
-
-            <!-- SLOT GAMES SECTION (Dynamic via JS) -->
-            <div class="space-y-4">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-white uppercase text-xs tracking-wider flex items-center gap-2">
-                        <i class="fas fa-slot-machine text-emerald"></i> Machines à Sous (Slots)
-                    </h3>
-                    <a href="#" class="text-xs font-bold text-emerald hover:underline">Voir Tout <i class="fas fa-arrow-right ml-1"></i></a>
-                </div>
-
-                <!-- الشبكة التي ستستقبل الألعاب من الباك إند -->
-                <div id="home-trending-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                    <div class="col-span-full text-center py-6 text-gray-400 text-xs animate-pulse">Chargement des jeux...</div>
-                </div>
-            </div>
-
-            <!-- SECOND AD BANNER -->
-            <div class="bg-gradient-to-r from-purple-900/40 via-[#161922] to-[#161922] border border-purple-500/30 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div>
-                    <span class="text-purple-400 font-bold text-[10px] uppercase tracking-wider block mb-1"><i class="fas fa-trophy mr-1"></i> Tournoi Hebdomadaire</span>
-                    <h4 class="text-white font-bold text-base">Affrontement Slots - 10,000 USDT</h4>
-                    <p class="text-xs text-gray-400 mt-1">Montez dans le classement en jouant à vos machines à sous favorites.</p>
-                </div>
-                <button class="bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs uppercase px-4 py-2.5 rounded-xl transition shadow shrink-0">Participer</button>
-            </div>
-
-            <!-- LIVE MATCHES SECTION -->
-            <div class="space-y-4">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-white uppercase text-xs tracking-wider flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald"></span> Matchs en Direct
-                    </h3>
-                </div>
-
-                <!-- Match 1 -->
-                <div class="bg-panel rounded-2xl p-5 hover:border-[#2e3648] transition">
-                    <div class="flex justify-between items-center text-xs text-gray-400 mb-4 pb-2 border-b border-[#212631]">
-                        <span class="flex items-center gap-1.5"><i class="fas fa-futbol text-emerald"></i> Ligue des Champions</span>
-                        <span class="text-red-400 font-bold bg-red-500/10 px-2 py-0.5 rounded flex items-center gap-1"><i class="fas fa-circle text-[6px] animate-pulse"></i> 72'</span>
-                    </div>
-
-                    <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
-                        <div class="flex-1 w-full flex justify-between items-center">
-                            <span class="font-bold text-white text-sm">Real Madrid</span>
-                            <span class="font-extrabold text-xl text-emerald bg-[#0f1117] px-3 py-1 rounded-xl border border-[#212631]">2 - 1</span>
-                            <span class="font-bold text-gray-300 text-sm">Liverpool</span>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-2">
-                        <button class="odds-btn p-2.5 rounded-xl flex justify-between items-center px-4"><span class="text-xs text-gray-400">1</span><span class="odd-value">1.15</span></button>
-                        <button class="odds-btn p-2.5 rounded-xl flex justify-between items-center px-4"><span class="text-xs text-gray-400">X</span><span class="odd-value">6.50</span></button>
-                        <button class="odds-btn p-2.5 rounded-xl flex justify-between items-center px-4"><span class="text-xs text-gray-400">2</span><span class="odd-value">12.0</span></button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 🌟 الفوتر: طرق الدفع والشروط 🌟 -->
-            <div class="mt-8 pt-8 border-t border-[#212631] text-center pb-8">
-                <!-- طرق الدفع -->
-                <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-4">Paiements Rapides & Sécurisés</p>
-                <div class="flex flex-wrap justify-center items-center gap-3 sm:gap-6 mb-8 opacity-80 grayscale hover:grayscale-0 transition-all duration-300">
-                    <div class="bg-[#161922] border border-[#212631] px-4 py-2 rounded-lg flex items-center gap-2"><i class="fas fa-mobile-alt text-blue-400"></i><span class="text-white font-black text-xs">D17</span></div>
-                    <div class="bg-[#161922] border border-[#212631] px-4 py-2 rounded-lg flex items-center gap-2"><i class="fab fa-bitcoin text-emerald-400"></i><span class="text-white font-black text-xs">USDT</span></div>
-                    <div class="bg-[#161922] border border-[#212631] px-4 py-2 rounded-lg flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-red-600"></div><span class="text-white font-black text-xs">Ooredoo</span></div>
-                    <div class="bg-[#161922] border border-[#212631] px-4 py-2 rounded-lg flex items-center gap-2"><div class="w-3 h-3 bg-orange-500 rounded-sm"></div><span class="text-white font-black text-xs">Orange</span></div>
-                    <div class="bg-[#161922] border border-[#212631] px-4 py-2 rounded-lg flex items-center gap-2"><i class="fas fa-money-bill-wave text-emerald-500"></i><span class="text-white font-black text-xs">Mandat</span></div>
-                </div>
-
-                <div class="flex flex-wrap justify-center gap-4 text-xs font-bold text-gray-400 mb-4">
-                    <button onclick="openPolicyModal('termes')" class="hover:text-emerald transition uppercase">Termes & Conditions</button>
-                    <span class="text-[#212631]">|</span>
-                    <button onclick="openPolicyModal('confidentialite')" class="hover:text-emerald transition uppercase">Confidentialité</button>
-                    <span class="text-[#212631]">|</span>
-                    <button onclick="openPolicyModal('responsable')" class="hover:text-emerald transition uppercase">Jeu Responsable</button>
-                </div>
-                <p class="text-[10px] text-gray-600 max-w-xl mx-auto">Alphabet216 est une plateforme de divertissement B2B. Interdit aux moins de 18 ans.</p>
-            </div>
-
-        </div>
-
-        <!-- RIGHT: Professional Bet Slip & Promo Ad -->
-        <div class="w-full xl:w-[25%] sticky-column space-y-4">
-            
-            <!-- Bet Slip -->
-            <div class="bg-panel rounded-2xl p-5 border-t-4 border-t-emerald shadow-lg">
-                <div class="flex justify-between items-center mb-4 pb-2 border-b border-[#212631]">
-                    <h3 class="font-bold text-white uppercase text-xs">Coupon de Pari</h3>
-                    <span class="bg-emerald text-black font-extrabold text-[10px] px-2 py-0.5 rounded-md">1</span>
-                </div>
-
-                <div class="bg-[#0f1117] p-3 rounded-xl mb-4 border border-[#212631]">
-                    <div class="flex justify-between text-[11px] text-gray-400 mb-1">
-                        <span>Real Madrid - Liverpool</span>
-                        <i class="fas fa-times cursor-pointer hover:text-white"></i>
-                    </div>
-                    <div class="flex justify-between items-center text-xs font-bold text-white">
-                        <span>Real Madrid (1)</span>
-                        <span class="text-gold">1.15</span>
-                    </div>
-                </div>
-
-                <div class="space-y-3 mb-4">
-                    <div>
-                        <label class="text-[10px] font-bold text-gray-500 uppercase block mb-1">Mise (TND)</label>
-                        <input type="number" value="100" class="w-full bg-[#0f1117] border border-[#2e3648] p-2.5 rounded-xl text-white font-bold text-xs outline-none focus:border-emerald">
-                    </div>
-                    <div class="flex gap-1">
-                        <button class="flex-1 bg-[#1e2330] hover:bg-[#2e3648] text-gray-300 font-bold text-[10px] py-1.5 rounded-lg transition">+10</button>
-                        <button class="flex-1 bg-[#1e2330] hover:bg-[#2e3648] text-gray-300 font-bold text-[10px] py-1.5 rounded-lg transition">+50</button>
-                        <button class="flex-1 bg-[#1e2330] hover:bg-[#2e3648] text-gray-300 font-bold text-[10px] py-1.5 rounded-lg transition">+100</button>
-                        <button class="flex-1 bg-emerald text-black font-extrabold text-[10px] py-1.5 rounded-lg transition">MAX</button>
-                    </div>
-                    <div class="flex justify-between text-xs font-bold pt-2 border-t border-[#212631]">
-                        <span class="text-gray-400">Gains Potentiels:</span>
-                        <span class="text-emerald font-extrabold text-sm">115.00 TND</span>
-                    </div>
-                </div>
-
-                <button onclick="toggleCashier()" class="w-full bg-emerald hover:bg-emerald-600 text-black font-extrabold uppercase text-xs py-3.5 rounded-xl transition shadow-lg">
-                    Placer le Pari
+            <div class="relative z-10 mt-4">
+                <button onclick="if(typeof openCashierModal === 'function') openCashierModal(); else switchSection('accueil');" class="bg-emerald hover:bg-emerald-400 text-black font-extrabold px-5 py-2 rounded-xl text-xs transition-all shadow-[0_0_10px_rgba(16,185,129,0.3)]">
+                    Réclamer 🎁
                 </button>
             </div>
+        </div>
 
-            <!-- Ad Widget: Telegram VIP -->
-            <div class="bg-panel rounded-2xl p-4 text-center border border-[#212631]">
-                <i class="fab fa-telegram text-3xl text-blue-400 mb-2"></i>
-                <h4 class="font-bold text-white text-xs mb-1">Canal Telegram VIP</h4>
-                <p class="text-[11px] text-gray-400 mb-3">Recevez des pronostics gratuits et des tours bonus exclusifs.</p>
-                <button class="w-full bg-[#1e2330] hover:bg-[#2e3648] text-white font-bold text-xs py-2 rounded-xl transition border border-[#2e3648]">Rejoindre</button>
+        <!-- Promo 2: Jackpot (Thème Gold) -->
+        <div class="snap-center shrink-0 w-[85%] md:w-auto relative bg-gradient-to-br from-[#0f1117] via-[#161922] to-yellow-900/20 border border-[#212631] hover:border-yellow-500/50 rounded-2xl p-5 overflow-hidden shadow-xl flex flex-col justify-between min-h-[160px]">
+            <div class="absolute -right-4 -top-4 w-24 h-24 bg-yellow-500/20 rounded-full blur-2xl"></div>
+            <div class="relative z-10">
+                <span class="inline-block bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 text-[9px] font-black uppercase px-2 py-0.5 rounded-md mb-2">Grand Jackpot</span>
+                <h3 class="text-white text-lg font-black leading-tight mb-1">Drop Quotidien Actif</h3>
+                <p class="text-gray-400 text-[11px]">Jouez à vos slots préférés pour gagner.</p>
+            </div>
+            <div class="relative z-10 mt-4">
+                <button onclick="switchSection('casino'); if(typeof initCasinoLobby === 'function') initCasinoLobby();" class="bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold px-5 py-2 rounded-xl text-xs transition-all shadow-[0_0_10px_rgba(234,179,8,0.3)]">
+                    Jouer Maintenant 🎰
+                </button>
+            </div>
+        </div>
+
+        <!-- Promo 3: Tournaments (Thème Blue) -->
+        <div class="snap-center shrink-0 w-[85%] md:w-auto relative bg-gradient-to-br from-[#0f1117] via-[#161922] to-blue-900/20 border border-[#212631] hover:border-blue-500/50 rounded-2xl p-5 overflow-hidden shadow-xl flex flex-col justify-between min-h-[160px]">
+            <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/20 rounded-full blur-2xl"></div>
+            <div class="relative z-10">
+                <span class="inline-block bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[9px] font-black uppercase px-2 py-0.5 rounded-md mb-2">Tournoi Exclusif</span>
+                <h3 class="text-white text-lg font-black leading-tight mb-1">Championnat Virtuel</h3>
+                <p class="text-gray-400 text-[11px]">Grimpez dans le classement aujourd'hui.</p>
+            </div>
+            <div class="relative z-10 mt-4">
+                <button onclick="switchSection('virtuals'); if(typeof initVirtualsLobby === 'function') initVirtualsLobby();" class="bg-blue-500 hover:bg-blue-400 text-white font-extrabold px-5 py-2 rounded-xl text-xs transition-all shadow-[0_0_10px_rgba(59,130,246,0.3)]">
+                    Rejoindre 🏆
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+</style>
+                
+                <div id="dynamic-featured-providers" class="flex flex-col gap-6 mb-8 w-full mt-4">
+                    <!-- الجافاسكريبت سيضع ألعاب Pragmatic و Amatic و Hacksaw هنا مع صورهم الأصلية -->
+                </div>
+                <!-- ============================================== --><!-- ============================================== -->
+
+                <!-- اختيار اليوم (الألعاب المتغيرة) -->
+                <div>
+                    <h3 class="font-bold text-white uppercase text-xs tracking-wider mb-3 flex items-center gap-2">
+                        <i class="fas fa-star text-emerald animate-pulse"></i> Sélection du Jour
+                    </h3>
+                    <div id="games-of-the-day-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
+                </div>
+            </div>
+
+            <!-- PANE: CASINO -->
+            <div id="pane-casino" class="player-view-section hidden w-full">
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fas fa-slot-machine text-2xl text-emerald"></i>
+                    <h2 class="text-white font-extrabold text-xl">Casino & Slots</h2>
+                </div>
+
+                <!-- 🌟 محرك البحث وقائمة المزودين الجديدة -->
+                <div class="flex flex-col md:flex-row gap-3 mb-6 relative z-20">
+                    <!-- 1. البحث عن الألعاب -->
+                    <div class="relative flex-1">
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="game-search-input" onkeyup="filterGames()"
+                            placeholder="Rechercher un jeu (ex: Sweet Bonanza)..."
+                            class="w-full bg-[#161922] border border-[#212631] rounded-xl py-3 pl-11 pr-4 text-white text-sm outline-none focus:border-emerald transition-all shadow-md font-bold">
+                    </div>
+
+                    <!-- 2. زر وقائمة المزودين -->
+                    <div class="relative">
+                        <button onclick="toggleProviderDropdown()"
+                            class="w-full md:w-auto bg-[#161922] border border-[#212631] hover:border-emerald px-6 py-3 rounded-xl text-sm font-bold text-gray-300 hover:text-white flex items-center justify-between gap-4 transition-all shadow-md">
+                            <span class="flex items-center gap-2"><i class="fas fa-filter text-emerald"></i> <span
+                                    id="current-provider-label">Fournisseurs</span></span>
+                            <i class="fas fa-chevron-down text-xs text-gray-500"></i>
+                        </button>
+
+                        <!-- القائمة المنسدلة (Dropdown) -->
+                        <div id="provider-dropdown"
+                            class="absolute right-0 top-full mt-2 w-full md:w-72 bg-[#161922] border border-[#212631] rounded-xl shadow-2xl hidden flex-col overflow-hidden z-50">
+                            <!-- بحث المزودين -->
+                            <div class="p-3 border-b border-[#212631] bg-[#0f1117]">
+                                <div class="relative">
+                                    <i
+                                        class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs"></i>
+                                    <input type="text" id="provider-search-input" onkeyup="filterProviders()"
+                                        placeholder="Chercher un fournisseur..."
+                                        class="w-full bg-[#1a1e29] border border-[#212631] rounded-lg py-2 pl-9 pr-3 text-white text-xs outline-none focus:border-emerald">
+                                </div>
+                            </div>
+                            <!-- قائمة المزودين -->
+                            <div id="provider-dropdown-list"
+                                class="max-h-[300px] overflow-y-auto hide-scroll p-2 flex flex-col gap-1 bg-[#161922]">
+                                <!-- سيتم وضع المزودين هنا برمجياً -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- شبكة الألعاب (هذا هو مكانها الصحيح في الأسفل!) -->
+                <div id="games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10">
+                </div>
+            </div>
+
+            <!-- PANE: LIVE CASINO -->
+            <div id="pane-live-casino" class="player-view-section hidden w-full">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fas fa-video text-xl text-red-500"></i>
+                    <h2 class="text-white font-bold text-lg">Live Casino</h2>
+                </div>
+                <!-- وهذا شريط اللايف كازينو! 👇 -->
+                <div id="live-providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4"></div>
+
+                <div id="live-games-grid"
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10">
+                </div>
+            </div>
+
+            <!-- PANE: VIRTUALS -->
+            <div id="pane-virtuals" class="player-view-section hidden w-full">
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fas fa-gamepad text-xl text-blue-400"></i>
+                    <h2 class="text-white font-bold text-lg">Jeux Virtuels</h2>
+                </div>
+                <div id="virtuals-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pb-10"></div>
             </div>
 
         </div>
 
-    </div>
 
-    <!-- ============================================== -->
-    <!-- MODALS & JAVASCRIPT (BACKEND CONNECTION)       -->
-    <!-- ============================================== -->
+    </main>
+    </main>
 
-    <!-- Casino Iframe Container -->
-    <div id="casino-iframe-container" class="fixed inset-0 z-[300] bg-black hidden flex-col">
-        <div class="h-12 bg-[#12151d] flex justify-between items-center px-4 border-b border-[#212631]">
-            <span class="text-white font-bold text-sm">Alphabet216 Casino</span>
-            <button onclick="closeCasinoGame()" class="text-gray-400 hover:text-white bg-[#1e2330] px-3 py-1 rounded-lg text-xs font-bold"><i class="fas fa-times mr-1"></i> Fermer</button>
+    <!-- 🌟 تذييل الصفحة (الذي تم حذفه بالخطأ) -->
+    <div
+        class="mt-8 pt-6 border-t border-[#212631] flex flex-col items-center justify-center text-center space-y-4 pb-8 w-full">
+        <div class="flex flex-wrap justify-center gap-3 md:gap-6 text-xs font-bold text-gray-400">
+            <button onclick="openPolicyModal('termes')"
+                class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Termes &
+                Conditions</button>
+            <span class="text-[#212631]">|</span>
+            <button onclick="openPolicyModal('confidentialite')"
+                class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Politique de
+                Confidentialité</button>
+            <span class="text-[#212631]">|</span>
+            <button onclick="openPolicyModal('responsable')"
+                class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Jeu
+                Responsable</button>
         </div>
-        <iframe id="casino-iframe" class="w-full flex-grow border-0 bg-[#0f1117]"></iframe>
-    </div>
-
-    <!-- Login Modal -->
-    <div id="player-login-modal" class="fixed inset-0 z-[200] bg-black/80 hidden items-center justify-center p-4 backdrop-blur-sm">
-        <div class="w-full max-w-md bg-[#161922] border border-[#212631] rounded-2xl p-8 relative shadow-2xl">
-            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
-            <h2 class="text-white text-2xl font-bold mb-6 text-center">Connexion</h2>
-            <input type="text" id="p-auth-username" placeholder="Nom d'utilisateur" class="w-full mb-3 p-3 rounded-xl bg-[#0f1117] border border-[#212631] text-white outline-none focus:border-emerald">
-            <input type="password" id="p-auth-password" placeholder="Mot de passe" class="w-full mb-4 p-3 rounded-xl bg-[#0f1117] border border-[#212631] text-white outline-none focus:border-emerald">
-            <button onclick="handlePlayerAuth()" class="w-full bg-emerald text-black font-bold p-3 rounded-xl hover:bg-emerald-600 transition">Entrer</button>
+        <p class="text-[9px] text-gray-600 max-w-2xl mx-auto leading-relaxed px-4">
+            Alphabet216 est une plateforme de divertissement. En utilisant ce site, vous acceptez nos conditions
+            générales d'utilisation. Les jeux d'argent sont strictement interdits aux personnes de moins de 18 ans.
+            Jouez avec modération.
+            <br>
+            <span class="text-gray-700 mt-1 block">* Note légale : Le gain et le retrait maximum autorisés par joueur
+                sont limités à 30 000 TND par mois.</span>
+        </p>
+        <div class="text-gray-500 text-[10px] font-black mt-1 tracking-widest uppercase flex items-center gap-2">
+            <i class="fas fa-bolt text-emerald/50"></i> © 2026 Alphabet216. Tous droits réservés.
         </div>
     </div>
 
-    <!-- Cashier Modal (Deposit/Withdraw) -->
-    <div id="cashier-modal" class="fixed inset-0 z-[400] hidden bg-black/80 backdrop-blur-md items-center justify-center p-4">
-        <div class="bg-[#161922] border border-[#212631] rounded-2xl w-full max-w-md p-6 relative shadow-2xl max-h-[90vh] overflow-y-auto hide-scroll">
-            <button onclick="toggleCashier()" class="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-2xl">&times;</button>
-            <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2"><i class="fas fa-wallet text-emerald"></i> Caisse</h2>
+    <!-- ================= CAISSE (DÉPÔT & RETRAIT) MODAL ================= -->
+    <div id="cashier-modal"
+        class="fixed inset-0 z-[400] hidden bg-black/80 backdrop-blur-md items-center justify-center p-4">
+        <div
+            class="bg-[#161922] border border-[#212631] rounded-3xl w-full max-w-md p-6 relative shadow-2xl max-h-[90vh] overflow-y-auto hide-scroll">
+            <button onclick="toggleCashier()"
+                class="absolute top-4 right-4 text-gray-400 hover:text-white font-bold text-3xl">&times;</button>
+            <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2"><i
+                    class="fas fa-wallet text-emerald"></i> Caisse</h2>
 
             <div class="flex gap-2 mb-6 bg-[#0f1117] p-1 rounded-xl border border-[#212631]">
-                <button onclick="switchCashierTab('deposit')" id="tab-deposit" class="flex-1 bg-emerald text-black font-bold py-2 rounded-lg text-xs transition-all shadow-md">Dépôt</button>
-                <button onclick="switchCashierTab('withdraw')" id="tab-withdraw" class="flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all">Retrait</button>
+                <button onclick="switchCashierTab('deposit')" id="tab-deposit"
+                    class="flex-1 bg-emerald text-black font-bold py-2 rounded-lg text-xs transition-all shadow-md">Dépôt</button>
+                <button onclick="switchCashierTab('withdraw')" id="tab-withdraw"
+                    class="flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all">Retrait</button>
             </div>
 
             <!-- SECTION DÉPÔT -->
             <div id="deposit-section" class="space-y-4">
                 <label class="text-xs text-gray-400 font-bold">Choisissez la méthode:</label>
                 <div id="payment-methods-grid" class="grid grid-cols-2 gap-3">
-                    <button onclick="showForm('form-usdt')" class="bg-[#0f1117] border border-[#212631] hover:border-emerald p-3 rounded-xl flex flex-col items-center gap-2 transition-all"><span class="text-2xl text-green-400">💎</span><span class="text-[10px] font-bold text-white">USDT (Crypto)</span></button>
-                    <button onclick="showForm('form-d17')" class="bg-[#0f1117] border border-[#212631] hover:border-blue-500 p-3 rounded-xl flex flex-col items-center gap-2 transition-all"><span class="text-2xl text-blue-500 font-black">D17</span><span class="text-[10px] font-bold text-white">Transfert</span></button>
-                    <button onclick="showForm('form-ooredoo')" class="bg-[#0f1117] border border-[#212631] hover:border-red-500 p-3 rounded-xl flex flex-col items-center gap-2 transition-all"><span class="text-2xl text-red-500 font-black">Ooredoo</span><span class="text-[10px] font-bold text-white">Recharge</span></button>
-                    <button onclick="showForm('form-orange')" class="bg-[#0f1117] border border-[#212631] hover:border-orange-500 p-3 rounded-xl flex flex-col items-center gap-2 transition-all"><span class="text-2xl text-orange-500 font-black">Orange</span><span class="text-[10px] font-bold text-white">Recharge</span></button>
+                    <button onclick="showForm('form-voucher')"
+                        class="bg-[#0f1117] border border-[#212631] hover:border-emerald p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
+                        <span class="text-2xl text-yellow-500">🎟️</span><span
+                            class="text-[10px] font-bold text-white">Code Voucher</span>
+                    </button>
+                    <button onclick="showForm('form-usdt')"
+                        class="bg-[#0f1117] border border-[#212631] hover:border-emerald p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
+                        <span class="text-2xl text-green-400">💎</span><span
+                            class="text-[10px] font-bold text-white">USDT (Crypto)</span>
+                    </button>
+                    <button onclick="showForm('form-ooredoo')"
+                        class="bg-[#0f1117] border border-[#212631] hover:border-red-500 p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
+                        <span class="text-2xl text-red-500 font-black">Ooredoo</span><span
+                            class="text-[10px] font-bold text-white">Recharge</span>
+                    </button>
+                    <button onclick="showForm('form-orange')"
+                        class="bg-[#0f1117] border border-[#212631] hover:border-orange-500 p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
+                        <span class="text-2xl text-orange-500 font-black">Orange</span><span
+                            class="text-[10px] font-bold text-white">Recharge</span>
+                    </button>
                 </div>
-                <!-- Payment Forms (Hidden by default, shown by JS) -->
+
+                <div id="form-voucher" class="hidden space-y-3 mt-4">
+                    <input type="text" id="voucher-code" placeholder="Entrez le code Voucher"
+                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-3 text-white text-sm outline-none focus:border-emerald font-mono text-center tracking-widest">
+                    <div class="flex gap-2 mt-2">
+                        <button onclick="backToMethods()"
+                            class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2">Retour</button>
+                        <button onclick="submitDeposit('voucher')"
+                            class="flex-1 bg-emerald text-black font-bold rounded-lg py-2">Valider</button>
+                    </div>
+                </div>
+
                 <div id="form-usdt" class="hidden space-y-3 mt-4">
-                    <div class="bg-[#0f1117] p-3 rounded-lg border border-emerald/30 text-center"><p class="text-xs text-gray-400 mb-1">Adresse USDT (TRC20) :</p><p class="text-xs font-bold text-emerald break-all font-mono">TVXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</p></div>
-                    <button onclick="backToMethods()" class="w-full bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2">Retour</button>
+                    <div class="bg-[#0f1117] p-3 rounded-lg border border-emerald/30 text-center">
+                        <p class="text-xs text-gray-400 mb-1">Adresse USDT (TRC20) :</p>
+                        <p class="text-xs font-bold text-emerald break-all font-mono">
+                            TVXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                        </p>
+                    </div>
+                    <label
+                        class="block w-full bg-[#0f1117] border border-[#212631] border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-emerald transition-all">
+                        <span class="text-sm text-gray-300">📸 Importer le reçu</span>
+                        <input type="file" id="usdt-file" accept="image/*" class="hidden"
+                            onchange="updateFileName('usdt')">
+                    </label>
+                    <div class="flex gap-2 mt-2">
+                        <button onclick="backToMethods()"
+                            class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2">Retour</button>
+                        <button onclick="submitDeposit('usdt')"
+                            class="flex-1 bg-emerald text-black font-bold rounded-lg py-2">Confirmer</button>
+                    </div>
                 </div>
-                <!-- (Add other forms like D17, Ooredoo here similarly) -->
+
+                <div id="form-ooredoo" class="hidden space-y-3 mt-4">
+                    <input type="number" id="ooredoo-code" placeholder="Code Ooredoo (14 chiffres)"
+                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-3 text-white text-sm outline-none focus:border-red-500">
+                    <label
+                        class="block w-full bg-[#0f1117] border border-[#212631] border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-red-500 transition-all">
+                        <span class="text-sm text-gray-300">📸 Capture d'écran</span>
+                        <input type="file" id="ooredoo-file" accept="image/*" class="hidden"
+                            onchange="updateFileName('ooredoo')">
+                    </label>
+                    <div class="flex gap-2 mt-2">
+                        <button onclick="backToMethods()"
+                            class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2">Retour</button>
+                        <button onclick="submitDeposit('ooredoo')"
+                            class="flex-1 bg-red-600 text-white font-bold rounded-lg py-2">Confirmer</button>
+                    </div>
+                </div>
+
+                <div id="form-orange" class="hidden space-y-3 mt-4">
+                    <input type="number" id="orange-code" placeholder="Code Orange (14 chiffres)"
+                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-3 text-white text-sm outline-none focus:border-orange-500">
+                    <label
+                        class="block w-full bg-[#0f1117] border border-[#212631] border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-orange-500 transition-all">
+                        <span class="text-sm text-gray-300">📸 Capture d'écran</span>
+                        <input type="file" id="orange-file" accept="image/*" class="hidden"
+                            onchange="updateFileName('orange')">
+                    </label>
+                    <div class="flex gap-2 mt-2">
+                        <button onclick="backToMethods()"
+                            class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2">Retour</button>
+                        <button onclick="submitDeposit('orange')"
+                            class="flex-1 bg-orange-500 text-white font-bold rounded-lg py-2">Confirmer</button>
+                    </div>
+                </div>
             </div>
 
             <!-- SECTION RETRAIT -->
             <div id="withdraw-section" class="hidden space-y-4">
-                <div class="bg-[#0f1117] border border-[#212631] p-3 rounded-xl flex justify-between items-center mb-4">
+                <div class="bg-[#0f1117] border border-[#212631] p-3 rounded-xl flex justify-between items-center mb-2">
                     <span class="text-xs text-gray-400">Solde Retirable:</span>
-                    <span class="text-sm font-black text-emerald">450.00 TND</span>
+                    <span class="text-sm font-black text-emerald"><span id="modal-balance">0.00</span>
+                        TND</span>
                 </div>
+                <label class="text-xs text-gray-400 font-bold block">Méthode de retrait:</label>
                 <div class="grid grid-cols-2 gap-2 mb-4">
-                    <button class="bg-[#0f1117] border border-[#212631] hover:border-emerald p-2.5 rounded-xl flex flex-col items-center gap-1 transition-all"><span class="text-xl">💸</span><span class="text-[10px] font-bold text-white">Mandat Minute</span></button>
-                    <button class="bg-[#0f1117] border border-[#212631] hover:border-emerald p-2.5 rounded-xl flex flex-col items-center gap-1 transition-all"><span class="text-xl">📱</span><span class="text-[10px] font-bold text-white">D17</span></button>
+                    <button onclick="showWithdrawForm('form-w-mandat')"
+                        class="bg-[#0f1117] border border-[#212631] hover:border-emerald p-2.5 rounded-xl flex flex-col items-center gap-1 transition-all">
+                        <span class="text-xl">💸</span><span class="text-[10px] font-bold text-white">Mandat
+                            Minute</span>
+                    </button>
+                    <button onclick="showWithdrawForm('form-w-d17')"
+                        class="bg-[#0f1117] border border-[#212631] hover:border-emerald p-2.5 rounded-xl flex flex-col items-center gap-1 transition-all">
+                        <span class="text-xl">📱</span><span class="text-[10px] font-bold text-white">D17</span>
+                    </button>
+                </div>
+                <div id="form-w-d17" class="withdraw-form space-y-3 hidden">
+                    <input type="text" id="d17-nom" placeholder="Nom et Prénom"
+                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-2.5 text-white text-xs outline-none focus:border-emerald">
+                    <input type="tel" id="d17-phone" placeholder="Numéro D17"
+                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-2.5 text-white text-xs outline-none focus:border-emerald">
+                    <input type="number" id="d17-amount" placeholder="Montant (TND)"
+                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-2.5 text-white text-xs outline-none focus:border-emerald font-bold">
+                    <button onclick="submitWithdraw('d17')"
+                        class="w-full py-3 bg-emerald text-black font-bold rounded-xl hover:opacity-90 shadow-md">Confirmer</button>
+                </div>
+                <div id="form-w-mandat" class="withdraw-form space-y-3 hidden">
+                    <input type="text" id="mandat-nom" placeholder="Nom et Prénom"
+                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-2.5 text-white text-xs outline-none focus:border-emerald">
+                    <input type="tel" id="mandat-phone" placeholder="Numéro Téléphone"
+                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-2.5 text-white text-xs outline-none focus:border-emerald">
+                    <input type="number" id="mandat-amount" placeholder="Montant (TND)"
+                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-2.5 text-white text-xs outline-none focus:border-emerald font-bold">
+                    <button onclick="submitWithdraw('mandat')"
+                        class="w-full py-3 bg-emerald text-black font-bold rounded-xl hover:opacity-90 shadow-md">Confirmer</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Policy Modal -->
-    <div id="policy-modal" class="fixed inset-0 z-[500] bg-black/90 hidden items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-[#161922] border border-[#212631] rounded-2xl w-full max-w-2xl flex flex-col max-h-[85vh] shadow-2xl">
-            <div class="flex justify-between items-center p-5 border-b border-[#212631] bg-[#0f1117] rounded-t-2xl">
-                <h3 id="policy-modal-title" class="text-white font-black uppercase tracking-wider text-lg">Titre</h3>
-                <button onclick="closePolicyModal()" class="text-gray-400 hover:text-white text-xl"><i class="fas fa-times"></i></button>
+    <!-- Login Modal -->
+    <div id="player-login-modal" class="fixed inset-0 z-[200] bg-black/80 hidden items-center justify-center p-4">
+        <div class="w-full max-w-md bg-[#161922] border border-emerald/50 rounded-2xl p-8 relative">
+            <button onclick="closeLoginModal()"
+                class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <h2 class="text-white text-2xl font-bold mb-6 text-center">Connexion</h2>
+            <input type="text" id="p-auth-username" placeholder="Nom d'utilisateur"
+                class="w-full mb-3 p-3 rounded-xl bg-[#0f1117] border border-[#212631] text-white outline-none focus:border-emerald">
+            <input type="password" id="p-auth-password" placeholder="Mot de passe"
+                class="w-full mb-4 p-3 rounded-xl bg-[#0f1117] border border-[#212631] text-white outline-none focus:border-emerald">
+            <button onclick="handlePlayerAuth()"
+                class="w-full bg-emerald text-black font-bold p-3 rounded-xl">Entrer</button>
+        </div>
+    </div>
+    <!-- 🌟 نافذة الشروط والأحكام (Policy Modal) -->
+    <div id="policy-modal"
+        class="fixed inset-0 z-[200] bg-black/90 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
+        <div class="bg-[#161922] border border-[#212631] rounded-2xl w-full max-w-2xl flex flex-col max-h-[85vh] shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300"
+            id="policy-modal-content">
+
+            <!-- رأس النافذة -->
+            <div class="flex justify-between items-center p-5 border-b border-[#212631] bg-[#0f1117]">
+                <h3 id="policy-modal-title" class="text-white font-black uppercase tracking-wider text-lg">Titre
+                </h3>
+                <button onclick="closePolicyModal()"
+                    class="text-gray-400 hover:text-red-500 transition text-xl w-8 h-8 flex items-center justify-center rounded-full bg-[#161922] hover:bg-red-500/10">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <div id="policy-modal-body" class="p-6 overflow-y-auto text-sm text-gray-300 space-y-4 hide-scroll"></div>
+
+            <!-- محتوى النص (قابل للتمرير) -->
+            <div id="policy-modal-body" class="p-6 overflow-y-auto text-sm text-gray-300 space-y-4 custom-scrollbar">
+                <!-- سيتم حقن النص هنا عبر الجافاسكريبت -->
+            </div>
+
+            <!-- زر الإغلاق السفلي -->
+            <div class="p-4 border-t border-[#212631] bg-[#0f1117] flex justify-end">
+                <button onclick="closePolicyModal()"
+                    class="bg-emerald text-black font-bold text-xs uppercase px-6 py-2.5 rounded-xl hover:bg-emerald-600 transition">J'ai
+                    compris</button>
+            </div>
         </div>
     </div>
 
-    <!-- السكريبتات المدمجة للباك إند والواجهة -->
-    <script>
-        // إعدادات الباك إند
-        window.BACKEND_URL = "http://localhost:5000"; // قم بتغييرها لرابط السيرفر الحقيقي
-        let playerToken = localStorage.getItem('player_token');
+    <!-- 🎰 Casino Iframe Container -->
+    <div id="casino-iframe-container" class="fixed inset-0 z-[300] bg-black hidden flex-col">
+        <!-- تركنا الشريط العلوي لاسم المنصة فقط، وحذفنا زر الإغلاق -->
+        <div class="h-10 bg-[#12151d] flex justify-center items-center px-4">
+            <span class="text-emerald font-bold text-xs">Alphabet216</span>
+        </div>
+        <iframe id="casino-iframe" class="w-full flex-grow border-0"></iframe>
+    </div>
 
-        // 1. التحكم بالقائمة الجانبية للهاتف
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            if (menu.classList.contains('hidden')) {
-                menu.classList.remove('hidden');
-                menu.classList.add('flex');
-            } else {
-                menu.classList.add('hidden');
-                menu.classList.remove('flex');
-            }
-        }
+    <!-- Toasts -->
+    <div id="toast-container" class="fixed top-5 right-5 z-[500] flex flex-col gap-2 w-full max-w-sm px-4">
+    </div>
 
-        // 2. جلب الألعاب ديناميكياً من الباك إند
-        async function loadHomeTrendingGames() {
-            const grid = document.getElementById('home-trending-grid');
-            if (!grid) return;
-            
-            try {
-                const res = await fetch(`${window.BACKEND_URL}/api/get-providers`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ provider_code: 'PRAGMATIC' })
-                });
-                
-                if(!res.ok) throw new Error("API غير متاح");
-                const data = await res.json();
-                const games = data.games || data.data || [];
-                
-                if (games.length >= 4) {
-                    grid.innerHTML = games.slice(0, 8).map((g, index) => {
-                        const code = g.game_code || g.id;
-                        const pCode = g.provider_code || 'PRAGMATIC';
-                        const name = g.game_name || g.name || "Slot Game";
-                        const img = g.banner || g.image || 'https://images.unsplash.com/photo-1518133683791-0b9229971842?w=400&q=80';
-                        const tag = index === 0 ? '<span class="absolute top-2 left-2 bg-red-600 text-white text-[9px] font-black px-2 py-0.5 rounded z-10 uppercase blink">HOT</span>' : '';
 
-                        return `
-                        <div onclick="playCasinoGame('${pCode}', '${code}')" class="slot-card aspect-[3/4]">
-                            ${tag}
-                            <img src="${img}" alt="${name}">
-                            <div class="absolute bottom-0 inset-x-0 p-2.5 bg-gradient-to-t from-[#0f1117] to-transparent">
-                                <p class="font-bold text-white text-xs truncate">${name}</p>
-                                <p class="text-[10px] text-emerald font-semibold">${pCode}</p>
-                            </div>
-                            <div class="slot-overlay">
-                                <button class="bg-emerald text-black font-extrabold text-xs px-4 py-2 rounded-xl shadow hover:bg-white transition"><i class="fas fa-play mr-1"></i> JOUER</button>
-                            </div>
-                        </div>`;
-                    }).join('');
-                    return;
-                }
-            } catch (e) {
-                console.log("خطأ في جلب الألعاب الحقيقية، الاعتماد على الألعاب الاحتياطية", e);
-            }
-
-            // Fallback UI (ألعاب ثابتة في حال توقف السيرفر لكي لا تبقى الصفحة فارغة)
-            grid.innerHTML = `
-                <div onclick="playCasinoGame('PRAGMATIC', 'vs20olympgate')" class="slot-card aspect-[3/4]">
-                    <span class="absolute top-2 left-2 bg-red-600 text-white text-[9px] font-black px-2 py-0.5 rounded z-10 uppercase blink">HOT</span>
-                    <img src="https://images.unsplash.com/photo-1518133683791-0b9229971842?auto=format&fit=crop&w=400&q=80">
-                    <div class="absolute bottom-0 inset-x-0 p-2.5 bg-gradient-to-t from-[#0f1117] to-transparent">
-                        <p class="font-bold text-white text-xs truncate">Gates of Olympus</p><p class="text-[10px] text-emerald">Pragmatic</p>
-                    </div>
-                    <div class="slot-overlay"><button class="bg-emerald text-black font-extrabold text-xs px-4 py-2 rounded-xl"><i class="fas fa-play mr-1"></i> JOUER</button></div>
-                </div>
-                <div onclick="playCasinoGame('SPRIBE', 'aviator')" class="slot-card aspect-[3/4]">
-                    <span class="absolute top-2 left-2 bg-gold text-black text-[9px] font-black px-2 py-0.5 rounded z-10 uppercase">CRASH</span>
-                    <img src="https://images.unsplash.com/photo-1623844665487-eb9513e8a760?auto=format&fit=crop&w=400&q=80">
-                    <div class="absolute bottom-0 inset-x-0 p-2.5 bg-gradient-to-t from-[#0f1117] to-transparent">
-                        <p class="font-bold text-white text-xs truncate">Aviator</p><p class="text-[10px] text-emerald">Spribe</p>
-                    </div>
-                    <div class="slot-overlay"><button class="bg-emerald text-black font-extrabold text-xs px-4 py-2 rounded-xl"><i class="fas fa-play mr-1"></i> JOUER</button></div>
-                </div>
-                <div onclick="playCasinoGame('PRAGMATIC', 'vs20sweetbon')" class="slot-card aspect-[3/4]">
-                    <span class="absolute top-2 left-2 bg-blue-600 text-white text-[9px] font-black px-2 py-0.5 rounded z-10 uppercase">VIP</span>
-                    <img src="https://images.unsplash.com/photo-1595329088523-8cf62266bd2f?auto=format&fit=crop&w=400&q=80">
-                    <div class="absolute bottom-0 inset-x-0 p-2.5 bg-gradient-to-t from-[#0f1117] to-transparent">
-                        <p class="font-bold text-white text-xs truncate">Sweet Bonanza</p><p class="text-[10px] text-emerald">Pragmatic</p>
-                    </div>
-                    <div class="slot-overlay"><button class="bg-emerald text-black font-extrabold text-xs px-4 py-2 rounded-xl"><i class="fas fa-play mr-1"></i> JOUER</button></div>
-                </div>
-                <div onclick="playCasinoGame('EVO_LIVE', 'crazytime')" class="slot-card aspect-[3/4]">
-                    <span class="absolute top-2 left-2 bg-purple-600 text-white text-[9px] font-black px-2 py-0.5 rounded z-10 uppercase">LIVE</span>
-                    <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80">
-                    <div class="absolute bottom-0 inset-x-0 p-2.5 bg-gradient-to-t from-[#0f1117] to-transparent">
-                        <p class="font-bold text-white text-xs truncate">Crazy Time</p><p class="text-[10px] text-emerald">Evolution</p>
-                    </div>
-                    <div class="slot-overlay"><button class="bg-emerald text-black font-extrabold text-xs px-4 py-2 rounded-xl"><i class="fas fa-play mr-1"></i> JOUER</button></div>
-                </div>
-            `;
-        }
-
-        // 3. دالة تشغيل اللعبة في الـ Iframe (الارتباط الفعلي بالباك إند)
-        async function playCasinoGame(providerCode, gameCode) {
-            if (!playerToken) {
-                openLoginModal();
-                return;
-            }
-            try {
-                const res = await fetch(`${window.BACKEND_URL}/api/game-auth`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${playerToken}` },
-                    body: JSON.stringify({ provider_code: providerCode, game_code: gameCode })
-                });
-                const data = await res.json();
-                if (data.game_url) {
-                    document.getElementById('casino-iframe-container').style.display = 'flex';
-                    document.getElementById('casino-iframe').src = data.game_url;
-                } else {
-                    alert("Erreur de chargement du jeu: " + (data.message || "URL introuvable"));
-                }
-            } catch (err) {
-                alert("Erreur de connexion au serveur.");
-            }
-        }
-        function closeCasinoGame() {
-            document.getElementById('casino-iframe-container').style.display = 'none';
-            document.getElementById('casino-iframe').src = '';
-        }
-
-        // 4. التحكم بالموديلات (Caisse, Login, Policy)
-        function toggleCashier() {
-            const modal = document.getElementById('cashier-modal');
-            modal.classList.toggle('hidden');
-            modal.classList.toggle('flex');
-        }
-        function switchCashierTab(tab) {
-            document.getElementById('tab-deposit').className = tab === 'deposit' ? 'flex-1 bg-emerald text-black font-bold py-2 rounded-lg text-xs shadow-md' : 'flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs';
-            document.getElementById('tab-withdraw').className = tab === 'withdraw' ? 'flex-1 bg-emerald text-black font-bold py-2 rounded-lg text-xs shadow-md' : 'flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs';
-            document.getElementById('deposit-section').style.display = tab === 'deposit' ? 'block' : 'none';
-            document.getElementById('withdraw-section').style.display = tab === 'withdraw' ? 'block' : 'none';
-        }
-        function showForm(formId) {
-            document.querySelectorAll('#deposit-section > div[id^="form-"]').forEach(el => el.classList.add('hidden'));
-            document.getElementById('payment-methods-grid').classList.add('hidden');
-            document.getElementById(formId).classList.remove('hidden');
-        }
-        function backToMethods() {
-            document.querySelectorAll('#deposit-section > div[id^="form-"]').forEach(el => el.classList.add('hidden'));
-            document.getElementById('payment-methods-grid').classList.remove('hidden');
-        }
-        
-        function openLoginModal() { document.getElementById('player-login-modal').classList.remove('hidden'); document.getElementById('player-login-modal').classList.add('flex'); }
-        function closeLoginModal() { document.getElementById('player-login-modal').classList.add('hidden'); document.getElementById('player-login-modal').classList.remove('flex'); }
-        
-        function openPolicyModal(type) {
-            const modal = document.getElementById('policy-modal');
-            const title = document.getElementById('policy-modal-title');
-            const body = document.getElementById('policy-modal-body');
-            modal.classList.remove('hidden'); modal.classList.add('flex');
-            
-            if(type === 'termes') {
-                title.innerText = "Termes et Conditions";
-                body.innerHTML = "<p>1. Les jeux d'argent sont interdits aux moins de 18 ans.</p><p>2. Alphabet216 se réserve le droit de vérifier l'identité des joueurs.</p><p>3. Le gain maximum par mois est limité à 30 000 TND.</p>";
-            } else if (type === 'confidentialite') {
-                title.innerText = "Politique de Confidentialité";
-                body.innerHTML = "<p>Vos données personnelles sont cryptées et protégées. Nous ne partageons aucune information financière avec des tiers sans votre consentement explicite.</p>";
-            } else {
-                title.innerText = "Jeu Responsable";
-                body.innerHTML = "<p>Jouez avec modération. Si vous pensez avoir un problème d'addiction au jeu, veuillez contacter les organismes d'aide spécialisés ou demander une auto-exclusion de notre plateforme.</p>";
-            }
-        }
-        function closePolicyModal() { document.getElementById('policy-modal').classList.add('hidden'); document.getElementById('policy-modal').classList.remove('flex'); }
-
-        // تشغيل كل شيء عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', () => {
-            loadHomeTrendingGames();
-        });
-    </script>
-</body>
-</html>
     <!-- ================= JAVASCRIPT (محرك الألفابت الشامل) ================= -->
     <script>
 
-function applySidebarFilter(filterType, filterValue, clickedButton) {
-    // 1. تحديث المتغيرات بناءً على نوع الفلتر
-    if (filterType === 'category') {
-        currentCategory = filterValue;
-    } else if (filterType === 'volatility') {
-        currentVolatility = filterValue;
-    }
-
-    // 2. تلوين الزر النشط داخل نفس المجموعة فقط وإعادة البقية للون الرمادي
-    const parentDiv = clickedButton.closest('ul');
-    const allButtonsInGroup = parentDiv.querySelectorAll('.sidebar-filter-btn');
-    
-    allButtonsInGroup.forEach(btn => {
-        btn.className = "sidebar-filter-btn w-full text-left text-gray-400 hover:text-white hover:bg-[#1a1c24] px-3 py-2 rounded-lg text-sm transition-colors";
-        // الحفاظ على أيقونة النار إن وجدت
-        if(btn.innerHTML.includes('fa-fire')) {
-            btn.className = "sidebar-filter-btn w-full flex items-center justify-between text-gray-400 hover:text-white hover:bg-[#1a1c24] px-3 py-2 rounded-lg text-sm transition-colors";
-        }
-    });
-
-    // تلوين الزر المضغوط باللون الأزرق
-    clickedButton.className = clickedButton.className.replace('text-gray-400 hover:bg-[#1a1c24]', 'text-white bg-blue-600');
-
-    // 3. استدعاء دالة رسم الكازينو لتطبيق الفلاتر الجديدة
-    // renderCasinoGrid(); // قم بتفعيل هذا السطر وربطه بدالة رسم الكازينو الخاصة بك
-}
-
-
-
-
-        function filterLiveGames(providerCode) {
-            currentLiveProvider = providerCode;
-
-            // 🛡️ إفراغ مربع البحث بالقوة وتصفير ذاكرة البحث
-            const searchInput = document.getElementById('live-casino-search');
-            if (searchInput) searchInput.value = '';
-            currentLiveSearch = '';
-
-            // تحديث ألوان الأزرار
-            document.querySelectorAll('.live-provider-btn').forEach(btn => {
-                if (btn.getAttribute('onclick').includes(providerCode)) {
-                    btn.className = "live-provider-btn bg-blue-600 text-white px-4 py-2 rounded-lg whitespace-nowrap font-bold text-sm transition-transform active:scale-95";
-                } else {
-                    btn.className = "live-provider-btn bg-[#1a1c24] border border-[#2b2d35] hover:border-blue-500 text-white px-4 py-2 rounded-lg whitespace-nowrap text-sm transition-transform active:scale-95";
-                }
-            });
-
-            renderLiveCasino();
-        }
-        function renderLiveCasino() {
-    const grid = document.getElementById('live-games-grid');
-    if (!grid) return;
-
-    // التفريغ المسموح به هنا هو فقط تصحيح الخطأ إذا كان المتغير فارغاً
-    const searchInput = document.getElementById('live-casino-search');
-    if (searchInput && currentLiveSearch === '') {
-        searchInput.value = ''; 
-    }
-
-    const filteredGames = allLiveGames.filter(game => {
-        // المطابقة
-        const gameProvider = game.provider_code || game.provider || game._provider_code_filter || 'PP_LIVE_PRO'; 
-        const matchProvider = (currentLiveProvider === 'All') || (gameProvider === currentLiveProvider);
-        
-        const gameName = game.name || game.game_name || "Live Game";
-        const matchSearch = gameName.toLowerCase().includes(currentLiveSearch);
-        
-        return matchProvider && matchSearch;
-    });
-
-    if (filteredGames.length === 0) {
-        grid.innerHTML = '<div class="col-span-full text-gray-400 text-center py-10">Aucun jeu trouvé</div>';
-        return;
-    }
-
-    // ⚠️ انتبه: لقد أزلت reverse() من هنا. 
-    // كما اتفقنا سابقاً، يجب وضع allLiveGames.reverse() في دالة الجلب الأساسية فقط
-    grid.innerHTML = filteredGames.map(g => {
-        const gameCode = g.game_code || g.id;
-        const pCode = g.provider_code || g.provider || g._provider_code_filter || 'PP_LIVE_PRO'; 
-        const safeName = escapeHTML(g.game_name || g.name || "Live Game");
-        
-        return `
-        <div onclick="playCasinoGame('${pCode}', '${gameCode}')" class="bg-[#0f1117] border border-[#2b2d35] rounded-xl cursor-pointer group hover:-translate-y-1 transition-all overflow-hidden shadow-lg relative">
-            <div class="absolute top-0 right-0 bg-red-600 text-white text-[8px] font-black px-2 py-1 z-10 rounded-bl-lg shadow-md">LIVE</div>
-            <div class="relative w-full aspect-square overflow-hidden bg-black/50">
-                <img src="${g.banner || g.image || 'https://placehold.co/400x400/180A2B/FFF'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="${safeName}">
-            </div>
-            <div class="p-2 text-[10px] text-white font-bold truncate text-center">${safeName}</div>
-        </div>
-        `;
-    }).join('');
-}
 
         function openBonusModal() {
             showNotification("Aucun bonus disponible pour le moment.", "error");
@@ -724,62 +906,62 @@ function applySidebarFilter(filterType, filterValue, clickedButton) {
             }, 3000);
         }
         // ================= محرك الذاكرة الشاملة للبحث (Global Game Cache) =================
-        window.globalGameDictionary = [];
-        window.isCacheLoaded = false;
+window.globalGameDictionary = [];
+window.isCacheLoaded = false;
 
-        async function initGlobalGameCache() {
-            if (window.isCacheLoaded) return;
+async function initGlobalGameCache() {
+    if (window.isCacheLoaded) return;
 
-            // 1. جلب وتخزين الألعاب الافتراضية (Virtuals)
-            try {
-                const resV = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games`);
-                const dataV = await resV.json();
-                const virtuals = dataV.games || dataV.data || dataV || [];
-                virtuals.forEach(g => {
-                    const name = String(g.game_name || g.name || "").trim();
-                    if (name) {
-                        window.globalGameDictionary.push({
-                            name: name,
-                            img: g.banner || g.image || g.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(name.substring(0, 15))}`,
-                            onclick: `launchSpecificVirtualGame('${g.uuid || g.game_uuid || g.id || g.game_code}')`
-                        });
-                    }
+    // 1. جلب وتخزين الألعاب الافتراضية (Virtuals)
+    try {
+        const resV = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games`);
+        const dataV = await resV.json();
+        const virtuals = dataV.games || dataV.data || dataV || [];
+        virtuals.forEach(g => {
+            const name = String(g.game_name || g.name || "").trim();
+            if (name) {
+                window.globalGameDictionary.push({
+                    name: name,
+                    img: g.banner || g.image || g.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(name.substring(0, 15))}`,
+                    onclick: `launchSpecificVirtualGame('${g.uuid || g.game_uuid || g.id || g.game_code}')`
                 });
-            } catch (e) { console.warn("Erreur chargement Virtuals cache"); }
-
-            // 2. جلب وتخزين ألعاب الكازينو لأهم المزودين في الخلفية
-            // يمكنك إضافة أي مزود آخر هنا مثل AMATIC أو PLAYNGO
-            const topProviders = ['PRAGMATIC', 'HACKSAW', 'SPRIBE', 'EVOPLAY', 'PGSOFT'];
-
-            for (let pCode of topProviders) {
-                try {
-                    const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ provider_code: pCode })
-                    });
-                    const data = await res.json();
-                    let games = data.games || data.data || data || [];
-
-                    games.forEach(g => {
-                        const name = String(g.game_name || g.name || "").trim();
-                        if (name) {
-                            window.globalGameDictionary.push({
-                                name: name,
-                                img: g.banner || g.image || g.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(name.substring(0, 15))}`,
-                                onclick: `playCasinoGame('${pCode}', '${g.game_code || g.id}')`
-                            });
-                        }
-                    });
-                } catch (e) { console.warn(`Erreur chargement ${pCode} cache`); }
             }
+        });
+    } catch (e) { console.warn("Erreur chargement Virtuals cache"); }
 
-            window.isCacheLoaded = true;
-            console.log("✅ Global Game Cache Prêt:", window.globalGameDictionary.length, "Jeux");
-        }
+    // 2. جلب وتخزين ألعاب الكازينو لأهم المزودين في الخلفية
+    // يمكنك إضافة أي مزود آخر هنا مثل AMATIC أو PLAYNGO
+    const topProviders = ['PRAGMATIC', 'HACKSAW', 'SPRIBE', 'EVOPLAY', 'PGSOFT'];
+    
+    for (let pCode of topProviders) {
+        try {
+            const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ provider_code: pCode })
+            });
+            const data = await res.json();
+            let games = data.games || data.data || data || [];
+            
+            games.forEach(g => {
+                const name = String(g.game_name || g.name || "").trim();
+                if (name) {
+                    window.globalGameDictionary.push({
+                        name: name,
+                        img: g.banner || g.image || g.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(name.substring(0, 15))}`,
+                        onclick: `playCasinoGame('${pCode}', '${g.game_code || g.id}')`
+                    });
+                }
+            });
+        } catch (e) { console.warn(`Erreur chargement ${pCode} cache`); }
+    }
+    
+    window.isCacheLoaded = true;
+    console.log("✅ Global Game Cache Prêt:", window.globalGameDictionary.length, "Jeux");
+}
 
 
-        //-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
         window.onload = () => {
             // 1. استرجاع بيانات اللاعب إذا كان مسجلاً
             const savedSession = localStorage.getItem('alpha_player_session');
@@ -1056,42 +1238,32 @@ function applySidebarFilter(filterType, filterValue, clickedButton) {
             }
         }
         function renderCasinoGrid() {
-    const grid = document.getElementById('games-grid');
-    if (!grid) return;
+            const container = document.getElementById('games-grid');
+            if (!container) return;
 
-    // 1. تطبيق الفلتر على الألعاب قبل رسمها
-    const filteredGames = (window.currentProviderGames || []).filter(game => {
-        // تأكد أن الباك إند يرسل خصائص 'category' و 'volatility' مع كل لعبة
-        const matchCategory = (currentCategory === 'All') || (game.category === currentCategory);
-        const matchVolatility = (currentVolatility === 'All') || (game.volatility === currentVolatility);
-        
-        return matchCategory && matchVolatility;
-    });
+            if (window.currentProviderGames.length === 0) {
+                container.innerHTML = '<div class="col-span-full text-gray-500 text-center py-10">Aucun jeu trouvé.</div>';
+                return;
+            }
 
-    // 2. التحقق من وجود ألعاب بعد الفلترة
-    if (filteredGames.length === 0) {
-        grid.innerHTML = '<div class="col-span-full text-gray-400 text-center py-10">Aucun jeu trouvé pour ce filtre</div>';
-        return;
-    }
+            const gamesToDisplay = window.currentProviderGames.slice(0, currentDisplayLimit);
 
-    // 3. رسم الألعاب المفلترة فقط (لاحظ استخدام filteredGames هنا)
-    grid.innerHTML = filteredGames.map(game => {
-        const gameCode = game.game_code || game.id;
-        const pCode = game.provider_code || currentActiveProviderCode;
-        const safeName = escapeHTML(game.game_name || game.name || "Casino Game");
-        const imageSrc = game.banner || game.image || 'https://placehold.co/400x400/180A2B/FFF';
-        
-        // كود تصميم البطاقة (استبدله بتصميم البطاقة الفعلي الموجود لديك في الدالة القديمة إذا كان مختلفاً)
-        return `
-        <div onclick="playCasinoGame('${pCode}', '${gameCode}')" class="bg-[#0f1117] border border-[#2b2d35] rounded-xl cursor-pointer group hover:-translate-y-1 transition-all overflow-hidden shadow-lg">
-            <div class="relative w-full aspect-square overflow-hidden bg-black/50">
-                <img src="${imageSrc}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="${safeName}">
-            </div>
-            <div class="p-2 text-[10px] text-white font-bold truncate text-center">${safeName}</div>
-        </div>
-        `;
-    }).join('');
-}
+            container.innerHTML = gamesToDisplay.map(g => {
+                const title = escapeHTML(String(g.game_name || g.name || "Game"));
+                const img = g.banner || g.image || g.thumb || `https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}`;
+                const code = g.game_code || g.id;
+
+                return `
+                <div onclick="playCasinoGame('${currentActiveProviderCode}', '${code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg">
+                    <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
+                        <img src="${img}" alt="${title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}';">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                            <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
+                        </div>
+                    </div>
+                    <div class="p-2 text-[10px] text-white font-bold truncate text-center">${title}</div>
+                </div>`;
+            }).join('');
 
             let sentinel = document.getElementById('games-scroll-sentinel');
 
@@ -1118,7 +1290,7 @@ function applySidebarFilter(filterType, filterValue, clickedButton) {
             } else if (sentinel) {
                 sentinel.remove();
             }
-        
+        }
         // ================= 
         function toggleProviderDropdown() {
             const dropdown = document.getElementById('provider-dropdown');
@@ -1406,169 +1578,51 @@ function applySidebarFilter(filterType, filterValue, clickedButton) {
             }
         }
 
-        // متغيرات الذاكرة
-        let currentLiveProvider = 'All';
-        let currentLiveSearch = '';
-        let allLiveGames = [];
-
-        function filterLiveGames(providerCode) {
-            currentLiveProvider = providerCode;
-
-            // تفريغ مربع البحث تلقائياً عند تغيير المزود
-            const searchInput = document.getElementById('live-casino-search');
-            if (searchInput) searchInput.value = '';
-            currentLiveSearch = '';
-
-            // تحديد الزر المضغوط وتلوينه بالأزرق، وإعادة البقية للون الداكن
-            document.querySelectorAll('.live-provider-btn').forEach(btn => {
-                const onclickText = btn.getAttribute('onclick') || '';
-                if (onclickText.includes(`'${providerCode}'`)) {
-                    btn.className = "live-provider-btn bg-blue-600 text-white px-4 py-2 rounded-lg whitespace-nowrap font-bold text-sm transition-transform active:scale-95";
-                } else {
-                    btn.className = "live-provider-btn bg-[#1a1c24] border border-[#2b2d35] hover:border-blue-500 text-white px-4 py-2 rounded-lg whitespace-nowrap text-sm transition-transform active:scale-95";
-                }
-            });
-
-            renderLiveCasino();
-        }
-
-        function renderLiveCasino() {
+        async function openLiveCasino() {
             const grid = document.getElementById('live-games-grid');
-            if (!grid) return;
-
-            const filteredGames = allLiveGames.filter(game => {
-                // الاعتماد على الكود المحقون يدوياً لضمان عدم اختفاء الألعاب
-                const matchProvider = (currentLiveProvider === 'All') || (game._provider_code_filter === currentLiveProvider);
-
-                const gameName = game.name || game.game_name || "Live Game";
-                const matchSearch = gameName.toLowerCase().includes(currentLiveSearch);
-
-                return matchProvider && matchSearch;
-            });
-
-            if (filteredGames.length === 0) {
-                grid.innerHTML = '<div class="col-span-full text-gray-400 text-center py-10">Aucun jeu trouvé</div>';
-                return;
-            }
-
-            grid.innerHTML = filteredGames.map(g => {
-                const gameCode = g.game_code || g.id;
-                const pCode = g.provider_code || g.provider || g._provider_code_filter;
-                const safeName = escapeHTML(g.game_name || g.name || "Live Game");
-
-                return `
-        <div onclick="playCasinoGame('${pCode}', '${gameCode}')" class="bg-[#0f1117] border border-[#2b2d35] rounded-xl cursor-pointer group hover:-translate-y-1 transition-all overflow-hidden shadow-lg relative">
-            <div class="absolute top-0 right-0 bg-red-600 text-white text-[8px] font-black px-2 py-1 z-10 rounded-bl-lg shadow-md">LIVE</div>
-            <div class="relative w-full aspect-square overflow-hidden bg-black/50">
-                <img src="${g.banner || g.image || 'https://placehold.co/400x400/180A2B/FFF'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="${safeName}">
-            </div>
-            <div class="p-2 text-[10px] text-white font-bold truncate text-center">${safeName}</div>
-        </div>
-        `;
-            }).join('');
-        }
-
-       async function openLiveCasino() {
-    const grid = document.getElementById('live-games-grid');
-    if (grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10">Chargement des jeux live...</div>';
-    
-    try {
-        const liveProviderCodes = ['PP_LIVE_PRO', 'EVO_LIVE', 'EZUGI_LIVE', 'VIVO_LIVE'];
-
-        const fetchPromises = liveProviderCodes.map(code => 
-            fetch(`${BACKEND_URL}/api/get-providers`, {
-                method: 'POST', 
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ provider_code: code })
-            })
-            .then(res => res.json())
-            .then(data => {
-                let gamesArray = data.games || data.data || [];
-                // حقن كود المزود يدوياً لضمان الفلترة
-                return gamesArray.map(g => {
-                    g._provider_code_filter = code; 
-                    return g;
+            if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Chargement Live...</div>';
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider_code: 'PP_LIVE_PRO' })
                 });
-            })
-            .catch(err => {
-                console.warn(`Erreur: ${code}`, err);
-                return [];
-            })
-        );
-
-        const results = await Promise.all(fetchPromises);
-        
-        allLiveGames = [];
-        results.forEach(gamesArray => {
-            allLiveGames = allLiveGames.concat(gamesArray);
-        });
-        allLiveGames.reverse();
-        // تفريغ مربع البحث من أي إكمال تلقائي للمتصفح
-        setTimeout(() => {
-            const searchInput = document.getElementById('live-casino-search');
-            if (searchInput) searchInput.value = '';
-            currentLiveSearch = '';
-        }, 100);
-        
-        // استدعاء الفلتر الافتراضي لعرض كل الألعاب
-        filterLiveGames('All');
-        
-    } catch (e) {
-        console.error("Erreur Live Casino:", e);
-        if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de chargement</div>';
-    }
-}
+                const data = await res.json();
+                if (grid) grid.innerHTML = (data.games || []).map(g => {
+                    const safeName = escapeHTML(g.game_name || g.name || "Live Game");
+                    return `
+                    <div onclick="playCasinoGame('PP_LIVE_PRO', '${g.game_code || g.id}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-red-500 transition-all relative">
+                        <div class="absolute top-0 right-0 bg-red-600 text-white text-[8px] font-black px-2 py-0.5 z-10 animate-pulse rounded-bl">LIVE</div>
+                        <img src="${g.banner || g.image || 'https://placehold.co/400x400/180A2B/FFF'}" class="w-full aspect-square object-cover">
+                        <div class="p-2 text-[10px] text-white font-bold truncate text-center">${safeName}</div>
+                    </div>
+                `}).join('');
+            } catch (e) { }
+        }
 
         async function initVirtualsLobby() {
             const grid = document.getElementById('virtuals-games-grid');
-            if (grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10">Chargement des jeux...</div>';
-
+            if (grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10">Chargement Virtuels...</div>';
             try {
                 const res = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games`);
                 const data = await res.json();
                 let games = data.games || data.data || data || [];
 
-                // 🛡️ قائمة معرّفات الألعاب التي تعمل بنجاح
-                const workingGamesUUIDs = [
-                    "9542d915-1e76-4897-baf8-da867e9e504a", "9fa4f900-0ac6-a795-9e42-c3775578aa4f", "a02d0edf-4afd-d62a-e005-edbc01a4c538",
-                    "b7a2f4e3-95b4-4f83-8e27-91c4b7f6dabc", "3098bdda-d5da-d548-ce14-eb646a79b590", "f3d77a4e-71a4-4c9c-8f63-83f4b52f16b1",
-                    "8420c302-05df-1636-3344-1550b01f53d8", "e758a994-19a7-c557-cbdb-037aeeb68933", "e92f58d5-42a9-a3ad-8e85-8bf75396daf2",
-                    "123e4567-e89b-12d3-a456-426614174001", "123e4567-e89b-12d3-a456-426614174002", "123e4567-e89b-12d3-a456-426614174003",
-                    "e88411fe-6ea6-5904-b410-9b1a6c4e4c0e", "2b281ca2-753c-50af-b105-c90fe98638c7", "2b5ecf43-dd1b-5ed8-b20c-a87a3d061571",
-                    "a4ee684c-4fc7-5618-b20d-ccc60efc7a64", "0fa1c2b3-137c-94da-909b-d7250608fcb6", "ed019bee-6393-64af-0046-377cb36a4bd9",
-                    "6a1373d6-4286-62c7-daae-c86be86ea2fb", "da559e73-26a2-c4d4-26d5-842456cf98b2", "fc732415-bd48-870a-4a10-fc49095e82f2",
-                    "3c2a9f66-2e3d-4c2a-8a1e-775a79bb38a2", "9f0a1692-8fbf-8400-b284-d47b74357100", "ad8a8686-3f24-11f1-b390-42010a69900b",
-                    "ad8bf72b-3f24-11f1-b390-42010a69900b", "5e711cf5-3f2c-11f1-b390-42010a69900b", "c8c1a65d-2f89-92a5-0372-66cb2f856a62",
-                    "1df14d9c-79d8-11f1-9d45-42010a699010", "1df1a2a8-79d8-11f1-9d45-42010a699010", "f94e798c-84dc-11f1-9d45-42010a699010",
-                    "cbe3293f-af9a-ecad-0cbd-acaae3f8ff86", "9f2c7a1e-6b4d-4c8f-91a3-d0e5b7c2f846", "a3f9d7b2-4f1c-4b98-8e4d-7b1e3a0a11d2",
-                    "550e8400-e29b-41d4-a716-446655440000", "f81d4fae-7dec-11d0-a765-00a0c91e6bf6"
-                ];
-
-                // 🛡️ تطبيق الفلتر: الاحتفاظ فقط بالألعاب المطابقة للقائمة
-                const validGames = games.filter(g => {
-                    const uuid = g.uuid || g.game_uuid || g.id || g.game_code;
-                    return workingGamesUUIDs.includes(uuid);
-                });
-
-                if (grid) grid.innerHTML = validGames.map(g => {
+                if (grid) grid.innerHTML = games.map(g => {
                     const uuid = g.uuid || g.game_uuid || g.id || g.game_code;
                     const safeName = escapeHTML(g.game_name || g.name || "Virtual Game");
-
                     return `
-            <div onclick="launchSpecificVirtualGame('${uuid}')" class="bg-[#0f1117] border border-[#2b2d35] rounded-xl cursor-pointer group hover:-translate-y-1 transition-all overflow-hidden shadow-lg shadow-black/50">
-                <div class="relative w-full aspect-square overflow-hidden bg-black/50">
-                    <img src="${g.banner || g.image || 'https://placehold.co/400x400/180A2B/FFF'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="${safeName}">
-                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
-                        <span class="bg-blue-500 text-white text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
+                    <div onclick="launchSpecificVirtualGame('${uuid}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-blue-500 transition-all shadow-lg group">
+                        <div class="relative w-full aspect-square overflow-hidden bg-black/50">
+                            <img src="${g.banner || g.image || 'https://placehold.co/400x400/180A2B/FFF'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                                <span class="bg-blue-500 text-white text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
+                            </div>
+                        </div>
+                        <div class="p-2 text-[10px] text-white font-bold truncate text-center">${safeName}</div>
                     </div>
-                </div>
-                <div class="p-2 text-[10px] text-white font-bold truncate text-center">${safeName}</div>
-            </div>
-            `;
-                }).join('');
+                `}).join('');
             } catch (e) {
-                console.error("Erreur:", e);
-                if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur lors du chargement des jeux</div>';
+                if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de chargement</div>';
             }
         }
 
@@ -1776,46 +1830,46 @@ function applySidebarFilter(filterType, filterValue, clickedButton) {
             }
         }
 
-        // ================= فتح قسم الرياضة في نافذة مستقلة =================
-        async function openSportsbookForProvider(providerCode) {
-            closeChat();
-            if (!playerSession) return openLoginModal();
+       // ================= فتح قسم الرياضة في نافذة مستقلة =================
+async function openSportsbookForProvider(providerCode) {
+    closeChat();
+    if (!playerSession) return openLoginModal();
 
-            if (!providerCode || providerCode === 'nexus' || providerCode === 'SABA') {
-                providerCode = 'SPORTSBOOK';
+    if (!providerCode || providerCode === 'nexus' || providerCode === 'SABA') {
+        providerCode = 'SPORTSBOOK';
+    }
+
+    try {
+        // إشعار سريع للاعب أثناء التجهيز
+        showNotification("Ouverture du Sportsbook...", "info");
+
+        const response = await fetch(`${BACKEND_URL}/api/provider/launch-sportsbook`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({
+                provider_code: providerCode,
+                user_code: playerSession.username,
+                game_code: "SPORTSBOOK"
+            })
+        });
+        
+        const data = await response.json();
+
+        if (data.launch_url) {
+            // 🚀 فتح الواجهة الرياضية في تبويب مستقل
+            window.open(data.launch_url, '_blank');
+            
+            // تحديث رصيد اللاعب تلقائياً لمزامنة أي تغييرات
+            if (typeof refreshBalance === 'function') {
+                setTimeout(refreshBalance, 4000);
             }
-
-            try {
-                // إشعار سريع للاعب أثناء التجهيز
-                showNotification("Ouverture du Sportsbook...", "info");
-
-                const response = await fetch(`${BACKEND_URL}/api/provider/launch-sportsbook`, {
-                    method: 'POST',
-                    headers: getAuthHeaders(),
-                    body: JSON.stringify({
-                        provider_code: providerCode,
-                        user_code: playerSession.username,
-                        game_code: "SPORTSBOOK"
-                    })
-                });
-
-                const data = await response.json();
-
-                if (data.launch_url) {
-                    // 🚀 فتح الواجهة الرياضية في تبويب مستقل
-                    window.open(data.launch_url, '_blank');
-
-                    // تحديث رصيد اللاعب تلقائياً لمزامنة أي تغييرات
-                    if (typeof refreshBalance === 'function') {
-                        setTimeout(refreshBalance, 4000);
-                    }
-                } else {
-                    showNotification(data.error || "Sportsbook non disponible", "error");
-                }
-            } catch (error) {
-                showNotification("Erreur de connexion", "error");
-            }
+        } else {
+            showNotification(data.error || "Sportsbook non disponible", "error");
         }
+    } catch (error) {
+        showNotification("Erreur de connexion", "error");
+    }
+}
         // ================= شريط الفائزين المتحرك =================
         function generateLiveWinnersTicker() {
             const track = document.getElementById('winners-ticker-track');
@@ -2400,70 +2454,70 @@ function applySidebarFilter(filterType, filterValue, clickedButton) {
     `).join('');
         }
 
-        // ================= نظام البحث الفوري الشامل والمضمون =================
-        function handleLiveSearch(query) {
-            const dropdown = document.getElementById('search-dropdown');
-            const term = query.trim().toLowerCase();
+// ================= نظام البحث الفوري الشامل والمضمون =================
+function handleLiveSearch(query) {
+    const dropdown = document.getElementById('search-dropdown');
+    const term = query.trim().toLowerCase();
 
-            if (!term) {
-                dropdown.classList.add('hidden');
-                dropdown.innerHTML = '';
-                return;
-            }
+    if (!term) {
+        dropdown.classList.add('hidden');
+        dropdown.innerHTML = '';
+        return;
+    }
 
-            let matches = [];
-            const seenNames = new Set();
+    let matches = [];
+    const seenNames = new Set();
 
-            // 1. البحث الفوري في الواجهة (الألعاب المعروضة حالياً)
-            const gameCards = document.querySelectorAll('div[onclick*="playCasinoGame"], div[onclick*="launchSpecificVirtualGame"], div[onclick*="play"]');
-            gameCards.forEach(el => {
-                const onclickAttr = el.getAttribute('onclick');
-                const imgEl = el.querySelector('img');
-                const titleDiv = el.querySelector('.text-white.font-bold') || el.querySelector('p') || el.querySelector('span');
+    // 1. البحث الفوري في الواجهة (الألعاب المعروضة حالياً)
+    const gameCards = document.querySelectorAll('div[onclick*="playCasinoGame"], div[onclick*="launchSpecificVirtualGame"], div[onclick*="play"]');
+    gameCards.forEach(el => {
+        const onclickAttr = el.getAttribute('onclick');
+        const imgEl = el.querySelector('img');
+        const titleDiv = el.querySelector('.text-white.font-bold') || el.querySelector('p') || el.querySelector('span');
+        
+        if (onclickAttr && imgEl) {
+            const name = titleDiv ? titleDiv.innerText.trim() : (imgEl.alt || "Jeu");
+            const img = imgEl.src;
 
-                if (onclickAttr && imgEl) {
-                    const name = titleDiv ? titleDiv.innerText.trim() : (imgEl.alt || "Jeu");
-                    const img = imgEl.src;
-
-                    if (name && name.length > 1 && !seenNames.has(name)) {
-                        if (name.toLowerCase().includes(term)) {
-                            seenNames.add(name);
-                            matches.push({ name, img, onclick: onclickAttr });
-                        }
-                    }
+            if (name && name.length > 1 && !seenNames.has(name)) {
+                if (name.toLowerCase().includes(term)) {
+                    seenNames.add(name);
+                    matches.push({ name, img, onclick: onclickAttr });
                 }
-            });
-
-            // 2. البحث في الذاكرة الشاملة (لجلب الألعاب المخفية أو الأقسام الأخرى)
-            if (window.globalGameDictionary && window.globalGameDictionary.length > 0) {
-                window.globalGameDictionary.forEach(g => {
-                    if (g.name.toLowerCase().includes(term) && !seenNames.has(g.name)) {
-                        seenNames.add(g.name);
-                        matches.push(g);
-                    }
-                });
-            } else if (window.currentProviderGames && window.currentProviderGames.length > 0) {
-                // 3. بديل آمن: البحث في الكازينو النشط في حال فشل تحميل الذاكرة الشاملة
-                window.currentProviderGames.forEach(g => {
-                    const name = String(g.game_name || g.name || "").trim();
-                    if (name.toLowerCase().includes(term) && !seenNames.has(name)) {
-                        seenNames.add(name);
-                        const img = g.banner || g.image || g.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(name.substring(0, 15))}`;
-                        const code = g.game_code || g.id;
-                        const provider = typeof currentActiveProviderCode !== 'undefined' ? currentActiveProviderCode : 'PRAGMATIC';
-                        matches.push({ name, img, onclick: `playCasinoGame('${provider}', '${code}')` });
-                    }
-                });
             }
+        }
+    });
 
-            if (matches.length === 0) {
-                dropdown.innerHTML = '<div class="p-3 text-xs text-gray-400 text-center">Aucun jeu trouvé</div>';
-                dropdown.classList.remove('hidden');
-                return;
+    // 2. البحث في الذاكرة الشاملة (لجلب الألعاب المخفية أو الأقسام الأخرى)
+    if (window.globalGameDictionary && window.globalGameDictionary.length > 0) {
+        window.globalGameDictionary.forEach(g => {
+            if (g.name.toLowerCase().includes(term) && !seenNames.has(g.name)) {
+                seenNames.add(g.name);
+                matches.push(g);
             }
+        });
+    } else if (window.currentProviderGames && window.currentProviderGames.length > 0) {
+        // 3. بديل آمن: البحث في الكازينو النشط في حال فشل تحميل الذاكرة الشاملة
+        window.currentProviderGames.forEach(g => {
+            const name = String(g.game_name || g.name || "").trim();
+            if (name.toLowerCase().includes(term) && !seenNames.has(name)) {
+                seenNames.add(name);
+                const img = g.banner || g.image || g.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(name.substring(0, 15))}`;
+                const code = g.game_code || g.id;
+                const provider = typeof currentActiveProviderCode !== 'undefined' ? currentActiveProviderCode : 'PRAGMATIC';
+                matches.push({ name, img, onclick: `playCasinoGame('${provider}', '${code}')` });
+            }
+        });
+    }
 
-            // عرض أول 8 نتائج في القائمة المنسدلة
-            dropdown.innerHTML = matches.slice(0, 8).map(m => `
+    if (matches.length === 0) {
+        dropdown.innerHTML = '<div class="p-3 text-xs text-gray-400 text-center">Aucun jeu trouvé</div>';
+        dropdown.classList.remove('hidden');
+        return;
+    }
+
+    // عرض أول 8 نتائج في القائمة المنسدلة
+    dropdown.innerHTML = matches.slice(0, 8).map(m => `
         <div onclick="${m.onclick}; document.getElementById('search-dropdown').classList.add('hidden'); document.getElementById('header-search-input').value='';" 
              class="flex items-center gap-2.5 p-2 hover:bg-[#1a1f2c] cursor-pointer border-b border-[#212631] last:border-none transition">
             <img src="${m.img}" class="w-8 h-8 object-cover rounded-md shrink-0 shadow-sm" onerror="this.src='https://placehold.co/400x400/12151d/10b981?text=Jeu'">
@@ -2471,66 +2525,37 @@ function applySidebarFilter(filterType, filterValue, clickedButton) {
         </div>
     `).join('');
 
-            dropdown.classList.remove('hidden');
+    dropdown.classList.remove('hidden');
+}
+
+
+
+// ================= نظام التمرير التلقائي لبانرات الهاتف =================
+function startPromoAutoScroll() {
+    const slider = document.getElementById('promo-slider');
+    if (!slider) return;
+
+    let scrollIndex = 0;
+    const cards = slider.children;
+    const totalCards = cards.length;
+
+    setInterval(() => {
+        // العمل فقط في شاشات الهاتف (حيث يعمل الـ scroll)
+        if (window.innerWidth < 768) {
+            scrollIndex++;
+            if (scrollIndex >= totalCards) {
+                scrollIndex = 0; // العودة للبانر الأول
+            }
+            
+            // حساب مسافة التمرير بناءً على حجم البطاقة
+            const scrollPosition = cards[scrollIndex].offsetLeft - slider.offsetLeft;
+            slider.scrollTo({ left: scrollPosition, behavior: 'smooth' });
         }
+    }, 2500); // يمرر كل ثانيتين ونصف (2500ms) - يمكنك تقليلها إلى 1500 إن أردتها أسرع
+}
 
-
-
-        // ================= نظام التمرير التلقائي لبانرات الهاتف =================
-        function startPromoAutoScroll() {
-            const slider = document.getElementById('promo-slider');
-            if (!slider) return;
-
-            let scrollIndex = 0;
-            const cards = slider.children;
-            const totalCards = cards.length;
-
-            setInterval(() => {
-                // العمل فقط في شاشات الهاتف (حيث يعمل الـ scroll)
-                if (window.innerWidth < 768) {
-                    scrollIndex++;
-                    if (scrollIndex >= totalCards) {
-                        scrollIndex = 0; // العودة للبانر الأول
-                    }
-
-                    // حساب مسافة التمرير بناءً على حجم البطاقة
-                    const scrollPosition = cards[scrollIndex].offsetLeft - slider.offsetLeft;
-                    slider.scrollTo({ left: scrollPosition, behavior: 'smooth' });
-                }
-            }, 2500); // يمرر كل ثانيتين ونصف (2500ms) - يمكنك تقليلها إلى 1500 إن أردتها أسرع
-        }
-
-        // استدعاء الدالة
-        startPromoAutoScroll();
-
-        // تعريف المتغيرات في الذاكرة العامة للمتصفح
-window.currentCategory = 'All';
-window.currentVolatility = 'All';
-
-// إجبار الدالة على الظهور لأزرار HTML
-window.applySidebarFilter = function(filterType, filterValue, clickedButton) {
-    if (filterType === 'category') window.currentCategory = filterValue;
-    else if (filterType === 'volatility') window.currentVolatility = filterValue;
-
-    // تلوين الزر النشط وإعادة البقية للون الافتراضي
-    const parentDiv = clickedButton.closest('ul');
-    const allButtonsInGroup = parentDiv.querySelectorAll('.sidebar-filter-btn');
-    
-    allButtonsInGroup.forEach(btn => {
-        btn.className = "sidebar-filter-btn w-full text-left text-gray-400 hover:text-white hover:bg-[#1c212d] px-3 py-2 rounded-xl text-xs font-bold transition-colors";
-        if(btn.innerHTML.includes('fa-fire')) {
-            btn.className = "sidebar-filter-btn w-full flex items-center justify-between text-gray-400 hover:text-white hover:bg-[#1c212d] px-3 py-2 rounded-xl text-xs font-bold transition-colors";
-        }
-    });
-
-    clickedButton.className = clickedButton.className.replace('text-gray-400 hover:bg-[#1c212d]', 'text-white bg-emerald-600');
-
-    // استدعاء دالة رسم الألعاب
-    if (typeof renderCasinoGrid === "function") {
-        renderCasinoGrid(); 
-    }
-};
-
+// استدعاء الدالة
+startPromoAutoScroll();
 
     </script>
     <!-- 💬 مربع الشات (Modal في الهاتف، عائم في الكمبيوتر) -->
