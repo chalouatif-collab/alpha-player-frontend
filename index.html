@@ -1756,28 +1756,6 @@ function logoutPlayer() {
                 }
             }
 
-            window.playSMPLGame = playCasinoGame;
-            window.playNexusGame = playCasinoGame;
-            // ================= إغلاق نافذة اللعبة =================
-            function closeCasinoGame(fromPopState = false) {
-                const container = document.getElementById('casino-iframe-container');
-                if (container) {
-                    container.classList.add('hidden');
-                    container.classList.remove('flex');
-                }
-                const iframe = document.getElementById('casino-iframe');
-                if (iframe) iframe.src = '';
-
-                if (typeof refreshBalance === 'function') {
-                    refreshBalance();
-                }
-
-                // 🌟 الرجوع خطوة للوراء في الهاتف إذا كان الإغلاق برمجياً وليس من زر الهاتف
-                if (!fromPopState && history.state && history.state.modalOpen) {
-                    history.back();
-                }
-            }
-
             // متغيرات الذاكرة
             let currentLiveProvider = 'All';
             let currentLiveSearch = '';
@@ -3133,7 +3111,27 @@ async function initVirtualsLobby2() {
                 }
             }
 
-            
+            window.searchLiveGames = function() {
+    const searchInput = document.getElementById('live-search-input');
+    const grid = document.getElementById('live-games-grid');
+    
+    if (!grid || !searchInput) return;
+
+    const query = searchInput.value.toLowerCase().trim();
+    // استهداف جميع بطاقات الألعاب المباشرة داخل الشبكة
+    const cards = grid.children; 
+
+    Array.from(cards).forEach(card => {
+        // استخراج اسم اللعبة من النص الموجود في البطاقة
+        const gameName = card.innerText.toLowerCase();
+        
+        if (gameName.includes(query)) {
+            card.style.display = ''; 
+        } else {
+            card.style.display = 'none'; 
+        }
+    });
+};
         </script>
         <!-- 💬 مربع الشات (Modal في الهاتف، عائم في الكمبيوتر) -->
         <div id="live-chat-sidebar" onclick="if(event.target === this) closeChat()"
