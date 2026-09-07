@@ -51,48 +51,57 @@
 <body class="antialiased text-sm flex flex-col min-h-screen">
     <!-- 1. الشريط العلوي (الرصيد وتسجيل الدخول - متجاوب وأنيق للهاتف) -->
     <header class="bg-[#161922] border-b border-[#212631] sticky top-0 z-50">
-        <div class="max-w-[1700px] mx-auto px-3 md:px-4 h-16 md:h-18 flex justify-between items-center py-2 md:py-3">
+        <div class="max-w-[1700px] mx-auto px-3 md:px-4 h-16 md:h-18 flex justify-between items-center py-2 md:py-3 relative">
 
-            <!-- القسم الأيسر: الشعار + شريط البحث المصغر والذكي -->
+            <!-- القسم الأيسر: الشعار -->
             <div class="flex items-center gap-4 md:gap-6">
-                <div class="flex items-center gap-1.5 md:gap-2 cursor-pointer shrink-0"
-                    onclick="switchSection('accueil')">
-                    <!-- تصغير الشعار في الهاتف -->
-                    <div
-                        class="w-7 h-7 md:w-9 md:h-9 rounded-lg md:rounded-xl bg-emerald flex items-center justify-center text-black font-black text-sm md:text-xl shadow-md">
+                <div class="flex items-center gap-1.5 md:gap-2 cursor-pointer shrink-0" onclick="switchSection('accueil')">
+                    <div class="w-7 h-7 md:w-9 md:h-9 rounded-lg md:rounded-xl bg-emerald flex items-center justify-center text-black font-black text-sm md:text-xl shadow-md">
                         <i class="fas fa-bolt"></i>
                     </div>
-                    <span class="font-extrabold text-lg md:text-2xl tracking-tight text-white">Alphabet<span
-                            class="text-emerald">216</span></span>
+                    <span class="font-extrabold text-lg md:text-2xl tracking-tight text-white">Alphabet<span class="text-emerald">216</span></span>
                 </div>
-
             </div>
 
-            <!-- أزرار الدخول أو رصيد اللاعب -->
-            <div class="flex items-center gap-2 md:gap-3">
+            <!-- القسم الأيمن (تم تجميع الأزرار والجرس في حاوية واحدة لتجنب المنتصف) -->
+            <div class="flex items-center gap-2 md:gap-4">
                 
-                <!-- أزرار تسجيل الدخول -->
+                <!-- أزرار الدخول -->
                 <div id="auth-buttons-container" class="flex items-center gap-2">
                     <button onclick="openLoginModal()" class="text-[10px] md:text-xs font-bold text-gray-300 hover:text-white uppercase px-2 md:px-3 py-2 transition">Connexion</button>
                     <button onclick="openRegisterModal()" class="bg-emerald hover:bg-emerald-600 text-black font-extrabold text-[10px] md:text-xs uppercase px-3 md:px-5 py-2 md:py-2.5 rounded-xl transition shadow-lg">S'inscrire</button>
                 </div>
 
-                <!-- بروفايل اللاعب والرصيد (يظهر بعد تسجيل الدخول) -->
+                <!-- بروفايل اللاعب والرصيد -->
                 <div id="top-user-profile" class="hidden items-center gap-2 cursor-pointer group shrink-0" onclick="toggleProfileSidebar()">
-                    <!-- أيقونة المحفظة / الحساب -->
                     <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-[#212631] text-emerald flex items-center justify-center border border-[#2e3648] shadow-sm hover:border-emerald transition-all">
                         <i class="fas fa-wallet"></i>
                     </div>
-                    <!-- الرصيد -->
                     <div class="text-right hidden sm:block">
                         <span class="text-[9px] text-gray-500 font-bold uppercase block leading-none mb-0.5">Solde</span>
                         <span class="font-extrabold text-white text-xs leading-none"><span id="player-balance-val">0.00</span> TND</span>
                     </div>
                 </div>
 
+                <!-- جرس الإشعارات -->
+                <div id="top-notification-bell" class="hidden relative cursor-pointer items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] border border-[#212631] hover:border-emerald-500 hover:text-white transition shrink-0" onclick="toggleNotificationsPanel()">
+                    <i class="fas fa-bell text-gray-400 text-[10px] md:text-xs transition"></i>
+                    <span id="notif-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold px-1 py-0.5 rounded-full hidden leading-none shadow-md">0</span>
+                </div>
+
             </div>
 
-            <!-- 2️⃣ جرس الإشعارات (دائري وصغير أقصى اليمين) -->
+            <!-- النافذة المنسدلة للإشعارات -->
+            <div id="notifications-panel" class="absolute top-12 md:top-14 right-2 md:right-4 w-[280px] md:w-80 bg-[#161922] border border-[#212631] rounded-2xl shadow-2xl hidden flex-col z-[100] overflow-hidden">
+                <div class="p-3 border-b border-[#212631] bg-[#0f1117] flex justify-between items-center">
+                    <h3 class="text-white font-bold text-sm"> notifications🔔</h3>
+                </div>
+                <div id="notifs-list" class="max-h-[300px] overflow-y-auto hide-scroll p-2 flex flex-col gap-1">
+                </div>
+            </div>
+
+        </div>
+    </header>            <!-- 2️⃣ جرس الإشعارات (دائري وصغير أقصى اليمين) -->
             <div id="top-notification-bell"
                 class="hidden relative cursor-pointer items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] border border-[#212631] hover:border-emerald-500 hover:text-white transition shrink-0 ml-1"
                 onclick="toggleNotificationsPanel()">
@@ -1283,32 +1292,7 @@
                 else if (sectionId === 'live-casino' && typeof openLiveCasino === 'function') openLiveCasino();
                 else if (sectionId === 'virtuals' && typeof initVirtualsLobby === 'function') initVirtualsLobby();
             }
-
-            function updateAuthUI() {
-    const token = localStorage.getItem('player_token');
-    
-    const guestUI = document.getElementById('guest-ui');
-    const loggedInUI = document.getElementById('logged-in-ui');
-    const depositBtn = document.getElementById('btn-deposit-ui');
-    
-    if (token) {
-        guestUI.classList.add('hidden');
-        guestUI.classList.remove('flex');
-        loggedInUI.classList.remove('hidden');
-        loggedInUI.classList.add('flex');
-
-        // إخفاء زر الإيداع دائماً لأن الحسابات تدار عبر الوكلاء
-        if (depositBtn) {
-            depositBtn.classList.add('hidden');
-            depositBtn.classList.remove('block');
-        }
-    } else {
-        guestUI.classList.remove('hidden');
-        guestUI.classList.add('flex');
-        loggedInUI.classList.add('hidden');
-        loggedInUI.classList.remove('flex');
-    }
-}
+// دالة تسجيل الدخول
 async function handlePlayerAuth() {
     const user = document.getElementById('p-auth-username').value;
     const pass = document.getElementById('p-auth-password').value;
@@ -1330,10 +1314,7 @@ async function handlePlayerAuth() {
                 playerSession = { username: data.username, balance: data.balance };
                 localStorage.setItem('alpha_player_session', JSON.stringify(playerSession));
 
-                closeLoginModal();
-                updateAuthUI();
-                
-                if(typeof setupLoggedInUI === 'function') setupLoggedInUI();
+                setupLoggedInUI(); // استدعاء الدالة الأصلية التي تخفي الأزرار وتظهر الرصيد
                 showNotification("Connexion réussie !", "success");
             } else {
                 showNotification(data.detail || "Identifiants incorrects", "error");
@@ -1345,7 +1326,24 @@ async function handlePlayerAuth() {
         showNotification("Veuillez remplir tous les champs", "error");
     }
 }
+
+// دالة تسجيل الخروج
+function logoutPlayer() {
+    localStorage.removeItem('player_token');
+    localStorage.removeItem('alpha_player_session');
+    window.playerToken = null;
+    playerSession = null;
+    
+    // إعادة إظهار أزرار الدخول وإخفاء الرصيد
+    document.getElementById('auth-buttons-container').classList.remove('hidden');
+    document.getElementById('auth-buttons-container').classList.add('flex');
+    document.getElementById('top-user-profile').classList.add('hidden');
+    document.getElementById('top-user-profile').classList.remove('flex');
+    
+    if (typeof closeCasinoGame === 'function') closeCasinoGame();
+}
            
+
             function setupLoggedInUI() {
                 closeLoginModal();
                 const authBtns = document.getElementById('auth-buttons-container');
@@ -1371,38 +1369,7 @@ async function handlePlayerAuth() {
                 if (typeof fetchNotifications === 'function') fetchNotifications();
             }
 
-            function logoutPlayer() {
-                localStorage.removeItem('player_token');
-                localStorage.removeItem('is_self_registered');
-                updateAuthUI();
-                if (typeof closeCasinoGame === 'function') closeCasinoGame();
-            }
-            async function refreshBalance() {
-                if (!playerSession) return;
-                try {
-                    const res = await fetch(`${BACKEND_URL}/gold_api`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ method: 'user_balance', user_code: playerSession.username })
-                    });
-                    const data = await res.json();
-                    if (data.user_balance !== undefined) {
-                        playerSession.balance = data.user_balance;
-                        const formattedBalance = parseFloat(data.user_balance).toFixed(2);
-
-                        // 1. تحديث الرصيد في الشريط العلوي المخفي
-                        const balDisplay = document.getElementById('player-balance-val');
-                        if (balDisplay) balDisplay.innerText = formattedBalance;
-
-                        // 2. تحديث الرصيد في القائمة الجانبية (Sidebar)
-                        const sidebarBalDisplay = document.getElementById('sidebar-balance');
-                        if (sidebarBalDisplay) sidebarBalDisplay.innerText = formattedBalance + ' TND';
-
-                        // 3. تحديث الرصيد في نافذة السحب (Cashier)
-                        const modalBalDisplay = document.getElementById('modal-balance');
-                        if (modalBalDisplay) modalBalDisplay.innerText = formattedBalance;
-                    }
-                } catch (e) { }
-            }
+            
 
             function getAuthHeaders() { return { 'Authorization': `Bearer ${localStorage.getItem('token')}`, 'Content-Type': 'application/json' }; }
 
