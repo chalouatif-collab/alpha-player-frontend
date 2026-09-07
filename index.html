@@ -1227,36 +1227,61 @@
                     initGlobalGameCache();
                 });
             };
-            // ================= محرك الجاكبوت الحي (Real-time WebSocket) =================
-            function startLiveJackpots() {
-                // تحويل رابط الباك إند العادي إلى رابط WebSocket (ws:// أو wss://)
-                const wsUrl = BACKEND_URL.replace("http", "ws").replace("https", "wss") + "/ws/jackpot";
-                const socket = new WebSocket(wsUrl);
+            // دالة الـ WebSocket المحدثة
+function startLiveJackpots() {
+    const wsUrl = BACKEND_URL.replace("http", "ws").replace("https", "wss") + "/ws/jackpot";
+    const socket = new WebSocket(wsUrl);
 
-                socket.onmessage = function (event) {
-                    const data = JSON.parse(event.data);
+    socket.onmessage = function (event) {
+        const data = JSON.parse(event.data);
 
-                    const elMini = document.getElementById('jackpot-mini');
-                    const elMinor = document.getElementById('jackpot-minor');
-                    const elMajor = document.getElementById('jackpot-major');
-                    const elGrand = document.getElementById('jackpot-grand');
+        // 🌟 التقاط إشعار سقوط الجاكبوت الاستثنائي
+        if (data.type === 'jackpot_drop') {
+            announceJackpotDrop(data);
+            return; // نوقف التنفيذ هنا كي لا يقرأه كأرقام عادية
+        }
 
-                    // تحديث الأرقام في الواجهة وتنسيقها كعملة
-                    if (elMini) elMini.innerText = parseFloat(data.mini).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TND';
-                    if (elMinor) elMinor.innerText = parseFloat(data.minor).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TND';
-                    if (elMajor) elMajor.innerText = parseFloat(data.major).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TND';
-                    if (elGrand) elGrand.innerText = parseFloat(data.grand).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TND';
-                };
+        // التحديث العادي للأرقام
+        const elMini = document.getElementById('jackpot-mini');
+        const elMinor = document.getElementById('jackpot-minor');
+        const elMajor = document.getElementById('jackpot-major');
+        const elGrand = document.getElementById('jackpot-grand');
 
-                socket.onerror = function (error) {
-                    console.error("Jackpot WS Error:", error);
-                };
+        if (elMini && data.mini !== undefined) elMini.innerText = parseFloat(data.mini).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TND';
+        if (elMinor && data.minor !== undefined) elMinor.innerText = parseFloat(data.minor).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TND';
+        if (elMajor && data.major !== undefined) elMajor.innerText = parseFloat(data.major).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TND';
+        if (elGrand && data.grand !== undefined) elGrand.innerText = parseFloat(data.grand).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TND';
+    };
 
-                socket.onclose = function () {
-                    // إعادة الاتصال الصامت تلقائياً إذا انقطع الإنترنت أو السيرفر
-                    setTimeout(startLiveJackpots, 5000);
-                };
-            }
+    socket.onerror = function (error) { console.error("Jackpot WS Error:", error); };
+    socket.onclose = function () { setTimeout(startLiveJackpots, 5000); };
+}
+
+// 🌟 دالة رسم الإشعار الذهبي في التيكر
+function announceJackpotDrop(data) {
+    const track = document.getElementById('winners-ticker-track');
+    if (!track) return;
+
+    // دمج أسماء الفائزين (المشفرة)
+    const winnersStr = data.winners.join(' & ');
+    
+    // تصميم كارت استثنائي يختلف عن بقية الفائزين
+    const alertHTML = `
+    <div class="flex items-center gap-2 text-[11px] font-black text-white bg-gradient-to-r from-yellow-600 to-yellow-400 px-4 py-1.5 rounded-lg border border-yellow-300 shrink-0 shadow-[0_0_15px_rgba(234,179,8,0.6)] animate-pulse">
+        <i class="fas fa-crown text-yellow-900 text-lg animate-bounce"></i>
+        <span class="text-yellow-900 drop-shadow-md">ALERTE JACKPOT ${data.level} !</span> 
+        <span>${winnersStr} se partagent ${parseFloat(data.total_amount).toFixed(2)} TND !</span> 
+        <span class="bg-black/30 px-2 py-0.5 rounded text-yellow-100 border border-yellow-200/30">(${parseFloat(data.win_per_user).toFixed(2)} TND chacun)</span>
+    </div>`;
+
+    // إدراج الإشعار في بداية شريط المتحرك (التيكر) ليراه الجميع فوراً
+    track.insertAdjacentHTML('afterbegin', alertHTML);
+    
+    // إطلاق إشعار Toast إضافي يظهر في زاوية الشاشة
+    if(typeof showNotification === 'function') {
+        showNotification(`🔥 LE JACKPOT ${data.level} EST TOMBÉ !`, "success");
+    }
+}
             function switchSection(sectionId, fromPopState = false) {
                 localStorage.setItem('active_section', sectionId);
 
