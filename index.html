@@ -68,39 +68,25 @@
 
             </div>
 
-            <!-- أزرار الدخول أو رصيد اللاعب (Dynamic Auth) -->
+            <!-- أزرار الدخول أو رصيد اللاعب -->
             <div class="flex items-center gap-2 md:gap-3">
-
-                <!-- واجهة الزائر (غير مسجل الدخول) -->
-                <div id="guest-ui" class="flex items-center gap-2">
-                    <button onclick="openLoginModal()"
-                        class="text-[10px] md:text-xs font-bold text-gray-300 hover:text-white uppercase px-2 md:px-3 py-2 transition">Connexion</button>
-                    <button onclick="openRegisterModal()"
-                        class="bg-emerald hover:bg-emerald-600 text-black font-extrabold text-[10px] md:text-xs uppercase px-3 md:px-5 py-2 md:py-2.5 rounded-xl transition shadow-lg">S'inscrire</button>
+                
+                <!-- أزرار تسجيل الدخول -->
+                <div id="auth-buttons-container" class="flex items-center gap-2">
+                    <button onclick="openLoginModal()" class="text-[10px] md:text-xs font-bold text-gray-300 hover:text-white uppercase px-2 md:px-3 py-2 transition">Connexion</button>
+                    <button onclick="openRegisterModal()" class="bg-emerald hover:bg-emerald-600 text-black font-extrabold text-[10px] md:text-xs uppercase px-3 md:px-5 py-2 md:py-2.5 rounded-xl transition shadow-lg">S'inscrire</button>
                 </div>
 
-                <!-- واجهة اللاعب (مسجل الدخول) -->
-                <div id="logged-in-ui" class="hidden items-center gap-2 md:gap-3">
-                    <!-- الرصيد -->
-                    <div class="bg-[#0f1117] border border-[#212631] rounded-xl p-1 px-3 hidden sm:flex items-center">
-                        <div>
-                            <span class="text-[9px] text-gray-500 font-bold uppercase block">Solde</span>
-                            <span class="font-bold text-white text-xs"><span id="player-balance-val">0.00</span>
-                                TND</span>
-                        </div>
+                <!-- بروفايل اللاعب والرصيد (يظهر بعد تسجيل الدخول) -->
+                <div id="top-user-profile" class="hidden items-center gap-2 cursor-pointer group shrink-0" onclick="toggleProfileSidebar()">
+                    <!-- أيقونة المحفظة / الحساب -->
+                    <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-[#212631] text-emerald flex items-center justify-center border border-[#2e3648] shadow-sm hover:border-emerald transition-all">
+                        <i class="fas fa-wallet"></i>
                     </div>
-
-                    <!-- زر الإيداع (يظهر فقط لمن سجل بنفسه) -->
-                    <button id="btn-deposit-ui" onclick="toggleCashier()"
-                        class="hidden bg-emerald hover:bg-emerald-600 text-black font-extrabold uppercase text-[10px] md:text-xs px-3 md:px-5 py-2 md:py-2.5 rounded-xl transition shadow-lg">
-                        Dépôt
-                    </button>
-
-                    <!-- أيقونة الحساب (تسجيل الخروج) -->
-                    <div onclick="logoutPlayer()"
-                        class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-[#212631] flex items-center justify-center text-gray-300 hover:text-red-400 cursor-pointer transition"
-                        title="Déconnexion">
-                        <i class="fas fa-user"></i>
+                    <!-- الرصيد -->
+                    <div class="text-right hidden sm:block">
+                        <span class="text-[9px] text-gray-500 font-bold uppercase block leading-none mb-0.5">Solde</span>
+                        <span class="font-extrabold text-white text-xs leading-none"><span id="player-balance-val">0.00</span> TND</span>
                     </div>
                 </div>
 
