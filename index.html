@@ -3079,8 +3079,9 @@ async function handlePlayerAuth() {
             try {
                 data = JSON.parse(textResponse);
             } catch (e) {
-                console.error("Erreur serveur (Non-JSON):", textResponse);
-                throw new Error("Le serveur redémarre. Veuillez réessayer dans 2 minutes.");
+                console.error("Erreur serveur:", textResponse);
+                // 🌟 التعديل هنا: إظهار رد السيرفر الحقيقي لتشخيص المشكلة
+                throw new Error("خطأ من السيرفر: " + textResponse.substring(0, 100)); 
             }
 
             if (!response.ok) {
