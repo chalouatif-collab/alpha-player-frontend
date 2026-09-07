@@ -1351,30 +1351,33 @@ function logoutPlayer() {
            
 
             function setupLoggedInUI() {
-                closeLoginModal();
-                const authBtns = document.getElementById('auth-buttons-container');
-                if (authBtns) authBtns.classList.add('hidden');
+    closeLoginModal();
+    
+    const authBtns = document.getElementById('auth-buttons-container');
+    if (authBtns) { authBtns.classList.add('hidden'); authBtns.classList.remove('flex'); }
 
-                const userProfile = document.getElementById('top-user-profile');
-                if (userProfile) { userProfile.classList.remove('hidden'); userProfile.classList.add('flex'); }
+    const userProfile = document.getElementById('top-user-profile');
+    if (userProfile) { userProfile.classList.remove('hidden'); userProfile.classList.add('flex'); }
 
-                // 🔔 إظهار جرس الإشعارات
-                const notifBell = document.getElementById('top-notification-bell');
-                if (notifBell) { notifBell.classList.remove('hidden'); notifBell.classList.add('flex'); }
+    const notifBell = document.getElementById('top-notification-bell');
+    if (notifBell) { notifBell.classList.remove('hidden'); notifBell.classList.add('flex'); }
 
-                const nameDisplay = document.getElementById('player-name-display');
-                if (nameDisplay) nameDisplay.innerText = playerSession.username;
+    const sidebarName = document.getElementById('sidebar-username');
+    if (sidebarName) sidebarName.innerText = playerSession.username;
 
-                const sidebarName = document.getElementById('sidebar-username');
-                if (sidebarName) sidebarName.innerText = playerSession.username;
+    // 🌟 تحديث الأرقام فوراً من بيانات الجلسة لكي لا تظهر الأرقام الوهمية
+    if (playerSession.balance !== undefined) {
+        updateBalanceDisplays(playerSession.balance);
+    }
 
-                refreshBalance();
-                setInterval(refreshBalance, 5000);
+    refreshBalance();
+    
+    // منع تكرار العدادات في الخلفية
+    if (window.balInterval) clearInterval(window.balInterval);
+    window.balInterval = setInterval(refreshBalance, 5000);
 
-                // جلب الإشعارات مباشرة عند الدخول
-                if (typeof fetchNotifications === 'function') fetchNotifications();
-            }
-
+    if (typeof fetchNotifications === 'function') fetchNotifications();
+}
             
 
             function getAuthHeaders() { return { 'Authorization': `Bearer ${localStorage.getItem('token')}`, 'Content-Type': 'application/json' }; }
@@ -2112,6 +2115,8 @@ function logoutPlayer() {
                     showNotification("Erreur réseau", "error");
                 }
             }
+
+
 
             function showWithdrawForm(formId) {
                 document.querySelectorAll('.withdraw-form').forEach(f => f.classList.add('hidden'));
@@ -3060,6 +3065,50 @@ async function fetchNotifications() {
     } else {
         showNotification("Veuillez remplir tous les champs obligatoires.", "error");
     }
+}
+
+async function refreshBalance() {
+    if (!playerSession) return;
+    try {
+        const res = await fetch(`${BACKEND_URL}/gold_api`, {
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ method: 'user_balance', user_code: playerSession.username })
+        });
+        const data = await res.json();
+        
+        if (data.status === 1 && data.user_balance !== undefined) {
+            playerSession.balance = data.user_balance;
+            localStorage.setItem('alpha_player_session', JSON.stringify(playerSession));
+            
+            // استدعاء الدالة المساعدة لتغيير الرقم في كل الواجهات
+            updateBalanceDisplays(data.user_balance);
+        }
+    } catch (e) {
+        console.error("Erreur balance:", e);
+    }
+}
+
+// 4. إصلاح خطأ 401 الصامت الذي كان يمنع الإشعارات وسجل المعاملات
+function getAuthHeaders() { 
+    return { 
+        'Authorization': `Bearer ${localStorage.getItem('player_token')}`, 
+        'Content-Type': 'application/json' 
+    }; 
+}
+
+function updateBalanceDisplays(balance) {
+    if (balance === undefined || balance === null) return;
+    const formattedBalance = parseFloat(balance).toFixed(2);
+    
+    const balDisplay = document.getElementById('player-balance-val');
+    if (balDisplay) balDisplay.innerText = formattedBalance;
+
+    const sidebarBalDisplay = document.getElementById('sidebar-balance');
+    if (sidebarBalDisplay) sidebarBalDisplay.innerText = formattedBalance + ' TND';
+
+    const modalBalDisplay = document.getElementById('modal-balance');
+    if (modalBalDisplay) modalBalDisplay.innerText = formattedBalance;
 }
         </script>
         <!-- 💬 مربع الشات (Modal في الهاتف، عائم في الكمبيوتر) -->
