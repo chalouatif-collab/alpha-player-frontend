@@ -1332,28 +1332,51 @@
                 }
             }
 
-            // 1. دالة تسجيل الدخول (محدثة لتحديث الذاكرة الفورية)
-            async function handlePlayerAuth() {
-                const user = document.getElementById('p-auth-username').value;
-                const pass = document.getElementById('p-auth-password').value;
+            // 1. دالة تسجيل الدخول (الربط الفعلي بالباك إند)
+async function handlePlayerAuth() {
+    const user = document.getElementById('p-auth-username').value;
+    const pass = document.getElementById('p-auth-password').value;
 
-                if (user && pass) {
-                    // [هنا تضع كود الاتصال بالباك إند الحقيقي لاحقاً]
-                    // const res = await fetch(`${window.BACKEND_URL}/api/login`, { ... });
-                    // const data = await res.json();
+    if (user && pass) {
+        try {
+            const res = await fetch(`${window.BACKEND_URL}/api/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: user, password: pass })
+            });
+            
+            const data = await res.json();
 
-                    // حفظ البيانات في المتصفح
-                    localStorage.setItem('player_token', 'real_token_example');
-                    localStorage.setItem('is_self_registered', 'true');
+            if (res.ok) {
+                // حفظ التوكن وبيانات اللاعب من رد السيرفر
+                localStorage.setItem('player_token', data.access_token);
+                // السطر المطلوب: حفظ حالة التسجيل الذاتي
+                localStorage.setItem('is_self_registered', data.is_self_registered);
 
-                    // 🌟 السر هنا: تحديث المتغير العالمي فوراً دون الحاجة لعمل Refresh
-                    window.playerToken = localStorage.getItem('player_token');
+                // تحديث المتغير العالمي
+                window.playerToken = data.access_token;
+                
+                // حفظ بيانات الجلسة (اختياري، لتشغيل دالة setupLoggedInUI)
+                playerSession = { username: data.username, balance: data.balance };
+                localStorage.setItem('alpha_player_session', JSON.stringify(playerSession));
 
-                    closeLoginModal();
-                    updateAuthUI();
-                }
+                closeLoginModal();
+                updateAuthUI();
+                
+                // تحديث واجهة المستخدم بالكامل
+                if(typeof setupLoggedInUI === 'function') setupLoggedInUI();
+                
+                showNotification("Connexion réussie !", "success");
+            } else {
+                showNotification(data.detail || "Identifiants incorrects", "error");
             }
-
+        } catch (error) {
+            showNotification("Erreur de connexion au serveur", "error");
+        }
+    } else {
+        showNotification("Veuillez remplir tous les champs", "error");
+    }
+}
             function setupLoggedInUI() {
                 closeLoginModal();
                 const authBtns = document.getElementById('auth-buttons-container');
