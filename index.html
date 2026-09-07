@@ -68,36 +68,37 @@
 
             </div>
 
-            <!-- أزرار الدخول أو رصيد اللاعب -->
+            <!-- أزرار الدخول أو رصيد اللاعب (Dynamic Auth) -->
             <div class="flex items-center gap-2 md:gap-3">
-
-                <!-- أزرار تسجيل الدخول -->
-                <div id="auth-buttons-container" class="flex items-center gap-2">
-                    <button onclick="openLoginModal()"
-                        class="text-[10px] md:text-xs font-bold text-gray-300 hover:text-white uppercase px-2 md:px-3 py-2">Connexion</button>
-                    <button onclick="openRegisterModal()"
-                        class="bg-emerald text-black font-extrabold text-[10px] md:text-xs uppercase px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition shadow-md">S'inscrire</button>
+                
+                <!-- واجهة الزائر (غير مسجل الدخول) -->
+                <div id="guest-ui" class="flex items-center gap-2">
+                    <button onclick="openLoginModal()" class="text-[10px] md:text-xs font-bold text-gray-300 hover:text-white uppercase px-2 md:px-3 py-2 transition">Connexion</button>
+                    <button onclick="openRegisterModal()" class="bg-emerald hover:bg-emerald-600 text-black font-extrabold text-[10px] md:text-xs uppercase px-3 md:px-5 py-2 md:py-2.5 rounded-xl transition shadow-lg">S'inscrire</button>
                 </div>
 
-                <!-- 1️⃣ بروفايل الرصيد (واضح وأبيض على الهاتف، ومخفي للسرية على الكمبيوتر) -->
-                <div id="top-user-profile" class="hidden items-center gap-2 cursor-pointer group shrink-0"
-                    onclick="toggleProfileSidebar()">
-                    <!-- أيقونة المحفظة -->
-                    <div
-                        class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] text-emerald-500 md:text-emerald-600 flex items-center justify-center text-[10px] md:text-xs border border-emerald-500/30 md:border-[#212631] group-hover:border-emerald-500 transition shrink-0 shadow-sm md:shadow-none">
-                        <i class="fas fa-wallet"></i>
-                    </div>
-                    <!-- الرصيد (opacity-100 للهاتف، و md:opacity-50 للكمبيوتر) -->
-                    <div
-                        class="text-right opacity-100 md:opacity-50 group-hover:opacity-100 transition-opacity duration-300">
-                        <!-- text-white للهاتف، و md:text-gray-300 للكمبيوتر -->
-                        <div
-                            class="font-mono text-white md:text-gray-300 text-[11px] md:text-xs leading-none font-bold">
-                            <span id="player-balance-val" class="tracking-tight">0.00</span> <span
-                                class="text-emerald-400 md:text-emerald-500 text-[8px] md:text-[9px]">TND</span>
+                <!-- واجهة اللاعب (مسجل الدخول) -->
+                <div id="logged-in-ui" class="hidden items-center gap-2 md:gap-3">
+                    <!-- الرصيد -->
+                    <div class="bg-[#0f1117] border border-[#212631] rounded-xl p-1 px-3 hidden sm:flex items-center">
+                        <div>
+                            <span class="text-[9px] text-gray-500 font-bold uppercase block">Solde</span>
+                            <span class="font-bold text-white text-xs"><span id="player-balance-val">0.00</span> TND</span>
                         </div>
                     </div>
+
+                    <!-- زر الإيداع (يظهر فقط لمن سجل بنفسه) -->
+                    <button id="btn-deposit-ui" onclick="toggleCashier()" class="hidden bg-emerald hover:bg-emerald-600 text-black font-extrabold uppercase text-[10px] md:text-xs px-3 md:px-5 py-2 md:py-2.5 rounded-xl transition shadow-lg">
+                        Dépôt
+                    </button>
+
+                    <!-- أيقونة الحساب (تسجيل الخروج) -->
+                    <div onclick="logoutPlayer()" class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-[#212631] flex items-center justify-center text-gray-300 hover:text-red-400 cursor-pointer transition" title="Déconnexion">
+                        <i class="fas fa-user"></i>
+                    </div>
                 </div>
+
+            </div>
 
                 <!-- 2️⃣ جرس الإشعارات (دائري وصغير أقصى اليمين) -->
                 <div id="top-notification-bell"
@@ -174,7 +175,7 @@
                 class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center justify-center gap-2 flex-shrink-0 grow transition-all whitespace-nowrap">
                 <i class="fas fa-headset text-orange-500"></i> E-Sports
             </button>
-            
+
             <!-- 📊 Résultats (يفتح فلاش سكور في نافذة جديدة) -->
             <button id="btn-nav-resultats" onclick="window.open('https://www.flashscore.fr/', '_blank');"
                 class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center justify-center gap-2 flex-shrink-0 grow transition-all whitespace-nowrap">
@@ -1247,24 +1248,61 @@
                 else if (sectionId === 'virtuals' && typeof initVirtualsLobby === 'function') initVirtualsLobby();
             }
 
+            function updateAuthUI() {
+                const token = localStorage.getItem('player_token');
+                const isSelfRegistered = localStorage.getItem('is_self_registered') === 'true'; // جلب نوع الحساب
+
+                const guestUI = document.getElementById('guest-ui');
+                const loggedInUI = document.getElementById('logged-in-ui');
+                const depositBtn = document.getElementById('btn-deposit-ui');
+
+                if (token) {
+                    // إخفاء أزرار الزائر وإظهار واجهة اللاعب
+                    guestUI.classList.add('hidden');
+                    guestUI.classList.remove('flex');
+                    loggedInUI.classList.remove('hidden');
+                    loggedInUI.classList.add('flex');
+
+                    // إظهار زر الإيداع فقط إذا كان اللاعب أنشأ حسابه بنفسه
+                    if (isSelfRegistered && depositBtn) {
+                        depositBtn.classList.remove('hidden');
+                        depositBtn.classList.add('block');
+                    } else if (depositBtn) {
+                        // إخفاء الزر للاعبين الذين تم إضافتهم من لوحة الإدارة
+                        depositBtn.classList.add('hidden');
+                        depositBtn.classList.remove('block');
+                    }
+
+                } else {
+                    // إظهار أزرار الزائر
+                    guestUI.classList.remove('hidden');
+                    guestUI.classList.add('flex');
+                    loggedInUI.classList.add('hidden');
+                    loggedInUI.classList.remove('flex');
+                }
+            }
+
+            // دالة الدخول (كمثال لما سيرجعه الباك إند الخاص بك)
             async function handlePlayerAuth() {
-                const username = document.getElementById('p-auth-username').value.trim();
-                const password = document.getElementById('p-auth-password').value;
-                if (!username || !password) return;
-                try {
-                    const res = await fetch(`${BACKEND_URL}/api/login`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ username, password })
-                    });
-                    const data = await res.json();
-                    if (res.ok) {
-                        playerSession = data;
-                        localStorage.setItem('alpha_player_session', JSON.stringify(data));
-                        localStorage.setItem('token', data.access_token);
-                        setupLoggedInUI();
-                        showNotification("Bienvenue !");
-                    } else showNotification(data.detail, 'error');
-                } catch (e) { showNotification("Erreur serveur", 'error'); }
+                const user = document.getElementById('p-auth-username').value;
+                const pass = document.getElementById('p-auth-password').value;
+
+                if (user && pass) {
+                    /*
+                     في التطبيق الحقيقي ستقوم بالاتصال بالـ API هكذا:
+                     const response = await fetch('/api/login', { body: ... });
+                     const data = await response.json();
+                     
+                     يجب أن يرسل لك الباك إند قيمة مثل data.is_self_registered
+                    */
+
+                    // محاكاة: سنفترض أن اللاعب سجل بنفسه لتجربة الكود، يمكنك تغييرها لـ 'false' لتجربة إخفاء الزر
+                    localStorage.setItem('player_token', 'true_token_example');
+                    localStorage.setItem('is_self_registered', 'true'); // أو 'false' إذا تم خلقه من الإدارة
+
+                    closeLoginModal();
+                    updateAuthUI();
+                }
             }
 
             function setupLoggedInUI() {
@@ -1293,11 +1331,11 @@
             }
 
             function logoutPlayer() {
-                playerSession = null;
-                localStorage.clear();
-                location.reload();
+                localStorage.removeItem('player_token');
+                localStorage.removeItem('is_self_registered');
+                updateAuthUI();
+                if (typeof closeCasinoGame === 'function') closeCasinoGame();
             }
-
             async function refreshBalance() {
                 if (!playerSession) return;
                 try {
@@ -2134,7 +2172,7 @@
 
                 try {
                     // إشعار سريع للاعب أثناء التجهيز
-                    showNotification("Ouverture du Sportsbook...", "info");
+                    showNotification("Chargement du Sportsbook...", "info");
 
                     const response = await fetch(`${BACKEND_URL}/api/provider/launch-sportsbook`, {
                         method: 'POST',
