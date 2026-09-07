@@ -3051,18 +3051,18 @@ async function handlePlayerAuth() {
                 document.getElementById('player-register-modal').classList.remove('flex');
             }
 
-            async function handlePlayerRegistration() {
+           async function handlePlayerRegistration() {
     const user = document.getElementById('r-auth-username').value;
-    const email = document.getElementById('r-auth-email').value;
+    const email = document.getElementById('r-auth-email').value; // يمكنك إرساله أو تجاهله حسب الباك إند
     const pass = document.getElementById('r-auth-password').value;
     const phone = document.getElementById('r-auth-phone').value;
 
-    if (user && email && pass) {
+    if (user && pass) {
         try {
-            const response = await fetch(`${window.BACKEND_URL}/api/register`, {
+            // 🌟 التعديل الحاسم: استخدام BACKEND_URL مباشرة بدون window.
+            const response = await fetch(`${BACKEND_URL}/api/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                // 🌟 تم إضافة role و created_by الإجبارية للباك إند 🌟
                 body: JSON.stringify({ 
                     username: user, 
                     password: pass, 
@@ -3080,12 +3080,12 @@ async function handlePlayerAuth() {
                 data = JSON.parse(textResponse);
             } catch (e) {
                 console.error("Erreur serveur:", textResponse);
-                // 🌟 التعديل هنا: إظهار رد السيرفر الحقيقي لتشخيص المشكلة
-                throw new Error("خطأ من السيرفر: " + textResponse.substring(0, 100)); 
+                throw new Error("Erreur de serveur (Vérifiez Render)");
             }
 
             if (!response.ok) {
-                throw new Error(data.message || data.detail || "Erreur d'inscription");
+                // التقاط رسالة الخطأ الحقيقية من السيرفر (مثل: الاسم مستخدم مسبقاً)
+                throw new Error(data.detail || data.message || "Erreur d'inscription");
             }
 
             // استلام التوكن وحالة التسجيل من الباك إند
