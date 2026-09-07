@@ -3146,6 +3146,27 @@
                     }
                 });
             };
+
+            // دالة لعكس ترتيب ألعاب الكازينو لايف (من الأسفل إلى الأعلى)
+function reverseLiveGamesOrder() {
+    const grid = document.getElementById('live-games-grid');
+    if (!grid) return;
+    
+    // جلب جميع بطاقات الألعاب وتحويلها إلى مصفوفة
+    const cards = Array.from(grid.children);
+    
+    // التحقق من وجود ألعاب فعلیة وليست رسالة التحميل
+    if (cards.length <= 1) return; 
+
+    // عكس الترتيب وإعادة إدراجها في الشبكة
+    grid.innerHTML = '';
+    cards.reverse().forEach(card => {
+        grid.appendChild(card);
+    });
+}
+
+// استدعاء الدالة بعد تحميل الألعاب بقليل لضمان جاهزية العناصر
+setTimeout(reverseLiveGamesOrder, 1500);
         </script>
         <!-- 💬 مربع الشات (Modal في الهاتف، عائم في الكمبيوتر) -->
         <div id="live-chat-sidebar" onclick="if(event.target === this) closeChat()"
