@@ -3147,37 +3147,34 @@
                 });
             };
 
-           // دالة عكس ترتيب ألعاب الكازينو لايف
-function reverseLiveGamesOrder() {
+// مراقبة حاوية الكازينو لايف لعكس الألعاب تلقائياً فور ظهورها
+function initLiveGamesAutoReverse() {
     const grid = document.getElementById('live-games-grid');
     if (!grid) return;
-    
-    const cards = Array.from(grid.children);
-    if (cards.length <= 1) return; // إذا كانت فارغة أو تحتوي على لعبة واحدة
 
-    grid.innerHTML = '';
-    cards.reverse().forEach(card => {
-        grid.appendChild(card);
-    });
+    let lastContent = '';
+    
+    // فحص دوري خفيف جداً للحاوية لا يتجاوز أجزاء من الثانية
+    setInterval(() => {
+        const currentContent = grid.innerHTML;
+        
+        // إذا تغير المحتوى (أي تم تحميل ألعاب جديدة) ولم يكن عبارة عن رسالة "جاري التحميل"
+        if (currentContent !== lastContent && !currentContent.includes('Chargement')) {
+            const cards = Array.from(grid.children);
+            
+            // إذا كان هناك أكثر من لعبة معروضة
+            if (cards.length > 1) {
+                grid.innerHTML = '';
+                cards.reverse().forEach(card => grid.appendChild(card));
+                lastContent = grid.innerHTML; // حفظ المحتوى الجديد حتى لا يتكرر بدون سبب
+            }
+        }
+    }, 200);
 }
 
-// 🌟 مراقبة الضغط على زر الكازينو لايف لضمان بقائها معكوسة دائماً عند التنقل
-document.addEventListener('click', function(e) {
-    const btn = e.target.closest('button');
-    if (btn) {
-        const onclickAttr = btn.getAttribute('onclick') || '';
-        const btnText = btn.innerText || '';
-        
-        // إذا كان الزر هو الخاص بـ Live Casino أو يحتوي على تبديل للقسم
-        if (onclickAttr.includes('live') || btnText.toLowerCase().includes('live casino') || btn.id.includes('live')) {
-            // ننتظر قليلاً ريثما يقوم السيرفر بجلب الألعاب ورسمها، ثم نعكسها فوراً
-            setTimeout(reverseLiveGamesOrder, 500);
-        }
-    }
-});
-
-// تشغيلها أيضاً عند فتح الصفحة لأول مرة
-setTimeout(reverseLiveGamesOrder, 1000);
+// تشغيل المراقب بمجرد تحميل الصفحة
+document.addEventListener('DOMContentLoaded', initLiveGamesAutoReverse);
+setTimeout(initLiveGamesAutoReverse, 1000); // احتياطي لوقت التحميل المبدئي
         </script>
         <!-- 💬 مربع الشات (Modal في الهاتف، عائم في الكمبيوتر) -->
         <div id="live-chat-sidebar" onclick="if(event.target === this) closeChat()"
