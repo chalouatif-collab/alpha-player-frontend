@@ -1327,19 +1327,25 @@ async function handlePlayerAuth() {
     }
 }
 
-// دالة تسجيل الخروج
 function logoutPlayer() {
     localStorage.removeItem('player_token');
     localStorage.removeItem('alpha_player_session');
     window.playerToken = null;
     playerSession = null;
     
-    // إعادة إظهار أزرار الدخول وإخفاء الرصيد
-    document.getElementById('auth-buttons-container').classList.remove('hidden');
-    document.getElementById('auth-buttons-container').classList.add('flex');
-    document.getElementById('top-user-profile').classList.add('hidden');
-    document.getElementById('top-user-profile').classList.remove('flex');
-    
+    // إيقاف أي عدادات نشطة
+    if (window.balInterval) clearInterval(window.balInterval);
+
+    // إعادة الواجهة لوضع الزائر
+    const authBtns = document.getElementById('auth-buttons-container');
+    if (authBtns) { authBtns.classList.remove('hidden'); authBtns.classList.add('flex'); }
+
+    const userProfile = document.getElementById('top-user-profile');
+    if (userProfile) { userProfile.classList.add('hidden'); userProfile.classList.remove('flex'); }
+
+    const notifBell = document.getElementById('top-notification-bell');
+    if (notifBell) { notifBell.classList.add('hidden'); notifBell.classList.remove('flex'); }
+
     if (typeof closeCasinoGame === 'function') closeCasinoGame();
 }
            
@@ -2588,45 +2594,54 @@ function logoutPlayer() {
                 panel.classList.toggle('flex');
             }
 
-            async function fetchNotifications() {
-                if (!playerSession) return;
-                try {
-                    const res = await fetch(`${BACKEND_URL}/api/user/notifications`, { headers: getAuthHeaders() });
-                    const data = await res.json();
+            // 1. دالة جلب الإشعارات المحمية ضد انتهاء الجلسة (401)
+async function fetchNotifications() {
+    if (!playerSession) return;
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/user/notifications`, { headers: getAuthHeaders() });
+        
+        // إذا انتهت صلاحية التوكن أو كان غير صالح، يتم تسجيل الخروج صامتاً لمنع التكرار
+        if (res.status === 401) {
+            logoutPlayer();
+            return;
+        }
 
-                    const badge = document.getElementById('notif-badge');
-                    if (data.unread > 0) {
-                        badge.innerText = data.unread;
-                        badge.classList.remove('hidden');
-                    } else {
-                        badge.classList.add('hidden');
-                    }
+        const data = await res.json();
+        if (!res.ok) return;
 
-                    const list = document.getElementById('notifs-list');
-                    if (data.notifications.length === 0) {
-                        list.innerHTML = '<div class="text-center text-gray-500 text-xs py-4">Aucune notification</div>';
-                        return;
-                    }
+        const badge = document.getElementById('notif-badge');
+        if (badge && data.unread > 0) {
+            badge.innerText = data.unread;
+            badge.classList.remove('hidden');
+        } else if (badge) {
+            badge.classList.add('hidden');
+        }
 
-                    let html = data.notifications.map(n => `
+        const list = document.getElementById('notifs-list');
+        if (!list) return;
+
+        if (!data.notifications || data.notifications.length === 0) {
+            list.innerHTML = '<div class="text-center text-gray-500 text-xs py-4">Aucune notification</div>';
+            return;
+        }
+
+        let html = data.notifications.map(n => `
             <div class="relative p-2 rounded-xl border ${n.is_read ? 'bg-[#0f1117] border-transparent' : 'bg-[#1a1e29] border-emerald/30'} hover:bg-gray-800 transition">
                 <div class="flex justify-between items-start mb-1">
                     <div class="flex items-center gap-2 cursor-pointer w-full" onclick="markAsRead('${n.id}')">
-                        <i class="fas ${n.icon} text-emerald"></i>
-                        <strong class="text-white text-xs">${n.title}</strong>
+                        <i class="fas ${n.icon || 'fa-bell'} text-emerald"></i>
+                        <strong class="text-white text-xs">${escapeHTML(n.title)}</strong>
                     </div>
-                    <!-- زر مسح هذا الإشعار تحديداً -->
                     <button onclick="deleteNotification('${n.id}')" class="text-gray-500 hover:text-red-500 transition px-1">
                         <i class="fas fa-times text-[12px]"></i>
                     </button>
                 </div>
-                <p class="text-gray-400 text-[10px] cursor-pointer" onclick="markAsRead('${n.id}')">${n.message}</p>
-                <span class="text-gray-600 text-[9px] block mt-1">${n.date}</span>
+                <p class="text-gray-400 text-[10px] cursor-pointer" onclick="markAsRead('${n.id}')">${escapeHTML(n.message)}</p>
+                <span class="text-gray-600 text-[9px] block mt-1">${escapeHTML(n.date)}</span>
             </div>
         `).join('');
 
-                    // إضافة زر "مسح الكل" أسفل الإشعارات
-                    html += `
+        html += `
             <div class="mt-2 pt-2 border-t border-[#212631]">
                 <button onclick="deleteNotification('all')" class="w-full text-xs text-red-400 hover:text-red-500 font-bold py-1.5 bg-red-500/10 rounded-lg transition">
                     <i class="fas fa-trash-alt"></i> Effacer tout
@@ -2634,9 +2649,13 @@ function logoutPlayer() {
             </div>
         `;
 
-                    list.innerHTML = html;
-                } catch (e) { }
-            }
+        list.innerHTML = html;
+    } catch (e) {
+        // تجاهل أخطاء الشبكة المؤقتة لعدم إزعاج الـ Console
+    }
+}
+
+                   
 
             async function markAsRead(id) {
                 await fetch(`${BACKEND_URL}/api/user/read-notification`, {
