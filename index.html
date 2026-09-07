@@ -1716,46 +1716,60 @@
                 }
                 loadFeaturedProvidersBlocks();
             }
-            window.playCasinoGame = async function(provider, gameCode) {
-    // 1. التحقق من تسجيل الدخول
+            // ================= تشغيل الألعاب في تبويب جديد (نافذة مستقلة) =================
+window.playCasinoGame = async function(providerCode, gameCode) {
+    if (typeof closeChat === 'function') closeChat();
+    
+    // 1. التحقق الصارم من تسجيل الدخول واسم المستخدم (لحل خطأ user: null)
     if (!window.playerSession || !window.playerSession.username) {
-        if (typeof showNotification === 'function') showNotification("Veuillez vous connecter", "error");
+        if (typeof showNotification === 'function') showNotification("Veuillez vous connecter pour jouer", "error");
         if (typeof openLoginModal === 'function') openLoginModal();
         return;
     }
 
-    // 2. إظهار نافذة اللعبة
-    const gameContainer = document.getElementById('game-container');
-    const iframe = document.getElementById('game-iframe');
-    if (gameContainer && iframe) {
-        gameContainer.classList.remove('hidden');
-        iframe.src = ''; 
-    }
-
-    // 3. إرسال الطلب مع تمرير اسم اللاعب بشكل إجباري
     try {
-        const res = await fetch(`${window.BACKEND_URL || BACKEND_URL}/api/provider/launch-casino`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                provider_code: provider,
-                game_code: gameCode,
-                user_code: window.playerSession.username // 👈 هذا السطر يحل مشكلة الـ null لجميع الألعاب
-            })
-        });
-        
-        const data = await res.json();
-        
-        if (data.launch_url && iframe) {
-            iframe.src = data.launch_url;
-        } else {
-            if (typeof showNotification === 'function') showNotification(data.error || "Erreur de lancement", "error");
-            if (gameContainer) gameContainer.classList.add('hidden');
+        let endpointUrl = `${window.BACKEND_URL || BACKEND_URL}/api/provider/launch-casino`;
+        let requestBody = {
+            game_code: gameCode,
+            provider_code: providerCode,
+            user_code: window.playerSession.username // تمرير اسم اللاعب بشكل آمن
+        };
+
+        // دعم مزود EuroVirtuals
+        if (providerCode === 'EUROVIRTUALS' || providerCode === 'EuroVirtuals') {
+            endpointUrl = `${window.BACKEND_URL || BACKEND_URL}/api/provider/launch-eurovirtuals`;
+            requestBody = {
+                user_code: window.playerSession.username,
+                game_uuid: gameCode
+            };
         }
-    } catch (e) {
-        console.error("Game Launch Error:", e);
-        if (typeof showNotification === 'function') showNotification("Erreur de connexion", "error");
-        if (gameContainer) gameContainer.classList.add('hidden');
+
+        const res = await fetch(endpointUrl, {
+            method: 'POST',
+            headers: typeof getAuthHeaders === 'function' ? getAuthHeaders() : { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody)
+        });
+
+        const data = await res.json();
+
+        if (data.launch_url) {
+            // 🚀 فتح اللعبة في تبويب جديد كلياً
+            window.open(data.launch_url, '_blank');
+
+            // تحديث رصيد اللاعب تلقائياً بعد بضع ثوانٍ ليتزامن مع الجلسة
+            if (typeof refreshBalance === 'function') {
+                setTimeout(refreshBalance, 4000);
+            }
+        } else {
+            if (typeof showNotification === 'function') {
+                showNotification(data.error || "Jeu non disponible", "error");
+            }
+        }
+    } catch (error) {
+        console.error("Game Launch Error:", error);
+        if (typeof showNotification === 'function') {
+            showNotification("Erreur de connexion", "error");
+        }
     }
 };
             // متغيرات الذاكرة
