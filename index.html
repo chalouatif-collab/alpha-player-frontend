@@ -919,6 +919,41 @@
                     class="w-full bg-emerald text-black font-bold p-3 rounded-xl">Entrer</button>
             </div>
         </div>
+        <!-- نافذة إنشاء حساب جديد (Register Modal) -->
+    <div id="player-register-modal" class="fixed inset-0 z-[200] bg-black/80 hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="w-full max-w-md bg-[#161922] border border-[#212631] rounded-2xl p-8 relative shadow-2xl">
+            <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl transition">&times;</button>
+            <h2 class="text-white text-2xl font-black mb-6 text-center uppercase tracking-wider">Créer un compte</h2>
+            
+            <div class="space-y-4">
+                <div class="relative">
+                    <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="text" id="r-auth-username" placeholder="Nom d'utilisateur" class="w-full pl-10 pr-4 py-3 rounded-xl bg-[#0f1117] border border-[#212631] text-white outline-none focus:border-emerald-500 transition">
+                </div>
+                <div class="relative">
+                    <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="email" id="r-auth-email" placeholder="Adresse Email" class="w-full pl-10 pr-4 py-3 rounded-xl bg-[#0f1117] border border-[#212631] text-white outline-none focus:border-emerald-500 transition">
+                </div>
+                <div class="relative">
+                    <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="password" id="r-auth-password" placeholder="Mot de passe" class="w-full pl-10 pr-4 py-3 rounded-xl bg-[#0f1117] border border-[#212631] text-white outline-none focus:border-emerald-500 transition">
+                </div>
+                <div class="relative">
+                    <i class="fas fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="tel" id="r-auth-phone" placeholder="Numéro de téléphone" class="w-full pl-10 pr-4 py-3 rounded-xl bg-[#0f1117] border border-[#212631] text-white outline-none focus:border-emerald-500 transition">
+                </div>
+                
+                <button onclick="handlePlayerRegistration()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-[#07090e] font-black uppercase tracking-wider p-3.5 rounded-xl transition mt-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:scale-[1.02]">
+                    S'inscrire
+                </button>
+            </div>
+            
+            <p class="text-[10px] text-gray-500 mt-5 text-center leading-relaxed">
+                En vous inscrivant, vous acceptez nos <br>
+                <button onclick="closeRegisterModal(); openPolicyModal('termes')" class="text-emerald-500 font-bold hover:underline">Termes et Conditions</button>
+            </p>
+        </div>
+    </div>
         <!-- 🌟 نافذة الشروط والأحكام (Policy Modal) -->
         <div id="policy-modal"
             class="fixed inset-0 z-[200] bg-black/90 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
@@ -2964,6 +2999,44 @@
                 if (touchEndX < touchStartX - 40) nextPromoSlide(); // سحب لليسار
                 if (touchEndX > touchStartX + 40) prevPromoSlide(); // سحب لليمين
             }
+
+            // دوال فتح وإغلاق نافذة التسجيل
+function openRegisterModal() { 
+    document.getElementById('player-register-modal').classList.remove('hidden'); 
+    document.getElementById('player-register-modal').classList.add('flex'); 
+}
+
+function closeRegisterModal() { 
+    document.getElementById('player-register-modal').classList.add('hidden'); 
+    document.getElementById('player-register-modal').classList.remove('flex'); 
+}
+
+// دالة معالجة التسجيل
+async function handlePlayerRegistration() {
+    const user = document.getElementById('r-auth-username').value;
+    const email = document.getElementById('r-auth-email').value;
+    const pass = document.getElementById('r-auth-password').value;
+    
+    if(user && email && pass) {
+        /*
+         هنا ستقوم بربط الباك إند الحقيقي لاحقاً:
+         const response = await fetch('/api/register', { ... });
+        */
+
+        // محاكاة نجاح التسجيل (نقوم بحفظ التوكن ونحدد أن اللاعب سجل بنفسه)
+        localStorage.setItem('player_token', 'new_user_token');
+        localStorage.setItem('is_self_registered', 'true'); // هذا السطر سيجعل زر الإيداع يظهر
+        
+        // إغلاق النافذة وتحديث الواجهة
+        closeRegisterModal();
+        updateAuthUI();
+        
+        // إشعار ترحيبي بسيط (يمكنك تغييره لاحقاً بنظام إشعارات أفضل)
+        alert("Bienvenue " + user + " ! Votre compte a été créé avec succès.");
+    } else {
+        alert("Veuillez remplir tous les champs obligatoires.");
+    }
+}
 
         </script>
         <!-- 💬 مربع الشات (Modal في الهاتف، عائم في الكمبيوتر) -->
