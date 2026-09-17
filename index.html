@@ -701,22 +701,21 @@
 
             </div>
 
-            <!-- PANE: VIRTUALS -->
-            <div id="pane-virtuals" class="player-view-section hidden w-full">
-                <div class="flex items-center gap-2 mb-4">
-                    <i class="fas fa-gamepad text-xl text-blue-400"></i>
-                    <h2 class="text-white font-bold text-lg">Jeux Virtuels</h2>
+            <div id="pane-virtuals" class="player-view-section hidden w-full space-y-4">
+                <div class="bg-betCard p-3 md:p-4 border border-gray-700 rounded-sm flex justify-between items-center">
+                    <h2 class="text-white font-black text-lg md:text-xl flex items-center gap-2"><i
+                            class="fas fa-gamepad text-blue-400"></i> Sports Virtuels</h2>
                 </div>
-                <div id="virtuals-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pb-10"></div>
-            </div>
 
-            <!-- PANE: VIRTUALS 2 (Tests / Jeux cassés) -->
-            <div id="pane-virtuals2" class="player-view-section hidden w-full">
-                <div class="flex items-center gap-2 mb-4">
-                    <i class="fas fa-bug text-xl text-yellow-500"></i>
-                    <h2 class="text-white font-bold text-lg">Jeux Virtuels (Tests)</h2>
+                <!-- هذا هو الشريط الجديد الذي ستُرسم فيه الأزرار تلقائياً -->
+                <div id="virtuals-providers-bar"
+                    class="flex flex-wrap gap-2 bg-betCard p-2 md:p-3 border border-gray-700 rounded-sm overflow-x-auto no-scrollbar hidden">
                 </div>
-                <div id="virtuals2-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pb-10"></div>
+
+                <div class="bg-betMain pt-2">
+                    <div id="virtuals-games-grid"
+                        class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 md:gap-3 pb-6"></div>
+                </div>
             </div>
 
     </main>
@@ -1884,26 +1883,26 @@
             }
 
             async function initVirtualsLobby() {
-    const grid = document.getElementById('virtuals-games-grid');
-    if (grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10">Chargement de tous les jeux... 🚀</div>';
+                const grid = document.getElementById('virtuals-games-grid');
+                if (grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10">Chargement de tous les jeux... 🚀</div>';
 
-    try {
-        const res = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games`);
-        const data = await res.json();
-        let games = data.games || data.data || data || [];
+                try {
+                    const res = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games`);
+                    const data = await res.json();
+                    let games = data.games || data.data || data || [];
 
-        if (games.length === 0) {
-            if (grid) grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-10">Aucun jeu trouvé.</div>';
-            return;
-        }
+                    if (games.length === 0) {
+                        if (grid) grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-10">Aucun jeu trouvé.</div>';
+                        return;
+                    }
 
-        // 🌟 عرض كافة الألعاب مباشرة بدون أي فلتر مقيد (نفس طريقة ألفا بعد إزالة الفلتر)
-        if (grid) grid.innerHTML = games.map(g => {
-            const uuid = g.uuid || g.game_uuid || g.id || g.game_code;
-            const safeName = escapeHTML(g.game_name || g.name || "Virtual Game");
-            const img = g.banner || g.image || g.thumb || 'https://placehold.co/400x400/180A2B/FFF?text=Game';
+                    // 🌟 عرض كافة الألعاب مباشرة بدون أي فلتر مقيد (نفس طريقة ألفا بعد إزالة الفلتر)
+                    if (grid) grid.innerHTML = games.map(g => {
+                        const uuid = g.uuid || g.game_uuid || g.id || g.game_code;
+                        const safeName = escapeHTML(g.game_name || g.name || "Virtual Game");
+                        const img = g.banner || g.image || g.thumb || 'https://placehold.co/400x400/180A2B/FFF?text=Game';
 
-            return `
+                        return `
             <div onclick="launchSpecificVirtualGame('${uuid}')" class="bg-[#0f1117] border border-[#2b2d35] rounded-xl cursor-pointer group hover:-translate-y-1 transition-all overflow-hidden shadow-lg shadow-black/50">
                 <div class="relative w-full aspect-square overflow-hidden bg-black/50">
                     <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="${safeName}">
@@ -1914,13 +1913,13 @@
                 <div class="p-2 text-[10px] text-white font-bold truncate text-center">${safeName}</div>
             </div>
             `;
-        }).join('');
+                    }).join('');
 
-    } catch (e) {
-        console.error("Erreur:", e);
-        if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur lors du chargement des jeux</div>';
-    }
-}
+                } catch (e) {
+                    console.error("Erreur:", e);
+                    if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur lors du chargement des jeux</div>';
+                }
+            }
 
             async function launchSpecificVirtualGame(uuid) {
                 console.log("🖱️ Clicked game with UUID:", uuid);
@@ -3133,7 +3132,7 @@
                 });
             };
 
-      </script>
+        </script>
         <!-- 💬 مربع الشات (Modal في الهاتف، عائم في الكمبيوتر) -->
         <div id="live-chat-sidebar" onclick="if(event.target === this) closeChat()"
             class="fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-4 md:right-8 z-[500] hidden items-center justify-center p-4 sm:p-0 bg-black/80 sm:bg-transparent backdrop-blur-sm sm:backdrop-blur-none">
