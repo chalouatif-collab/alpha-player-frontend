@@ -1877,13 +1877,13 @@
                 }
             }
 
-window.allVirtualGames = []; // متغير عام لحفظ الألعاب
+window.allFetchedGames = []; // لتخزين الألعاب في الذاكرة لتسهيل الفلترة السريعة
 
 async function initVirtualsLobby() {
     const grid = document.getElementById('virtuals-games-grid');
     const providerBar = document.getElementById('virtuals-providers-bar');
     
-    if (grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10"><i class="fas fa-circle-notch fa-spin text-3xl mb-3"></i><br>Chargement des jeux virtuels...</div>';
+    if (grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10"><i class="fas fa-circle-notch fa-spin text-3xl mb-3"></i><br>Chargement des jeux...</div>';
     if (providerBar) { providerBar.innerHTML = ''; providerBar.classList.add('hidden'); }
 
     try {
@@ -1896,63 +1896,75 @@ async function initVirtualsLobby() {
             return;
         }
 
-        // حفظ الألعاب في الذاكرة لاستخدامها في الفلترة
-        window.allVirtualGames = games;
+        window.allFetchedGames = games; // حفظها للفلترة
 
-        // 1. استخراج أسماء المزودين من البيانات ديناميكياً (بدون تكرار)
+        // 1. استخراج أسماء المزودين من استجابة السيرفر ديناميكياً
         const providersSet = new Set();
         games.forEach(g => {
-            // يبحث عن اسم المزود في البيانات، وإذا لم يجده يضعه تحت اسم "Autre"
-            const pName = g.provider || g.provider_code || g.provider_name || g.category || 'Autres';
+            // نبحث عن اسم المزود في الخصائص المحتملة التي يرسلها السيرفر
+            const pName = g.provider || g.provider_name || g.category || 'Autres';
             providersSet.add(pName);
         });
 
-        // 2. رسم الأزرار في الشريط العلوي إذا كان هناك مزودون
+        // 2. رسم الأزرار بناءً على ما وجدناه في السيرفر
         if (providersSet.size > 0 && providerBar) {
-            // زر "الكل" الافتراضي
-            let buttonsHTML = `<button onclick="filterVirtualGames('All')" class="virtual-prov-btn bg-blue-500 text-white px-4 py-1.5 md:py-2 text-[10px] md:text-sm font-bold rounded-full transition whitespace-nowrap">Tout</button>`;
+            let buttonsHTML = `<button onclick="filterGamesByProvider('All', this)" class="virtual-prov-btn bg-blue-500 text-white px-4 py-1.5 md:py-2 text-[10px] md:text-sm font-bold rounded-full transition whitespace-nowrap">Tout</button>`;
             
-            // إضافة زر لكل مزود قادم من السيرفر
-            providersSet.forEach(p => {
-                buttonsHTML += `<button onclick="filterVirtualGames('${p}')" class="virtual-prov-btn bg-betMain border border-gray-700 text-gray-300 hover:text-white px-4 py-1.5 md:py-2 text-[10px] md:text-sm font-bold rounded-full transition whitespace-nowrap">${p}</button>`;
+            providersSet.forEach(pName => {
+                const safePName = escapeHTML(pName);
+                buttonsHTML += `<button onclick="filterGamesByProvider('${safePName}', this)" class="virtual-prov-btn bg-betMain border border-gray-700 text-gray-300 hover:text-white px-4 py-1.5 md:py-2 text-[10px] md:text-sm font-bold rounded-full transition whitespace-nowrap">${safePName}</button>`;
             });
             
             providerBar.innerHTML = buttonsHTML;
             providerBar.classList.remove('hidden');
         }
 
-        // 3. عرض كل الألعاب مبدئياً
-        filterVirtualGames('All');
+        // 3. عرض جميع الألعاب كبداية
+        renderVirtualGamesList(games);
 
     } catch (e) {
         console.error("Erreur:", e);
-        if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur lors du chargement des jeux</div>';
+        if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur lors du chargement</div>';
     }
 }
 
-// دالة فلترة الألعاب عند الضغط على زر المزود
-window.filterVirtualGames = function(provider) {
-    const grid = document.getElementById('virtuals-games-grid');
-    if (!grid || !window.allVirtualGames) return;
-
-    // فلترة الألعاب
-    let filtered = window.allVirtualGames;
-    if (provider !== 'All') {
-        filtered = window.allVirtualGames.filter(g => {
-            const pName = g.provider || g.provider_code || g.provider_name || g.category || 'Autres';
-            return pName === provider;
+// دالة الفلترة عند الضغط على زر المزود
+window.filterGamesByProvider = function(providerName, btnElement) {
+    // تلوين الزر المختار
+    if (btnElement) {
+        document.querySelectorAll('.virtual-prov-btn').forEach(btn => {
+            btn.classList.remove('bg-blue-500', 'text-white');
+            btn.classList.add('bg-betMain', 'text-gray-300');
         });
+        btnElement.classList.remove('bg-betMain', 'text-gray-300');
+        btnElement.classList.add('bg-blue-500', 'text-white');
     }
 
-    if (filtered.length === 0) {
-        grid.innerHTML = '<div class="col-span-full py-8 text-center text-gray-500 font-bold text-xs">Aucun jeu trouvé pour ce fournisseur.</div>';
+    // فرز الألعاب
+    let filtered = window.allFetchedGames;
+    if (providerName !== 'All') {
+        filtered = window.allFetchedGames.filter(g => {
+            const p = g.provider || g.provider_name || g.category || 'Autres';
+            return p === providerName;
+        });
+    }
+    
+    renderVirtualGamesList(filtered);
+};
+
+// دالة رسم الألعاب في الشبكة
+window.renderVirtualGamesList = function(gamesToRender) {
+    const grid = document.getElementById('virtuals-games-grid');
+    if (!grid) return;
+
+    if (gamesToRender.length === 0) {
+        grid.innerHTML = '<div class="col-span-full py-8 text-center text-gray-500 font-bold text-xs">Aucun jeu trouvé.</div>';
         return;
     }
 
-    // رسم الألعاب
-    grid.innerHTML = filtered.map(g => {
+    grid.innerHTML = gamesToRender.map(g => {
         const uuid = g.uuid || g.game_uuid || g.id || g.game_code;
-        const safeName = escapeHTML(g.game_name || g.name || "Virtual Game");
+        const safeName = escapeHTML(g.game_name || g.name || "Game");
         const img = g.banner || g.image || g.thumb || 'https://placehold.co/400x400/180A2B/FFF?text=Game';
 
         return `
@@ -1967,7 +1979,7 @@ window.filterVirtualGames = function(provider) {
         </div>
         `;
     }).join('');
-};
+};;
 
             async function launchSpecificVirtualGame(uuid) {
                 console.log("🖱️ Clicked game with UUID:", uuid);
