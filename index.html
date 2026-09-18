@@ -718,13 +718,27 @@
                         class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 md:gap-3 pb-6"></div>
                 </div>
             </div>
-            <div id="pane-virtual-casino" class="player-view-section hidden w-full space-y-4">
-    <div class="bg-betCard p-3 md:p-4 border border-gray-700 rounded-sm flex justify-between items-center">
+          <div id="pane-virtual-casino" class="player-view-section hidden w-full space-y-4">
+    <div class="bg-betCard p-3 md:p-4 border border-gray-700 rounded-sm flex flex-col sm:flex-row justify-between sm:items-center gap-3">
         <h2 class="text-white font-black text-lg md:text-xl flex items-center gap-2"><i class="fas fa-slot-machine text-purple-500"></i> Casino Virtuel</h2>
-    </div>
-    
-    <!-- شريط مزودي الكازينو العالمي -->
-    <div id="virtual-casino-providers-bar" class="flex flex-wrap gap-2 bg-betCard p-2 md:p-3 border border-gray-700 rounded-sm overflow-x-auto no-scrollbar">
+        
+        <!-- القائمة المنسدلة للبحث عن المزودين -->
+        <div class="relative w-full sm:w-72 z-[150]">
+            <button onclick="toggleVCDropdown()" class="w-full bg-betMain border border-gray-700 px-4 py-2 text-xs md:text-sm text-white font-bold flex items-center justify-between rounded hover:border-gray-500 transition shadow-lg">
+                <span id="vc-current-provider-label">Sélectionner un Fournisseur</span>
+                <i class="fas fa-chevron-down text-gray-500"></i>
+            </button>
+            
+            <div id="vc-provider-dropdown" class="absolute right-0 top-full mt-2 w-full bg-betCard border border-gray-700 shadow-2xl hidden flex-col rounded-md overflow-hidden">
+                <div class="p-2 border-b border-gray-700 bg-betMain relative">
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs"></i>
+                    <input type="text" id="vc-provider-search" onkeyup="filterVCDropdown()" placeholder="Chercher..." class="b365-input pl-8 py-1.5 text-xs md:text-sm rounded w-full border-gray-600 focus:border-purple-500">
+                </div>
+                <div id="vc-provider-list" class="max-h-[300px] overflow-y-auto no-scrollbar p-1 flex flex-col">
+                    <!-- سيتم رسم المزودين هنا بواسطة الجافاسكريبت -->
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="bg-betMain pt-2">
@@ -1292,40 +1306,49 @@
     { code: "ZILLION", name: "Zillion" }
 ];
 
-function initVirtualCasinoLobby() {
-    const bar = document.getElementById('virtual-casino-providers-bar');
-    
-    if (bar) {
-        let html = '';
-        virtualCasinoProvidersList.forEach((p, index) => {
-            html += `<button onclick="fetchVirtualCasinoGames('${p.code}', this)" class="vc-prov-btn bg-betMain border border-gray-700 text-gray-300 hover:text-white px-4 py-1.5 md:py-2 text-[10px] md:text-sm font-bold rounded-full transition whitespace-nowrap">${p.name}</button>`;
-        });
-        bar.innerHTML = html;
-    }
-
-    // جلب أول مزود في القائمة (Pragmatic) تلقائياً عند فتح القسم
-    setTimeout(() => {
-        const firstBtn = document.querySelector('.vc-prov-btn');
-        if(firstBtn) fetchVirtualCasinoGames(virtualCasinoProvidersList[0].code, firstBtn);
-    }, 100);
+// دوال إدارة القائمة المنسدلة والبحث
+function toggleVCDropdown() {
+    document.getElementById('vc-provider-dropdown').classList.toggle('hidden');
 }
 
-async function fetchVirtualCasinoGames(providerCode, btnElement) {
+function filterVCDropdown() {
+    const input = document.getElementById('vc-provider-search').value.toLowerCase();
+    const items = document.querySelectorAll('.vc-prov-item');
+    items.forEach(item => {
+        if (item.innerText.toLowerCase().includes(input)) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+function initVirtualCasinoLobby() {
+    const listContainer = document.getElementById('vc-provider-list');
+    if (!listContainer) return;
+
+    // رسم أسماء المزودين داخل القائمة المنسدلة
+    let html = '';
+    virtualCasinoProvidersList.forEach(p => {
+        html += `<button onclick="selectVCProvider('${p.code}', '${escapeHTML(p.name)}')" class="vc-prov-item text-left px-3 py-2 text-xs md:text-sm text-gray-300 font-bold hover:text-white hover:bg-gray-700 rounded transition w-full">${escapeHTML(p.name)}</button>`;
+    });
+    listContainer.innerHTML = html;
+}
+
+function selectVCProvider(providerCode, providerName) {
+    // تحديث اسم الزر وإغلاق القائمة
+    document.getElementById('vc-current-provider-label').innerText = providerName;
+    document.getElementById('vc-provider-dropdown').classList.add('hidden');
+    
+    // جلب الألعاب
+    fetchVirtualCasinoGames(providerCode);
+}
+
+async function fetchVirtualCasinoGames(providerCode) {
     const grid = document.getElementById('virtual-casino-games-grid');
     if (grid) grid.innerHTML = '<div class="col-span-full text-purple-400 text-center py-10"><i class="fas fa-circle-notch fa-spin text-3xl mb-3"></i><br>Chargement des jeux...</div>';
 
-    // تلوين الزر المختار
-    if (btnElement) {
-        document.querySelectorAll('.vc-prov-btn').forEach(btn => {
-            btn.classList.remove('bg-purple-500', 'text-white');
-            btn.classList.add('bg-betMain', 'text-gray-300');
-        });
-        btnElement.classList.remove('bg-betMain', 'text-gray-300');
-        btnElement.classList.add('bg-purple-500', 'text-white');
-    }
-
     try {
-        // توجيه الطلب إلى الباك إند (نرسل اسم المزود لجلب ألعابه)
         const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1335,7 +1358,7 @@ async function fetchVirtualCasinoGames(providerCode, btnElement) {
         let games = data.games || data.data || data || [];
 
         if (games.length === 0) {
-            if (grid) grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-10">Aucun jeu trouvé pour ce fournisseur.</div>';
+            if (grid) grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-10 font-bold text-xs">Aucun jeu trouvé. Veuillez vérifier le code fournisseur.</div>';
             return;
         }
 
