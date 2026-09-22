@@ -930,7 +930,7 @@
             }
         }
 
-       // 2. دالة جلب الألعاب الخاصة باستوديو محدد
+       // 2. دالة جلب الألعاب الخاصة باستوديو محدد (النظام الذكي الشامل)
         async function loadEuroGamesByStudio(partnerId, partnerName) {
             document.getElementById('vc-current-provider-label').innerText = partnerName;
             document.getElementById('vc-provider-dropdown').classList.add('hidden');
@@ -947,23 +947,41 @@
                 const res = await fetch(fetchUrl);
                 const responseData = await res.json();
                 
-                // سطر برمجي لطباعة البيانات في الكونسول لتسهيل أي تتبع مستقبلي
-                console.log("Données des jeux reçues:", responseData); 
+                // طباعة البيانات في الكونسول لتسهيل أي فحص مستقبلي
+                console.log("1. API Response:", responseData); 
 
-                // 🌟 استخراج ذكي وشامل للمصفوفة مهما كان الهيكل الذي يرسله المزود
-                let rawGames = responseData.games || responseData.data || responseData;
+                // تحديد مصدر البيانات الأساسي
+                let rawData = responseData.games || responseData.data || responseData;
+                
+                // معالجة مشكلة التشفير المزدوج (إذا أرسل المزود البيانات كنص)
+                if (typeof rawData === 'string') {
+                    try { rawData = JSON.parse(rawData); } 
+                    catch (e) { console.warn("Impossible de parser le string"); }
+                }
+
                 let games = [];
                 
-                if (Array.isArray(rawGames)) {
-                    games = rawGames;
-                } else if (rawGames && Array.isArray(rawGames.games)) {
-                    games = rawGames.games;
-                } else if (rawGames && Array.isArray(rawGames.data)) {
-                    games = rawGames.data;
-                } else if (rawGames && Array.isArray(rawGames.list)) {
-                    games = rawGames.list;
+                // محرك استخراج الألعاب الذكي
+                if (Array.isArray(rawData)) {
+                    // إذا كانت مصفوفة عادية
+                    games = rawData;
+                } else if (typeof rawData === 'object' && rawData !== null) {
+                    // فحص إذا كانت مصفوفة تحولت إلى كائن بسبب لغة برمجة المزود (PHP)
+                    const keys = Object.keys(rawData);
+                    if (keys.length > 0 && !isNaN(keys[0])) {
+                        games = Object.values(rawData);
+                    } else {
+                        // البحث عن أي مفتاح يحتوي على مصفوفة الألعاب بالداخل
+                        for (let key in rawData) {
+                            if (Array.isArray(rawData[key])) {
+                                games = rawData[key];
+                                break;
+                            }
+                        }
+                    }
                 }
                 
+                console.log("2. Jeux extraits:", games);
                 renderVirtualCasinoGames(games, partnerName);
                 
             } catch (e) {
