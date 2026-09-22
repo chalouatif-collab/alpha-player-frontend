@@ -929,7 +929,7 @@
                 if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de connexion avec le serveur</div>';
             }
         }
-// 2. دالة جلب الألعاب (المحرك المرن الشامل لكل المزودين)
+// 2. محرك جلب الألعاب الشامل والمفتوح لكافة المزودين
         async function loadEuroGamesByStudio(partnerId, partnerName) {
             document.getElementById('vc-current-provider-label').innerText = partnerName;
             document.getElementById('vc-provider-dropdown').classList.add('hidden');
@@ -946,39 +946,44 @@
                 const res = await fetch(fetchUrl);
                 const responseData = await res.json();
                 
-                let games = [];
+                console.log("Données brutes reçues pour:", partnerName, responseData);
+
                 let rawPayload = responseData.games || responseData.data || responseData;
+                let games = [];
 
-                let itemsList = [];
-                if (Array.isArray(rawPayload)) {
-                    itemsList = rawPayload;
-                } else if (typeof rawPayload === 'object' && rawPayload !== null) {
-                    itemsList = Object.values(rawPayload);
-                }
-
-                // استخراج العناصر بعمق مهما كان شكلها
-                for (let item of itemsList) {
-                    if (Array.isArray(item)) {
-                        games = games.concat(item);
-                    } else if (typeof item === 'object' && item !== null) {
-                        // إذا كان عنصراً يحمل خصائص لعبة أياً كانت تسميتها
-                        if (item.game_name || item.name || item.title || item.uuid || item.id || item.game_code || item.code) {
-                            games.push(item);
-                        } else {
-                            for (let subKey in item) {
-                                if (Array.isArray(item[subKey])) {
-                                    games = games.concat(item[subKey]);
-                                }
+                // دالة تفتيش عميق لاستخراج كافة الكائنات الداخلية مهما كان مسارها
+                function deepExtract(obj) {
+                    if (!obj || typeof obj !== 'object') return;
+                    if (Array.isArray(obj)) {
+                        obj.forEach(item => deepExtract(item));
+                    } else {
+                        const keys = Object.keys(obj);
+                        // إذا كان الكائن يمتلك خصائص، نفحص إن كان يمثل لعبة أو يحتوي بداخله ألعاب
+                        if (keys.length > 0) {
+                            let hasNestedObjects = keys.some(k => typeof obj[k] === 'object' && obj[k] !== null);
+                            if (!hasNestedObjects || obj.name || obj.game_name || obj.title || obj.uuid || obj.id || obj.code) {
+                                games.push(obj);
                             }
+                            keys.forEach(k => {
+                                if (typeof obj[k] === 'object' && obj[k] !== null) {
+                                    deepExtract(obj[k]);
+                                }
+                            });
                         }
                     }
                 }
 
-                // 🌟 فلترة مرنة تقبل أي كائن يحتوي على أي صيغة تدل على اسم أو معرف لعبة
-                games = games.filter(g => g && typeof g === 'object' && (g.game_name || g.name || g.title || g.game_title || g.uuid || g.id || g.game_code || g.code));
+                deepExtract(rawPayload);
 
-                console.log("Jeux extraits (Universel):", games);
-                renderVirtualCasinoGames(games, partnerName);
+                // تنقية النتائج لضمان بقاء الكائنات الصالحة فقط
+                let validGames = games.filter(g => g && typeof g === 'object' && !Array.isArray(g));
+                
+                // تصفية إضافية لاستهداف الألعاب التي تحمل ملامح لعبة حقيقية، أو أخذ العينة مباشرة إن لم توجد مطابقة حرفية
+                const matchedGames = validGames.filter(g => g.name || g.game_name || g.title || g.gameName || g.uuid || g.id || g.code || g.image || g.banner);
+                const finalGames = matchedGames.length > 0 ? matchedGames : validGames.slice(0, 30);
+
+                console.log("Jeux finaux extraits:", finalGames);
+                renderVirtualCasinoGames(finalGames, partnerName);
                 
             } catch (e) {
                 console.error("Erreur Jeux:", e);
@@ -986,7 +991,7 @@
             }
         }
 
-        // 3. دالة الرسم المرنة (تدعم كافة أسماء الصور والمعرفات)
+        // 3. دالة الرسم المرنة للبطاقات مع البدائل التلقائية
         function renderVirtualCasinoGames(gamesToRender, defaultProviderName) {
             const grid = document.getElementById('virtual-casino-games-grid');
             if (!grid) return;
@@ -996,13 +1001,10 @@
                 return;
             }
 
-            grid.innerHTML = gamesToRender.map(g => {
-                // التقاط المعرف بأي اسم محتمل
-                const uuid = g.uuid || g.game_uuid || g.id || g.game_code || g.code;
-                // التقاط الاسم بأي اسم محتمل
-                const safeName = escapeHTML(g.game_name || g.name || g.title || g.game_title || "Casino Game");
-                // التقاط رابط الصورة بأي مفتاح محتمل
-                const img = g.banner || g.image || g.thumbnail || g.thumb || g.img || g.poster || 'https://placehold.co/400x400/180A2B/FFF?text=Game';
+            grid.innerHTML = gamesToRender.map((g, index) => {
+                const uuid = g.uuid || g.game_uuid || g.id || g.game_code || g.code || `game_${index}`;
+                const safeName = escapeHTML(g.game_name || g.name || g.title || g.gameName || g.label || `Jeu ${index + 1}`);
+                const img = g.banner || g.image || g.thumbnail || g.thumb || g.img || g.poster || g.imageUrl || 'https://placehold.co/400x400/180A2B/FFF?text=Game';
                 const providerTag = escapeHTML(g.provider || g.provider_name || defaultProviderName || 'EV');
 
                 return `
@@ -1021,7 +1023,6 @@
         `;
             }).join('');
         }
-
         // 2. دالة الفلترة عند اختيار مزود من القائمة المنسدلة
         function selectVCProvider(providerName) {
             // تحديث اسم الزر وإغلاق القائمة
