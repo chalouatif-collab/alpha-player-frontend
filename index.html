@@ -894,20 +894,20 @@
             if (grid) grid.innerHTML = '<div class="col-span-full text-purple-400 text-center py-10"><i class="fas fa-circle-notch fa-spin text-3xl mb-3"></i><br>Chargement des fournisseurs...</div>';
 
             try {
-                // جلب قائمة الاستوديوهات (Partners) من السيرفر
                 const res = await fetch(`${BACKEND_URL}/api/get-studios`);
-                const data = await res.json();
+                const responseData = await res.json();
 
-                let studios = data.studios || [];
+                // 🌟 الحل السحري: استخراج المصفوفة بشكل آمن مهما كان شكل الاستجابة
+                let rawStudios = responseData.studios || responseData.data || responseData;
+                let studios = Array.isArray(rawStudios) ? rawStudios : (rawStudios.data || []);
 
-                // رسم قائمة الاستوديوهات في النافذة المنسدلة
+                // رسم قائمة الاستوديوهات
                 if (listContainer) {
                     let html = `<button onclick="loadEuroGamesByStudio('', 'Tous les jeux')" class="vc-prov-item flex items-center px-3 py-2 text-xs md:text-sm text-purple-400 font-black hover:text-white hover:bg-gray-700 rounded transition w-full">Tous les jeux</button>`;
 
                     studios.forEach(studio => {
                         const safeName = escapeHTML(studio.name);
                         const safeId = studio.id;
-                        // وضع شعار الاستوديو إن وُجد، وإلا وضع أيقونة
                         const thumb = studio.thumbnail ? `<img src="${studio.thumbnail}" class="w-5 h-5 rounded-full mr-2 object-cover bg-white">` : `<i class="fas fa-gamepad mr-2 text-gray-500"></i>`;
                         
                         html += `<button onclick="loadEuroGamesByStudio('${safeId}', '${safeName}')" class="vc-prov-item flex items-center px-3 py-2 text-xs md:text-sm text-gray-300 font-bold hover:text-white hover:bg-gray-700 rounded transition w-full">
@@ -917,7 +917,7 @@
                     listContainer.innerHTML = html;
                 }
 
-                // عرض ألعاب أول استوديو افتراضياً لتجنب شاشة فارغة
+                // عرض ألعاب أول استوديو افتراضياً
                 if (studios.length > 0) {
                     loadEuroGamesByStudio(studios[0].id, studios[0].name);
                 } else {
@@ -930,9 +930,8 @@
             }
         }
 
-        // 2. دالة جلب الألعاب الخاصة باستوديو محدد بناءً على partner_id
+        // 2. دالة جلب الألعاب الخاصة باستوديو محدد
         async function loadEuroGamesByStudio(partnerId, partnerName) {
-            // تحديث اسم الزر وإغلاق القائمة
             document.getElementById('vc-current-provider-label').innerText = partnerName;
             document.getElementById('vc-provider-dropdown').classList.add('hidden');
             
@@ -940,16 +939,18 @@
             if (grid) grid.innerHTML = '<div class="col-span-full text-purple-400 text-center py-10"><i class="fas fa-circle-notch fa-spin text-3xl mb-3"></i><br>Chargement des jeux...</div>';
 
             try {
-                // بناء الرابط مع الـ id الجديد للفلترة
                 let fetchUrl = `${BACKEND_URL}/api/get-eurovirtuals-games`;
                 if (partnerId) {
                     fetchUrl += `?partner_id=${partnerId}`;
                 }
 
                 const res = await fetch(fetchUrl);
-                const data = await res.json();
+                const responseData = await res.json();
                 
-                let games = data.games || data.data || data || [];
+                // 🌟 حماية إضافية للألعاب أيضاً
+                let rawGames = responseData.games || responseData.data || responseData;
+                let games = Array.isArray(rawGames) ? rawGames : (rawGames.data || []);
+                
                 renderVirtualCasinoGames(games, partnerName);
                 
             } catch (e) {
@@ -957,7 +958,6 @@
                 if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur lors du chargement des jeux.</div>';
             }
         }
-
         // 3. دالة رسم شبكة البطاقات الزجاجية
         function renderVirtualCasinoGames(gamesToRender, defaultProviderName) {
             const grid = document.getElementById('virtual-casino-games-grid');
