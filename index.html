@@ -930,7 +930,7 @@
             }
         }
 
-        // 2. دالة جلب الألعاب الخاصة باستوديو محدد
+       // 2. دالة جلب الألعاب الخاصة باستوديو محدد
         async function loadEuroGamesByStudio(partnerId, partnerName) {
             document.getElementById('vc-current-provider-label').innerText = partnerName;
             document.getElementById('vc-provider-dropdown').classList.add('hidden');
@@ -947,9 +947,22 @@
                 const res = await fetch(fetchUrl);
                 const responseData = await res.json();
                 
-                // 🌟 حماية إضافية للألعاب أيضاً
+                // سطر برمجي لطباعة البيانات في الكونسول لتسهيل أي تتبع مستقبلي
+                console.log("Données des jeux reçues:", responseData); 
+
+                // 🌟 استخراج ذكي وشامل للمصفوفة مهما كان الهيكل الذي يرسله المزود
                 let rawGames = responseData.games || responseData.data || responseData;
-                let games = Array.isArray(rawGames) ? rawGames : (rawGames.data || []);
+                let games = [];
+                
+                if (Array.isArray(rawGames)) {
+                    games = rawGames;
+                } else if (rawGames && Array.isArray(rawGames.games)) {
+                    games = rawGames.games;
+                } else if (rawGames && Array.isArray(rawGames.data)) {
+                    games = rawGames.data;
+                } else if (rawGames && Array.isArray(rawGames.list)) {
+                    games = rawGames.list;
+                }
                 
                 renderVirtualCasinoGames(games, partnerName);
                 
