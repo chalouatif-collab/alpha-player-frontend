@@ -930,7 +930,7 @@
             }
         }
 
-       // 2. دالة جلب الألعاب الخاصة باستوديو محدد (النظام الذكي الشامل)
+       // 2. دالة جلب الألعاب الخاصة باستوديو محدد (النظام النهائي الشامل)
         async function loadEuroGamesByStudio(partnerId, partnerName) {
             document.getElementById('vc-current-provider-label').innerText = partnerName;
             document.getElementById('vc-provider-dropdown').classList.add('hidden');
@@ -947,38 +947,24 @@
                 const res = await fetch(fetchUrl);
                 const responseData = await res.json();
                 
-                // طباعة البيانات في الكونسول لتسهيل أي فحص مستقبلي
                 console.log("1. API Response:", responseData); 
-
-                // تحديد مصدر البيانات الأساسي
-                let rawData = responseData.games || responseData.data || responseData;
-                
-                // معالجة مشكلة التشفير المزدوج (إذا أرسل المزود البيانات كنص)
-                if (typeof rawData === 'string') {
-                    try { rawData = JSON.parse(rawData); } 
-                    catch (e) { console.warn("Impossible de parser le string"); }
-                }
 
                 let games = [];
                 
-                // محرك استخراج الألعاب الذكي
-                if (Array.isArray(rawData)) {
-                    // إذا كانت مصفوفة عادية
-                    games = rawData;
-                } else if (typeof rawData === 'object' && rawData !== null) {
-                    // فحص إذا كانت مصفوفة تحولت إلى كائن بسبب لغة برمجة المزود (PHP)
-                    const keys = Object.keys(rawData);
-                    if (keys.length > 0 && !isNaN(keys[0])) {
-                        games = Object.values(rawData);
-                    } else {
-                        // البحث عن أي مفتاح يحتوي على مصفوفة الألعاب بالداخل
-                        for (let key in rawData) {
-                            if (Array.isArray(rawData[key])) {
-                                games = rawData[key];
-                                break;
-                            }
-                        }
-                    }
+                // 1. الغوص داخل البيانات للوصول إلى النقطة التي توجد فيها الألعاب فعلياً
+                let payload = responseData.games || responseData.data || responseData;
+                
+                // إذا كان بداخل payload مفتاح data (كما ظهر في الكونسول لديك) ندخل إليه
+                if (payload && payload.data) {
+                    payload = payload.data;
+                }
+
+                // 2. تحويل البيانات المستخرجة إلى مصفوفة نظيفة قابلة للقراءة
+                if (Array.isArray(payload)) {
+                    games = payload;
+                } else if (typeof payload === 'object' && payload !== null) {
+                    // تحويل الكائن الذي يحتوي على الأرقام (0, 1, 2) إلى مصفوفة حقيقية
+                    games = Object.values(payload); 
                 }
                 
                 console.log("2. Jeux extraits:", games);
