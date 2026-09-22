@@ -929,7 +929,7 @@
                 if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de connexion avec le serveur</div>';
             }
         }
-// 2. دالة جلب الألعاب الخاصة باستوديو محدد (المحرك الدقيق والنظيف)
+// محرك استخراج الألعاب الشامل والذكي (عميق التفتيش)
         async function loadEuroGamesByStudio(partnerId, partnerName) {
             document.getElementById('vc-current-provider-label').innerText = partnerName;
             document.getElementById('vc-provider-dropdown').classList.add('hidden');
@@ -946,51 +946,51 @@
                 const res = await fetch(fetchUrl);
                 const responseData = await res.json();
                 
-                console.log("API Response for", partnerName, responseData);
+                console.log("API Response pour", partnerName, responseData);
 
                 let games = [];
-                
-                // البحث المباشر والآمن عن مصفوفة الألعاب في الاستجابة
-                if (Array.isArray(responseData)) {
-                    games = responseData;
-                } else if (responseData.games) {
-                    if (Array.isArray(responseData.games)) {
-                        games = responseData.games;
-                    } else if (responseData.games.data && Array.isArray(responseData.games.data)) {
-                        games = responseData.games.data;
-                    } else if (typeof responseData.games === 'object') {
-                        games = Object.values(responseData.games);
-                    }
-                } else if (responseData.data && Array.isArray(responseData.data)) {
-                    games = responseData.data;
-                }
 
-                // إذا كانت مخفية داخل كائن فرعي، نقوم بالبحث عنها عميقاً بشكل آمن
-                if (games.length === 0) {
-                    const findGameArray = (obj) => {
-                        if (!obj || typeof obj !== 'object') return null;
-                        for (let key in obj) {
-                            if (Array.isArray(obj[key]) && obj[key].length > 0) {
-                                // نتأكد أن العنصر الأول يمتلك خصائص لعبة حقيقية
-                                const sample = obj[key][0];
-                                if (sample && (sample.game_name || sample.name || sample.uuid || sample.id || sample.game_code)) {
-                                    return obj[key];
+                // دالة تفتيش عميق تستخرج الألعاب مهما كان مكانها في الـ JSON
+                function deepExtract(obj) {
+                    if (!obj || typeof obj !== 'object') return;
+                    
+                    if (Array.isArray(obj)) {
+                        obj.forEach(item => {
+                            if (item && typeof item === 'object') {
+                                // إذا كان العنصر يمتلك خصائص تدل على أنه لعبة
+                                if (item.uuid || item.game_uuid || item.id || item.game_code || item.name || item.game_name || item.title) {
+                                    games.push(item);
+                                } else {
+                                    deepExtract(item);
                                 }
-                            } else if (typeof obj[key] === 'object') {
-                                const res = findGameArray(obj[key]);
-                                if (res) return res;
+                            }
+                        });
+                    } else {
+                        // فحص مفاتيح الكائن بالتفصيل
+                        for (let key in obj) {
+                            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                                const val = obj[key];
+                                if (val && typeof val === 'object') {
+                                    // إذا وجدنا مصفوفة داخلية أو كائن يحتوي على ألعاب
+                                    if (Array.isArray(val) || val.name || val.game_name || val.uuid || val.game_uuid) {
+                                        deepExtract(val);
+                                    } else {
+                                        deepExtract(val);
+                                    }
+                                }
                             }
                         }
-                        return null;
-                    };
-                    games = findGameArray(responseData) || [];
+                    }
                 }
 
-                // تصفية نهائية لضمان أن كل عنصر هو لعبة صالحة وليست بيانات نظام
-                games = games.filter(g => g && typeof g === 'object' && (g.game_name || g.name || g.title || g.uuid || g.id || g.game_code));
+                deepExtract(responseData);
 
-                console.log("Jeux propres et valides extraits:", games);
-                renderVirtualCasinoGames(games, partnerName);
+                // تصفية نهائية لإزالة أي تكرار أو عناصر غير صالحة
+                const uniqueGames = Array.from(new Set(games.map(g => g.uuid || g.id || g.game_code || g.name)))
+                    .map(id => games.find(g => (g.uuid || g.id || g.game_code || g.name) === id));
+
+                console.log("Jeux finaux extraits avec succès:", uniqueGames);
+                renderVirtualCasinoGames(uniqueGames, partnerName);
                 
             } catch (e) {
                 console.error("Erreur Jeux:", e);
