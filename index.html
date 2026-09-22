@@ -930,7 +930,7 @@
             }
         }
 
-       // 2. دالة جلب الألعاب الخاصة باستوديو محدد (النظام النهائي الشامل)
+       // 2. دالة جلب الألعاب الخاصة باستوديو محدد (المحرك النهائي المصفى)
         async function loadEuroGamesByStudio(partnerId, partnerName) {
             document.getElementById('vc-current-provider-label').innerText = partnerName;
             document.getElementById('vc-provider-dropdown').classList.add('hidden');
@@ -947,27 +947,43 @@
                 const res = await fetch(fetchUrl);
                 const responseData = await res.json();
                 
-                console.log("1. API Response:", responseData); 
+                console.log("API Response Brute:", responseData); 
 
                 let games = [];
-                
-                // 1. الغوص داخل البيانات للوصول إلى النقطة التي توجد فيها الألعاب فعلياً
-                let payload = responseData.games || responseData.data || responseData;
-                
-                // إذا كان بداخل payload مفتاح data (كما ظهر في الكونسول لديك) ندخل إليه
-                if (payload && payload.data) {
-                    payload = payload.data;
+                let rawPayload = responseData.games || responseData.data || responseData;
+
+                // إذا كانت الاستجابة عبارة عن كائن أو مصفوفة تحتوي على طبقات متعددة
+                let itemsList = [];
+                if (Array.isArray(rawPayload)) {
+                    itemsList = rawPayload;
+                } else if (typeof rawPayload === 'object' && rawPayload !== null) {
+                    itemsList = Object.values(rawPayload);
                 }
 
-                // 2. تحويل البيانات المستخرجة إلى مصفوفة نظيفة قابلة للقراءة
-                if (Array.isArray(payload)) {
-                    games = payload;
-                } else if (typeof payload === 'object' && payload !== null) {
-                    // تحويل الكائن الذي يحتوي على الأرقام (0, 1, 2) إلى مصفوفة حقيقية
-                    games = Object.values(payload); 
+                // 🌟 الفلتر الذكي: البحث العميق عن مصفوفة الألعاب الحقيقية وتجنب أرقام الحالة (200, 404)
+                for (let item of itemsList) {
+                    if (Array.isArray(item)) {
+                        // إذا وجدنا مصفوفة داخلية، نتأكد هل هي مصفوفة ألعاب؟
+                        games = games.concat(item);
+                    } else if (typeof item === 'object' && item !== null) {
+                        // إذا كانت تحتوي على خصائص لعبة مثل اسم أو معرف
+                        if (item.game_name || item.name || item.uuid || item.game_uuid) {
+                            games.push(item);
+                        } else {
+                            // ربما تكون مخفية في مفتاح فرعي داخل هذا الكائن
+                            for (let subKey in item) {
+                                if (Array.isArray(item[subKey])) {
+                                    games = games.concat(item[subKey]);
+                                }
+                            }
+                        }
+                    }
                 }
-                
-                console.log("2. Jeux extraits:", games);
+
+                // تصفية إضافية للتأكد من أن العناصر المستخرجة هي ألعاب وليست أكواد HTTP (مثل 200 أو 404)
+                games = games.filter(g => g && typeof g === 'object' && (g.game_name || g.name || g.uuid || g.game_uuid));
+
+                console.log("Jeux filtrés et prêts:", games);
                 renderVirtualCasinoGames(games, partnerName);
                 
             } catch (e) {
@@ -975,8 +991,9 @@
                 if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur lors du chargement des jeux.</div>';
             }
         }
-        // 3. دالة رسم شبكة البطاقات الزجاجية
-        function renderVirtualCasinoGames(gamesToRender, defaultProviderName) {
+
+
+       function renderVirtualCasinoGames(gamesToRender, defaultProviderName) {
             const grid = document.getElementById('virtual-casino-games-grid');
             if (!grid) return;
 
@@ -988,7 +1005,8 @@
             grid.innerHTML = gamesToRender.map(g => {
                 const uuid = g.uuid || g.game_uuid || g.id || g.game_code;
                 const safeName = escapeHTML(g.game_name || g.name || "Casino Game");
-                const img = g.banner || g.image || g.thumbnail || g.thumb || 'https://placehold.co/400x400/180A2B/FFF?text=Game';
+                // التقاط الصورة من أي مفتاح محتمل يرسله المزود
+                const img = g.banner || g.image || g.thumbnail || g.thumb || g.img || 'https://placehold.co/400x400/180A2B/FFF?text=Game';
                 const providerTag = escapeHTML(g.provider || defaultProviderName || 'EV');
 
                 return `
