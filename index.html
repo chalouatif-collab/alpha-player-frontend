@@ -929,7 +929,7 @@
                 if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de connexion avec le serveur</div>';
             }
         }
-// 2. محرك جلب الألعاب الشامل والمفتوح لكافة المزودين
+// 2. دالة جلب الألعاب الخاصة باستوديو محدد (المحرك الدقيق والنظيف)
         async function loadEuroGamesByStudio(partnerId, partnerName) {
             document.getElementById('vc-current-provider-label').innerText = partnerName;
             document.getElementById('vc-provider-dropdown').classList.add('hidden');
@@ -946,44 +946,51 @@
                 const res = await fetch(fetchUrl);
                 const responseData = await res.json();
                 
-                console.log("Données brutes reçues pour:", partnerName, responseData);
+                console.log("API Response for", partnerName, responseData);
 
-                let rawPayload = responseData.games || responseData.data || responseData;
                 let games = [];
-
-                // دالة تفتيش عميق لاستخراج كافة الكائنات الداخلية مهما كان مسارها
-                function deepExtract(obj) {
-                    if (!obj || typeof obj !== 'object') return;
-                    if (Array.isArray(obj)) {
-                        obj.forEach(item => deepExtract(item));
-                    } else {
-                        const keys = Object.keys(obj);
-                        // إذا كان الكائن يمتلك خصائص، نفحص إن كان يمثل لعبة أو يحتوي بداخله ألعاب
-                        if (keys.length > 0) {
-                            let hasNestedObjects = keys.some(k => typeof obj[k] === 'object' && obj[k] !== null);
-                            if (!hasNestedObjects || obj.name || obj.game_name || obj.title || obj.uuid || obj.id || obj.code) {
-                                games.push(obj);
-                            }
-                            keys.forEach(k => {
-                                if (typeof obj[k] === 'object' && obj[k] !== null) {
-                                    deepExtract(obj[k]);
-                                }
-                            });
-                        }
+                
+                // البحث المباشر والآمن عن مصفوفة الألعاب في الاستجابة
+                if (Array.isArray(responseData)) {
+                    games = responseData;
+                } else if (responseData.games) {
+                    if (Array.isArray(responseData.games)) {
+                        games = responseData.games;
+                    } else if (responseData.games.data && Array.isArray(responseData.games.data)) {
+                        games = responseData.games.data;
+                    } else if (typeof responseData.games === 'object') {
+                        games = Object.values(responseData.games);
                     }
+                } else if (responseData.data && Array.isArray(responseData.data)) {
+                    games = responseData.data;
                 }
 
-                deepExtract(rawPayload);
+                // إذا كانت مخفية داخل كائن فرعي، نقوم بالبحث عنها عميقاً بشكل آمن
+                if (games.length === 0) {
+                    const findGameArray = (obj) => {
+                        if (!obj || typeof obj !== 'object') return null;
+                        for (let key in obj) {
+                            if (Array.isArray(obj[key]) && obj[key].length > 0) {
+                                // نتأكد أن العنصر الأول يمتلك خصائص لعبة حقيقية
+                                const sample = obj[key][0];
+                                if (sample && (sample.game_name || sample.name || sample.uuid || sample.id || sample.game_code)) {
+                                    return obj[key];
+                                }
+                            } else if (typeof obj[key] === 'object') {
+                                const res = findGameArray(obj[key]);
+                                if (res) return res;
+                            }
+                        }
+                        return null;
+                    };
+                    games = findGameArray(responseData) || [];
+                }
 
-                // تنقية النتائج لضمان بقاء الكائنات الصالحة فقط
-                let validGames = games.filter(g => g && typeof g === 'object' && !Array.isArray(g));
-                
-                // تصفية إضافية لاستهداف الألعاب التي تحمل ملامح لعبة حقيقية، أو أخذ العينة مباشرة إن لم توجد مطابقة حرفية
-                const matchedGames = validGames.filter(g => g.name || g.game_name || g.title || g.gameName || g.uuid || g.id || g.code || g.image || g.banner);
-                const finalGames = matchedGames.length > 0 ? matchedGames : validGames.slice(0, 30);
+                // تصفية نهائية لضمان أن كل عنصر هو لعبة صالحة وليست بيانات نظام
+                games = games.filter(g => g && typeof g === 'object' && (g.game_name || g.name || g.title || g.uuid || g.id || g.game_code));
 
-                console.log("Jeux finaux extraits:", finalGames);
-                renderVirtualCasinoGames(finalGames, partnerName);
+                console.log("Jeux propres et valides extraits:", games);
+                renderVirtualCasinoGames(games, partnerName);
                 
             } catch (e) {
                 console.error("Erreur Jeux:", e);
