@@ -179,12 +179,8 @@
                 class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center justify-center gap-2 flex-shrink-0 grow transition-all whitespace-nowrap">
                 <i class="fas fa-chart-bar text-emerald"></i> Résultats
             </button>
-            <button id="btn-nav-01tech" onclick="setActiveMenuBtn('btn-nav-01tech'); switchSection('01tech')"
-                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-yellow-400 hover:text-white px-4 py-1.5 rounded-xl border border-yellow-500/30 flex items-center justify-center gap-2 flex-shrink-0 grow transition-all whitespace-nowrap">
-                <i class="fas fa-star text-yellow-400"></i> 01.TECH Test
-            </button>
+
         </div>
-    </div>
     <!-- 🌟 شريط الفائزين المباشر (من الحافة للحافة) -->
     <div class="w-full bg-[#12151d] border-b border-[#212631] py-1.5 overflow-hidden relative flex items-center">
 
@@ -594,39 +590,6 @@
                 <div class="flex items-center gap-2 mb-4">
                     <i class="fas fa-slot-machine text-2xl text-emerald"></i>
                     <h2 class="text-white font-extrabold text-xl">Casino & Slots</h2>
-                </div>
-                <!-- PANE: 01.TECH TEST (منطقة معزولة تماماً في قسم مستقل) -->
-                <div id="pane-01tech" class="player-view-section hidden w-full space-y-6">
-                    <div class="bg-panel p-6 rounded-2xl border border-yellow-500/30 text-center shadow-2xl">
-                        <h2 class="text-yellow-400 font-extrabold text-xl mb-2">🚀 01.TECH Aggregator - منطقة الاختبار
-                            المستقلة</h2>
-                        <p class="text-gray-400 text-xs mb-6">هذا القسم مخصص حصرياً لاختبار جلب وإطلاق ألعاب 01.tech
-                            بمعزل عن باقي المزودين.</p>
-
-                        <!-- أزرار الفئات -->
-                        <div class="flex justify-center gap-4 mb-6">
-                            <button onclick="fetch01TechCategory('slots')"
-                                class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition flex items-center gap-2">
-                                <i class="fas fa-dice"></i> Casino (Slots)
-                            </button>
-                            <button onclick="fetch01TechCategory('live')"
-                                class="bg-red-600 hover:bg-red-500 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition flex items-center gap-2">
-                                <i class="fas fa-video"></i> Casino Live
-                            </button>
-                        </div>
-
-                        <!-- حالة التحميل -->
-                        <div id="test-01tech-status"
-                            class="text-sm text-gray-300 mb-6 font-semibold bg-[#0f1117] py-3 rounded-xl border border-[#212631]">
-                            اختر قسماً بالأعلى لعرض الألعاب وفحص الاتصال...
-                        </div>
-
-                        <!-- شبكة عرض ألعاب 01.TECH -->
-                        <div id="test-01tech-grid"
-                            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 text-left">
-                            <!-- ستظهر الألعاب هنا بنظافة تامة -->
-                        </div>
-                    </div>
                 </div>
                 <!-- 🌟 محرك البحث وقائمة المزودين الجديدة -->
                 <div class="flex flex-col md:flex-row gap-3 mb-6 relative z-20">
@@ -3261,83 +3224,7 @@
                 }
             });
         };
-const TEST_BACKEND = "https://alpha-backend-server.onrender.com"; 
 
-async function fetch01TechCategory(category) {
-    const grid = document.getElementById('test-01tech-grid');
-    const status = document.getElementById('test-01tech-status');
-    
-    status.innerHTML = `<span class="text-yellow-400"><i class="fas fa-circle-notch fa-spin"></i> جاري الاتصال بسيرفر 01.tech وجلب الألعاب (${category})...</span>`;
-    grid.innerHTML = ''; 
-
-    try {
-        const response = await fetch(`${TEST_BACKEND}/api/01tech/games/${category}`);
-        const data = await response.json();
-
-        if (data.error) {
-            status.innerHTML = `<span class="text-red-500 font-bold">❌ رفض المزود الطلب: ${data.error}</span>`;
-            return;
-        }
-
-        const games = data.games || [];
-        
-        if (games.length === 0) {
-            status.innerHTML = `<span class="text-gray-400">⚠️ لا توجد ألعاب متاحة في قسم (${category}) حالياً.</span>`;
-            return;
-        }
-
-        status.innerHTML = `<span class="text-green-400 font-bold">✅ تم جلب ${games.length} لعبة بنجاح تام!</span>`;
-
-        grid.innerHTML = games.map(g => {
-            const img = g.banner || `https://placehold.co/400x400/180A2B/10b981?text=01TECH`;
-            return `
-            <div onclick="launch01TechTest('${g.game_code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-yellow-500 transition-all flex flex-col group shadow-lg">
-                <div class="relative w-full aspect-square overflow-hidden bg-black/50">
-                    <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="${g.game_name}">
-                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                        <span class="bg-yellow-500 text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">TESTER</span>
-                    </div>
-                </div>
-                <div class="p-2 text-[10px] text-white font-bold truncate text-center">${g.game_name}</div>
-            </div>
-            `;
-        }).join('');
-
-    } catch (err) {
-        status.innerHTML = `<span class="text-red-500 font-bold">🚨 فشل الاتصال بالباك إند! تأكد من تشغيل السيرفر.</span>`;
-    }
-}
-
-async function launch01TechTest(gameId) {
-    const playerSessionStr = localStorage.getItem('alpha_player_session');
-    const playerId = playerSessionStr ? JSON.parse(playerSessionStr).username : null; 
-    
-    if (!playerId) {
-        alert("يرجى تسجيل الدخول أولاً كلاعب لتجربة اللعبة!");
-        return;
-    }
-
-    document.body.style.cursor = 'wait';
-    try {
-        const response = await fetch(`${TEST_BACKEND}/api/01tech/launch`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ game_id: gameId, account_id: playerId })
-        });
-
-        const data = await response.json();
-        
-        if (data.game_url) {
-            window.open(data.game_url, '_blank');
-        } else {
-            alert("خطأ أثناء الإطلاق: \n" + (data.error || "مجهول"));
-        }
-    } catch (err) {
-        alert("حدث خطأ في الاتصال أثناء محاولة إطلاق اللعبة.");
-    } finally {
-        document.body.style.cursor = 'default';
-    }
-}
 
     </script>
     <!-- 💬 مربع الشات (Modal في الهاتف، عائم في الكمبيوتر) -->
