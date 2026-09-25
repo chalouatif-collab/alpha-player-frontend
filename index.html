@@ -244,189 +244,76 @@
                         </div>
                     </div>
                 </div>
-                <!-- 🌟 2. شريط شعارات المزودين السريع (مصغرة وفي سطر واحد) -->
-                <div class="flex overflow-x-auto flex-nowrap gap-2 py-2 hide-scroll w-full">
-
-                    <button onclick="loadProviderGames('PRAGMATIC'); switchSection('casino');"
-                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
-                        <i class="fas fa-slot-machine text-emerald/70 text-xs"></i> Pragmatic
-                    </button>
-
-                    <button onclick="loadProviderGames('HACKSAW'); switchSection('casino');"
-                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
-                        <i class="fas fa-bolt text-yellow-500/70 text-xs"></i> Hacksaw
-                    </button>
-
-                    <button onclick="loadProviderGames('PLAYNGO'); switchSection('casino');"
-                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
-                        <i class="fas fa-crown text-purple-500/70 text-xs"></i> Play'n Go
-                    </button>
-
-                    <button onclick="loadProviderGames('PGSOFT'); switchSection('casino');"
-                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
-                        <i class="fas fa-gamepad text-blue-500/70 text-xs"></i> PGSoft
-                    </button>
-
-                    <button onclick="loadProviderGames('SPRIBE'); switchSection('casino');"
-                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
-                        <i class="fas fa-plane text-red-500/70 text-xs"></i> Spribe
-                    </button>
-
-                    <button onclick="loadProviderGames('EVOPLAY'); switchSection('casino');"
-                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
-                        <i class="fas fa-dice text-orange-500/70 text-xs"></i> Evoplay
-                    </button>
-
-                    <button onclick="loadProviderGames('AMATIC'); switchSection('casino');"
-                        class="bg-[#1a1e29] border border-[#2e3648] hover:border-emerald hover:text-emerald px-2.5 py-1 rounded-md text-[10px] font-bold text-white shrink-0 flex items-center justify-center gap-1 transition-all shadow uppercase tracking-wide">
-                        <i class="fas fa-gem text-cyan-500/70 text-xs"></i> Amatic
-                    </button>
-
-                </div>
-                <!-- 🌟 شريط الجاكبوت المباشر (Pure CSS Energy Fire) -->
-                <style>
-                    /* محرك النيران والنبض باستخدام CSS فقط */
-                    @keyframes pure-fire-mini {
-
-                        0%,
-                        100% {
-                            box-shadow: 0 0 10px rgba(234, 88, 12, 0.4), inset 0 -15px 30px rgba(234, 88, 12, 0.3);
-                            border-color: #ea580c;
-                        }
-
-                        50% {
-                            box-shadow: 0 0 25px rgba(249, 115, 22, 0.7), inset 0 -35px 50px rgba(234, 88, 12, 0.6);
-                            border-color: #fdba74;
-                        }
-                    }
-
-                    @keyframes pure-fire-minor {
-
-                        0%,
-                        100% {
-                            box-shadow: 0 0 10px rgba(37, 99, 235, 0.4), inset 0 -15px 30px rgba(37, 99, 235, 0.3);
-                            border-color: #2563eb;
-                        }
-
-                        50% {
-                            box-shadow: 0 0 25px rgba(59, 130, 246, 0.7), inset 0 -35px 50px rgba(37, 99, 235, 0.6);
-                            border-color: #93c5fd;
-                        }
-                    }
-
-                    @keyframes pure-fire-major {
-
-                        0%,
-                        100% {
-                            box-shadow: 0 0 15px rgba(202, 138, 4, 0.4), inset 0 -20px 40px rgba(202, 138, 4, 0.3);
-                            border-color: #ca8a04;
-                        }
-
-                        50% {
-                            box-shadow: 0 0 35px rgba(234, 179, 8, 0.7), inset 0 -45px 60px rgba(202, 138, 4, 0.6);
-                            border-color: #fef08a;
-                        }
-                    }
-
-                    @keyframes pure-fire-grand {
-
-                        0%,
-                        100% {
-                            box-shadow: 0 0 20px rgba(5, 150, 105, 0.5), inset 0 -25px 50px rgba(5, 150, 105, 0.4);
-                            border-color: #059669;
-                        }
-
-                        50% {
-                            box-shadow: 0 0 45px rgba(16, 185, 129, 0.8), inset 0 -55px 75px rgba(5, 150, 105, 0.7);
-                            border-color: #6ee7b7;
-                        }
-                    }
-
-                    /* حركة سراب الحرارة للنصوص */
-                    @keyframes heat-wave {
-                        0% {
-                            transform: translateY(0) scale(1);
-                        }
-
-                        100% {
-                            transform: translateY(-1px) scale(1.01);
-                        }
-                    }
-
-                    /* إعدادات بطاقات الجاكبوت */
-                    .pure-jackpot-card {
-                        background: linear-gradient(180deg, #0f1117 0%, #0a0c10 100%);
-                        border: 2px solid;
-                        border-radius: 0.75rem;
-                        padding: 0.75rem;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        justify-content: center;
-                        position: relative;
-                        overflow: hidden;
-                        transition: transform 0.3s ease;
-                    }
-
-                    .pure-jackpot-card:hover {
-                        transform: translateY(-4px) scale(1.03);
-                    }
-
-                    /* ربط الأنيميشن بالبطاقات */
-                    .anim-mini {
-                        animation: pure-fire-mini 1s infinite alternate ease-in-out;
-                    }
-
-                    .anim-minor {
-                        animation: pure-fire-minor 1.2s infinite alternate ease-in-out;
-                    }
-
-                    .anim-major {
-                        animation: pure-fire-major 0.9s infinite alternate ease-in-out;
-                    }
-
-                    .anim-grand {
-                        animation: pure-fire-grand 0.7s infinite alternate ease-in-out;
-                    }
-
-                    .text-heat {
-                        animation: heat-wave 0.15s infinite alternate linear;
-                    }
-                </style>
-
-                <div class="grid grid-cols-4 gap-1.5 md:gap-4 w-full relative z-10 mb-4 mt-2">
+                <!-- 🌟 سلايدر البنرات الترويجية (Hero Banner Slider) -->
+                <div class="relative w-full h-[180px] md:h-[260px] rounded-2xl overflow-hidden mb-6 group bg-[#161922] border border-[#212631] shadow-xl">
                     
-                    <!-- MINI -->
-                    <div class="pure-jackpot-card anim-mini !p-1 md:!p-3 !border md:!border-2 !rounded-md md:!rounded-xl">
-                        <div class="absolute inset-0 bg-gradient-to-t from-orange-600/20 to-transparent"></div>
-                        <span class="text-orange-300 font-black text-[6px] md:text-[10px] tracking-widest mb-0.5 md:mb-1 flex items-center gap-0.5 md:gap-1.5 relative z-10"><i class="fas fa-fire text-orange-500 text-[8px] md:text-sm"></i> MINI</span>
-                        <span id="jackpot-mini" class="text-heat text-white font-extrabold text-[7px] sm:text-[9px] md:text-base drop-shadow-[0_0_8px_rgba(249,115,22,0.9)] relative z-10 whitespace-nowrap">0.00 TND</span>
+                    <!-- حاوية البنرات -->
+                    <div id="hero-slider" class="w-full h-full relative">
+                        
+                        <!-- البنر الأول (الكازينو) -->
+                        <div class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100 z-20">
+                            <!-- خلفية متدرجة أنيقة -->
+                            <div class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/90 to-[#10b981]/20"></div>
+                            <!-- نمط شبكي خفيف (Grid Pattern) -->
+                            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:20px_20px]"></div>
+                            
+                            <div class="relative h-full flex flex-col justify-center px-6 md:px-12 w-full md:w-2/3">
+                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] md:text-xs font-bold mb-3 w-fit">
+                                    <i class="fas fa-slot-machine"></i> CASINO PREMIUM
+                                </div>
+                                <h2 class="text-white text-lg md:text-3xl font-black uppercase tracking-wide leading-tight mb-2">
+                                    L'Expérience Casino <br><span class="text-emerald">Ultime</span>
+                                </h2>
+                                <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md">
+                                    Plongez dans un univers de divertissement sans limite avec les meilleurs fournisseurs mondiaux.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- البنر الثاني (الرياضة) -->
+                        <div class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-10">
+                            <div class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/90 to-blue-600/20"></div>
+                            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px]"></div>
+                            
+                            <div class="relative h-full flex flex-col justify-center px-6 md:px-12 w-full md:w-2/3">
+                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[10px] md:text-xs font-bold mb-3 w-fit">
+                                    <i class="fas fa-futbol"></i> SPORTSBOOK
+                                </div>
+                                <h2 class="text-white text-lg md:text-3xl font-black uppercase tracking-wide leading-tight mb-2">
+                                    Vivez le Sport <br><span class="text-blue-500">En Direct</span>
+                                </h2>
+                                <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md">
+                                    Une couverture mondiale, des statistiques en temps réel et les cotes les plus compétitives du marché.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- البنر الثالث (الموثوقية والسرعة) -->
+                        <div class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-10">
+                            <div class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/90 to-purple-600/20"></div>
+                            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#a855f7_1px,transparent_1px)] [background-size:20px_20px]"></div>
+                            
+                            <div class="relative h-full flex flex-col justify-center px-6 md:px-12 w-full md:w-2/3">
+                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-[10px] md:text-xs font-bold mb-3 w-fit">
+                                    <i class="fas fa-shield-check"></i> FIABILITÉ ABSOLUE
+                                </div>
+                                <h2 class="text-white text-lg md:text-3xl font-black uppercase tracking-wide leading-tight mb-2">
+                                    Transactions Rapides <br><span class="text-purple-500">& Sécurisées</span>
+                                </h2>
+                                <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md">
+                                    Profitez d'un environnement de jeu sûr avec des dépôts instantanés et des retraits garantis.
+                                </p>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- MINOR -->
-                    <div class="pure-jackpot-card anim-minor !p-1 md:!p-3 !border md:!border-2 !rounded-md md:!rounded-xl">
-                        <div class="absolute inset-0 bg-gradient-to-t from-blue-600/20 to-transparent"></div>
-                        <span class="text-blue-300 font-black text-[6px] md:text-[10px] tracking-widest mb-0.5 md:mb-1 flex items-center gap-0.5 md:gap-1.5 relative z-10"><i class="fas fa-fire text-blue-500 text-[8px] md:text-sm"></i> MINOR</span>
-                        <span id="jackpot-minor" class="text-heat text-white font-extrabold text-[7px] sm:text-[9px] md:text-base drop-shadow-[0_0_8px_rgba(59,130,246,0.9)] relative z-10 whitespace-nowrap">0.00 TND</span>
+                    <!-- أزرار التحكم (النقاط السفلية) -->
+                    <div class="absolute bottom-3 md:bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-30">
+                        <button class="slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-emerald shadow-[0_0_8px_rgba(16,185,129,0.8)] transition-all"></button>
+                        <button class="slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-600 hover:bg-gray-400 transition-all"></button>
+                        <button class="slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-600 hover:bg-gray-400 transition-all"></button>
                     </div>
-
-                    <!-- MAJOR -->
-                    <div class="pure-jackpot-card anim-major !p-1 md:!p-3 !border md:!border-2 !rounded-md md:!rounded-xl">
-                        <div class="absolute inset-0 bg-gradient-to-t from-yellow-600/20 to-transparent"></div>
-                        <span class="text-yellow-300 font-black text-[6px] md:text-[10px] tracking-widest mb-0.5 md:mb-1 flex items-center gap-0.5 md:gap-1.5 relative z-10"><i class="fas fa-fire-alt text-yellow-500 text-[8px] md:text-lg"></i> MAJOR</span>
-                        <span id="jackpot-major" class="text-heat text-white font-extrabold text-[7px] sm:text-[9px] md:text-lg drop-shadow-[0_0_12px_rgba(234,179,8,1)] relative z-10 whitespace-nowrap">0.00 TND</span>
-                    </div>
-
-                    <!-- GRAND -->
-                    <div class="pure-jackpot-card anim-grand transform md:scale-105 !p-1 md:!p-3 !border md:!border-2 !rounded-md md:!rounded-xl">
-                        <div class="absolute inset-0 bg-gradient-to-t from-emerald-600/20 to-transparent"></div>
-                        <span class="text-emerald-300 font-black text-[7px] md:text-[11px] tracking-widest mb-0.5 md:mb-1 flex items-center gap-0.5 md:gap-1.5 relative z-10"><i class="fas fa-fire-alt text-emerald-400 text-[9px] md:text-xl"></i> GRAND</span>
-                        <span id="jackpot-grand" class="text-heat text-white font-black text-[8px] sm:text-[10px] md:text-xl drop-shadow-[0_0_15px_rgba(16,185,129,1)] relative z-10 tracking-wide whitespace-nowrap">0.00 TND</span>
-                    </div>
-                    
                 </div>
-                <!-- ============================================== -->
-<!-- ============================================== -->
 <!-- قسم أبرز المزودين (يُعبأ تلقائياً عبر API) -->
 <!-- ============================================== -->
 <div id="dynamic-featured-providers" class="flex flex-col gap-6 mb-8 w-full mt-4">
@@ -2363,6 +2250,63 @@ async function loadFeaturedProvidersBlocks() {
             }
         }
         // =================================================================
+
+        // ================= محرك سلايدر البنرات =================
+        let currentSlideIndex = 0;
+        let slideInterval;
+
+        function initHeroSlider() {
+            const slides = document.querySelectorAll('.slide-item');
+            const dots = document.querySelectorAll('.slide-dot');
+            if (slides.length === 0) return;
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    if (i === index) {
+                        slide.classList.replace('opacity-0', 'opacity-100');
+                        slide.classList.replace('z-10', 'z-20');
+                    } else {
+                        slide.classList.replace('opacity-100', 'opacity-0');
+                        slide.classList.replace('z-20', 'z-10');
+                    }
+                });
+
+                dots.forEach((dot, i) => {
+                    if (i === index) {
+                        dot.className = "slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-emerald shadow-[0_0_8px_rgba(16,185,129,0.8)] transition-all";
+                    } else {
+                        dot.className = "slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-600 hover:bg-gray-400 transition-all cursor-pointer";
+                    }
+                });
+            }
+
+            function nextSlide() {
+                currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+                showSlide(currentSlideIndex);
+            }
+
+            // تفعيل النقر على النقاط
+            dots.forEach((dot, i) => {
+                dot.addEventListener('click', () => {
+                    currentSlideIndex = i;
+                    showSlide(currentSlideIndex);
+                    resetInterval();
+                });
+            });
+
+            function resetInterval() {
+                clearInterval(slideInterval);
+                slideInterval = setInterval(nextSlide, 5000); // تغيير كل 5 ثواني
+            }
+
+            // تشغيل آلي
+            resetInterval();
+        }
+
+        // تشغيل السلايدر عند تحميل الصفحة
+        window.addEventListener('DOMContentLoaded', () => {
+            initHeroSlider();
+        });
     </script>
     <!-- 💬 مربع الشات (Modal في الهاتف، عائم في الكمبيوتر) -->
     <div id="live-chat-sidebar" onclick="if(event.target === this) closeChat()"
