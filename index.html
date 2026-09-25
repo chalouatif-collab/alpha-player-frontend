@@ -2224,15 +2224,19 @@ async function loadFeaturedProvidersBlocks() {
             }
         }
 
-        // دالة الفلترة والرسم السريع
+        // دالة الفلترة والرسم السريع (محدثة لتطابق شرط النقطتين الرأسيتين)
         function renderZeroOneGamesByProvider(providerName) {
             const gridContainer = document.getElementById('grid-zeroone-test');
             const filteredGames = zeroOneAllGames.filter(g => g.provider === providerName);
 
             gridContainer.innerHTML = filteredGames.map(item => {
                 const poster = item.banner || `https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(item.game_name.substring(0,10))}`;
+                
+                // 💡 التعديل هنا: دمج اسم المزود مع كود اللعبة وبينهما نقطتين رأسيتين
+                const exactGameId = `${item.provider}:${item.game_code}`;
+
                 return `
-                <div onclick="launchIsolatedZeroOneGame('${item.game_code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-yellow-500 transition-all flex flex-col group shadow-lg relative">
+                <div onclick="launchIsolatedZeroOneGame('${exactGameId}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-yellow-500 transition-all flex flex-col group shadow-lg relative">
                     <div class="absolute top-0 right-0 bg-black/80 text-yellow-500 text-[8px] font-black px-2 py-1 rounded-bl-lg z-20 border-b border-l border-[#212631]">${item.provider}</div>
                     <div class="relative w-full aspect-square overflow-hidden bg-black/50">
                         <img src="${poster}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="${escapeHTML(item.game_name)}" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(item.game_name.substring(0,10))}';">
