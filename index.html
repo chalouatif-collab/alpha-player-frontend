@@ -423,7 +423,8 @@
                     <div id="status-zeroone-test" class="text-sm text-gray-300 mb-6 font-semibold bg-[#0f1117] py-3 rounded-xl border border-[#212631]">
                         Appuyez sur l'un des boutons ci-dessus pour vous connecter et récupérer les jeux....
                     </div>
-
+                    <!-- 🌟 شريط أزرار المزودين (سيتم تعبئته آلياً) -->
+                    <div id="zeroone-providers-filter" class="flex flex-wrap gap-2 justify-center mb-6"></div>
                     <div id="grid-zeroone-test" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 text-left">
                         <!-- ستظهر الألعاب هنا -->
                     </div>
@@ -2172,50 +2173,77 @@ async function loadFeaturedProvidersBlocks() {
 // =================================================================
         // 🧪 ISOLATED 01.TECH LOGIC (دالات معزولة بأسماء جديدة)
         // =================================================================
+        let zeroOneAllGames = []; // متغير لحفظ كل الألعاب في الذاكرة لتسريع الفلترة
+
         async function fetchIsolatedZeroOneGames(categoryType) {
             const gridContainer = document.getElementById('grid-zeroone-test');
             const statusDisplay = document.getElementById('status-zeroone-test');
+            const providersFilter = document.getElementById('zeroone-providers-filter');
             
             statusDisplay.innerHTML = `<span class="text-yellow-400"><i class="fas fa-circle-notch fa-spin"></i> جاري الاتصال وتشفير البيانات...</span>`;
             gridContainer.innerHTML = ''; 
+            if(providersFilter) providersFilter.innerHTML = '';
 
             try {
-                // نستخدم BACKEND_URL المعرف مسبقاً في ملفك
                 const response = await fetch(`${BACKEND_URL}/api/01tech/games/${categoryType}`);
                 const resultData = await response.json();
 
                 if (resultData.error) {
-                    statusDisplay.innerHTML = `<span class="text-red-500 font-bold">❌Refus du fournisseur: ${escapeHTML(resultData.error)}</span>`;
+                    statusDisplay.innerHTML = `<span class="text-red-500 font-bold">❌ رفض المزود: ${escapeHTML(resultData.error)}</span>`;
                     return;
                 }
 
-                const gameList = resultData.games || [];
+                zeroOneAllGames = resultData.games || [];
                 
-                if (gameList.length === 0) {
+                if (zeroOneAllGames.length === 0) {
                     statusDisplay.innerHTML = `<span class="text-gray-400">⚠️ القائمة فارغة. لا توجد ألعاب هنا.</span>`;
                     return;
                 }
 
-                statusDisplay.innerHTML = `<span class="text-emerald font-bold">✅ نجاح! تم جلب ${gameList.length} لعبة.</span>`;
+                // 💡 استخراج قائمة المزودين الفريدين (بدون تكرار)
+                const uniqueProviders = [...new Set(zeroOneAllGames.map(g => g.provider))];
 
-                gridContainer.innerHTML = gameList.map(item => {
-                    const poster = item.banner || `https://placehold.co/400x400/180A2B/10b981?text=01TECH`;
-                    return `
-                    <div onclick="launchIsolatedZeroOneGame('${item.game_code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-yellow-500 transition-all flex flex-col group shadow-lg">
-                        <div class="relative w-full aspect-square overflow-hidden bg-black/50">
-                            <img src="${poster}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="${escapeHTML(item.game_name)}">
-                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                                <span class="bg-yellow-500 text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">TESTER</span>
-                            </div>
-                        </div>
-                        <div class="p-2 text-[10px] text-white font-bold truncate text-center">${escapeHTML(item.game_name)}</div>
-                    </div>
-                    `;
-                }).join('');
+                statusDisplay.innerHTML = `<span class="text-emerald font-bold">✅ نجاح! تم جلب ${zeroOneAllGames.length} لعبة من ${uniqueProviders.length} مزود.</span>`;
+
+                // 💡 رسم أزرار المزودين
+                if (providersFilter) {
+                    providersFilter.innerHTML = uniqueProviders.map(prov => 
+                        `<button onclick="renderZeroOneGamesByProvider('${prov}')" class="bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-3 py-1.5 rounded-lg border border-[#2e3648] hover:border-yellow-400 text-xs font-bold transition shadow-sm uppercase">
+                            ${prov}
+                        </button>`
+                    ).join('');
+                }
+
+                // 💡 عرض ألعاب أول مزود في القائمة افتراضياً
+                if(uniqueProviders.length > 0) {
+                    renderZeroOneGamesByProvider(uniqueProviders[0]);
+                }
 
             } catch (err) {
                 statusDisplay.innerHTML = `<span class="text-red-500 font-bold">🚨 فشل الاتصال! تأكد أن السيرفر الخلفي يعمل.</span>`;
             }
+        }
+
+        // دالة الفلترة والرسم السريع
+        function renderZeroOneGamesByProvider(providerName) {
+            const gridContainer = document.getElementById('grid-zeroone-test');
+            const filteredGames = zeroOneAllGames.filter(g => g.provider === providerName);
+
+            gridContainer.innerHTML = filteredGames.map(item => {
+                const poster = item.banner || `https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(item.game_name.substring(0,10))}`;
+                return `
+                <div onclick="launchIsolatedZeroOneGame('${item.game_code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-yellow-500 transition-all flex flex-col group shadow-lg relative">
+                    <div class="absolute top-0 right-0 bg-black/80 text-yellow-500 text-[8px] font-black px-2 py-1 rounded-bl-lg z-20 border-b border-l border-[#212631]">${item.provider}</div>
+                    <div class="relative w-full aspect-square overflow-hidden bg-black/50">
+                        <img src="${poster}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="${escapeHTML(item.game_name)}" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(item.game_name.substring(0,10))}';">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                            <span class="bg-yellow-500 text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">TESTER</span>
+                        </div>
+                    </div>
+                    <div class="p-2 text-[10px] text-white font-bold truncate text-center">${escapeHTML(item.game_name)}</div>
+                </div>
+                `;
+            }).join('');
         }
 
         async function launchIsolatedZeroOneGame(targetGameId) {
@@ -2239,7 +2267,7 @@ async function loadFeaturedProvidersBlocks() {
                 const resData = await req.json();
                 
                 if (resData.game_url) {
-                    window.open(resData.game_url, '_blank');
+                    window.open(resData.game_url, '_blank'); // يفتح اللعبة في نافذة جديدة للاختبار
                 } else {
                     alert("خطأ في التشغيل: \n" + (resData.error || "مجهول"));
                 }
@@ -2250,7 +2278,6 @@ async function loadFeaturedProvidersBlocks() {
             }
         }
         // =================================================================
-
         // ================= محرك سلايدر البنرات =================
         let currentSlideIndex = 0;
         let slideInterval;
