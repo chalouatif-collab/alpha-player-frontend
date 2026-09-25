@@ -163,6 +163,11 @@
                 class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
                 <i class="fas fa-chart-bar text-emerald"></i> Résultats
             </button>
+            <!-- 🧪 01.TECH TEST -->
+            <button id="btn-nav-zeroone-test" onclick="setActiveMenuBtn('btn-nav-zeroone-test'); switchSection('zeroone-test');"
+                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-yellow-400 hover:text-white px-4 py-1.5 rounded-xl border border-yellow-500/50 hover:border-yellow-400 flex items-center gap-2 flex-shrink-0 transition-all shadow-lg">
+                <i class="fas fa-flask text-yellow-400"></i> 01.TECH
+            </button>
         </div>
     </div>
 
@@ -513,10 +518,30 @@
                 </div>
                 <div id="virtuals-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pb-10"></div>
             </div>
+            <!-- PANE: 01.TECH TEST (منطقة معزولة كلياً) -->
+            <div id="pane-zeroone-test" class="player-view-section hidden w-full space-y-6">
+                <div class="bg-panel p-6 rounded-2xl border border-yellow-500/30 text-center shadow-2xl">
+                    <h2 class="text-yellow-400 font-extrabold text-xl mb-2">🧪 المختبر المعزول - 01.TECH</h2>
+                    <p class="text-gray-400 text-xs mb-6">هذا القسم لا يتداخل مع أي كود آخر. اختبر براحتك!</p>
+                    
+                    <div class="flex justify-center gap-4 mb-6">
+                        <button onclick="fetchIsolatedZeroOneGames('slots')" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition flex items-center gap-2">
+                            <i class="fas fa-dice"></i> Casino (Slots)
+                        </button>
+                        <button onclick="fetchIsolatedZeroOneGames('live')" class="bg-red-600 hover:bg-red-500 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition flex items-center gap-2">
+                            <i class="fas fa-video"></i> Casino Live
+                        </button>
+                    </div>
 
-        </div>
+                    <div id="status-zeroone-test" class="text-sm text-gray-300 mb-6 font-semibold bg-[#0f1117] py-3 rounded-xl border border-[#212631]">
+                        اضغط على أحد الأزرار بالأعلى للاتصال وجلب الألعاب...
+                    </div>
 
-
+                    <div id="grid-zeroone-test" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 text-left">
+                        <!-- ستظهر الألعاب هنا -->
+                    </div>
+                </div>
+            </div>
     </main>
     </main>
 
@@ -2256,6 +2281,88 @@ async function loadFeaturedProvidersBlocks() {
     // طباعة كل الأقسام دفعة واحدة
     container.innerHTML = finalHtml;
 }
+
+// =================================================================
+        // 🧪 ISOLATED 01.TECH LOGIC (دالات معزولة بأسماء جديدة)
+        // =================================================================
+        async function fetchIsolatedZeroOneGames(categoryType) {
+            const gridContainer = document.getElementById('grid-zeroone-test');
+            const statusDisplay = document.getElementById('status-zeroone-test');
+            
+            statusDisplay.innerHTML = `<span class="text-yellow-400"><i class="fas fa-circle-notch fa-spin"></i> جاري الاتصال وتشفير البيانات...</span>`;
+            gridContainer.innerHTML = ''; 
+
+            try {
+                // نستخدم BACKEND_URL المعرف مسبقاً في ملفك
+                const response = await fetch(`${BACKEND_URL}/api/01tech/games/${categoryType}`);
+                const resultData = await response.json();
+
+                if (resultData.error) {
+                    statusDisplay.innerHTML = `<span class="text-red-500 font-bold">❌ رفض المزود: ${escapeHTML(resultData.error)}</span>`;
+                    return;
+                }
+
+                const gameList = resultData.games || [];
+                
+                if (gameList.length === 0) {
+                    statusDisplay.innerHTML = `<span class="text-gray-400">⚠️ القائمة فارغة. لا توجد ألعاب هنا.</span>`;
+                    return;
+                }
+
+                statusDisplay.innerHTML = `<span class="text-emerald font-bold">✅ نجاح! تم جلب ${gameList.length} لعبة.</span>`;
+
+                gridContainer.innerHTML = gameList.map(item => {
+                    const poster = item.banner || `https://placehold.co/400x400/180A2B/10b981?text=01TECH`;
+                    return `
+                    <div onclick="launchIsolatedZeroOneGame('${item.game_code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-yellow-500 transition-all flex flex-col group shadow-lg">
+                        <div class="relative w-full aspect-square overflow-hidden bg-black/50">
+                            <img src="${poster}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" alt="${escapeHTML(item.game_name)}">
+                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                <span class="bg-yellow-500 text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">TESTER</span>
+                            </div>
+                        </div>
+                        <div class="p-2 text-[10px] text-white font-bold truncate text-center">${escapeHTML(item.game_name)}</div>
+                    </div>
+                    `;
+                }).join('');
+
+            } catch (err) {
+                statusDisplay.innerHTML = `<span class="text-red-500 font-bold">🚨 فشل الاتصال! تأكد أن السيرفر الخلفي يعمل.</span>`;
+            }
+        }
+
+        async function launchIsolatedZeroOneGame(targetGameId) {
+            const sessionStr = localStorage.getItem('alpha_player_session');
+            const accountUsername = sessionStr ? JSON.parse(sessionStr).username : null; 
+            
+            if (!accountUsername) {
+                showNotification("يرجى تسجيل الدخول لتجربة اللعبة.", "error");
+                openLoginModal();
+                return;
+            }
+
+            document.body.style.cursor = 'wait';
+            try {
+                const req = await fetch(`${BACKEND_URL}/api/01tech/launch`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ game_id: targetGameId, account_id: accountUsername })
+                });
+
+                const resData = await req.json();
+                
+                if (resData.game_url) {
+                    window.open(resData.game_url, '_blank');
+                } else {
+                    alert("خطأ في التشغيل: \n" + (resData.error || "مجهول"));
+                }
+            } catch (err) {
+                alert("حدث خطأ في الشبكة أثناء الإطلاق.");
+            } finally {
+                document.body.style.cursor = 'default';
+            }
+        }
+        // =================================================================
     </script>
     <!-- 💬 مربع الشات (Modal في الهاتف، عائم في الكمبيوتر) -->
     <div id="live-chat-sidebar" onclick="if(event.target === this) closeChat()"
