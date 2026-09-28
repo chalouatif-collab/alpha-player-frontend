@@ -2394,53 +2394,67 @@
         });
 
        
+    
     // دالة جلب وعرض ألعاب EuroVirtuals مفلترة
-            async function loadEuroVirtualsGames(categoryFilter) {
-        // تأكد أن هذا الـ ID يطابق الـ div الذي تعرض فيه الألعاب في قسم الكازينو
-        const container = document.getElementById('games-grid') || document.querySelector('.grid');
+    async function loadEuroVirtualsGames(categoryFilter) {
+        // تحديد القسم الذي ستعرض فيه الألعاب في منتصف الشاشة
+        const container = document.getElementById('games-grid') || document.querySelector('.grid'); 
+        
+        // إظهار رسالة تحميل أنيقة
+        container.innerHTML = '<p class="text-gray-400 text-center col-span-full py-10"><i class="fas fa-spinner fa-spin mr-2"></i> جاري تحميل ألعاب EuroVirtuals...</p>';
 
-            container.innerHTML = '<p class="text-gray-400 text-center col-span-full py-10">جاري تحميل ألعاب EuroVirtuals...</p>';
-
-            try {
+        try {
+            // الاتصال بالباك اند لجلب الألعاب
             const response = await fetch('/api/get-eurovirtuals-games');
             const data = await response.json();
 
             if (data.status === 'success' && data.games && data.games.length > 0) {
                 container.innerHTML = '';
-
-                // فلترة الألعاب
+                
+                // 🎯 نظام الفلترة الذكي لفصل الكازينو عن المباشر
                 const filteredGames = data.games.filter(game => {
                     const gameType = (game.type || game.category || "").toLowerCase();
-            const gameName = (game.name || game.game_name || "").toLowerCase();
-
-            const isLive = gameType.includes('live') || gameName.includes('live') ||
-            gameType.includes('roulette') || gameType.includes('blackjack') ||
-            gameType.includes('baccarat');
-
-            if (categoryFilter === 'live') return isLive;
-            if (categoryFilter === 'casino') return !isLive;
-            return true;
+                    const gameName = (game.name || game.game_name || "").toLowerCase();
+                    const providerName = (game.provider || "").toLowerCase();
+                    
+                    // الكلمات المفتاحية التي تدل على الكازينو المباشر
+                    const isLive = gameType.includes('live') || gameName.includes('live') || 
+                                   gameType.includes('roulette') || gameType.includes('blackjack') || 
+                                   gameType.includes('baccarat') || providerName.includes('live');
+                    
+                    if (categoryFilter === 'live') return isLive;
+                    if (categoryFilter === 'casino') return !isLive; // الألعاب العادية (السلوتس)
+                    return true;
                 });
 
-            if (filteredGames.length === 0) {
-                container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">لا توجد ألعاب في هذه الفئة حالياً.</p>';
-            return;
+                if (filteredGames.length === 0) {
+                    container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">لا توجد ألعاب متوفرة في هذا القسم حالياً.</p>';
+                    return;
                 }
 
-                // رسم الألعاب
+                // 🎨 رسم كل لعبة في الشبكة (Grid)
                 filteredGames.forEach(game => {
                     const gameId = game.game_code || game.uuid || game.id;
-            const gameName = game.name || game.game_name || 'لعبة كازينو';
-            const gameImage = game.image || game.img || 'default-image.jpg';
+                    const gameName = game.name || game.game_name || 'لعبة كازينو';
+                    const gameImage = game.image || game.img || 'default-image.jpg';
+                    const provider = game.provider || 'EuroVirtuals';
 
-            const gameCard = `
-            <div class="bg-gray-900 rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition hover:scale-105 border border-gray-800 hover:border-emerald-500"
-                onclick="launchEuroVirtuals('${gameId}')">
-                <img src="${gameImage}" alt="${gameName}" class="w-full h-36 object-cover" onerror="this.src='default-image.jpg'">
-                    <div class="p-3 text-center bg-gray-800">
-                        <h3 class="text-white text-xs font-semibold truncate">${gameName}</h3>
-                    </div>
-            </div>
+                    const gameCard = `
+                        <div class="bg-gray-900 rounded-xl overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-105 border border-[#212631] hover:border-emerald-500 flex flex-col" 
+                             onclick="launchEuroVirtuals('${gameId}')">
+                            <div class="relative h-36 w-full">
+                                <img src="${gameImage}" alt="${gameName}" class="w-full h-full object-cover" onerror="this.src='default-image.jpg'">
+                                <div class="absolute top-2 right-2 bg-black bg-opacity-70 text-xs text-gray-300 px-2 py-1 rounded">
+                                    ${provider}
+                                </div>
+                            </div>
+                            <div class="p-3 text-center bg-[#1c212d] flex-grow flex flex-col justify-center">
+                                <h3 class="text-white text-xs font-bold truncate">${gameName}</h3>
+                                <button class="mt-2 text-[10px] bg-[#212631] hover:bg-emerald-600 text-white py-1 px-3 rounded-full transition w-full">
+                                    العب الآن
+                                </button>
+                            </div>
+                        </div>
                     `;
                     container.innerHTML += gameCard;
                 });
@@ -2453,11 +2467,11 @@
         }
     }
 
-    // دالة تشغيل اللعبة
+    // دالة تشغيل اللعبة عند النقر عليها
     async function launchEuroVirtuals(gameId) {
         const token = localStorage.getItem('access_token');
         if (!token) {
-            alert('الرجاء تسجيل الدخول للعب!');
+            alert('الرجاء تسجيل الدخول أولاً للعب!');
             return;
         }
 
@@ -2474,7 +2488,8 @@
             const data = await response.json();
 
             if (data.launch_url) {
-                window.open(data.launch_url, '_self');
+                // توجيه اللاعب فوراً إلى اللعبة
+                window.open(data.launch_url, '_self'); 
             } else {
                 alert('عذراً، لم نتمكن من تشغيل اللعبة: ' + (data.error || 'خطأ مجهول'));
             }
@@ -2483,82 +2498,11 @@
             alert('حدث خطأ أثناء محاولة فتح اللعبة.');
         }
     }
+</script>
     </script>
     </script>
-    <!-- 💬 مربع الشات (Modal في الهاتف، عائم في الكمبيوتر) -->
-    <div id="live-chat-sidebar" onclick="if(event.target === this) closeChat()"
-        class="fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-4 md:right-8 z-[500] hidden items-center justify-center p-4 sm:p-0 bg-black/80 sm:bg-transparent backdrop-blur-sm sm:backdrop-blur-none">
+    
 
-        <!-- الحاوية الداخلية للشات -->
-        <div
-            class="w-full max-w-[350px] h-[75vh] sm:h-[500px] bg-[#12151d] border border-gray-700 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.8)] flex flex-col overflow-hidden relative">
-
-            <!-- رأس الشات -->
-            <div class="h-16 bg-[#0f1117] flex justify-between items-center px-4 border-b border-gray-800 shrink-0">
-                <div class="flex items-center gap-3">
-                    <span class="relative flex h-3 w-3">
-                        <span
-                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                    </span>
-                    <div>
-                        <h3 class="text-white font-bold text-sm tracking-wide">CHAT EN DIRECT</h3>
-                        <p class="text-emerald-500 text-[10px] font-semibold"><i class="fas fa-users"></i> 142
-                            en ligne</p>
-                    </div>
-                </div>
-                <!-- زر إغلاق الشات يدوياً -->
-                <button onclick="toggleChat()"
-                    class="text-gray-400 hover:text-red-500 transition cursor-pointer w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-
-            <!-- رسائل الشات -->
-            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-5 text-sm bg-[#12151d] hide-scroll">
-                <div
-                    class="bg-emerald-900/20 border border-emerald-500/30 rounded p-3 text-emerald-400 text-xs shadow-sm">
-                    🚀 <strong>[SYSTÈME]</strong> Sarah*** vient de gagner <strong>693.97 TND</strong> sur
-                    Aviator !
-                </div>
-                <div class="flex flex-col mt-4">
-                    <span class="text-yellow-400 font-bold text-[11px] mb-1">👑 [VIP] Chalo</span>
-                    <span
-                        class="text-gray-300 bg-[#161922] border border-emerald-500/30 p-2.5 rounded-xl rounded-tr-none text-xs break-words shadow-md">C'est
-                        le feu aujourd'hui 🔥 Qui joue avec moi ?</span>
-                </div>
-            </div>
-
-            <!-- منطقة الإدخال و الإيموجي -->
-            <div class="p-3 bg-[#0f1117] border-t border-gray-800 shrink-0 relative z-20">
-                <!-- شريط الإيموجي السريع -->
-                <div class="flex justify-around mb-3 px-1 text-lg">
-                    <button type="button" onclick="addEmoji('🔥')"
-                        class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">🔥</button>
-                    <button type="button" onclick="addEmoji('🚀')"
-                        class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">🚀</button>
-                    <button type="button" onclick="addEmoji('🤑')"
-                        class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">🤑</button>
-                    <button type="button" onclick="addEmoji('😂')"
-                        class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">😂</button>
-                    <button type="button" onclick="addEmoji('❤️')"
-                        class="hover:bg-gray-800 rounded p-1.5 transition transform hover:scale-125 cursor-pointer">❤️</button>
-                </div>
-
-                <div class="relative w-full z-30">
-                    <!-- تم إضافة maxlength="25" ومنع النسخ واللصق -->
-                    <input type="text" id="chat-input" maxlength="25" oncopy="return false" onpaste="return false"
-                        oncut="return false" onkeypress="handleChatEnter(event)" placeholder="Écrivez (Max 25)..."
-                        class="w-full bg-[#161922] text-white text-xs rounded-xl py-3 pl-4 pr-12 outline-none border border-gray-700 focus:border-emerald-500 transition shadow-inner pointer-events-auto select-none"
-                        autocomplete="off">
-                    <button type="button" onclick="sendMessage()"
-                        class="absolute right-1 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-emerald-500 rounded-lg text-[#0f1117] flex items-center justify-center hover:bg-emerald-400 transition shadow-md cursor-pointer z-40">
-                        <i class="fas fa-paper-plane text-xs pointer-events-none"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- 👤 قائمة الملف الشخصي (Profile Sidebar) -->
     <!-- خلفية ضبابية عند فتح القائمة -->
     <div id="profile-overlay" onclick="toggleProfileSidebar()"
@@ -2584,14 +2528,7 @@
             </button>
         </div>
 
-        <!-- زر الإيداع البارز -->
-        <div class="p-5 border-b border-gray-800">
-            <button onclick="toggleProfileSidebar(); setTimeout(toggleCashier, 100);"
-                class="w-full bg-emerald hover:bg-emerald-400 text-[#0f1117] font-black py-3.5 rounded-lg flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition transform hover:scale-[1.02]">
-                <i class="fas fa-wallet text-lg"></i> FAIRE UN DÉPÔT
-            </button>
-        </div>
-
+        
         <!-- روابط التحكم في الحساب -->
         <div class="flex-1 overflow-y-auto p-3 space-y-1">
             <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2 ml-2 mt-2">Mon Compte
@@ -2616,14 +2553,7 @@
                 <span class="ml-auto bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">NEW</span>
             </a>
         </div>
-        <!-- زر الشات (يظهر في الهاتف فقط) -->
-        <div class="px-4 pt-4 border-t border-gray-800 bg-[#0f1117] xl:hidden">
-            <button onclick="toggleProfileSidebar(); setTimeout(toggleChat, 200);"
-                class="w-full bg-[#1a1d24] hover:bg-gray-800 text-white font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition border border-gray-700">
-                <i class="fas fa-comments text-emerald-500"></i> CHAT EN DIRECT
-            </button>
-        </div>
-
+        
         <!-- تذييل القائمة (زر الخروج) -->
         <div class="p-4 bg-[#0f1117]">
             <button onclick="toggleProfileSidebar(); logoutPlayer();"
@@ -2632,15 +2562,6 @@
             </button>
         </div>
     </div>
-
-    <!-- 💬 الزر العائم للشات (يظهر في الكمبيوتر أسفل اليمين) -->
-    <button id="floating-chat-btn" onclick="toggleChat()"
-        class="fixed bottom-6 right-6 z-[100] w-14 h-14 bg-emerald-500 hover:bg-emerald-400 rounded-full hidden xl:flex items-center justify-center text-[#0f1117] shadow-[0_0_20px_rgba(16,185,129,0.4)] transition transform hover:scale-110">
-        <i class="fas fa-comments text-2xl"></i>
-        <!-- نقطة الإشعارات الحمراء -->
-        <span
-            class="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-[#12151d] rounded-full animate-pulse"></span>
-    </button>
 
     <!-- 📜 نافذة سجل الرهانات (Historique des paris) -->
     <div id="history-modal"
