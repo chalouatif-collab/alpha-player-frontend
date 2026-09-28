@@ -2421,74 +2421,58 @@
         // دالة جلب وعرض ألعاب EuroVirtuals مفلترة
         
   
-    async function loadEuroVirtualsGames(categoryFilter, targetGridId) {
+    
+    // تخزين الألعاب مؤقتاً للفلترة السريعة
+    let euroVirtualsAllGames = [];
+
+    async function loadEuroVirtualsGames(providerFilter, targetGridId) {
         const container = document.getElementById(targetGridId); 
-        
-        container.innerHTML = '<p class="text-gray-400 text-center col-span-full py-10"><i class="fas fa-spinner fa-spin mr-2"></i> جاري تحميل ألعاب EuroVirtuals...</p>';
+        container.innerHTML = '<p class="text-gray-400 text-center col-span-full py-10"><i class="fas fa-spinner fa-spin mr-2"></i> جاري تحميل الألعاب من EuroVirtuals...</p>';
 
         try {
+            // جلب الألعاب من الباك اند الخاص بك
             const response = await fetch('https://alpha-backend-server.onrender.com/api/get-eurovirtuals-games');
             const data = await response.json();
 
             if (data.status === 'success' && data.games && data.games.length > 0) {
+                euroVirtualsAllGames = data.games;
                 container.innerHTML = '';
                 
-                // 🎯 الفلتر الذكي النهائي
-                const filteredGames = data.games.filter(game => {
-                    const gameType = (game.type || game.category || "").toLowerCase();
-                    const gameName = (game.name || game.game_name || "").toLowerCase();
-                    const providerName = (game.provider || "").toLowerCase();
+                // 🎯 تصفية الألعاب بناءً على المزود القادم من الـ API
+                const filteredGames = euroVirtualsAllGames.filter(game => {
+                    const prov = (game.provider || "").toLowerCase();
+                    const name = (game.name || game.game_name || "").toLowerCase();
                     
-                    // 1. تحديد الألعاب الافتراضية والكراش لاستبعادها تماماً
-                    const isVirtualOrCrash = 
-                        providerName === 'eurovirtuals' || 
-                        gameName.includes('league') || 
-                        gameName.includes('virtual') || 
-                        gameName.includes('cup') || 
-                        gameName.includes('crash') || 
-                        gameName.includes('aviator');
-                        
-                    // 2. تحديد ألعاب الكازينو المباشر والطاولة (الروليت وغيرها)
-                    const isLive = 
-                        gameType.includes('live') || 
-                        gameName.includes('live') || 
-                        gameName.includes('roulette') || 
-                        gameName.includes('blackjack') || 
-                        gameName.includes('baccarat') ||
-                        gameName.includes('keno');
-
-                    // 3. تطبيق الفرز حسب الزر المضغوط
-                    if (categoryFilter === 'live') {
-                        // قسم اللايف: نعرض المباشر فقط، ونستبعد الافتراضية
-                        return isLive && !isVirtualOrCrash;
-                    } else if (categoryFilter === 'casino') {
-                        // قسم الكازينو: نعرض السلوتس (نستبعد المباشر ونستبعد الافتراضية)
-                        return !isLive && !isVirtualOrCrash;
+                    if (providerFilter === 'virtuals') {
+                        // ألعاب الرياضات الافتراضية الخاصة بـ EuroVirtuals الأصلية
+                        return prov.includes('eurovirtuals') || name.includes('league') || name.includes('virtual');
+                    } else if (providerFilter === 'casino_studios') {
+                        // المزودون الجدد (مثل Vimplay, ExaGaming وغيرها)
+                        return !prov.includes('eurovirtuals') && !name.includes('league');
                     }
-
-                    return false; // تجاهل أي شيء آخر
+                    return true;
                 });
 
                 if (filteredGames.length === 0) {
-                    container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">لا توجد ألعاب متوفرة في هذا القسم حالياً.</p>';
+                    container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">لا توجد ألعاب متوفرة لهذا المزود حالياً.</p>';
                     return;
                 }
 
-                // 🎨 رسم الألعاب المفلترة
+                // 🎨 رسم البطاقات
                 filteredGames.forEach(game => {
                     const gameId = game.game_code || game.uuid || game.id;
                     const gameName = game.name || game.game_name || 'لعبة كازينو';
                     const defaultImg = `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
                     const gameImage = game.image || game.img || defaultImg;
-                    const provider = game.provider || 'EuroVirtuals';
+                    const providerName = game.provider || 'Studio';
 
                     const gameCard = `
                         <div class="bg-gray-900 rounded-xl overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-105 border border-[#212631] hover:border-emerald-500 flex flex-col" 
                              onclick="launchEuroVirtuals('${gameId}')">
                             <div class="relative h-36 w-full">
                                 <img src="${gameImage}" alt="${gameName}" class="w-full h-full object-cover" onerror="this.src='${defaultImg}'">
-                                <div class="absolute top-2 right-2 bg-black bg-opacity-70 text-xs text-gray-300 px-2 py-1 rounded">
-                                    ${provider}
+                                <div class="absolute top-2 right-2 bg-black bg-opacity-70 text-[10px] text-emerald-400 font-bold px-2 py-1 rounded">
+                                    ${providerName}
                                 </div>
                             </div>
                             <div class="p-3 text-center bg-[#1c212d] flex-grow flex flex-col justify-center">
@@ -2499,13 +2483,14 @@
                     container.innerHTML += gameCard;
                 });
             } else {
-                container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">لا توجد ألعاب متوفرة في هذا القسم حالياً.</p>';
+                container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">لم يتم العثور على ألعاب.</p>';
             }
         } catch (error) {
             console.error('Fetch Error:', error);
             container.innerHTML = '<p class="text-red-500 text-center col-span-full py-10">حدث خطأ في الاتصال بالسيرفر.</p>';
         }
     }
+
     async function launchEuroVirtuals(gameId) {
         const token = localStorage.getItem('access_token');
         if (!token) {
@@ -2535,6 +2520,7 @@
             alert('حدث خطأ أثناء محاولة فتح اللعبة.');
         }
     }
+</script>
 </script>
     </script>
     </script>
