@@ -200,15 +200,14 @@
                 <a href="javascript:void(0)" onclick="switchSection('virtuals'); initVirtualsLobby();"
                     class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
                         class="fas fa-gamepad text-blue-400 text-lg"></i> Jeux Virtuels</a>
-                <!-- أزرار EuroVirtuals المستقلة -->
                 <a href="javascript:void(0)"
-                    onclick="switchSection('euro-casino'); loadEuroVirtualsGames('casino', 'euro-casino-grid');"
+                    onclick="switchSection('euro-casino'); loadEuroVirtualsStudios('casino', 'euro-casino-grid', 'euro-casino-providers');"
                     class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition">
                     <i class="fas fa-coins text-emerald-500 text-lg"></i> EuroVirtuals Casino
                 </a>
 
                 <a href="javascript:void(0)"
-                    onclick="switchSection('euro-live'); loadEuroVirtualsGames('live', 'euro-live-grid');"
+                    onclick="switchSection('euro-live'); loadEuroVirtualsStudios('live', 'euro-live-grid', 'euro-live-providers');"
                     class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition">
                     <i class="fas fa-headset text-purple-500 text-lg"></i> EuroVirtuals Live
                 </a>
@@ -2423,105 +2422,105 @@
 
 
         // دالة جلب وعرض ألعاب EuroVirtuals مفلترة
-let availableStudios = [];
+        let availableStudios = [];
 
-    async function loadEuroVirtualsStudios(categoryFilter, targetGridId, providersBarId) {
-        const container = document.getElementById(targetGridId);
-        const providersBar = document.getElementById(providersBarId);
-        
-        if (!container) return;
+        async function loadEuroVirtualsStudios(categoryFilter, targetGridId, providersBarId) {
+            const container = document.getElementById(targetGridId);
+            const providersBar = document.getElementById(providersBarId);
 
-        container.innerHTML = '<p class="text-gray-400 text-center col-span-full py-10"><i class="fas fa-spinner fa-spin mr-2"></i> جاري تحميل مزودي الكازينو...</p>';
-        if (providersBar) providersBar.innerHTML = '';
+            if (!container) return;
 
-        try {
-            // جلب الـ 33 استوديو من السيرفر
-            const res = await fetch('https://alpha-backend-server.onrender.com/api/eurovirtuals/studios');
-            const result = await res.json();
-            
-            // استخراج المصفوفة (حسب صورتك، البيانات موجودة داخل result.data)
-            availableStudios = result.data || result.partners || [];
+            container.innerHTML = '<p class="text-gray-400 text-center col-span-full py-10"><i class="fas fa-spinner fa-spin mr-2"></i> جاري تحميل مزودي الكازينو...</p>';
+            if (providersBar) providersBar.innerHTML = '';
 
-            if (availableStudios.length > 0) {
-                // قائمة المزودين الكبار التي نريد إظهارها في الأزرار
-                const targetProviders = [
-                    'Pragmatic Play', 
-                    'Evolution', 
-                    'Hacksaw', 
-                    "Play'n Go", 
-                    'NetEnt', 
-                    'Spribe', 
-                    'Wazdan', 
-                    'Playson', 
-                    'EGT', 
-                    'Amusnet', 
-                    'Vimplay'
-                ];
+            try {
+                // جلب الـ 33 استوديو من السيرفر
+                const res = await fetch('https://alpha-backend-server.onrender.com/api/eurovirtuals/studios');
+                const result = await res.json();
 
-                let buttonsHTML = '';
+                // استخراج المصفوفة (حسب صورتك، البيانات موجودة داخل result.data)
+                availableStudios = result.data || result.partners || [];
 
-                // إنشاء الأزرار فقط للمزودين الموجودين فعلياً في الـ API مع ربط الـ ID
-                targetProviders.forEach(targetName => {
-                    // البحث عن المزود داخل الـ 33 استوديو (تجاهل حالة الأحرف)
-                    const matchedStudio = availableStudios.find(s => 
-                        (s.name || '').toLowerCase().includes(targetName.toLowerCase())
-                    );
+                if (availableStudios.length > 0) {
+                    // قائمة المزودين الكبار التي نريد إظهارها في الأزرار
+                    const targetProviders = [
+                        'Pragmatic Play',
+                        'Evolution',
+                        'Hacksaw',
+                        "Play'n Go",
+                        'NetEnt',
+                        'Spribe',
+                        'Wazdan',
+                        'Playson',
+                        'EGT',
+                        'Amusnet',
+                        'Vimplay'
+                    ];
 
-                    if (matchedStudio) {
-                        buttonsHTML += `
+                    let buttonsHTML = '';
+
+                    // إنشاء الأزرار فقط للمزودين الموجودين فعلياً في الـ API مع ربط الـ ID
+                    targetProviders.forEach(targetName => {
+                        // البحث عن المزود داخل الـ 33 استوديو (تجاهل حالة الأحرف)
+                        const matchedStudio = availableStudios.find(s =>
+                            (s.name || '').toLowerCase().includes(targetName.toLowerCase())
+                        );
+
+                        if (matchedStudio) {
+                            buttonsHTML += `
                             <button onclick="loadGamesByStudio('${matchedStudio.id}', '${targetGridId}')" 
                                     class="px-3 py-1.5 rounded-xl bg-[#1a1e29] hover:bg-emerald hover:text-black text-gray-300 text-xs font-bold transition border border-[#2e3648] uppercase shadow-sm">
                                 ${targetName}
                             </button>
                         `;
+                        }
+                    });
+
+                    providersBar.innerHTML = buttonsHTML;
+
+                    // تحميل ألعاب Pragmatic Play تلقائياً عند فتح القسم (أو أول مزود متاح)
+                    const defaultStudio = availableStudios.find(s => (s.name || '').toLowerCase().includes('pragmatic')) || availableStudios[0];
+                    if (defaultStudio) {
+                        loadGamesByStudio(defaultStudio.id, targetGridId);
                     }
-                });
 
-                providersBar.innerHTML = buttonsHTML;
+                } else {
+                    container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">لا توجد استوديوهات متاحة حالياً.</p>';
+                }
+            } catch (e) {
+                console.error("Studio Fetch Error:", e);
+                container.innerHTML = '<p class="text-red-500 text-center col-span-full py-10">حدث خطأ أثناء جلب قائمة المزودين.</p>';
+            }
+        }
 
-                // تحميل ألعاب Pragmatic Play تلقائياً عند فتح القسم (أو أول مزود متاح)
-                const defaultStudio = availableStudios.find(s => (s.name || '').toLowerCase().includes('pragmatic')) || availableStudios[0];
-                if (defaultStudio) {
-                    loadGamesByStudio(defaultStudio.id, targetGridId);
+        // جلب الألعاب بناءً على الـ ID الخاص بالمزود
+        async function loadGamesByStudio(partnerId, targetGridId) {
+            const container = document.getElementById(targetGridId);
+            if (!container) return;
+
+            container.innerHTML = '<p class="text-gray-400 text-center col-span-full py-10"><i class="fas fa-spinner fa-spin mr-2"></i> جاري تحميل الألعاب...</p>';
+
+            try {
+                // استدعاء مسار الألعاب مع تمرير الـ partner_id (مثلاً 15 لـ Pragmatic)
+                const res = await fetch(`https://alpha-backend-server.onrender.com/api/eurovirtuals/studio-games/${partnerId}`);
+                const data = await res.json();
+
+                let games = data.games || [];
+
+                if (games.length === 0) {
+                    container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">لا توجد ألعاب مضافة لهذا المزود حالياً.</p>';
+                    return;
                 }
 
-            } else {
-                container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">لا توجد استوديوهات متاحة حالياً.</p>';
-            }
-        } catch (e) {
-            console.error("Studio Fetch Error:", e);
-            container.innerHTML = '<p class="text-red-500 text-center col-span-full py-10">حدث خطأ أثناء جلب قائمة المزودين.</p>';
-        }
-    }
+                // رسم شبكة الألعاب
+                container.innerHTML = games.map(game => {
+                    const gameId = game.uuid || game.id || game.game_code;
+                    const gameName = game.name || game.game_name || 'لعبة كازينو';
+                    const defaultImg = `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
+                    const gameImage = game.image || game.img || game.logo || defaultImg;
+                    const provider = game.provider || game.partner_name || 'Casino Game';
 
-    // جلب الألعاب بناءً على الـ ID الخاص بالمزود
-    async function loadGamesByStudio(partnerId, targetGridId) {
-        const container = document.getElementById(targetGridId);
-        if (!container) return;
-
-        container.innerHTML = '<p class="text-gray-400 text-center col-span-full py-10"><i class="fas fa-spinner fa-spin mr-2"></i> جاري تحميل الألعاب...</p>';
-
-        try {
-            // استدعاء مسار الألعاب مع تمرير الـ partner_id (مثلاً 15 لـ Pragmatic)
-            const res = await fetch(`https://alpha-backend-server.onrender.com/api/eurovirtuals/studio-games/${partnerId}`);
-            const data = await res.json();
-
-            let games = data.games || [];
-
-            if (games.length === 0) {
-                container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">لا توجد ألعاب مضافة لهذا المزود حالياً.</p>';
-                return;
-            }
-
-            // رسم شبكة الألعاب
-            container.innerHTML = games.map(game => {
-                const gameId = game.uuid || game.id || game.game_code;
-                const gameName = game.name || game.game_name || 'لعبة كازينو';
-                const defaultImg = `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
-                const gameImage = game.image || game.img || game.logo || defaultImg;
-                const provider = game.provider || game.partner_name || 'Casino Game';
-
-                return `
+                    return `
                     <div class="bg-gray-900 rounded-xl overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-105 border border-[#212631] hover:border-emerald-500 flex flex-col" 
                          onclick="launchEuroVirtuals('${gameId}')">
                         <div class="relative h-36 w-full">
@@ -2535,44 +2534,44 @@ let availableStudios = [];
                         </div>
                     </div>
                 `;
-            }).join('');
-        } catch (e) {
-            console.error("Games Fetch Error:", e);
-            container.innerHTML = '<p class="text-red-500 text-center col-span-full py-10">حدث خطأ أثناء جلب الألعاب.</p>';
-        }
-    }
-
-    async function launchEuroVirtuals(gameId) {
-        const token = localStorage.getItem('access_token');
-        if (!token) {
-            alert('الرجاء تسجيل الدخول أولاً للعب!');
-            return;
-        }
-
-        try {
-            const response = await fetch('https://alpha-backend-server.onrender.com/api/provider/launch-eurovirtuals', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token
-                },
-                body: JSON.stringify({ game_uuid: gameId })
-            });
-
-            const data = await response.json();
-
-            if (data.launch_url) {
-                window.open(data.launch_url, '_self'); 
-            } else {
-                alert('عذراً، لم نتمكن من تشغيل اللعبة: ' + (data.error || 'خطأ مجهول'));
+                }).join('');
+            } catch (e) {
+                console.error("Games Fetch Error:", e);
+                container.innerHTML = '<p class="text-red-500 text-center col-span-full py-10">حدث خطأ أثناء جلب الألعاب.</p>';
             }
-        } catch (error) {
-            console.error('Launch Error:', error);
-            alert('حدث خطأ أثناء محاولة فتح اللعبة.');
         }
-    }
 
-</script>
+        async function launchEuroVirtuals(gameId) {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                alert('الرجاء تسجيل الدخول أولاً للعب!');
+                return;
+            }
+
+            try {
+                const response = await fetch('https://alpha-backend-server.onrender.com/api/provider/launch-eurovirtuals', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({game_uuid: gameId})
+                });
+
+                const data = await response.json();
+
+                if (data.launch_url) {
+                    window.open(data.launch_url, '_self');
+                } else {
+                    alert('عذراً، لم نتمكن من تشغيل اللعبة: ' + (data.error || 'خطأ مجهول'));
+                }
+            } catch (error) {
+                console.error('Launch Error:', error);
+                alert('حدث خطأ أثناء محاولة فتح اللعبة.');
+            }
+        }
+
+    </script>
 
 
 
@@ -2586,190 +2585,193 @@ let availableStudios = [];
             class="absolute right-1 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-emerald-500 rounded-lg text-[#0f1117] flex items-center justify-center hover:bg-emerald-400 transition shadow-md cursor-pointer z-40">
             <i class="fas fa-paper-plane text-xs pointer-events-none"></i>
         </button>
-   
-    <!-- 👤 قائمة الملف الشخصي (Profile Sidebar) -->
-    <!-- خلفية ضبابية عند فتح القائمة -->
-    <div id="profile-overlay" onclick="toggleProfileSidebar()"
-        class="fixed inset-0 bg-black/60 z-[190] hidden backdrop-blur-sm transition-opacity"></div>
 
-    <div id="profile-sidebar"
-        class="fixed right-0 top-0 h-full w-80 bg-[#12151d] border-l border-gray-800 z-[200] shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
-        <!-- رأس القائمة -->
-        <div class="p-5 border-b border-gray-800 flex justify-between items-center bg-[#0f1117]">
-            <div class="flex items-center gap-3">
-                <div
-                    class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center text-xl border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
-                    <i class="fas fa-user-astronaut"></i>
+        <!-- 👤 قائمة الملف الشخصي (Profile Sidebar) -->
+        <!-- خلفية ضبابية عند فتح القائمة -->
+        <div id="profile-overlay" onclick="toggleProfileSidebar()"
+            class="fixed inset-0 bg-black/60 z-[190] hidden backdrop-blur-sm transition-opacity"></div>
+
+        <div id="profile-sidebar"
+            class="fixed right-0 top-0 h-full w-80 bg-[#12151d] border-l border-gray-800 z-[200] shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+            <!-- رأس القائمة -->
+            <div class="p-5 border-b border-gray-800 flex justify-between items-center bg-[#0f1117]">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center text-xl border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
+                        <i class="fas fa-user-astronaut"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-bold text-base uppercase" id="sidebar-username">TEST1</h3>
+                        <p class="text-emerald-400 font-black text-sm" id="sidebar-balance">313.28 TND</p>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="text-white font-bold text-base uppercase" id="sidebar-username">TEST1</h3>
-                    <p class="text-emerald-400 font-black text-sm" id="sidebar-balance">313.28 TND</p>
-                </div>
-            </div>
-            <button onclick="toggleProfileSidebar()"
-                class="text-gray-400 hover:text-white transition w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-
-        <!-- زر الإيداع البارز -->
-        <div class="p-5 border-b border-gray-800">
-            <button onclick="toggleProfileSidebar(); setTimeout(toggleCashier, 100);"
-                class="w-full bg-emerald hover:bg-emerald-400 text-[#0f1117] font-black py-3.5 rounded-lg flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition transform hover:scale-[1.02]">
-                <i class="fas fa-wallet text-lg"></i> FAIRE UN DÉPÔT
-            </button>
-        </div>
-
-        <!-- روابط التحكم في الحساب -->
-        <div class="flex-1 overflow-y-auto p-3 space-y-1">
-            <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2 ml-2 mt-2">Mon Compte
-            </div>
-
-            <a href="javascript:void(0)" onclick="openHistoryModal()"
-                class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
-                <i class="fas fa-history text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
-                <span class="text-sm font-semibold">Historique des paris</span>
-            </a>
-
-            <a href="javascript:void(0)" onclick="openTransactionsModal()"
-                class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
-                <i class="fas fa-exchange-alt text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
-                <span class="text-sm font-semibold">Transactions</span>
-            </a>
-
-            <a href="javascript:void(0)" onclick="openBonusModal()"
-                class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
-                <i class="fas fa-gift text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
-                <span class="text-sm font-semibold">Bonus & Offres</span>
-                <span class="ml-auto bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">NEW</span>
-            </a>
-        </div>
-        <!-- زر الشات (يظهر في الهاتف فقط) -->
-        <div class="px-4 pt-4 border-t border-gray-800 bg-[#0f1117] xl:hidden">
-            <button onclick="toggleProfileSidebar(); setTimeout(toggleChat, 200);"
-                class="w-full bg-[#1a1d24] hover:bg-gray-800 text-white font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition border border-gray-700">
-                <i class="fas fa-comments text-emerald-500"></i> CHAT EN DIRECT
-            </button>
-        </div>
-
-        <!-- تذييل القائمة (زر الخروج) -->
-        <div class="p-4 bg-[#0f1117]">
-            <button onclick="toggleProfileSidebar(); logoutPlayer();"
-                class="w-full bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 border border-red-500/30 font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition">
-                <i class="fas fa-sign-out-alt"></i> DÉCONNEXION
-            </button>
-        </div>
-    </div>
-
-    <!-- 💬 الزر العائم للشات (يظهر في الكمبيوتر أسفل اليمين) -->
-    <button id="floating-chat-btn" onclick="toggleChat()"
-        class="fixed bottom-6 right-6 z-[100] w-14 h-14 bg-emerald-500 hover:bg-emerald-400 rounded-full hidden xl:flex items-center justify-center text-[#0f1117] shadow-[0_0_20px_rgba(16,185,129,0.4)] transition transform hover:scale-110">
-        <i class="fas fa-comments text-2xl"></i>
-        <!-- نقطة الإشعارات الحمراء -->
-        <span
-            class="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-[#12151d] rounded-full animate-pulse"></span>
-    </button>
-
-    <!-- 📜 نافذة سجل الرهانات (Historique des paris) -->
-    <div id="history-modal"
-        class="fixed inset-0 z-[400] bg-black/80 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
-        <div class="bg-[#161922] border border-[#212631] rounded-2xl w-full max-w-4xl flex flex-col max-h-[85vh] shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300"
-            id="history-modal-content">
-
-            <!-- رأس النافذة -->
-            <div class="flex justify-between items-center p-5 border-b border-[#212631] bg-[#0f1117]">
-                <h3 class="text-white font-black uppercase tracking-wider text-lg flex items-center gap-2">
-                    <i class="fas fa-history text-emerald"></i> Historique des paris
-                </h3>
-                <button onclick="closeHistoryModal()"
-                    class="text-gray-400 hover:text-red-500 transition text-xl w-8 h-8 flex items-center justify-center rounded-full bg-[#161922] hover:bg-red-500/10 border border-transparent hover:border-red-500/30">
+                <button onclick="toggleProfileSidebar()"
+                    class="text-gray-400 hover:text-white transition w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
 
-            <!-- محتوى الجدول -->
-            <div class="p-4 overflow-y-auto hide-scroll flex-1 bg-[#0f1117]">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse whitespace-nowrap">
-                        <thead>
-                            <tr class="text-[10px] uppercase tracking-wider text-gray-500 border-b border-[#212631]">
-                                <th class="p-3 font-bold">Date</th>
-                                <th class="p-3 font-bold">Jeu / Provider</th>
-                                <th class="p-3 font-bold text-center">Montant (Mise)</th>
-                                <th class="p-3 font-bold text-center">Multiplicateur</th>
-                                <th class="p-3 font-bold text-right">Gain / Perte</th>
-                            </tr>
-                        </thead>
-                        <tbody id="history-table-body" class="text-xs text-gray-300 divide-y divide-[#212631]">
-                            <!-- سيتم حقن البيانات هنا برمجياً -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- حالة التحميل -->
-                <div id="history-loader" class="py-12 text-center hidden">
-                    <i class="fas fa-circle-notch fa-spin text-emerald text-4xl mb-4"></i>
-                    <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Chargement de
-                        l'historique...</p>
-                </div>
-
-                <!-- حالة لا توجد بيانات -->
-                <div id="history-empty" class="py-12 text-center hidden">
-                    <i class="fas fa-ghost text-gray-700 text-5xl mb-4"></i>
-                    <p class="text-gray-500 text-xs font-bold uppercase tracking-widest">Aucun pari trouvé.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- 💸 نافذة سجل المعاملات المالية (Transactions) -->
-    <div id="transactions-modal"
-        class="fixed inset-0 z-[400] bg-black/80 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
-        <div class="bg-[#161922] border border-[#212631] rounded-2xl w-full max-w-3xl flex flex-col max-h-[85vh] shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300"
-            id="transactions-modal-content">
-
-            <!-- رأس النافذة -->
-            <div class="flex justify-between items-center p-5 border-b border-[#212631] bg-[#0f1117]">
-                <h3 class="text-white font-black uppercase tracking-wider text-lg flex items-center gap-2">
-                    <i class="fas fa-exchange-alt text-emerald"></i> Historique des Transactions
-                </h3>
-                <button onclick="closeTransactionsModal()"
-                    class="text-gray-400 hover:text-red-500 transition text-xl w-8 h-8 flex items-center justify-center rounded-full bg-[#161922] hover:bg-red-500/10 border border-transparent hover:border-red-500/30">
-                    <i class="fas fa-times"></i>
+            <!-- زر الإيداع البارز -->
+            <div class="p-5 border-b border-gray-800">
+                <button onclick="toggleProfileSidebar(); setTimeout(toggleCashier, 100);"
+                    class="w-full bg-emerald hover:bg-emerald-400 text-[#0f1117] font-black py-3.5 rounded-lg flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition transform hover:scale-[1.02]">
+                    <i class="fas fa-wallet text-lg"></i> FAIRE UN DÉPÔT
                 </button>
             </div>
 
-            <!-- محتوى الجدول -->
-            <div class="p-4 overflow-y-auto hide-scroll flex-1 bg-[#0f1117]">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse whitespace-nowrap">
-                        <thead>
-                            <tr class="text-[10px] uppercase tracking-wider text-gray-500 border-b border-[#212631]">
-                                <th class="p-3 font-bold">Date</th>
-                                <th class="p-3 font-bold">Type</th>
-                                <th class="p-3 font-bold">Méthode</th>
-                                <th class="p-3 font-bold text-center">Montant</th>
-                                <th class="p-3 font-bold text-right">Statut</th>
-                            </tr>
-                        </thead>
-                        <tbody id="transactions-table-body" class="text-xs text-gray-300 divide-y divide-[#212631]">
-                            <!-- سيتم حقن البيانات هنا -->
-                        </tbody>
-                    </table>
+            <!-- روابط التحكم في الحساب -->
+            <div class="flex-1 overflow-y-auto p-3 space-y-1">
+                <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2 ml-2 mt-2">Mon Compte
                 </div>
 
-                <div id="transactions-loader" class="py-12 text-center hidden">
-                    <i class="fas fa-circle-notch fa-spin text-emerald text-4xl mb-4"></i>
-                    <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Chargement...</p>
+                <a href="javascript:void(0)" onclick="openHistoryModal()"
+                    class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
+                    <i class="fas fa-history text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
+                    <span class="text-sm font-semibold">Historique des paris</span>
+                </a>
+
+                <a href="javascript:void(0)" onclick="openTransactionsModal()"
+                    class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
+                    <i
+                        class="fas fa-exchange-alt text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
+                    <span class="text-sm font-semibold">Transactions</span>
+                </a>
+
+                <a href="javascript:void(0)" onclick="openBonusModal()"
+                    class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
+                    <i class="fas fa-gift text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
+                    <span class="text-sm font-semibold">Bonus & Offres</span>
+                    <span class="ml-auto bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">NEW</span>
+                </a>
+            </div>
+            <!-- زر الشات (يظهر في الهاتف فقط) -->
+            <div class="px-4 pt-4 border-t border-gray-800 bg-[#0f1117] xl:hidden">
+                <button onclick="toggleProfileSidebar(); setTimeout(toggleChat, 200);"
+                    class="w-full bg-[#1a1d24] hover:bg-gray-800 text-white font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition border border-gray-700">
+                    <i class="fas fa-comments text-emerald-500"></i> CHAT EN DIRECT
+                </button>
+            </div>
+
+            <!-- تذييل القائمة (زر الخروج) -->
+            <div class="p-4 bg-[#0f1117]">
+                <button onclick="toggleProfileSidebar(); logoutPlayer();"
+                    class="w-full bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 border border-red-500/30 font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition">
+                    <i class="fas fa-sign-out-alt"></i> DÉCONNEXION
+                </button>
+            </div>
+        </div>
+
+        <!-- 💬 الزر العائم للشات (يظهر في الكمبيوتر أسفل اليمين) -->
+        <button id="floating-chat-btn" onclick="toggleChat()"
+            class="fixed bottom-6 right-6 z-[100] w-14 h-14 bg-emerald-500 hover:bg-emerald-400 rounded-full hidden xl:flex items-center justify-center text-[#0f1117] shadow-[0_0_20px_rgba(16,185,129,0.4)] transition transform hover:scale-110">
+            <i class="fas fa-comments text-2xl"></i>
+            <!-- نقطة الإشعارات الحمراء -->
+            <span
+                class="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-[#12151d] rounded-full animate-pulse"></span>
+        </button>
+
+        <!-- 📜 نافذة سجل الرهانات (Historique des paris) -->
+        <div id="history-modal"
+            class="fixed inset-0 z-[400] bg-black/80 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
+            <div class="bg-[#161922] border border-[#212631] rounded-2xl w-full max-w-4xl flex flex-col max-h-[85vh] shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300"
+                id="history-modal-content">
+
+                <!-- رأس النافذة -->
+                <div class="flex justify-between items-center p-5 border-b border-[#212631] bg-[#0f1117]">
+                    <h3 class="text-white font-black uppercase tracking-wider text-lg flex items-center gap-2">
+                        <i class="fas fa-history text-emerald"></i> Historique des paris
+                    </h3>
+                    <button onclick="closeHistoryModal()"
+                        class="text-gray-400 hover:text-red-500 transition text-xl w-8 h-8 flex items-center justify-center rounded-full bg-[#161922] hover:bg-red-500/10 border border-transparent hover:border-red-500/30">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
 
-                <div id="transactions-empty" class="py-12 text-center hidden">
-                    <i class="fas fa-file-invoice-dollar text-gray-700 text-5xl mb-4"></i>
-                    <p class="text-gray-500 text-xs font-bold uppercase tracking-widest">Aucune transaction
-                        trouvée.</p>
+                <!-- محتوى الجدول -->
+                <div class="p-4 overflow-y-auto hide-scroll flex-1 bg-[#0f1117]">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse whitespace-nowrap">
+                            <thead>
+                                <tr
+                                    class="text-[10px] uppercase tracking-wider text-gray-500 border-b border-[#212631]">
+                                    <th class="p-3 font-bold">Date</th>
+                                    <th class="p-3 font-bold">Jeu / Provider</th>
+                                    <th class="p-3 font-bold text-center">Montant (Mise)</th>
+                                    <th class="p-3 font-bold text-center">Multiplicateur</th>
+                                    <th class="p-3 font-bold text-right">Gain / Perte</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-table-body" class="text-xs text-gray-300 divide-y divide-[#212631]">
+                                <!-- سيتم حقن البيانات هنا برمجياً -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- حالة التحميل -->
+                    <div id="history-loader" class="py-12 text-center hidden">
+                        <i class="fas fa-circle-notch fa-spin text-emerald text-4xl mb-4"></i>
+                        <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Chargement de
+                            l'historique...</p>
+                    </div>
+
+                    <!-- حالة لا توجد بيانات -->
+                    <div id="history-empty" class="py-12 text-center hidden">
+                        <i class="fas fa-ghost text-gray-700 text-5xl mb-4"></i>
+                        <p class="text-gray-500 text-xs font-bold uppercase tracking-widest">Aucun pari trouvé.</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        <!-- 💸 نافذة سجل المعاملات المالية (Transactions) -->
+        <div id="transactions-modal"
+            class="fixed inset-0 z-[400] bg-black/80 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
+            <div class="bg-[#161922] border border-[#212631] rounded-2xl w-full max-w-3xl flex flex-col max-h-[85vh] shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300"
+                id="transactions-modal-content">
+
+                <!-- رأس النافذة -->
+                <div class="flex justify-between items-center p-5 border-b border-[#212631] bg-[#0f1117]">
+                    <h3 class="text-white font-black uppercase tracking-wider text-lg flex items-center gap-2">
+                        <i class="fas fa-exchange-alt text-emerald"></i> Historique des Transactions
+                    </h3>
+                    <button onclick="closeTransactionsModal()"
+                        class="text-gray-400 hover:text-red-500 transition text-xl w-8 h-8 flex items-center justify-center rounded-full bg-[#161922] hover:bg-red-500/10 border border-transparent hover:border-red-500/30">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- محتوى الجدول -->
+                <div class="p-4 overflow-y-auto hide-scroll flex-1 bg-[#0f1117]">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse whitespace-nowrap">
+                            <thead>
+                                <tr
+                                    class="text-[10px] uppercase tracking-wider text-gray-500 border-b border-[#212631]">
+                                    <th class="p-3 font-bold">Date</th>
+                                    <th class="p-3 font-bold">Type</th>
+                                    <th class="p-3 font-bold">Méthode</th>
+                                    <th class="p-3 font-bold text-center">Montant</th>
+                                    <th class="p-3 font-bold text-right">Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactions-table-body" class="text-xs text-gray-300 divide-y divide-[#212631]">
+                                <!-- سيتم حقن البيانات هنا -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="transactions-loader" class="py-12 text-center hidden">
+                        <i class="fas fa-circle-notch fa-spin text-emerald text-4xl mb-4"></i>
+                        <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Chargement...</p>
+                    </div>
+
+                    <div id="transactions-empty" class="py-12 text-center hidden">
+                        <i class="fas fa-file-invoice-dollar text-gray-700 text-5xl mb-4"></i>
+                        <p class="text-gray-500 text-xs font-bold uppercase tracking-widest">Aucune transaction
+                            trouvée.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 </body>
 
 </html>
