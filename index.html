@@ -200,324 +200,318 @@
                 <a href="javascript:void(0)" onclick="switchSection('virtuals'); initVirtualsLobby();"
                     class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
                         class="fas fa-gamepad text-blue-400 text-lg"></i> Jeux Virtuels</a>
-                <!-- أزرار EuroVirtuals المحدثة للاستوديوهات الحقيقية -->
+                <!-- أزرار EuroVirtuals المستقلة -->
                 <a href="javascript:void(0)"
-                    onclick="switchSection('euro-casino'); loadEuroVirtualsStudios('casino', 'euro-casino-grid', 'euro-casino-providers');"
+                    onclick="switchSection('euro-casino'); loadEuroVirtualsGames('casino', 'euro-casino-grid');"
                     class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition">
                     <i class="fas fa-coins text-emerald-500 text-lg"></i> EuroVirtuals Casino
                 </a>
 
                 <a href="javascript:void(0)"
-                    onclick="switchSection('euro-live'); loadEuroVirtualsStudios('live', 'euro-live-grid', 'euro-live-providers');"
+                    onclick="switchSection('euro-live'); loadEuroVirtualsGames('live', 'euro-live-grid');"
                     class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition">
                     <i class="fas fa-headset text-purple-500 text-lg"></i> EuroVirtuals Live
                 </a>
+            </div>
 
-                <!-- Ad Widget -->
+            <!-- Ad Widget -->
+            <div
+                class="bg-gradient-to-br from-[#1b2230] to-[#161922] border border-yellow-500/30 rounded-2xl p-4 text-center">
+                <h4 class="font-bold text-yellow-500 text-sm mt-2 mb-1">JACKPOT DROP</h4>
+                <p class="text-[11px] text-gray-400 mb-2">Gagnez jusqu'à <span
+                        class="text-white font-bold">124,567</span> TND</p>
+                <button
+                    class="w-full bg-yellow-500 text-black font-extrabold text-xs py-2 rounded-xl transition shadow">Participer</button>
+            </div>
+        </div>
+
+        <!-- CENTER: Dynamic Content Area (Panes) -->
+        <div class="w-full xl:w-[55%] space-y-6">
+            <style>
+                /* محرك حركة شريط الفائزين */
+                @keyframes scroll-ticker {
+                    0% {
+                        transform: translateX(0);
+                    }
+
+                    100% {
+                        transform: translateX(-50%);
+                    }
+                }
+
+                .ticker-move {
+                    animation: scroll-ticker 25s linear infinite;
+                }
+
+                .ticker-move:hover {
+                    animation-play-state: paused;
+                    /* يتوقف الشريط عند وضع الفأرة عليه */
+                }
+            </style>
+            <!-- PANE: ACCUEIL (الصفحة الرئيسية المتكاملة) -->
+            <div id="pane-accueil" class="player-view-section block space-y-6 w-full">
+
+                <!-- 🌟 1. شريط الفائزين المباشر (Live Winners Ticker) -->
+                <div class="relative w-full mx-auto mb-2 overflow-hidden">
+                    <div
+                        class="bg-[#161922]/80 backdrop-blur-xl border border-emerald/30 rounded-2xl p-2 flex items-center shadow-lg relative overflow-hidden w-full">
+                        <div
+                            class="bg-red-500/20 border border-red-500 rounded-lg px-2.5 py-1 flex items-center gap-1.5 z-20 shrink-0">
+                            <div class="w-2 h-2 rounded-full bg-red-500 animate-ping"></div>
+                            <span class="text-red-500 text-[9px] font-black uppercase tracking-wider">Live</span>
+                        </div>
+                        <div class="endless-ticker-container flex-grow h-6 ml-2 w-full overflow-hidden relative">
+                            <div id="winners-ticker-track" class="flex gap-4 items-center cursor-pointer ticker-move"
+                                style="width: max-content;">
+                                <!-- سيتم تعبئتها أوتوماتيكياً بالجافاسكريبت -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 🌟 سلايدر البنرات الترويجية (Hero Banner Slider) -->
                 <div
-                    class="bg-gradient-to-br from-[#1b2230] to-[#161922] border border-yellow-500/30 rounded-2xl p-4 text-center">
-                    <h4 class="font-bold text-yellow-500 text-sm mt-2 mb-1">JACKPOT DROP</h4>
-                    <p class="text-[11px] text-gray-400 mb-2">Gagnez jusqu'à <span
-                            class="text-white font-bold">124,567</span> TND</p>
-                    <button
-                        class="w-full bg-yellow-500 text-black font-extrabold text-xs py-2 rounded-xl transition shadow">Participer</button>
+                    class="relative w-full h-[180px] md:h-[260px] rounded-2xl overflow-hidden mb-6 group bg-[#161922] border border-[#212631] shadow-xl">
+
+                    <!-- حاوية البنرات -->
+                    <div id="hero-slider" class="w-full h-full relative">
+
+                        <!-- البنر الأول (الكازينو) -->
+                        <div
+                            class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100 z-20">
+                            <!-- خلفية متدرجة أنيقة -->
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/90 to-[#10b981]/20">
+                            </div>
+                            <!-- نمط شبكي خفيف (Grid Pattern) -->
+                            <div
+                                class="absolute inset-0 opacity-10 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:20px_20px]">
+                            </div>
+
+                            <div class="relative h-full flex flex-col justify-center px-6 md:px-12 w-full md:w-2/3">
+                                <div
+                                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] md:text-xs font-bold mb-3 w-fit">
+                                    <i class="fas fa-slot-machine"></i> CASINO PREMIUM
+                                </div>
+                                <h2
+                                    class="text-white text-lg md:text-3xl font-black uppercase tracking-wide leading-tight mb-2">
+                                    L'Expérience Casino <br><span class="text-emerald">Ultime</span>
+                                </h2>
+                                <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md">
+                                    Plongez dans un univers de divertissement sans limite avec les meilleurs
+                                    fournisseurs mondiaux.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- البنر الثاني (الرياضة) -->
+                        <div
+                            class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-10">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/90 to-blue-600/20">
+                            </div>
+                            <div
+                                class="absolute inset-0 opacity-10 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px]">
+                            </div>
+
+                            <div class="relative h-full flex flex-col justify-center px-6 md:px-12 w-full md:w-2/3">
+                                <div
+                                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[10px] md:text-xs font-bold mb-3 w-fit">
+                                    <i class="fas fa-futbol"></i> SPORTSBOOK
+                                </div>
+                                <h2
+                                    class="text-white text-lg md:text-3xl font-black uppercase tracking-wide leading-tight mb-2">
+                                    Vivez le Sport <br><span class="text-blue-500">En Direct</span>
+                                </h2>
+                                <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md">
+                                    Une couverture mondiale, des statistiques en temps réel et les cotes les plus
+                                    compétitives du marché.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- البنر الثالث (الموثوقية والسرعة) -->
+                        <div
+                            class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-10">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/90 to-purple-600/20">
+                            </div>
+                            <div
+                                class="absolute inset-0 opacity-10 bg-[radial-gradient(#a855f7_1px,transparent_1px)] [background-size:20px_20px]">
+                            </div>
+
+                            <div class="relative h-full flex flex-col justify-center px-6 md:px-12 w-full md:w-2/3">
+                                <div
+                                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-[10px] md:text-xs font-bold mb-3 w-fit">
+                                    <i class="fas fa-shield-check"></i> FIABILITÉ ABSOLUE
+                                </div>
+                                <h2
+                                    class="text-white text-lg md:text-3xl font-black uppercase tracking-wide leading-tight mb-2">
+                                    Transactions Rapides <br><span class="text-purple-500">& Sécurisées</span>
+                                </h2>
+                                <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md">
+                                    Profitez d'un environnement de jeu sûr avec des dépôts instantanés et des retraits
+                                    garantis.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- أزرار التحكم (النقاط السفلية) -->
+                    <div class="absolute bottom-3 md:bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-30">
+                        <button
+                            class="slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-emerald shadow-[0_0_8px_rgba(16,185,129,0.8)] transition-all"></button>
+                        <button
+                            class="slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-600 hover:bg-gray-400 transition-all"></button>
+                        <button
+                            class="slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-600 hover:bg-gray-400 transition-all"></button>
+                    </div>
+                </div>
+                <!-- قسم أبرز المزودين (يُعبأ تلقائياً عبر API) -->
+                <!-- ============================================== -->
+                <div id="dynamic-featured-providers" class="flex flex-col gap-6 mb-8 w-full mt-4">
+                    <!-- الجافاسكريبت سيضع ألعاب Pragmatic و Amatic و Hacksaw هنا مع صورهم الأصلية -->
+                </div>
+                <!-- ============================================== --><!-- ============================================== -->
+
+                <!-- اختيار اليوم (الألعاب المتغيرة) -->
+                <div>
+                    <h3 class="font-bold text-white uppercase text-xs tracking-wider mb-3 flex items-center gap-2">
+                        <i class="fas fa-star text-emerald animate-pulse"></i> Sélection du Jour
+                    </h3>
+                    <div id="games-of-the-day-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
                 </div>
             </div>
 
-            <!-- CENTER: Dynamic Content Area (Panes) -->
-            <div class="w-full xl:w-[55%] space-y-6">
-                <style>
-                    /* محرك حركة شريط الفائزين */
-                    @keyframes scroll-ticker {
-                        0% {
-                            transform: translateX(0);
-                        }
-
-                        100% {
-                            transform: translateX(-50%);
-                        }
-                    }
-
-                    .ticker-move {
-                        animation: scroll-ticker 25s linear infinite;
-                    }
-
-                    .ticker-move:hover {
-                        animation-play-state: paused;
-                        /* يتوقف الشريط عند وضع الفأرة عليه */
-                    }
-                </style>
-                <!-- PANE: ACCUEIL (الصفحة الرئيسية المتكاملة) -->
-                <div id="pane-accueil" class="player-view-section block space-y-6 w-full">
-
-                    <!-- 🌟 1. شريط الفائزين المباشر (Live Winners Ticker) -->
-                    <div class="relative w-full mx-auto mb-2 overflow-hidden">
-                        <div
-                            class="bg-[#161922]/80 backdrop-blur-xl border border-emerald/30 rounded-2xl p-2 flex items-center shadow-lg relative overflow-hidden w-full">
-                            <div
-                                class="bg-red-500/20 border border-red-500 rounded-lg px-2.5 py-1 flex items-center gap-1.5 z-20 shrink-0">
-                                <div class="w-2 h-2 rounded-full bg-red-500 animate-ping"></div>
-                                <span class="text-red-500 text-[9px] font-black uppercase tracking-wider">Live</span>
-                            </div>
-                            <div class="endless-ticker-container flex-grow h-6 ml-2 w-full overflow-hidden relative">
-                                <div id="winners-ticker-track"
-                                    class="flex gap-4 items-center cursor-pointer ticker-move"
-                                    style="width: max-content;">
-                                    <!-- سيتم تعبئتها أوتوماتيكياً بالجافاسكريبت -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 🌟 سلايدر البنرات الترويجية (Hero Banner Slider) -->
-                    <div
-                        class="relative w-full h-[180px] md:h-[260px] rounded-2xl overflow-hidden mb-6 group bg-[#161922] border border-[#212631] shadow-xl">
-
-                        <!-- حاوية البنرات -->
-                        <div id="hero-slider" class="w-full h-full relative">
-
-                            <!-- البنر الأول (الكازينو) -->
-                            <div
-                                class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100 z-20">
-                                <!-- خلفية متدرجة أنيقة -->
-                                <div
-                                    class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/90 to-[#10b981]/20">
-                                </div>
-                                <!-- نمط شبكي خفيف (Grid Pattern) -->
-                                <div
-                                    class="absolute inset-0 opacity-10 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:20px_20px]">
-                                </div>
-
-                                <div class="relative h-full flex flex-col justify-center px-6 md:px-12 w-full md:w-2/3">
-                                    <div
-                                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] md:text-xs font-bold mb-3 w-fit">
-                                        <i class="fas fa-slot-machine"></i> CASINO PREMIUM
-                                    </div>
-                                    <h2
-                                        class="text-white text-lg md:text-3xl font-black uppercase tracking-wide leading-tight mb-2">
-                                        L'Expérience Casino <br><span class="text-emerald">Ultime</span>
-                                    </h2>
-                                    <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md">
-                                        Plongez dans un univers de divertissement sans limite avec les meilleurs
-                                        fournisseurs mondiaux.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <!-- البنر الثاني (الرياضة) -->
-                            <div
-                                class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-10">
-                                <div
-                                    class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/90 to-blue-600/20">
-                                </div>
-                                <div
-                                    class="absolute inset-0 opacity-10 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px]">
-                                </div>
-
-                                <div class="relative h-full flex flex-col justify-center px-6 md:px-12 w-full md:w-2/3">
-                                    <div
-                                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[10px] md:text-xs font-bold mb-3 w-fit">
-                                        <i class="fas fa-futbol"></i> SPORTSBOOK
-                                    </div>
-                                    <h2
-                                        class="text-white text-lg md:text-3xl font-black uppercase tracking-wide leading-tight mb-2">
-                                        Vivez le Sport <br><span class="text-blue-500">En Direct</span>
-                                    </h2>
-                                    <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md">
-                                        Une couverture mondiale, des statistiques en temps réel et les cotes les plus
-                                        compétitives du marché.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <!-- البنر الثالث (الموثوقية والسرعة) -->
-                            <div
-                                class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-10">
-                                <div
-                                    class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/90 to-purple-600/20">
-                                </div>
-                                <div
-                                    class="absolute inset-0 opacity-10 bg-[radial-gradient(#a855f7_1px,transparent_1px)] [background-size:20px_20px]">
-                                </div>
-
-                                <div class="relative h-full flex flex-col justify-center px-6 md:px-12 w-full md:w-2/3">
-                                    <div
-                                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-[10px] md:text-xs font-bold mb-3 w-fit">
-                                        <i class="fas fa-shield-check"></i> FIABILITÉ ABSOLUE
-                                    </div>
-                                    <h2
-                                        class="text-white text-lg md:text-3xl font-black uppercase tracking-wide leading-tight mb-2">
-                                        Transactions Rapides <br><span class="text-purple-500">& Sécurisées</span>
-                                    </h2>
-                                    <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md">
-                                        Profitez d'un environnement de jeu sûr avec des dépôts instantanés et des
-                                        retraits
-                                        garantis.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- أزرار التحكم (النقاط السفلية) -->
-                        <div class="absolute bottom-3 md:bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-30">
-                            <button
-                                class="slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-emerald shadow-[0_0_8px_rgba(16,185,129,0.8)] transition-all"></button>
-                            <button
-                                class="slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-600 hover:bg-gray-400 transition-all"></button>
-                            <button
-                                class="slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-600 hover:bg-gray-400 transition-all"></button>
-                        </div>
-                    </div>
-                    <!-- قسم أبرز المزودين (يُعبأ تلقائياً عبر API) -->
-                    <!-- ============================================== -->
-                    <div id="dynamic-featured-providers" class="flex flex-col gap-6 mb-8 w-full mt-4">
-                        <!-- الجافاسكريبت سيضع ألعاب Pragmatic و Amatic و Hacksaw هنا مع صورهم الأصلية -->
-                    </div>
-                    <!-- ============================================== --><!-- ============================================== -->
-
-                    <!-- اختيار اليوم (الألعاب المتغيرة) -->
-                    <div>
-                        <h3 class="font-bold text-white uppercase text-xs tracking-wider mb-3 flex items-center gap-2">
-                            <i class="fas fa-star text-emerald animate-pulse"></i> Sélection du Jour
-                        </h3>
-                        <div id="games-of-the-day-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                        </div>
-                    </div>
+            <!-- PANE: CASINO -->
+            <div id="pane-casino" class="player-view-section hidden w-full">
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fas fa-slot-machine text-2xl text-emerald"></i>
+                    <h2 class="text-white font-extrabold text-xl">Casino & Slots</h2>
                 </div>
 
-                <!-- PANE: CASINO -->
-                <div id="pane-casino" class="player-view-section hidden w-full">
-                    <div class="flex items-center gap-2 mb-4">
-                        <i class="fas fa-slot-machine text-2xl text-emerald"></i>
-                        <h2 class="text-white font-extrabold text-xl">Casino & Slots</h2>
+                <!-- 🌟 محرك البحث وقائمة المزودين الجديدة -->
+                <div class="flex flex-col md:flex-row gap-3 mb-6 relative z-20">
+                    <!-- 1. البحث عن الألعاب -->
+                    <div class="relative flex-1">
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="game-search-input" onkeyup="filterGames()"
+                            placeholder="Rechercher un jeu (ex: Sweet Bonanza)..."
+                            class="w-full bg-[#161922] border border-[#212631] rounded-xl py-3 pl-11 pr-4 text-white text-sm outline-none focus:border-emerald transition-all shadow-md font-bold">
                     </div>
 
-                    <!-- 🌟 محرك البحث وقائمة المزودين الجديدة -->
-                    <div class="flex flex-col md:flex-row gap-3 mb-6 relative z-20">
-                        <!-- 1. البحث عن الألعاب -->
-                        <div class="relative flex-1">
-                            <i
-                                class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                            <input type="text" id="game-search-input" onkeyup="filterGames()"
-                                placeholder="Rechercher un jeu (ex: Sweet Bonanza)..."
-                                class="w-full bg-[#161922] border border-[#212631] rounded-xl py-3 pl-11 pr-4 text-white text-sm outline-none focus:border-emerald transition-all shadow-md font-bold">
-                        </div>
+                    <!-- 2. زر وقائمة المزودين -->
+                    <div class="relative">
+                        <button onclick="toggleProviderDropdown()"
+                            class="w-full md:w-auto bg-[#161922] border border-[#212631] hover:border-emerald px-6 py-3 rounded-xl text-sm font-bold text-gray-300 hover:text-white flex items-center justify-between gap-4 transition-all shadow-md">
+                            <span class="flex items-center gap-2"><i class="fas fa-filter text-emerald"></i> <span
+                                    id="current-provider-label">Fournisseurs</span></span>
+                            <i class="fas fa-chevron-down text-xs text-gray-500"></i>
+                        </button>
 
-                        <!-- 2. زر وقائمة المزودين -->
-                        <div class="relative">
-                            <button onclick="toggleProviderDropdown()"
-                                class="w-full md:w-auto bg-[#161922] border border-[#212631] hover:border-emerald px-6 py-3 rounded-xl text-sm font-bold text-gray-300 hover:text-white flex items-center justify-between gap-4 transition-all shadow-md">
-                                <span class="flex items-center gap-2"><i class="fas fa-filter text-emerald"></i> <span
-                                        id="current-provider-label">Fournisseurs</span></span>
-                                <i class="fas fa-chevron-down text-xs text-gray-500"></i>
-                            </button>
-
-                            <!-- القائمة المنسدلة (Dropdown) -->
-                            <div id="provider-dropdown"
-                                class="absolute right-0 top-full mt-2 w-full md:w-72 bg-[#161922] border border-[#212631] rounded-xl shadow-2xl hidden flex-col overflow-hidden z-50">
-                                <!-- بحث المزودين -->
-                                <div class="p-3 border-b border-[#212631] bg-[#0f1117]">
-                                    <div class="relative">
-                                        <i
-                                            class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs"></i>
-                                        <input type="text" id="provider-search-input" onkeyup="filterProviders()"
-                                            placeholder="Chercher un fournisseur..."
-                                            class="w-full bg-[#1a1e29] border border-[#212631] rounded-lg py-2 pl-9 pr-3 text-white text-xs outline-none focus:border-emerald">
-                                    </div>
+                        <!-- القائمة المنسدلة (Dropdown) -->
+                        <div id="provider-dropdown"
+                            class="absolute right-0 top-full mt-2 w-full md:w-72 bg-[#161922] border border-[#212631] rounded-xl shadow-2xl hidden flex-col overflow-hidden z-50">
+                            <!-- بحث المزودين -->
+                            <div class="p-3 border-b border-[#212631] bg-[#0f1117]">
+                                <div class="relative">
+                                    <i
+                                        class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs"></i>
+                                    <input type="text" id="provider-search-input" onkeyup="filterProviders()"
+                                        placeholder="Chercher un fournisseur..."
+                                        class="w-full bg-[#1a1e29] border border-[#212631] rounded-lg py-2 pl-9 pr-3 text-white text-xs outline-none focus:border-emerald">
                                 </div>
-                                <!-- قائمة المزودين -->
-                                <div id="provider-dropdown-list"
-                                    class="max-h-[300px] overflow-y-auto hide-scroll p-2 flex flex-col gap-1 bg-[#161922]">
-                                    <!-- سيتم وضع المزودين هنا برمجياً -->
-                                </div>
+                            </div>
+                            <!-- قائمة المزودين -->
+                            <div id="provider-dropdown-list"
+                                class="max-h-[300px] overflow-y-auto hide-scroll p-2 flex flex-col gap-1 bg-[#161922]">
+                                <!-- سيتم وضع المزودين هنا برمجياً -->
                             </div>
                         </div>
                     </div>
-
-                    <!-- شبكة الألعاب (هذا هو مكانها الصحيح في الأسفل!) -->
-                    <div id="games-grid"
-                        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10">
-                    </div>
                 </div>
 
-                <!-- PANE: LIVE CASINO -->
-                <div id="pane-live-casino" class="player-view-section hidden w-full">
-                    <div class="flex items-center gap-2 mb-2">
-                        <i class="fas fa-video text-xl text-red-500"></i>
-                        <h2 class="text-white font-bold text-lg">Live Casino</h2>
-                    </div>
-                    <!-- وهذا شريط اللايف كازينو! 👇 -->
-                    <div id="live-providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4"></div>
+                <!-- شبكة الألعاب (هذا هو مكانها الصحيح في الأسفل!) -->
+                <div id="games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10">
+                </div>
+            </div>
 
-                    <div id="live-games-grid"
-                        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10">
+            <!-- PANE: LIVE CASINO -->
+            <div id="pane-live-casino" class="player-view-section hidden w-full">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fas fa-video text-xl text-red-500"></i>
+                    <h2 class="text-white font-bold text-lg">Live Casino</h2>
+                </div>
+                <!-- وهذا شريط اللايف كازينو! 👇 -->
+                <div id="live-providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4"></div>
+
+                <div id="live-games-grid"
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10">
+                </div>
+            </div>
+
+            <!-- PANE: VIRTUALS -->
+            <div id="pane-virtuals" class="player-view-section hidden w-full">
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fas fa-gamepad text-xl text-blue-400"></i>
+                    <h2 class="text-white font-bold text-lg">Jeux Virtuels</h2>
+                </div>
+                <div id="virtuals-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pb-10"></div>
+            </div>
+            <!-- PANE: EUROVIRTUALS CASINO -->
+            <div id="pane-euro-casino" class="player-view-section hidden w-full">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-white font-bold text-lg">EuroVirtuals Casino</h2>
+                </div>
+                <!-- 🌟 حاوية أزرار المزودين الديناميكية -->
+                <div id="euro-casino-providers" class="flex flex-wrap gap-2 mb-4"></div>
+                <div id="euro-casino-grid"
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 pb-10">
+                </div>
+            </div>
+
+            <!-- PANE: EUROVIRTUALS LIVE -->
+            <div id="pane-euro-live" class="player-view-section hidden w-full">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-white font-bold text-lg">EuroVirtuals Live</h2>
+                </div>
+                <!-- 🌟 حاوية أزرار المزودين الديناميكية -->
+                <div id="euro-live-providers" class="flex flex-wrap gap-2 mb-4"></div>
+                <div id="euro-live-grid"
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 pb-10">
+                </div>
+            </div>
+            <!-- PANE: 01.TECH TEST (منطقة معزولة كلياً) -->
+            <div id="pane-zeroone-test" class="player-view-section hidden w-full space-y-6">
+                <div class="bg-panel p-6 rounded-2xl border border-yellow-500/30 text-center shadow-2xl">
+                    <h2 class="text-yellow-400 font-extrabold text-xl mb-2">🧪 Le laboratoire isolé - 01.TECH</h2>
+                    <p class="text-gray-400 text-xs mb-6">This section is completely isolated from any other code. Test
+                        at your leisure!</p>
+
+                    <div class="flex justify-center gap-4 mb-8">
+                        <!-- زر السلوتس -->
+                        <button onclick="fetchIsolatedZeroOneGames('slots')"
+                            class="bg-[#1b4ed8] hover:bg-[#1e40af] text-white px-6 py-2 rounded-lg font-bold transition shadow-lg flex items-center gap-2">
+                            <i class="fas fa-slot-machine"></i> Casino (Slots)
+                        </button>
+                        <!-- زر الكازينو المباشر -->
+                        <button onclick="fetchIsolatedZeroOneGames('live')"
+                            class="bg-[#b91c1c] hover:bg-[#991b1b] text-white px-6 py-2 rounded-lg font-bold transition shadow-lg flex items-center gap-2">
+                            <i class="fas fa-video"></i> Casino Live
+                        </button>
+                    </div>
+
+                    <div id="status-zeroone-test"
+                        class="text-sm text-gray-300 mb-6 font-semibold bg-[#0f1117] py-3 rounded-xl border border-[#212631]">
+                        Appuyez sur l'un des boutons ci-dessus pour vous connecter et récupérer les jeux....
+                    </div>
+                    <!-- 🌟 شريط أزرار المزودين (سيتم تعبئته آلياً) -->
+                    <div id="zeroone-providers-filter" class="flex flex-wrap gap-2 justify-center mb-6"></div>
+                    <div id="grid-zeroone-test"
+                        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 text-left">
+                        <!-- ستظهر الألعاب هنا -->
                     </div>
                 </div>
-
-                <!-- PANE: VIRTUALS -->
-                <div id="pane-virtuals" class="player-view-section hidden w-full">
-                    <div class="flex items-center gap-2 mb-4">
-                        <i class="fas fa-gamepad text-xl text-blue-400"></i>
-                        <h2 class="text-white font-bold text-lg">Jeux Virtuels</h2>
-                    </div>
-                    <div id="virtuals-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pb-10">
-                    </div>
-                </div>
-                <!-- PANE: EUROVIRTUALS CASINO -->
-                <div id="pane-euro-casino" class="player-view-section hidden w-full">
-                    <div class="flex items-center justify-between mb-3">
-                        <h2 class="text-white font-bold text-lg">EuroVirtuals Casino</h2>
-                    </div>
-                    <!-- 🌟 حاوية أزرار المزودين الديناميكية -->
-                    <div id="euro-casino-providers" class="flex flex-wrap gap-2 mb-4"></div>
-                    <div id="euro-casino-grid"
-                        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 pb-10">
-                    </div>
-                </div>
-
-                <!-- PANE: EUROVIRTUALS LIVE -->
-                <div id="pane-euro-live" class="player-view-section hidden w-full">
-                    <div class="flex items-center justify-between mb-3">
-                        <h2 class="text-white font-bold text-lg">EuroVirtuals Live</h2>
-                    </div>
-                    <!-- 🌟 حاوية أزرار المزودين الديناميكية -->
-                    <div id="euro-live-providers" class="flex flex-wrap gap-2 mb-4"></div>
-                    <div id="euro-live-grid"
-                        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 pb-10">
-                    </div>
-                </div>
-                <!-- PANE: 01.TECH TEST (منطقة معزولة كلياً) -->
-                <div id="pane-zeroone-test" class="player-view-section hidden w-full space-y-6">
-                    <div class="bg-panel p-6 rounded-2xl border border-yellow-500/30 text-center shadow-2xl">
-                        <h2 class="text-yellow-400 font-extrabold text-xl mb-2">🧪 Le laboratoire isolé - 01.TECH</h2>
-                        <p class="text-gray-400 text-xs mb-6">This section is completely isolated from any other code.
-                            Test
-                            at your leisure!</p>
-
-                        <div class="flex justify-center gap-4 mb-8">
-                            <!-- زر السلوتس -->
-                            <button onclick="fetchIsolatedZeroOneGames('slots')"
-                                class="bg-[#1b4ed8] hover:bg-[#1e40af] text-white px-6 py-2 rounded-lg font-bold transition shadow-lg flex items-center gap-2">
-                                <i class="fas fa-slot-machine"></i> Casino (Slots)
-                            </button>
-                            <!-- زر الكازينو المباشر -->
-                            <button onclick="fetchIsolatedZeroOneGames('live')"
-                                class="bg-[#b91c1c] hover:bg-[#991b1b] text-white px-6 py-2 rounded-lg font-bold transition shadow-lg flex items-center gap-2">
-                                <i class="fas fa-video"></i> Casino Live
-                            </button>
-                        </div>
-
-                        <div id="status-zeroone-test"
-                            class="text-sm text-gray-300 mb-6 font-semibold bg-[#0f1117] py-3 rounded-xl border border-[#212631]">
-                            Appuyez sur l'un des boutons ci-dessus pour vous connecter et récupérer les jeux....
-                        </div>
-                        <!-- 🌟 شريط أزرار المزودين (سيتم تعبئته آلياً) -->
-                        <div id="zeroone-providers-filter" class="flex flex-wrap gap-2 justify-center mb-6"></div>
-                        <div id="grid-zeroone-test"
-                            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 text-left">
-                            <!-- ستظهر الألعاب هنا -->
-                        </div>
-                    </div>
-                </div>
+            </div>
     </main>
     </main>
 
@@ -2429,7 +2423,7 @@
 
 
         // دالة جلب وعرض ألعاب EuroVirtuals مفلترة
-        let availableStudios = [];
+let availableStudios = [];
 
     async function loadEuroVirtualsStudios(categoryFilter, targetGridId, providersBarId) {
         const container = document.getElementById(targetGridId);
@@ -2577,7 +2571,9 @@
             alert('حدث خطأ أثناء محاولة فتح اللعبة.');
         }
     }
+
 </script>
+
 
 
     <div class="relative w-full z-30">
@@ -2590,10 +2586,7 @@
             class="absolute right-1 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-emerald-500 rounded-lg text-[#0f1117] flex items-center justify-center hover:bg-emerald-400 transition shadow-md cursor-pointer z-40">
             <i class="fas fa-paper-plane text-xs pointer-events-none"></i>
         </button>
-    </div>
-    </div>
-    </div>
-    </div>
+   
     <!-- 👤 قائمة الملف الشخصي (Profile Sidebar) -->
     <!-- خلفية ضبابية عند فتح القائمة -->
     <div id="profile-overlay" onclick="toggleProfileSidebar()"
