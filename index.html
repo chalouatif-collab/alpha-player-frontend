@@ -2502,7 +2502,23 @@
     </script>
     </script>
     
+               
+            
 
+                <div class="relative w-full z-30">
+                    <!-- تم إضافة maxlength="25" ومنع النسخ واللصق -->
+                    <input type="text" id="chat-input" maxlength="25" oncopy="return false" onpaste="return false"
+                        oncut="return false" onkeypress="handleChatEnter(event)" placeholder="Écrivez (Max 25)..."
+                        class="w-full bg-[#161922] text-white text-xs rounded-xl py-3 pl-4 pr-12 outline-none border border-gray-700 focus:border-emerald-500 transition shadow-inner pointer-events-auto select-none"
+                        autocomplete="off">
+                    <button type="button" onclick="sendMessage()"
+                        class="absolute right-1 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-emerald-500 rounded-lg text-[#0f1117] flex items-center justify-center hover:bg-emerald-400 transition shadow-md cursor-pointer z-40">
+                        <i class="fas fa-paper-plane text-xs pointer-events-none"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- 👤 قائمة الملف الشخصي (Profile Sidebar) -->
     <!-- خلفية ضبابية عند فتح القائمة -->
     <div id="profile-overlay" onclick="toggleProfileSidebar()"
@@ -2528,7 +2544,14 @@
             </button>
         </div>
 
-        
+        <!-- زر الإيداع البارز -->
+        <div class="p-5 border-b border-gray-800">
+            <button onclick="toggleProfileSidebar(); setTimeout(toggleCashier, 100);"
+                class="w-full bg-emerald hover:bg-emerald-400 text-[#0f1117] font-black py-3.5 rounded-lg flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition transform hover:scale-[1.02]">
+                <i class="fas fa-wallet text-lg"></i> FAIRE UN DÉPÔT
+            </button>
+        </div>
+
         <!-- روابط التحكم في الحساب -->
         <div class="flex-1 overflow-y-auto p-3 space-y-1">
             <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2 ml-2 mt-2">Mon Compte
@@ -2553,7 +2576,14 @@
                 <span class="ml-auto bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">NEW</span>
             </a>
         </div>
-        
+        <!-- زر الشات (يظهر في الهاتف فقط) -->
+        <div class="px-4 pt-4 border-t border-gray-800 bg-[#0f1117] xl:hidden">
+            <button onclick="toggleProfileSidebar(); setTimeout(toggleChat, 200);"
+                class="w-full bg-[#1a1d24] hover:bg-gray-800 text-white font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition border border-gray-700">
+                <i class="fas fa-comments text-emerald-500"></i> CHAT EN DIRECT
+            </button>
+        </div>
+
         <!-- تذييل القائمة (زر الخروج) -->
         <div class="p-4 bg-[#0f1117]">
             <button onclick="toggleProfileSidebar(); logoutPlayer();"
@@ -2562,6 +2592,15 @@
             </button>
         </div>
     </div>
+
+    <!-- 💬 الزر العائم للشات (يظهر في الكمبيوتر أسفل اليمين) -->
+    <button id="floating-chat-btn" onclick="toggleChat()"
+        class="fixed bottom-6 right-6 z-[100] w-14 h-14 bg-emerald-500 hover:bg-emerald-400 rounded-full hidden xl:flex items-center justify-center text-[#0f1117] shadow-[0_0_20px_rgba(16,185,129,0.4)] transition transform hover:scale-110">
+        <i class="fas fa-comments text-2xl"></i>
+        <!-- نقطة الإشعارات الحمراء -->
+        <span
+            class="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-[#12151d] rounded-full animate-pulse"></span>
+    </button>
 
     <!-- 📜 نافذة سجل الرهانات (Historique des paris) -->
     <div id="history-modal"
