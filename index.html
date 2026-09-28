@@ -2423,13 +2423,14 @@
 
 
         // دالة جلب وعرض ألعاب EuroVirtuals مفلترة
-
-    let euroVirtualsCache = [];
+let euroVirtualsCache = [];
 
     async function loadEuroVirtualsGames(categoryFilter, targetGridId) {
         const container = document.getElementById(targetGridId);
         const providersBarId = targetGridId === 'euro-casino-grid' ? 'euro-casino-providers' : 'euro-live-providers';
         const providersBar = document.getElementById(providersBarId);
+
+        if (!container) return;
 
         container.innerHTML = '<p class="text-gray-400 text-center col-span-full py-10"><i class="fas fa-spinner fa-spin mr-2"></i> جاري تحميل الألعاب والمزودين...</p>';
         if (providersBar) providersBar.innerHTML = '';
@@ -2455,39 +2456,36 @@
                         gameName.includes('aviator');
 
                     if (categoryFilter === 'live') {
-                        return !isVirtualOrCrash; // ألعاب الكازينو والمزودين
+                        return !isVirtualOrCrash; 
                     } else {
-                        return isVirtualOrCrash; // الرياضات الافتراضية
+                        return isVirtualOrCrash; 
                     }
                 });
 
-                // 2. قائمة المزودين الكبار الأساسيين التي تريد إبرازها في الواجهة
+                // 2. مفاتيح المزودين الكبار للبحث المرن
                 const featuredProviders = [
-                    'Tous', 
-                    'Pragmatic Play', 
-                    'Evolution', 
-                    'Hacksaw Gaming', 
-                    "Play'n Go", 
-                    'NetEnt', 
-                    'Spribe', 
-                    'Wazdan', 
-                    'Playson', 
-                    'EGT', 
-                    'Amusnet',
-                    'Vimplay'
+                    {label: 'Tous', key: 'tous'},
+                    {label: 'Pragmatic Play', key: 'pragmatic'},
+                    {label: 'Evolution', key: 'evolution'},
+                    {label: 'Hacksaw', key: 'hacksaw'},
+                    {label: "Play'n Go", key: 'play'},
+                    {label: 'NetEnt', key: 'netent'},
+                    {label: 'Spribe', key: 'spribe'},
+                    {label: 'Wazdan', key: 'wazdan'},
+                    {label: 'Playson', key: 'playson'},
+                    {label: 'Vimplay', key: 'vimplay'}
                 ];
 
-                // 3. رسم أزرار المزودين الكبار في الشريط العلوي للقسم
+                // 3. رسم أزرار المزودين
                 if (providersBar) {
                     providersBar.innerHTML = featuredProviders.map(prov => `
-                        <button onclick="filterEuroGridByProvider('${prov}', '${targetGridId}', '${categoryFilter}')" 
+                        <button onclick="filterEuroGridByProvider('${prov.key}', '${targetGridId}', '${categoryFilter}')" 
                                 class="px-3 py-1.5 rounded-xl bg-[#1a1e29] hover:bg-emerald hover:text-black text-gray-300 text-xs font-bold transition border border-[#2e3648] uppercase shadow-sm">
-                            ${prov}
+                            ${prov.label}
                         </button>
                     `).join('');
                 }
 
-                // عرض الألعاب مبدئياً (الكل)
                 renderEuroGamesGrid(baseFiltered, container);
 
             } else {
@@ -2499,9 +2497,10 @@
         }
     }
 
-    // دالة التصفية عند الضغط على زر أي مزود كبير
-    function filterEuroGridByProvider(providerName, targetGridId, categoryFilter) {
+    // دالة التصفية المرنة للمزودين
+    function filterEuroGridByProvider(providerKey, targetGridId, categoryFilter) {
         const container = document.getElementById(targetGridId);
+        if (!container) return;
         
         const baseFiltered = euroVirtualsCache.filter(game => {
             const gameName = (game.name || game.game_name || "").toLowerCase();
@@ -2511,9 +2510,12 @@
             return categoryFilter === 'live' ? !isVirtualOrCrash : isVirtualOrCrash;
         });
 
-        const finalGames = providerName === 'Tous' 
+        const finalGames = providerKey === 'tous' 
             ? baseFiltered 
-            : baseFiltered.filter(g => (g.provider || '').toLowerCase().includes(providerName.toLowerCase()));
+            : baseFiltered.filter(g => {
+                const p = (g.provider || "").toLowerCase();
+                return p.includes(providerKey);
+              });
 
         renderEuroGamesGrid(finalGames, container);
     }
