@@ -2441,7 +2441,7 @@
             if (data.status === 'success' && data.games && data.games.length > 0) {
                 euroVirtualsCache = data.games;
 
-                // 1. الفرز الأساسي للقسم (افتراضي مقابل استوديوهات الكازينو والمباشر)
+                // 1. تصفية الألعاب بناءً على القسم (كازينو أو افتراضية)
                 const baseFiltered = euroVirtualsCache.filter(game => {
                     const gameName = (game.name || game.game_name || "").toLowerCase();
                     const providerName = (game.provider || "").toLowerCase();
@@ -2455,18 +2455,31 @@
                         gameName.includes('aviator');
 
                     if (categoryFilter === 'live') {
-                        return !isVirtualOrCrash; // ألعاب الطاولة والكازينو والمزودين الجدد (Vimplay, ExaGaming...)
+                        return !isVirtualOrCrash; // ألعاب الكازينو والمزودين
                     } else {
                         return isVirtualOrCrash; // الرياضات الافتراضية
                     }
                 });
 
-                // 2. استخراج المزودين الفريدين تلقائياً لتوليد الأزرار
-                const uniqueProviders = ['Tous', ...new Set(baseFiltered.map(g => g.provider || 'EuroVirtuals'))];
+                // 2. قائمة المزودين الكبار الأساسيين التي تريد إبرازها في الواجهة
+                const featuredProviders = [
+                    'Tous', 
+                    'Pragmatic Play', 
+                    'Evolution', 
+                    'Hacksaw Gaming', 
+                    "Play'n Go", 
+                    'NetEnt', 
+                    'Spribe', 
+                    'Wazdan', 
+                    'Playson', 
+                    'EGT', 
+                    'Amusnet',
+                    'Vimplay'
+                ];
 
-                // 3. رسم أزرار المزودين في الشريط العلوي للقسم
+                // 3. رسم أزرار المزودين الكبار في الشريط العلوي للقسم
                 if (providersBar) {
-                    providersBar.innerHTML = uniqueProviders.map(prov => `
+                    providersBar.innerHTML = featuredProviders.map(prov => `
                         <button onclick="filterEuroGridByProvider('${prov}', '${targetGridId}', '${categoryFilter}')" 
                                 class="px-3 py-1.5 rounded-xl bg-[#1a1e29] hover:bg-emerald hover:text-black text-gray-300 text-xs font-bold transition border border-[#2e3648] uppercase shadow-sm">
                             ${prov}
@@ -2474,7 +2487,7 @@
                     `).join('');
                 }
 
-                // عرض الألعاب مبدئياً
+                // عرض الألعاب مبدئياً (الكل)
                 renderEuroGamesGrid(baseFiltered, container);
 
             } else {
@@ -2486,7 +2499,7 @@
         }
     }
 
-    // دالة التصفية عند الضغط على زر أي مزود
+    // دالة التصفية عند الضغط على زر أي مزود كبير
     function filterEuroGridByProvider(providerName, targetGridId, categoryFilter) {
         const container = document.getElementById(targetGridId);
         
@@ -2500,7 +2513,7 @@
 
         const finalGames = providerName === 'Tous' 
             ? baseFiltered 
-            : baseFiltered.filter(g => (g.provider || 'EuroVirtuals').toLowerCase() === providerName.toLowerCase());
+            : baseFiltered.filter(g => (g.provider || '').toLowerCase().includes(providerName.toLowerCase()));
 
         renderEuroGamesGrid(finalGames, container);
     }
@@ -2508,7 +2521,7 @@
     // دالة رسم بطاقات الألعاب
     function renderEuroGamesGrid(gamesList, container) {
         if (gamesList.length === 0) {
-            container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">لا توجد ألعاب لهذا المزود.</p>';
+            container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">لا توجد ألعاب متاحة لهذا المزود حالياً.</p>';
             return;
         }
 
@@ -2566,11 +2579,6 @@
         }
     }
 </script>
-
-
-       
-    </script>
-
 
 
 
