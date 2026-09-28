@@ -2584,7 +2584,7 @@
         }
 
     </script>
-    
+
         <!-- 👤 قائمة الملف الشخصي (Profile Sidebar) -->
         <!-- خلفية ضبابية عند فتح القائمة -->
         <div id="profile-overlay" onclick="toggleProfileSidebar()"
@@ -2643,14 +2643,6 @@
                     <span class="ml-auto bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">NEW</span>
                 </a>
             </div>
-            <!-- زر الشات (يظهر في الهاتف فقط) -->
-            <div class="px-4 pt-4 border-t border-gray-800 bg-[#0f1117] xl:hidden">
-                <button onclick="toggleProfileSidebar(); setTimeout(toggleChat, 200);"
-                    class="w-full bg-[#1a1d24] hover:bg-gray-800 text-white font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition border border-gray-700">
-                    <i class="fas fa-comments text-emerald-500"></i> CHAT EN DIRECT
-                </button>
-            </div>
-
             <!-- تذييل القائمة (زر الخروج) -->
             <div class="p-4 bg-[#0f1117]">
                 <button onclick="toggleProfileSidebar(); logoutPlayer();"
@@ -2659,16 +2651,6 @@
                 </button>
             </div>
         </div>
-
-        <!-- 💬 الزر العائم للشات (يظهر في الكمبيوتر أسفل اليمين) -->
-        <button id="floating-chat-btn" onclick="toggleChat()"
-            class="fixed bottom-6 right-6 z-[100] w-14 h-14 bg-emerald-500 hover:bg-emerald-400 rounded-full hidden xl:flex items-center justify-center text-[#0f1117] shadow-[0_0_20px_rgba(16,185,129,0.4)] transition transform hover:scale-110">
-            <i class="fas fa-comments text-2xl"></i>
-            <!-- نقطة الإشعارات الحمراء -->
-            <span
-                class="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-[#12151d] rounded-full animate-pulse"></span>
-        </button>
-
         <!-- 📜 نافذة سجل الرهانات (Historique des paris) -->
         <div id="history-modal"
             class="fixed inset-0 z-[400] bg-black/80 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
