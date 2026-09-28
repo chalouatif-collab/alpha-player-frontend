@@ -2085,55 +2085,67 @@
         }
 
         async function fetchNotifications() {
-            if (!playerSession) return;
-            try {
-                const res = await fetch(`${BACKEND_URL}/api/user/notifications`, {headers: getAuthHeaders()});
-                const data = await res.json();
+    if (!playerSession) return;
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/user/notifications`, {headers: getAuthHeaders()});
+        const data = await res.json();
 
-                const badge = document.getElementById('notif-badge');
-                if (data.unread > 0) {
-                    badge.innerText = data.unread;
-                    badge.classList.remove('hidden');
-                } else {
-                    badge.classList.add('hidden');
-                }
-
-                const list = document.getElementById('notifs-list');
-                if (data.notifications.length === 0) {
-                    list.innerHTML = '<div class="text-center text-gray-500 text-xs py-4">Aucune notification</div>';
-                    return;
-                }
-
-                let html = data.notifications.map(n => `
-            <div class="relative p-2 rounded-xl border ${n.is_read ? 'bg-[#0f1117] border-transparent' : 'bg-[#1a1e29] border-emerald/30'} hover:bg-gray-800 transition">
-                <div class="flex justify-between items-start mb-1">
-                    <div class="flex items-center gap-2 cursor-pointer w-full" onclick="markAsRead('${n.id}')">
-                        <i class="fas ${n.icon} text-emerald"></i>
-                        <strong class="text-white text-xs">${n.title}</strong>
-                    </div>
-                    <!-- زر مسح هذا الإشعار تحديداً -->
-                    <button onclick="deleteNotification('${n.id}')" class="text-gray-500 hover:text-red-500 transition px-1">
-                        <i class="fas fa-times text-[12px]"></i>
-                    </button>
-                </div>
-                <p class="text-gray-400 text-[10px] cursor-pointer" onclick="markAsRead('${n.id}')">${n.message}</p>
-                <span class="text-gray-600 text-[9px] block mt-1">${n.date}</span>
-            </div>
-        `).join('');
-
-                // إضافة زر "مسح الكل" أسفل الإشعارات
-                html += `
-            <div class="mt-2 pt-2 border-t border-[#212631]">
-                <button onclick="deleteNotification('all')" class="w-full text-xs text-red-400 hover:text-red-500 font-bold py-1.5 bg-red-500/10 rounded-lg transition">
-                    <i class="fas fa-trash-alt"></i> Effacer tout
-                </button>
-            </div>
-        `;
-
-                list.innerHTML = html;
-            } catch (e) { }
+        const badge = document.getElementById('notif-badge');
+        // حماية: التأكد من وجود data قبل قراءة unread
+        if (data?.unread > 0) {
+            badge.innerText = data.unread;
+            badge.classList.remove('hidden');
+        } else {
+            badge.classList.add('hidden');
         }
 
+        const list = document.getElementById('notifs-list');
+        // حماية: إذا كانت مصفوفة الإشعارات غير موجودة، اجعلها مصفوفة فارغة لتجنب خطأ length
+        const notifications = data?.notifications || [];
+
+        if (notifications.length === 0) {
+            list.innerHTML = '<div class="text-center text-gray-500 text-xs py-4">Aucune notification</div>';
+            return;
+        }
+
+        // حماية: استخدام علامة الاستفهامات ?. لتجنب خطأ القراءة من كائن فارغ
+        let html = notifications.map(n => {
+            if (!n) return ''; // تخطي العنصر إذا كان غير معرف
+            
+            // دعم للمعرف سواء كان id أو M_ID كما ظهر في الخطأ السابق
+            const notifId = n?.id || n?.M_ID || '';
+            
+            return `
+        <div class="relative p-2 rounded-xl border ${n?.is_read ? 'bg-[#0f1117] border-transparent' : 'bg-[#1a1e29] border-emerald/30'} hover:bg-gray-800 transition">
+            <div class="flex justify-between items-start mb-1">
+                <div class="flex items-center gap-2 cursor-pointer w-full" onclick="markAsRead('${notifId}')">
+                    <i class="fas ${n?.icon || 'fa-bell'} text-emerald"></i>
+                    <strong class="text-white text-xs">${n?.title || 'Notification'}</strong>
+                </div>
+                <!-- زر مسح هذا الإشعار تحديداً -->
+                <button onclick="deleteNotification('${notifId}')" class="text-gray-500 hover:text-red-500 transition px-1">
+                    <i class="fas fa-times text-[12px]"></i>
+                </button>
+            </div>
+            <p class="text-gray-400 text-[10px] cursor-pointer" onclick="markAsRead('${notifId}')">${n?.message || ''}</p>
+            <span class="text-gray-600 text-[9px] block mt-1">${n?.date || ''}</span>
+        </div>
+        `}).join('');
+
+        // إضافة زر "مسح الكل" أسفل الإشعارات
+        html += `
+        <div class="mt-2 pt-2 border-t border-[#212631]">
+            <button onclick="deleteNotification('all')" class="w-full text-xs text-red-400 hover:text-red-500 font-bold py-1.5 bg-red-500/10 rounded-lg transition">
+                <i class="fas fa-trash-alt"></i> Effacer tout
+            </button>
+        </div>
+        `;
+
+        list.innerHTML = html;
+    } catch (e) { 
+        console.error("Error fetching notifications: ", e);
+    }
+}
         async function markAsRead(id) {
             await fetch(`${BACKEND_URL}/api/user/read-notification`, {
                 method: 'POST', headers: getAuthHeaders(),
