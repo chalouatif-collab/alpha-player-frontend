@@ -200,13 +200,18 @@
                 <a href="javascript:void(0)" onclick="switchSection('virtuals'); initVirtualsLobby();"
                     class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
                         class="fas fa-gamepad text-blue-400 text-lg"></i> Jeux Virtuels</a>
-                <!-- أزرار EuroVirtuals الجديدة -->
-                <a href="javascript:void(0)" onclick="switchSection('casino'); loadEuroVirtualsGames('casino');"
+                <!-- أزرار EuroVirtuals المستقلة -->
+                <a href="javascript:void(0)"
+                    onclick="switchSection('euro-casino'); loadEuroVirtualsGames('casino', 'euro-casino-grid');"
                     class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition">
-                    <i class="fas fa-coins text-yellow-500 text-lg"></i> EuroVirtuals Casino
-                    <a href="javascript:void(0)" onclick="switchSection('live-casino'); loadEuroVirtualsGames('live');"
-                        class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition">
-                        <i class="fas fa-headset text-purple-500 text-lg"></i> EuroVirtuals Live
+                    <i class="fas fa-coins text-emerald-500 text-lg"></i> EuroVirtuals Casino
+                </a>
+
+                <a href="javascript:void(0)"
+                    onclick="switchSection('euro-live'); loadEuroVirtualsGames('live', 'euro-live-grid');"
+                    class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition">
+                    <i class="fas fa-headset text-purple-500 text-lg"></i> EuroVirtuals Live
+                </a>
             </div>
 
             <!-- Ad Widget -->
@@ -735,7 +740,25 @@
     <!-- Toasts -->
     <div id="toast-container" class="fixed top-5 right-5 z-[500] flex flex-col gap-2 w-full max-w-sm px-4">
     </div>
+<!-- قسم EuroVirtuals Casino المستقل -->
+<div id="euro-casino" class="hidden flex-col gap-6 w-full">
+    <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold text-white">EuroVirtuals Casino</h2>
+    </div>
+    <!-- شبكة الألعاب الخاصة بهذا القسم -->
+    <div id="euro-casino-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+    </div>
+</div>
 
+<!-- قسم EuroVirtuals Live المستقل -->
+<div id="euro-live" class="hidden flex-col gap-6 w-full">
+    <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-bold text-white">EuroVirtuals Live</h2>
+    </div>
+    <!-- شبكة الألعاب المباشرة الخاصة بهذا القسم -->
+    <div id="euro-live-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+    </div>
+</div>
 
     <!-- ================= JAVASCRIPT (محرك الألفابت الشامل) ================= -->
     <script>
@@ -2393,37 +2416,34 @@
             initHeroSlider();
         });
 
-       
-    
-    // دالة جلب وعرض ألعاب EuroVirtuals مفلترة
-    async function loadEuroVirtualsGames(categoryFilter) {
-        // تحديد القسم الذي ستعرض فيه الألعاب في منتصف الشاشة
-        const container = document.getElementById('games-grid') || document.querySelector('.grid'); 
+
+
+        // دالة جلب وعرض ألعاب EuroVirtuals مفلترة
         
-        // إظهار رسالة تحميل أنيقة
+    async function loadEuroVirtualsGames(categoryFilter, targetGridId) {
+        // نحدد الشبكة المستهدفة بناءً على القسم الذي فتحه اللاعب
+        const container = document.getElementById(targetGridId); 
+        
         container.innerHTML = '<p class="text-gray-400 text-center col-span-full py-10"><i class="fas fa-spinner fa-spin mr-2"></i> جاري تحميل ألعاب EuroVirtuals...</p>';
 
         try {
-            // الاتصال بالباك اند لجلب الألعاب
             const response = await fetch('/api/get-eurovirtuals-games');
             const data = await response.json();
 
             if (data.status === 'success' && data.games && data.games.length > 0) {
                 container.innerHTML = '';
                 
-                // 🎯 نظام الفلترة الذكي لفصل الكازينو عن المباشر
                 const filteredGames = data.games.filter(game => {
                     const gameType = (game.type || game.category || "").toLowerCase();
                     const gameName = (game.name || game.game_name || "").toLowerCase();
                     const providerName = (game.provider || "").toLowerCase();
                     
-                    // الكلمات المفتاحية التي تدل على الكازينو المباشر
                     const isLive = gameType.includes('live') || gameName.includes('live') || 
                                    gameType.includes('roulette') || gameType.includes('blackjack') || 
                                    gameType.includes('baccarat') || providerName.includes('live');
                     
                     if (categoryFilter === 'live') return isLive;
-                    if (categoryFilter === 'casino') return !isLive; // الألعاب العادية (السلوتس)
+                    if (categoryFilter === 'casino') return !isLive; 
                     return true;
                 });
 
@@ -2432,7 +2452,6 @@
                     return;
                 }
 
-                // 🎨 رسم كل لعبة في الشبكة (Grid)
                 filteredGames.forEach(game => {
                     const gameId = game.game_code || game.uuid || game.id;
                     const gameName = game.name || game.game_name || 'لعبة كازينو';
@@ -2450,9 +2469,6 @@
                             </div>
                             <div class="p-3 text-center bg-[#1c212d] flex-grow flex flex-col justify-center">
                                 <h3 class="text-white text-xs font-bold truncate">${gameName}</h3>
-                                <button class="mt-2 text-[10px] bg-[#212631] hover:bg-emerald-600 text-white py-1 px-3 rounded-full transition w-full">
-                                    العب الآن
-                                </button>
                             </div>
                         </div>
                     `;
@@ -2467,7 +2483,6 @@
         }
     }
 
-    // دالة تشغيل اللعبة عند النقر عليها
     async function launchEuroVirtuals(gameId) {
         const token = localStorage.getItem('access_token');
         if (!token) {
@@ -2488,7 +2503,6 @@
             const data = await response.json();
 
             if (data.launch_url) {
-                // توجيه اللاعب فوراً إلى اللعبة
                 window.open(data.launch_url, '_self'); 
             } else {
                 alert('عذراً، لم نتمكن من تشغيل اللعبة: ' + (data.error || 'خطأ مجهول'));
@@ -2498,26 +2512,58 @@
             alert('حدث خطأ أثناء محاولة فتح اللعبة.');
         }
     }
-</script>
-    </script>
-    </script>
-    
-               
-            
 
-                <div class="relative w-full z-30">
-                    <!-- تم إضافة maxlength="25" ومنع النسخ واللصق -->
-                    <input type="text" id="chat-input" maxlength="25" oncopy="return false" onpaste="return false"
-                        oncut="return false" onkeypress="handleChatEnter(event)" placeholder="Écrivez (Max 25)..."
-                        class="w-full bg-[#161922] text-white text-xs rounded-xl py-3 pl-4 pr-12 outline-none border border-gray-700 focus:border-emerald-500 transition shadow-inner pointer-events-auto select-none"
-                        autocomplete="off">
-                    <button type="button" onclick="sendMessage()"
-                        class="absolute right-1 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-emerald-500 rounded-lg text-[#0f1117] flex items-center justify-center hover:bg-emerald-400 transition shadow-md cursor-pointer z-40">
-                        <i class="fas fa-paper-plane text-xs pointer-events-none"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
+        // دالة تشغيل اللعبة عند النقر عليها
+        async function launchEuroVirtuals(gameId) {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                alert('الرجاء تسجيل الدخول أولاً للعب!');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/provider/launch-eurovirtuals', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({game_uuid: gameId})
+                });
+
+                const data = await response.json();
+
+                if (data.launch_url) {
+                    // توجيه اللاعب فوراً إلى اللعبة
+                    window.open(data.launch_url, '_self');
+                } else {
+                    alert('عذراً، لم نتمكن من تشغيل اللعبة: ' + (data.error || 'خطأ مجهول'));
+                }
+            } catch (error) {
+                console.error('Launch Error:', error);
+                alert('حدث خطأ أثناء محاولة فتح اللعبة.');
+            }
+        }
+    </script>
+    </script>
+    </script>
+
+
+
+
+    <div class="relative w-full z-30">
+        <!-- تم إضافة maxlength="25" ومنع النسخ واللصق -->
+        <input type="text" id="chat-input" maxlength="25" oncopy="return false" onpaste="return false"
+            oncut="return false" onkeypress="handleChatEnter(event)" placeholder="Écrivez (Max 25)..."
+            class="w-full bg-[#161922] text-white text-xs rounded-xl py-3 pl-4 pr-12 outline-none border border-gray-700 focus:border-emerald-500 transition shadow-inner pointer-events-auto select-none"
+            autocomplete="off">
+        <button type="button" onclick="sendMessage()"
+            class="absolute right-1 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-emerald-500 rounded-lg text-[#0f1117] flex items-center justify-center hover:bg-emerald-400 transition shadow-md cursor-pointer z-40">
+            <i class="fas fa-paper-plane text-xs pointer-events-none"></i>
+        </button>
+    </div>
+    </div>
+    </div>
     </div>
     <!-- 👤 قائمة الملف الشخصي (Profile Sidebar) -->
     <!-- خلفية ضبابية عند فتح القائمة -->
