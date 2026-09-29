@@ -1602,7 +1602,8 @@
             if (!playerSession) return;
             let amountInput, accountInfo;
 
-            // تجهيز معلومات الدفع (الاسم ورقم الهاتف)
+            
+            
             if (method === 'mandat') {
                 amountInput = document.getElementById('mandat-amount');
                 accountInfo = `Mandat: ${document.getElementById('mandat-nom').value} | Tel: ${document.getElementById('mandat-phone').value}`;
@@ -1616,17 +1617,17 @@
             if (amount > parseFloat(playerSession.balance || 0)) return showNotification("Solde insuffisant!", "error");
 
             try {
-                // استخدام FormData ليتوافق مع الباك إند الجديد
+                
                 const formData = new FormData();
                 formData.append("target_username", playerSession.username);
                 formData.append("action", "withdraw_request");
                 formData.append("amount", amount);
-                // إرسال معلومات الحساب (الهاتف والاسم) داخل حقل tx_id ليراها الأونر
+                
                 formData.append("tx_id", accountInfo);
 
                 const response = await fetch(`${BACKEND_URL}/api/admin/request-transaction`, {
                     method: 'POST',
-                    // نضع التوكن فقط بدون فرض Content-Type
+                    
                     headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`},
                     body: formData
                 });
@@ -1644,14 +1645,14 @@
                 showNotification("Erreur réseau", "error");
             }
         }
-        // ================= دالة تلوين الأزرار العلوية بذكاء =================
+        
         function setActiveMenuBtn(activeBtnId) {
-            // 1. إعادة كل الأزرار للحالة الرمادية
+            
             document.querySelectorAll('.main-nav-btn').forEach(btn => {
                 btn.className = "main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all";
             });
 
-            // 2. تلوين الزر المضغوط باللون الأخضر الفخم
+            
             const activeBtn = document.getElementById(activeBtnId);
             if (activeBtn) {
                 activeBtn.className = "main-nav-btn bg-emerald text-black px-4 py-1.5 rounded-xl border border-emerald flex items-center gap-2 flex-shrink-0 transition-all shadow";
@@ -1662,11 +1663,11 @@
             closeChat();
             if (!playerSession) return openLoginModal();
 
-            // 🌟 حفظ الحالة لتجنب الخروج عند الريفرش
+            
             localStorage.setItem('active_section', 'sport');
             localStorage.setItem('sport_provider', providerCode || 'nexus');
 
-            // فتح صفحة الرياضة داخل الموقع
+            
             switchSection('sport');
 
             if (!providerCode || providerCode === 'nexus' || providerCode === 'SABA') {
@@ -1708,7 +1709,7 @@
                 switchSection('accueil');
             }
         }
-        // ================= شريط الفائزين المتحرك =================
+        
         function generateLiveWinnersTicker() {
             const track = document.getElementById('winners-ticker-track');
             if (!track) return;
@@ -1732,10 +1733,10 @@
                     <span class="text-purple-400">${game}</span>
                 </div>`;
             }
-            track.innerHTML = tickerHTML + tickerHTML; // تكرار لتكون الحركة سلسة
+            track.innerHTML = tickerHTML + tickerHTML; 
         }
 
-        // ================= نوافذ الشروط والخصوصية =================
+        
         function openPolicyModal(type) {
             const modal = document.getElementById('policy-modal');
             const titleEl = document.getElementById('policy-modal-title');
@@ -1793,7 +1794,7 @@
             modal.classList.remove('hidden');
             modal.classList.add('flex');
 
-            // إضافة تأثير الدخول (Zoom in)
+            
             setTimeout(() => {
                 document.getElementById('policy-modal-content').classList.remove('scale-95');
                 document.getElementById('policy-modal-content').classList.add('scale-100');
@@ -1830,23 +1831,23 @@
             const overlay = document.getElementById('profile-overlay');
 
             if (sidebar.classList.contains('translate-x-full')) {
-                // فتح الشريط
+               
                 sidebar.classList.remove('translate-x-full');
                 overlay.classList.remove('hidden');
             } else {
-                // إغلاق الشريط
+               
                 sidebar.classList.add('translate-x-full');
                 overlay.classList.add('hidden');
             }
         }
         function openHistoryModal() {
-            // 1. إغلاق الشريط الجانبي أولاً
+            
             const sidebar = document.getElementById('profile-sidebar');
             if (!sidebar.classList.contains('translate-x-full')) {
                 toggleProfileSidebar();
             }
 
-            // 2. إظهار النافذة
+            
             const modal = document.getElementById('history-modal');
             const content = document.getElementById('history-modal-content');
 
@@ -1858,7 +1859,7 @@
                 content.classList.add('scale-100');
             }, 10);
 
-            // 3. تشغيل دالة جلب البيانات
+
             fetchBetHistory();
         }
 
@@ -1884,11 +1885,11 @@
             loader.classList.remove('hidden');
             emptyState.classList.add('hidden');
 
-            // 🌟 محاكاة جلب البيانات من السيرفر (ببيانات وهمية أنيقة ريثما نربطها بـ API السيرفر الفعلي)
+            
             setTimeout(() => {
                 loader.classList.add('hidden');
 
-                // هذه البيانات سنقوم بتغييرها لاحقاً لـ fetch من السيرفر
+                
                 const dummyData = [
                     {date: "2026-08-28 12:15", game: "Sweet Bonanza", provider: "Pragmatic", amount: 10.00, multiplier: 2.5, win: 25.00},
                     {date: "2026-08-28 11:30", game: "Aviator", provider: "Spribe", amount: 5.00, multiplier: 0, win: -5.00},
@@ -1923,10 +1924,10 @@
                         </tr>
                     `;
                 }).join('');
-            }, 800); // تأثير تحميل مدته 0.8 ثانية
+            }, 800); 
         }
         function openTransactionsModal() {
-            // إغلاق الشريط الجانبي أولاً
+            
             const sidebar = document.getElementById('profile-sidebar');
             if (!sidebar.classList.contains('translate-x-full')) {
                 toggleProfileSidebar();
@@ -1969,7 +1970,7 @@
             emptyState.classList.add('hidden');
 
             try {
-                // الاتصال بـ API السيرفر الجديد
+                
                 const res = await fetch(`${BACKEND_URL}/api/user/transactions-history`, {
                     headers: getAuthHeaders()
                 });
@@ -1977,13 +1978,13 @@
 
                 loader.classList.add('hidden');
 
-                // التحقق من وجود بيانات
+                
                 if (!res.ok || !result.data || result.data.length === 0) {
                     emptyState.classList.remove('hidden');
                     return;
                 }
 
-                // طباعة البيانات الحقيقية في الجدول
+                
                 tbody.innerHTML = result.data.map(tx => {
                     const isDeposit = tx.type === "Dépôt";
                     const typeColor = isDeposit ? 'text-emerald' : 'text-blue-400';
@@ -2011,74 +2012,8 @@
                 showNotification("Erreur de connexion serveur", "error");
             }
         }
-        // دالة إضافة الإيموجي
-        function addEmoji(emoji) {
-            const input = document.getElementById('chat-input');
-            if (input) {
-                input.value += emoji;
-                input.focus(); // إبقاء المؤشر في مربع النص
-            }
-        }
 
-        // إغلاق الشات حصراً عند فتح الألعاب
-        function closeChat() {
-            const chatBox = document.getElementById('live-chat-sidebar');
-            if (chatBox && !chatBox.classList.contains('hidden')) {
-                chatBox.classList.add('hidden');
-                chatBox.classList.remove('flex');
-            }
-        }
-
-
-
-        // تفعيل الإرسال بالضغط على زر Enter
-        function handleChatEnter(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                sendMessage();
-            }
-        }
-
-        // محرك إرسال الرسالة القوي
-        function sendMessage() {
-            // البحث عن كل مربعات الإدخال في حال وجود نسخ قديمة وأخذ المرئي منها
-            const inputs = document.querySelectorAll('#chat-input');
-            let input = inputs[inputs.length - 1]; // نأخذ الأحدث
-
-            const chatBoxes = document.querySelectorAll('#chat-messages');
-            let chatBox = chatBoxes[chatBoxes.length - 1]; // نأخذ الأحدث
-
-            if (!input || !chatBox) return;
-
-            const message = input.value.trim();
-
-            if (message !== "") {
-                // جلب اسم اللاعب
-                const playerName = (typeof playerSession !== 'undefined' && playerSession && playerSession.username) ? playerSession.username : "Moi";
-
-                const safePlayerName = escapeHTML(playerName);
-                const safeMessage = escapeHTML(message);
-
-                msgDiv.innerHTML = `
-                    <span class="text-emerald-400 font-bold text-[11px] mb-1">${safePlayerName}</span>
-                    <span class="text-gray-300 bg-[#161922] border border-emerald-500/30 p-2.5 rounded-xl rounded-tr-none text-xs break-words shadow-md">${safeMessage}</span>
-                `;
-
-                // إضافة الرسالة للشات
-                chatBox.appendChild(msgDiv);
-
-                // مسح المربع فوراً
-                input.value = "";
-
-                // تشغيل حركة الظهور (Animation) والتمرير للأسفل
-                setTimeout(() => {
-                    msgDiv.classList.remove('translate-y-4', 'opacity-0');
-                    chatBox.scrollTo({top: chatBox.scrollHeight, behavior: 'smooth'});
-                }, 50);
-            }
-        }
-
-        function toggleNotificationsPanel() {
+            function toggleNotificationsPanel() {
             const panel = document.getElementById('notifications-panel');
             panel.classList.toggle('hidden');
             panel.classList.toggle('flex');
@@ -2091,7 +2026,7 @@
         const data = await res.json();
 
         const badge = document.getElementById('notif-badge');
-        // حماية: التأكد من وجود data قبل قراءة unread
+        
         if (data?.unread > 0) {
             badge.innerText = data.unread;
             badge.classList.remove('hidden');
@@ -2100,7 +2035,7 @@
         }
 
         const list = document.getElementById('notifs-list');
-        // حماية: إذا كانت مصفوفة الإشعارات غير موجودة، اجعلها مصفوفة فارغة لتجنب خطأ length
+        
         const notifications = data?.notifications || [];
 
         if (notifications.length === 0) {
@@ -2108,11 +2043,11 @@
             return;
         }
 
-        // حماية: استخدام علامة الاستفهامات ?. لتجنب خطأ القراءة من كائن فارغ
+        
         let html = notifications.map(n => {
-            if (!n) return ''; // تخطي العنصر إذا كان غير معرف
+            if (!n) return ''; 
             
-            // دعم للمعرف سواء كان id أو M_ID كما ظهر في الخطأ السابق
+            
             const notifId = n?.id || n?.M_ID || '';
             
             return `
@@ -2132,7 +2067,7 @@
         </div>
         `}).join('');
 
-        // إضافة زر "مسح الكل" أسفل الإشعارات
+        
         html += `
         <div class="mt-2 pt-2 border-t border-[#212631]">
             <button onclick="deleteNotification('all')" class="w-full text-xs text-red-400 hover:text-red-500 font-bold py-1.5 bg-red-500/10 rounded-lg transition">
@@ -2155,7 +2090,7 @@
         }
 
         async function deleteNotification(id) {
-            // إذا كان يمسح الكل، نطلب التأكيد لتجنب المسح بالخطأ
+            
             if (id === 'all' && !confirm("Voulez-vous vraiment supprimer toutes les notifications ?")) return;
 
             try {
@@ -2164,21 +2099,21 @@
                     headers: getAuthHeaders(),
                     body: JSON.stringify({notif_id: id})
                 });
-                // تحديث القائمة فوراً بعد المسح
+                
                 fetchNotifications();
             } catch (e) {
                 showNotification("Erreur de connexion", "error");
             }
         }
 
-        // تحديث الإشعارات كل 15 ثانية
+        
         setInterval(fetchNotifications, 10000);
 
         async function loadFeaturedProvidersBlocks() {
             const container = document.getElementById('dynamic-featured-providers');
             if (!container) return;
 
-            // 🛡️ قفل الأمان لمنع التكرار: إذا تم تحميل القسم مسبقاً، توقف فوراً
+            
             if (container.dataset.loaded === 'true') return;
             container.dataset.loaded = 'true';
 
@@ -2190,7 +2125,7 @@
                 {name: "Hacksaw", code: "HACKSAW", color: "bg-purple-500", hover: "hover:border-purple-500"}
             ];
 
-            let finalHtml = ''; // تجميع الكود هنا لمنع ظهوره متكرراً أو متقطعاً
+            let finalHtml = ''; 
 
             for (let provider of featured) {
                 try {
@@ -2208,7 +2143,7 @@
                         else if (data.data) games = data.data;
                         else if (Array.isArray(data)) games = data;
 
-                        // 💡 سحب 6 ألعاب بدلاً من 3 لتعبئة السطر وتصغير حجم البطاقات
+                        
                         games = games.slice(0, 6);
 
                         if (games.length > 0) {
@@ -2222,7 +2157,7 @@
                                 Voir plus <i class="fas fa-chevron-right ml-1 text-[8px]"></i>
                             </button>
                         </div>
-                        <!-- 💡 تصغير المربعات: 6 أعمدة للكمبيوتر، 4 للتابلت، 3 للهاتف -->
+                        
                         <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-3">
                     `;
 
@@ -2231,7 +2166,7 @@
                                 const imageUrl = game.banner || game.image || game.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
                                 const gameCode = game.game_code || game.id;
 
-                                // 💡 استخدام نفس تصميم البطاقات الأنيق والمصغر (صورة مربعة + اسم في الأسفل)
+                                
                                 providerHtml += `
                             <div class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer ${provider.hover} transition-all flex flex-col group shadow-lg" onclick="playCasinoGame('${provider.code}', '${gameCode}')">
                                 <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
@@ -2258,15 +2193,12 @@
                 }
             }
 
-            // طباعة كل الأقسام دفعة واحدة
+            
             container.innerHTML = finalHtml;
         }
 
-        // =================================================================
-        // 🧪 ISOLATED 01.TECH LOGIC (دالات معزولة بأسماء جديدة)
-        // =================================================================
-        let zeroOneAllGames = []; // متغير لحفظ كل الألعاب في الذاكرة لتسريع الفلترة
-
+        
+        let zeroOneAllGames = []; 
         async function fetchIsolatedZeroOneGames(categoryType) {
             const gridContainer = document.getElementById('grid-zeroone-test');
             const statusDisplay = document.getElementById('status-zeroone-test');
@@ -2292,12 +2224,12 @@
                     return;
                 }
 
-                // 💡 استخراج قائمة المزودين الفريدين (بدون تكرار)
+                
                 const uniqueProviders = [...new Set(zeroOneAllGames.map(g => g.provider))];
 
                 statusDisplay.innerHTML = `<span class="text-emerald font-bold">✅ نجاح! تم جلب ${zeroOneAllGames.length} لعبة من ${uniqueProviders.length} مزود.</span>`;
 
-                // 💡 رسم أزرار المزودين
+                
                 if (providersFilter) {
                     providersFilter.innerHTML = uniqueProviders.map(prov =>
                         `<button onclick="renderZeroOneGamesByProvider('${prov}')" class="bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-3 py-1.5 rounded-lg border border-[#2e3648] hover:border-yellow-400 text-xs font-bold transition shadow-sm uppercase">
@@ -2306,7 +2238,7 @@
                     ).join('');
                 }
 
-                // 💡 عرض ألعاب أول مزود في القائمة افتراضياً
+                
                 if (uniqueProviders.length > 0) {
                     renderZeroOneGamesByProvider(uniqueProviders[0]);
                 }
@@ -2316,7 +2248,7 @@
             }
         }
 
-        // دالة الفلترة والرسم السريع (محدثة لتطابق شرط النقطتين الرأسيتين)
+        
         function renderZeroOneGamesByProvider(providerName) {
             const gridContainer = document.getElementById('grid-zeroone-test');
             const filteredGames = zeroOneAllGames.filter(g => g.provider === providerName);
@@ -2324,7 +2256,7 @@
             gridContainer.innerHTML = filteredGames.map(item => {
                 const poster = item.banner || `https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(item.game_name.substring(0, 10))}`;
 
-                // 💡 التعديل هنا: دمج اسم المزود مع كود اللعبة وبينهما نقطتين رأسيتين
+
                 const exactGameId = `${item.provider}:${item.game_code}`;
 
                 return `
@@ -2363,7 +2295,7 @@
                 const resData = await req.json();
 
                 if (resData.game_url) {
-                    window.open(resData.game_url, '_blank'); // يفتح اللعبة في نافذة جديدة للاختبار
+                    window.open(resData.game_url, '_blank'); 
                 } else {
                     alert("خطأ في التشغيل: \n" + (resData.error || "مجهول"));
                 }
@@ -2373,8 +2305,8 @@
                 document.body.style.cursor = 'default';
             }
         }
-        // =================================================================
-        // ================= محرك سلايدر البنرات =================
+        
+        
         let currentSlideIndex = 0;
         let slideInterval;
 
@@ -2408,7 +2340,7 @@
                 showSlide(currentSlideIndex);
             }
 
-            // تفعيل النقر على النقاط
+            
             dots.forEach((dot, i) => {
                 dot.addEventListener('click', () => {
                     currentSlideIndex = i;
@@ -2419,144 +2351,145 @@
 
             function resetInterval() {
                 clearInterval(slideInterval);
-                slideInterval = setInterval(nextSlide, 5000); // تغيير كل 5 ثواني
+                slideInterval = setInterval(nextSlide, 5000); 
             }
 
-            // تشغيل آلي
+
             resetInterval();
         }
 
-        // تشغيل السلايدر عند تحميل الصفحة
+        
         window.addEventListener('DOMContentLoaded', () => {
             initHeroSlider();
         });
 
 
 
-        // دالة جلب وعرض ألعاب EuroVirtuals مفلترة
-        let availableStudios = [];
+        
+        let allEuroGames = [];
 
-        async function loadEuroVirtualsStudios(categoryFilter, targetGridId, providersBarId) {
-            const container = document.getElementById(targetGridId);
-            const providersBar = document.getElementById(providersBarId);
+    async function loadEuroVirtualsStudios(categoryFilter, targetGridId, providersBarId) {
+        const container = document.getElementById(targetGridId);
+        const providersBar = document.getElementById(providersBarId);
 
-            if (!container) return;
+        if (!container) return;
 
-            container.innerHTML = '<p class="text-gray-400 text-center col-span-full py-10"><i class="fas fa-spinner fa-spin mr-2"></i> جاري تحميل مزودي الكازينو...</p>';
-            if (providersBar) providersBar.innerHTML = '';
+        container.innerHTML = '<p class="text-gray-400 text-center col-span-full py-10"><i class="fas fa-spinner fa-spin mr-2"></i> جاري تحميل الكتالوج الشامل...</p>';
+        if (providersBar) providersBar.innerHTML = '';
 
-            try {
-                // جلب الـ 33 استوديو من السيرفر
-                const res = await fetch('https://alpha-backend-server.onrender.com/api/eurovirtuals/studios');
-                const result = await res.json();
+        try {
+            // استدعاء المسار الشامل بناءً على توجيهات كيلفن لجلب كافة الألعاب دفعة واحدة
+            const res = await fetch('https://alpha-backend-server.onrender.com/api/get-eurovirtuals-games');
+            const data = await res.json();
 
-                // استخراج المصفوفة (حسب صورتك، البيانات موجودة داخل result.data)
-                availableStudios = result.data || result.partners || [];
+            let games = data.games || data.data || [];
 
-                if (availableStudios.length > 0) {
-                    // قائمة المزودين الكبار التي نريد إظهارها في الأزرار
-                    const targetProviders = [
-                        'Pragmatic Play',
-                        'Evolution',
-                        'Hacksaw',
-                        "Play'n Go",
-                        'NetEnt',
-                        'Spribe',
-                        'Wazdan',
-                        'Playson',
-                        'EGT',
-                        'Amusnet',
-                        'Vimplay'
-                    ];
+            if (games.length > 0) {
+                allEuroGames = games; // تخزين الألعاب محلياً للفلترة السريعة
 
-                    let buttonsHTML = '';
+                // 1. استخراج قائمة فريدة بأسماء المزودين من داخل الألعاب نفسها
+                const providersSet = new Set();
+                games.forEach(g => {
+                    const pName = g.provider || g.partner_name || 'EuroVirtuals';
+                    providersSet.add(pName);
+                });
+                const uniqueProviders = Array.from(providersSet);
 
-                    // إنشاء الأزرار فقط للمزودين الموجودين فعلياً في الـ API مع ربط الـ ID
-                    targetProviders.forEach(targetName => {
-                        // البحث عن المزود داخل الـ 33 استوديو (تجاهل حالة الأحرف)
-                        const matchedStudio = availableStudios.find(s =>
-                            (s.name || '').toLowerCase().includes(targetName.toLowerCase())
-                        );
+                // قائمة المزودين المستهدفة للترتيب
+                const targetProviders = [
+                    'Pragmatic Play', 'Evolution', 'Hacksaw', "Play'n Go",
+                    'NetEnt', 'Spribe', 'Wazdan', 'Playson', 'EGT', 'Amusnet', 'Vimplay'
+                ];
 
-                        if (matchedStudio) {
-                            buttonsHTML += `
-                            <button onclick="loadGamesByStudio('${matchedStudio.id}', '${targetGridId}')" 
+                let buttonsHTML = '';
+
+                // 2. رسم أزرار المزودين الذين يمتلكون ألعاباً فعلية في الكتالوج المُستلم
+                targetProviders.forEach(targetName => {
+                    const hasGames = games.some(g => (g.provider || g.partner_name || '').toLowerCase().includes(targetName.toLowerCase()));
+                    if (hasGames) {
+                        buttonsHTML += `
+                            <button onclick="renderGamesLocally('${targetName}', '${targetGridId}')"
                                     class="px-3 py-1.5 rounded-xl bg-[#1a1e29] hover:bg-emerald hover:text-black text-gray-300 text-xs font-bold transition border border-[#2e3648] uppercase shadow-sm">
                                 ${targetName}
                             </button>
                         `;
-                        }
-                    });
-
-                    providersBar.innerHTML = buttonsHTML;
-
-                    // تحميل ألعاب Pragmatic Play تلقائياً عند فتح القسم (أو أول مزود متاح)
-                    const defaultStudio = availableStudios.find(s => (s.name || '').toLowerCase().includes('pragmatic')) || availableStudios[0];
-                    if (defaultStudio) {
-                        loadGamesByStudio(defaultStudio.id, targetGridId);
                     }
+                });
 
-                } else {
-                    container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">لا توجد استوديوهات متاحة حالياً.</p>';
+                // إذا لم تتطابق الأسماء، نعرض الأسماء المستخرجة مباشرة من الـ API
+                if(buttonsHTML === '') {
+                    uniqueProviders.slice(0, 15).forEach(pName => {
+                         buttonsHTML += `
+                            <button onclick="renderGamesLocally('${pName}', '${targetGridId}')"
+                                    class="px-3 py-1.5 rounded-xl bg-[#1a1e29] hover:bg-emerald hover:text-black text-gray-300 text-xs font-bold transition border border-[#2e3648] uppercase shadow-sm">
+                                ${pName}
+                            </button>
+                        `;
+                    })
                 }
-            } catch (e) {
-                console.error("Studio Fetch Error:", e);
-                container.innerHTML = '<p class="text-red-500 text-center col-span-full py-10">حدث خطأ أثناء جلب قائمة المزودين.</p>';
+
+                providersBar.innerHTML = buttonsHTML;
+
+                // 3. عرض ألعاب أول مزود متاح تلقائياً
+                if (targetProviders.length > 0) {
+                    const firstAvailable = targetProviders.find(t => games.some(g => (g.provider || g.partner_name || '').toLowerCase().includes(t.toLowerCase())));
+                    if (firstAvailable) {
+                        renderGamesLocally(firstAvailable, targetGridId);
+                    } else {
+                        renderGamesLocally(uniqueProviders[0], targetGridId);
+                    }
+                }
+
+            } else {
+                container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">لا توجد ألعاب متاحة حالياً.</p>';
             }
+        } catch (e) {
+            console.error("Fetch Error:", e);
+            container.innerHTML = '<p class="text-red-500 text-center col-span-full py-10">حدث خطأ أثناء جلب الألعاب.</p>';
+        }
+    }
+
+    // دالة الفلترة المحلية (Local Filtering) لسرعة عرض فورية عند التبديل بين المزودين
+    function renderGamesLocally(providerName, targetGridId) {
+        const container = document.getElementById(targetGridId);
+        if (!container) return;
+
+        const filteredGames = allEuroGames.filter(g =>
+            (g.provider || g.partner_name || '').toLowerCase().includes(providerName.toLowerCase())
+        );
+
+        if (filteredGames.length === 0) {
+            container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">Aucun jeu trouvé pour ce fournisseur.</p>';
+            return;
         }
 
-        // جلب الألعاب بناءً على الـ ID الخاص بالمزود
-        async function loadGamesByStudio(partnerId, targetGridId) {
-            const container = document.getElementById(targetGridId);
-            if (!container) return;
+        container.innerHTML = filteredGames.map(game => {
+            const gameId = game.uuid || game.id || game.game_code;
+            const gameName = game.name || game.game_name || 'Casino Game';
+            const defaultImg = `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
+            const gameImage = game.image || game.img || game.logo || defaultImg;
+            const provider = game.provider || game.partner_name || 'EuroVirtuals';
 
-            container.innerHTML = '<p class="text-gray-400 text-center col-span-full py-10"><i class="fas fa-spinner fa-spin mr-2"></i> جاري تحميل الألعاب...</p>';
-
-            try {
-                // استدعاء مسار الألعاب مع تمرير الـ partner_id (مثلاً 15 لـ Pragmatic)
-                const res = await fetch(`https://alpha-backend-server.onrender.com/api/eurovirtuals/studio-games/${partnerId}`);
-                const data = await res.json();
-
-                let games = data.games || [];
-
-                if (games.length === 0) {
-                    container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">ً Aucun jeu na été ajouté pour ce fournisseur pour le moment.</p>';
-                    return;
-                }
-
-                // رسم شبكة الألعاب
-                container.innerHTML = games.map(game => {
-                    const gameId = game.uuid || game.id || game.game_code;
-                    const gameName = game.name || game.game_name || 'لعبة كازينو';
-                    const defaultImg = `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
-                    const gameImage = game.image || game.img || game.logo || defaultImg;
-                    const provider = game.provider || game.partner_name || 'Casino Game';
-
-                    return `
-                    <div class="bg-gray-900 rounded-xl overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-105 border border-[#212631] hover:border-emerald-500 flex flex-col" 
-                         onclick="launchEuroVirtuals('${gameId}')">
-                        <div class="relative h-36 w-full">
-                            <img src="${gameImage}" alt="${gameName}" class="w-full h-full object-cover" onerror="this.src='${defaultImg}'">
-                            <div class="absolute top-2 right-2 bg-black bg-opacity-70 text-[10px] text-emerald-400 font-bold px-2 py-1 rounded">
-                                ${provider}
-                            </div>
-                        </div>
-                        <div class="p-3 text-center bg-[#1c212d] flex-grow flex flex-col justify-center">
-                            <h3 class="text-white text-xs font-bold truncate">${gameName}</h3>
+            return `
+                <div class="bg-gray-900 rounded-xl overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-105 border border-[#212631] hover:border-emerald-500 flex flex-col"
+                     onclick="launchEuroVirtuals('${gameId}')">
+                    <div class="relative h-36 w-full">
+                        <img src="${gameImage}" alt="${gameName}" class="w-full h-full object-cover" onerror="this.src='${defaultImg}'">
+                        <div class="absolute top-2 right-2 bg-black bg-opacity-70 text-[10px] text-emerald-400 font-bold px-2 py-1 rounded">
+                            ${provider}
                         </div>
                     </div>
-                `;
-                }).join('');
-            } catch (e) {
-                console.error("Games Fetch Error:", e);
-                container.innerHTML = '<p class="text-red-500 text-center col-span-full py-10">حدث خطأ أثناء جلب الألعاب.</p>';
-            }
-        }
-
+                    <div class="p-3 text-center bg-[#1c212d] flex-grow flex flex-col justify-center">
+                        <h3 class="text-white text-xs font-bold truncate">${gameName}</h3>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
         async function launchEuroVirtuals(gameId) {
             const token = localStorage.getItem('access_token');
             if (!token) {
-                alert('الرجاء تسجيل الدخول أولاً للعب!');
+                alert('Veuillez d abord vous connecter pour jouer ! !');
                 return;
             }
 
@@ -2575,24 +2508,24 @@
                 if (data.launch_url) {
                     window.open(data.launch_url, '_self');
                 } else {
-                    alert('عذراً، لم نتمكن من تشغيل اللعبة: ' + (data.error || 'خطأ مجهول'));
+                    alert('Désolés, nous vons pas pu lancer le jeu : ' + (data.error || 'Erreur inconnue'));
                 }
             } catch (error) {
                 console.error('Launch Error:', error);
-                alert('حدث خطأ أثناء محاولة فتح اللعبة.');
+                alert('Une erreur s est produite lors de la tentative d ouverture du jeu.');
             }
         }
 
     </script>
 
-        <!-- 👤 قائمة الملف الشخصي (Profile Sidebar) -->
-        <!-- خلفية ضبابية عند فتح القائمة -->
+        
+        
         <div id="profile-overlay" onclick="toggleProfileSidebar()"
             class="fixed inset-0 bg-black/60 z-[190] hidden backdrop-blur-sm transition-opacity"></div>
 
         <div id="profile-sidebar"
             class="fixed right-0 top-0 h-full w-80 bg-[#12151d] border-l border-gray-800 z-[200] shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
-            <!-- رأس القائمة -->
+            
             <div class="p-5 border-b border-gray-800 flex justify-between items-center bg-[#0f1117]">
                 <div class="flex items-center gap-3">
                     <div
@@ -2610,7 +2543,7 @@
                 </button>
             </div>
 
-            <!-- زر الإيداع البارز -->
+            
             <div class="p-5 border-b border-gray-800">
                 <button onclick="toggleProfileSidebar(); setTimeout(toggleCashier, 100);"
                     class="w-full bg-emerald hover:bg-emerald-400 text-[#0f1117] font-black py-3.5 rounded-lg flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition transform hover:scale-[1.02]">
@@ -2618,7 +2551,7 @@
                 </button>
             </div>
 
-            <!-- روابط التحكم في الحساب -->
+            
             <div class="flex-1 overflow-y-auto p-3 space-y-1">
                 <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2 ml-2 mt-2">Mon Compte
                 </div>
@@ -2643,7 +2576,7 @@
                     <span class="ml-auto bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">NEW</span>
                 </a>
             </div>
-            <!-- تذييل القائمة (زر الخروج) -->
+            
             <div class="p-4 bg-[#0f1117]">
                 <button onclick="toggleProfileSidebar(); logoutPlayer();"
                     class="w-full bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 border border-red-500/30 font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition">
@@ -2651,13 +2584,13 @@
                 </button>
             </div>
         </div>
-        <!-- 📜 نافذة سجل الرهانات (Historique des paris) -->
+        
         <div id="history-modal"
             class="fixed inset-0 z-[400] bg-black/80 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
             <div class="bg-[#161922] border border-[#212631] rounded-2xl w-full max-w-4xl flex flex-col max-h-[85vh] shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300"
                 id="history-modal-content">
 
-                <!-- رأس النافذة -->
+                
                 <div class="flex justify-between items-center p-5 border-b border-[#212631] bg-[#0f1117]">
                     <h3 class="text-white font-black uppercase tracking-wider text-lg flex items-center gap-2">
                         <i class="fas fa-history text-emerald"></i> Historique des paris
@@ -2668,7 +2601,7 @@
                     </button>
                 </div>
 
-                <!-- محتوى الجدول -->
+                
                 <div class="p-4 overflow-y-auto hide-scroll flex-1 bg-[#0f1117]">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse whitespace-nowrap">
@@ -2683,19 +2616,19 @@
                                 </tr>
                             </thead>
                             <tbody id="history-table-body" class="text-xs text-gray-300 divide-y divide-[#212631]">
-                                <!-- سيتم حقن البيانات هنا برمجياً -->
+                                
                             </tbody>
                         </table>
                     </div>
 
-                    <!-- حالة التحميل -->
+                    
                     <div id="history-loader" class="py-12 text-center hidden">
                         <i class="fas fa-circle-notch fa-spin text-emerald text-4xl mb-4"></i>
                         <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Chargement de
                             l'historique...</p>
                     </div>
 
-                    <!-- حالة لا توجد بيانات -->
+                    
                     <div id="history-empty" class="py-12 text-center hidden">
                         <i class="fas fa-ghost text-gray-700 text-5xl mb-4"></i>
                         <p class="text-gray-500 text-xs font-bold uppercase tracking-widest">Aucun pari trouvé.</p>
@@ -2703,13 +2636,13 @@
                 </div>
             </div>
         </div>
-        <!-- 💸 نافذة سجل المعاملات المالية (Transactions) -->
+        
         <div id="transactions-modal"
             class="fixed inset-0 z-[400] bg-black/80 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
             <div class="bg-[#161922] border border-[#212631] rounded-2xl w-full max-w-3xl flex flex-col max-h-[85vh] shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300"
                 id="transactions-modal-content">
 
-                <!-- رأس النافذة -->
+                
                 <div class="flex justify-between items-center p-5 border-b border-[#212631] bg-[#0f1117]">
                     <h3 class="text-white font-black uppercase tracking-wider text-lg flex items-center gap-2">
                         <i class="fas fa-exchange-alt text-emerald"></i> Historique des Transactions
@@ -2720,7 +2653,7 @@
                     </button>
                 </div>
 
-                <!-- محتوى الجدول -->
+                
                 <div class="p-4 overflow-y-auto hide-scroll flex-1 bg-[#0f1117]">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse whitespace-nowrap">
@@ -2735,7 +2668,7 @@
                                 </tr>
                             </thead>
                             <tbody id="transactions-table-body" class="text-xs text-gray-300 divide-y divide-[#212631]">
-                                <!-- سيتم حقن البيانات هنا -->
+                                
                             </tbody>
                         </table>
                     </div>
