@@ -2366,9 +2366,7 @@
 
 
         
-        let allEuroGames = [];
-
-    async function loadEuroVirtualsStudios(categoryFilter, targetGridId, providersBarId) {
+        async function loadEuroVirtualsStudios(categoryFilter, targetGridId, providersBarId) {
         const container = document.getElementById(targetGridId);
         const providersBar = document.getElementById(providersBarId);
 
@@ -2378,24 +2376,14 @@
         if (providersBar) providersBar.innerHTML = '';
 
         try {
-            // استدعاء المسار الشامل بناءً على توجيهات كيلفن لجلب كافة الألعاب دفعة واحدة
             const res = await fetch('https://alpha-backend-server.onrender.com/api/get-eurovirtuals-games');
             const data = await res.json();
 
             let games = data.games || data.data || [];
 
             if (games.length > 0) {
-                allEuroGames = games; // تخزين الألعاب محلياً للفلترة السريعة
+                allEuroGames = games;
 
-                // 1. استخراج قائمة فريدة بأسماء المزودين من داخل الألعاب نفسها
-                const providersSet = new Set();
-                games.forEach(g => {
-                    const pName = g.provider || g.partner_name || 'EuroVirtuals';
-                    providersSet.add(pName);
-                });
-                const uniqueProviders = Array.from(providersSet);
-
-                // قائمة المزودين المستهدفة للترتيب
                 const targetProviders = [
                     'Pragmatic Play', 'Evolution', 'Hacksaw', "Play'n Go",
                     'NetEnt', 'Spribe', 'Wazdan', 'Playson', 'EGT', 'Amusnet', 'Vimplay'
@@ -2403,9 +2391,17 @@
 
                 let buttonsHTML = '';
 
-                // 2. رسم أزرار المزودين الذين يمتلكون ألعاباً فعلية في الكتالوج المُستلم
                 targetProviders.forEach(targetName => {
-                    const hasGames = games.some(g => (g.provider || g.partner_name || '').toLowerCase().includes(targetName.toLowerCase()));
+                    // التعديل هنا: بحث صارم للمزودين لتجنب الخلط بين Evolution و Shacks Evolution
+                    const hasGames = games.some(g => {
+                        const pName = (g.provider || g.partner_name || '').toLowerCase().trim();
+                        const tName = targetName.toLowerCase().trim();
+                        if (tName === 'evolution') {
+                            return pName === 'evolution' || pName === 'evolution gaming' || pName === 'evolution live';
+                        }
+                        return pName.includes(tName);
+                    });
+
                     if (hasGames) {
                         buttonsHTML += `
                             <button onclick="renderGamesLocally('${targetName}', '${targetGridId}')"
@@ -2416,27 +2412,17 @@
                     }
                 });
 
-                // إذا لم تتطابق الأسماء، نعرض الأسماء المستخرجة مباشرة من الـ API
                 if(buttonsHTML === '') {
-                    uniqueProviders.slice(0, 15).forEach(pName => {
-                         buttonsHTML += `
-                            <button onclick="renderGamesLocally('${pName}', '${targetGridId}')"
-                                    class="px-3 py-1.5 rounded-xl bg-[#1a1e29] hover:bg-emerald hover:text-black text-gray-300 text-xs font-bold transition border border-[#2e3648] uppercase shadow-sm">
-                                ${pName}
-                            </button>
-                        `;
-                    })
+                     container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">لم يتم تفعيل المزودين الكبار في حسابك بعد.</p>';
+                     return;
                 }
 
                 providersBar.innerHTML = buttonsHTML;
 
-                // 3. عرض ألعاب أول مزود متاح تلقائياً
                 if (targetProviders.length > 0) {
                     const firstAvailable = targetProviders.find(t => games.some(g => (g.provider || g.partner_name || '').toLowerCase().includes(t.toLowerCase())));
                     if (firstAvailable) {
                         renderGamesLocally(firstAvailable, targetGridId);
-                    } else {
-                        renderGamesLocally(uniqueProviders[0], targetGridId);
                     }
                 }
 
