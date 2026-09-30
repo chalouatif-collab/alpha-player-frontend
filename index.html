@@ -49,140 +49,143 @@
 </head>
 
 <body class="antialiased text-sm flex flex-col min-h-screen">
+    <div>
+        <!-- 1. الشريط العلوي (الرصيد وتسجيل الدخول - متجاوب وأنيق للهاتف) -->
+        <header class="bg-[#161922] border-b border-[#212631] sticky top-0 z-50">
+            <div
+                class="max-w-[1700px] mx-auto px-3 md:px-4 h-16 md:h-18 flex justify-between items-center py-2 md:py-3">
 
-    <!-- 1. الشريط العلوي (الرصيد وتسجيل الدخول - متجاوب وأنيق للهاتف) -->
-    <header class="bg-[#161922] border-b border-[#212631] sticky top-0 z-50">
-        <div class="max-w-[1700px] mx-auto px-3 md:px-4 h-16 md:h-18 flex justify-between items-center py-2 md:py-3">
-
-            <div class="flex items-center gap-2 md:gap-6">
-                <div class="flex items-center gap-1.5 md:gap-2 cursor-pointer" onclick="switchSection('accueil')">
-                    <!-- تصغير الشعار في الهاتف -->
-                    <div
-                        class="w-7 h-7 md:w-9 md:h-9 rounded-lg md:rounded-xl bg-emerald flex items-center justify-center text-black font-black text-sm md:text-xl shadow-md">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <span class="font-extrabold text-lg md:text-2xl tracking-tight text-white">Alphabet<span
-                            class="text-emerald">216</span></span>
-                </div>
-            </div>
-            <!-- أزرار الدخول أو رصيد اللاعب -->
-            <div class="flex items-center gap-2 md:gap-3">
-
-                <!-- أزرار تسجيل الدخول -->
-                <div id="auth-buttons-container" class="flex items-center gap-2">
-                    <button onclick="openLoginModal()"
-                        class="text-[10px] md:text-xs font-bold text-gray-300 hover:text-white uppercase px-2 md:px-3 py-2">Connexion</button>
-                    <button onclick="openRegisterModal()"
-                        class="bg-emerald text-black font-extrabold text-[10px] md:text-xs uppercase px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition shadow-md">S'inscrire</button>
-                </div>
-
-                <!-- 1️⃣ بروفايل الرصيد (واضح وأبيض على الهاتف، ومخفي للسرية على الكمبيوتر) -->
-                <div id="top-user-profile" class="hidden items-center gap-2 cursor-pointer group shrink-0"
-                    onclick="toggleProfileSidebar()">
-                    <!-- أيقونة المحفظة -->
-                    <div
-                        class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] text-emerald-500 md:text-emerald-600 flex items-center justify-center text-[10px] md:text-xs border border-emerald-500/30 md:border-[#212631] group-hover:border-emerald-500 transition shrink-0 shadow-sm md:shadow-none">
-                        <i class="fas fa-wallet"></i>
-                    </div>
-                    <!-- الرصيد (opacity-100 للهاتف، و md:opacity-50 للكمبيوتر) -->
-                    <div
-                        class="text-right opacity-100 md:opacity-50 group-hover:opacity-100 transition-opacity duration-300">
-                        <!-- text-white للهاتف، و md:text-gray-300 للكمبيوتر -->
+                <div class="flex items-center gap-2 md:gap-6">
+                    <div class="flex items-center gap-1.5 md:gap-2 cursor-pointer" onclick="switchSection('accueil')">
+                        <!-- تصغير الشعار في الهاتف -->
                         <div
-                            class="font-mono text-white md:text-gray-300 text-[11px] md:text-xs leading-none font-bold">
-                            <span id="player-balance-val" class="tracking-tight">0.00</span> <span
-                                class="text-emerald-400 md:text-emerald-500 text-[8px] md:text-[9px]">TND</span>
+                            class="w-7 h-7 md:w-9 md:h-9 rounded-lg md:rounded-xl bg-emerald flex items-center justify-center text-black font-black text-sm md:text-xl shadow-md">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h1 class="font-extrabold text-lg md:text-2xl tracking-tight text-white m-0">Alphabet<span
+                                class="text-emerald">216</span></h1>
+                    </div>
+                </div>
+                <!-- أزرار الدخول أو رصيد اللاعب -->
+                <div class="flex items-center gap-2 md:gap-3">
+
+                    <!-- أزرار تسجيل الدخول -->
+                    <div id="auth-buttons-container" class="flex items-center gap-2">
+                        <button onclick="openLoginModal()"
+                            class="text-[10px] md:text-xs font-bold text-gray-300 hover:text-white uppercase px-2 md:px-3 py-2">Connexion</button>
+                        <button onclick="openRegisterModal()"
+                            class="bg-emerald text-black font-extrabold text-[10px] md:text-xs uppercase px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition shadow-md">S'inscrire</button>
+                    </div>
+
+                    <!-- 1️⃣ بروفايل الرصيد (واضح وأبيض على الهاتف، ومخفي للسرية على الكمبيوتر) -->
+                    <div id="top-user-profile" class="hidden items-center gap-2 cursor-pointer group shrink-0"
+                        onclick="toggleProfileSidebar()">
+                        <!-- أيقونة المحفظة -->
+                        <div
+                            class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] text-emerald-500 md:text-emerald-600 flex items-center justify-center text-[10px] md:text-xs border border-emerald-500/30 md:border-[#212631] group-hover:border-emerald-500 transition shrink-0 shadow-sm md:shadow-none">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <!-- الرصيد (opacity-100 للهاتف، و md:opacity-50 للكمبيوتر) -->
+                        <div
+                            class="text-right opacity-100 md:opacity-50 group-hover:opacity-100 transition-opacity duration-300">
+                            <!-- text-white للهاتف، و md:text-gray-300 للكمبيوتر -->
+                            <div
+                                class="font-mono text-white md:text-gray-300 text-[11px] md:text-xs leading-none font-bold">
+                                <span id="player-balance-val" class="tracking-tight">0.00</span> <span
+                                    class="text-emerald-400 md:text-emerald-500 text-[8px] md:text-[9px]">TND</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2️⃣ جرس الإشعارات (دائري وصغير أقصى اليمين) -->
+                    <div id="top-notification-bell"
+                        class="hidden relative cursor-pointer items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] border border-[#212631] hover:border-emerald-500 hover:text-white transition shrink-0 ml-1"
+                        onclick="toggleNotificationsPanel()">
+                        <i class="fas fa-bell text-gray-400 text-[10px] md:text-xs transition"></i>
+                        <span id="notif-badge"
+                            class="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold px-1 py-0.5 rounded-full hidden leading-none shadow-md">0</span>
+                    </div>
+
+                    <!-- النافذة المنسدلة للإشعارات -->
+                    <div id="notifications-panel"
+                        class="absolute top-12 md:top-14 right-2 md:right-4 w-[280px] md:w-80 bg-[#161922] border border-[#212631] rounded-2xl shadow-2xl hidden flex-col z-[100] overflow-hidden">
+                        <div class="p-3 border-b border-[#212631] bg-[#0f1117] flex justify-between items-center">
+                            <h2 class="text-white font-bold text-sm"> notifications🔔</h2>
+                        </div>
+                        <div id="notifs-list" class="max-h-[300px] overflow-y-auto hide-scroll p-2 flex flex-col gap-1">
+                            <!-- الإشعارات ستظهر هنا -->
                         </div>
                     </div>
                 </div>
-
-                <!-- 2️⃣ جرس الإشعارات (دائري وصغير أقصى اليمين) -->
-                <div id="top-notification-bell"
-                    class="hidden relative cursor-pointer items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] border border-[#212631] hover:border-emerald-500 hover:text-white transition shrink-0 ml-1"
-                    onclick="toggleNotificationsPanel()">
-                    <i class="fas fa-bell text-gray-400 text-[10px] md:text-xs transition"></i>
-                    <span id="notif-badge"
-                        class="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold px-1 py-0.5 rounded-full hidden leading-none shadow-md">0</span>
-                </div>
-
-                <!-- النافذة المنسدلة للإشعارات -->
-                <div id="notifications-panel"
-                    class="absolute top-12 md:top-14 right-2 md:right-4 w-[280px] md:w-80 bg-[#161922] border border-[#212631] rounded-2xl shadow-2xl hidden flex-col z-[100] overflow-hidden">
-                    <div class="p-3 border-b border-[#212631] bg-[#0f1117] flex justify-between items-center">
-                        <h3 class="text-white font-bold text-sm"> notifications🔔</h3>
-                    </div>
-                    <div id="notifs-list" class="max-h-[300px] overflow-y-auto hide-scroll p-2 flex flex-col gap-1">
-                        <!-- الإشعارات ستظهر هنا -->
-                    </div>
-                </div>
-
             </div>
-    </header>
+        </header>
 
-    <!-- 2. شريط التصنيفات السريع الذكي -->
-    <div class="bg-[#12151d] border-b border-[#212631] py-2.5">
-        <div class="max-w-[1700px] mx-auto px-4 flex gap-2 overflow-x-auto text-xs font-bold text-gray-300 hide-scroll">
+        <!-- 2. شريط التصنيفات السريع الذكي -->
+        <div class="bg-[#12151d] border-b border-[#212631] py-2.5">
+            <div
+                class="max-w-[1700px] mx-auto px-4 flex gap-2 overflow-x-auto text-xs font-bold text-gray-300 hide-scroll">
 
-            <button id="btn-nav-accueil" onclick="setActiveMenuBtn('btn-nav-accueil'); switchSection('accueil')"
-                class="main-nav-btn bg-emerald text-black px-4 py-1.5 rounded-xl border border-emerald flex items-center gap-2 flex-shrink-0 transition-all shadow"><i
-                    class="fas fa-home"></i> Accueil</button>
+                <button id="btn-nav-accueil" onclick="setActiveMenuBtn('btn-nav-accueil'); switchSection('accueil')"
+                    class="main-nav-btn bg-emerald text-black px-4 py-1.5 rounded-xl border border-emerald flex items-center gap-2 flex-shrink-0 transition-all shadow"><i
+                        class="fas fa-home"></i> Accueil</button>
 
-            <button id="btn-nav-sport" onclick="setActiveMenuBtn('btn-nav-sport'); openSportsbookForProvider('nexus')"
-                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
-                    class="fas fa-futbol text-emerald"></i> Sport</button>
+                <button id="btn-nav-sport"
+                    onclick="setActiveMenuBtn('btn-nav-sport'); openSportsbookForProvider('nexus')"
+                    class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
+                        class="fas fa-futbol text-emerald"></i> Sport</button>
 
-            <button id="btn-nav-casino"
-                onclick="setActiveMenuBtn('btn-nav-casino'); switchSection('casino'); initCasinoLobby();"
-                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
-                    class="fas fa-slot-machine text-emerald"></i> Casino</button>
+                <button id="btn-nav-casino"
+                    onclick="setActiveMenuBtn('btn-nav-casino'); switchSection('casino'); initCasinoLobby();"
+                    class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
+                        class="fas fa-slot-machine text-emerald"></i> Casino</button>
 
-            <button id="btn-nav-live"
-                onclick="setActiveMenuBtn('btn-nav-live'); switchSection('live-casino'); openLiveCasino();"
-                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
-                    class="fas fa-video text-red-500"></i> Casino Live</button>
+                <button id="btn-nav-live"
+                    onclick="setActiveMenuBtn('btn-nav-live'); switchSection('live-casino'); openLiveCasino();"
+                    class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
+                        class="fas fa-video text-red-500"></i> Casino Live</button>
 
-            <button id="btn-nav-virtuals"
-                onclick="setActiveMenuBtn('btn-nav-virtuals'); switchSection('virtuals'); initVirtualsLobby();"
-                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
-                    class="fas fa-gamepad text-blue-400"></i> Virtuels</button>
+                <button id="btn-nav-virtuals"
+                    onclick="setActiveMenuBtn('btn-nav-virtuals'); switchSection('virtuals'); initVirtualsLobby();"
+                    class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
+                        class="fas fa-gamepad text-blue-400"></i> Virtuels</button>
 
-            <button id="btn-nav-aviator"
-                onclick="setActiveMenuBtn('btn-nav-aviator'); playCasinoGame('SPRIBE', 'aviator')"
-                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
-                    class="fas fa-plane text-red-500"></i> Aviator</button>
-            <!-- 🚀 Mini Jeux -->
-            <button id="btn-nav-mini-jeux" onclick="setActiveMenuBtn('btn-nav-mini-jeux'); loadMiniJeux();"
-                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
-                <i class="fas fa-rocket text-purple-400"></i> Mini Jeux
-            </button>
+                <button id="btn-nav-aviator"
+                    onclick="setActiveMenuBtn('btn-nav-aviator'); playCasinoGame('SPRIBE', 'aviator')"
+                    class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
+                        class="fas fa-plane text-red-500"></i> Aviator</button>
+                <!-- 🚀 Mini Jeux -->
+                <button id="btn-nav-mini-jeux" onclick="setActiveMenuBtn('btn-nav-mini-jeux'); loadMiniJeux();"
+                    class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
+                    <i class="fas fa-rocket text-purple-400"></i> Mini Jeux
+                </button>
 
-            <!-- 🎮 E-Sports -->
-            <button id="btn-nav-esports"
-                onclick="setActiveMenuBtn('btn-nav-esports'); openSportsbookForProvider('nexus'); showNotification('E-Sports filtré', 'success');"
-                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
-                <i class="fas fa-headset text-orange-500"></i> E-Sports
-            </button>
+                <!-- 🎮 E-Sports -->
+                <button id="btn-nav-esports"
+                    onclick="setActiveMenuBtn('btn-nav-esports'); openSportsbookForProvider('nexus'); showNotification('E-Sports filtré', 'success');"
+                    class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
+                    <i class="fas fa-headset text-orange-500"></i> E-Sports
+                </button>
 
-            <!-- 📺 Jeux TV -->
-            <button id="btn-nav-tvbet" onclick="setActiveMenuBtn('btn-nav-tvbet'); loadTVGames();"
-                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
-                <i class="fas fa-tv text-blue-400"></i> Jeux TV
-            </button>
+                <!-- 📺 Jeux TV -->
+                <button id="btn-nav-tvbet" onclick="setActiveMenuBtn('btn-nav-tvbet'); loadTVGames();"
+                    class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
+                    <i class="fas fa-tv text-blue-400"></i> Jeux TV
+                </button>
 
-            <!-- 📊 Résultats -->
-            <button id="btn-nav-resultats" onclick="setActiveMenuBtn('btn-nav-resultats'); openResultsModal();"
-                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
-                <i class="fas fa-chart-bar text-emerald"></i> Résultats
-            </button>
-            <!-- 🧪 01.TECH TEST -->
-            <button id="btn-nav-zeroone-test"
-                onclick="setActiveMenuBtn('btn-nav-zeroone-test'); switchSection('zeroone-test');"
-                class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-yellow-400 hover:text-white px-4 py-1.5 rounded-xl border border-yellow-500/50 hover:border-yellow-400 flex items-center gap-2 flex-shrink-0 transition-all shadow-lg">
-                <i class="fas fa-flask text-yellow-400"></i> 01.TECH
-            </button>
+                <!-- 📊 Résultats -->
+                <button id="btn-nav-resultats" onclick="setActiveMenuBtn('btn-nav-resultats'); openResultsModal();"
+                    class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
+                    <i class="fas fa-chart-bar text-emerald"></i> Résultats
+                </button>
+                <!-- 🧪 01.TECH TEST -->
+                <button id="btn-nav-zeroone-test"
+                    onclick="setActiveMenuBtn('btn-nav-zeroone-test'); switchSection('zeroone-test');"
+                    class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-yellow-400 hover:text-white px-4 py-1.5 rounded-xl border border-yellow-500/50 hover:border-yellow-400 flex items-center gap-2 flex-shrink-0 transition-all shadow-lg">
+                    <i class="fas fa-flask text-yellow-400"></i> 01.TECH
+                </button>
+            </div>
         </div>
     </div>
-
     <main class="max-w-[1700px] mx-auto px-4 py-6 w-full flex-grow flex flex-col xl:flex-row gap-6">
 
         <!-- LEFT: Sidebar Menu (Desktop) -->
@@ -216,7 +219,7 @@
             <!-- Ad Widget -->
             <div
                 class="bg-gradient-to-br from-[#1b2230] to-[#161922] border border-yellow-500/30 rounded-2xl p-4 text-center">
-                <h4 class="font-bold text-yellow-500 text-sm mt-2 mb-1">JACKPOT DROP</h4>
+                <h3 class="font-bold text-yellow-500 text-sm mt-2 mb-1">JACKPOT DROP</h3>
                 <p class="text-[11px] text-gray-400 mb-2">Gagnez jusqu'à <span
                         class="text-white font-bold">124,567</span> TND</p>
                 <button
@@ -510,8 +513,8 @@
                         <!-- ستظهر الألعاب هنا -->
                     </div>
                 </div>
-            </div>
-    </main>
+                </div>
+                </div>
     </main>
 
     <!-- ⚽ PANE: SPORT -->
@@ -776,19 +779,19 @@
         function escapeHTML(str) {
             if (!str) return '';
             return str.toString().replace(/[&<>'"]/g,
-                tag => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'}[tag] || tag)
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
             );
         }
 
         // ================= دوال التحكم في النوافذ والإشعارات المفقودة =================
         function openLoginModal() {
             const modal = document.getElementById('player-login-modal');
-            if (modal) {modal.classList.remove('hidden'); modal.classList.add('flex');}
+            if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
         }
 
         function closeLoginModal() {
             const modal = document.getElementById('player-login-modal');
-            if (modal) {modal.classList.add('hidden'); modal.classList.remove('flex');}
+            if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
         }
 
         function openRegisterModal() {
@@ -797,7 +800,7 @@
 
         function showNotification(message, type = "success") {
             const container = document.getElementById('toast-container');
-            if (!container) {alert(message); return;}
+            if (!container) { alert(message); return; }
 
             const toast = document.createElement('div');
             toast.className = `px-4 py-3 rounded-xl font-bold text-sm shadow-xl transform transition-all translate-x-full flex items-center gap-2 ${type === 'error' ? 'bg-red-500 text-white' : 'bg-emerald text-black'
@@ -848,10 +851,10 @@
                 const elGrand = document.getElementById('jackpot-grand');
 
                 // تحديث الأرقام في الواجهة وتنسيقها كعملة
-                if (elMini) elMini.innerText = parseFloat(data.mini).toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' TND';
-                if (elMinor) elMinor.innerText = parseFloat(data.minor).toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' TND';
-                if (elMajor) elMajor.innerText = parseFloat(data.major).toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' TND';
-                if (elGrand) elGrand.innerText = parseFloat(data.grand).toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' TND';
+                if (elMini) elMini.innerText = parseFloat(data.mini).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TND';
+                if (elMinor) elMinor.innerText = parseFloat(data.minor).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TND';
+                if (elMajor) elMajor.innerText = parseFloat(data.major).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TND';
+                if (elGrand) elGrand.innerText = parseFloat(data.grand).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TND';
             };
 
             socket.onerror = function (error) {
@@ -898,7 +901,7 @@
             }
 
             if (!fromPopState) {
-                history.pushState({section: sectionId}, "", `#${sectionId}`);
+                history.pushState({ section: sectionId }, "", `#${sectionId}`);
             }
 
             if (typeof setActiveMenuBtn === 'function') {
@@ -916,8 +919,8 @@
             if (!username || !password) return;
             try {
                 const res = await fetch(`${BACKEND_URL}/api/login`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({username, password})
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
                 });
                 const data = await res.json();
                 if (res.ok) {
@@ -927,7 +930,7 @@
                     setupLoggedInUI();
                     showNotification("Bienvenue !");
                 } else showNotification(data.detail, 'error');
-            } catch (e) {showNotification("Erreur serveur", 'error');}
+            } catch (e) { showNotification("Erreur serveur", 'error'); }
         }
 
         function setupLoggedInUI() {
@@ -936,11 +939,11 @@
             if (authBtns) authBtns.classList.add('hidden');
 
             const userProfile = document.getElementById('top-user-profile');
-            if (userProfile) {userProfile.classList.remove('hidden'); userProfile.classList.add('flex');}
+            if (userProfile) { userProfile.classList.remove('hidden'); userProfile.classList.add('flex'); }
 
             // 🔔 إظهار جرس الإشعارات
             const notifBell = document.getElementById('top-notification-bell');
-            if (notifBell) {notifBell.classList.remove('hidden'); notifBell.classList.add('flex');}
+            if (notifBell) { notifBell.classList.remove('hidden'); notifBell.classList.add('flex'); }
 
             const nameDisplay = document.getElementById('player-name-display');
             if (nameDisplay) nameDisplay.innerText = playerSession.username;
@@ -965,8 +968,8 @@
             if (!playerSession) return;
             try {
                 const res = await fetch(`${BACKEND_URL}/gold_api`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({method: 'user_balance', user_code: playerSession.username})
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ method: 'user_balance', user_code: playerSession.username })
                 });
                 const data = await res.json();
                 if (data.user_balance !== undefined) {
@@ -988,31 +991,31 @@
             } catch (e) { }
         }
 
-        function getAuthHeaders() {return {'Authorization': `Bearer ${localStorage.getItem('token')}`, 'Content-Type': 'application/json'};}
+        function getAuthHeaders() { return { 'Authorization': `Bearer ${localStorage.getItem('token')}`, 'Content-Type': 'application/json' }; }
 
         // ================= 3. الكازينو والسلوتس (محرك نكسيس النهائي + Infinite Scroll) =================
         window.currentProviderGames = [];
         window.nexusProviders = [
-            {code: 'PRAGMATIC', name: 'Pragmatic Slot'},
-            {code: 'HACKSAW', name: 'Hacksaw'},
-            {code: 'SPRIBE', name: 'Spribe'},
-            {code: 'PLAYNGO', name: "Play'n Go"},
-            {code: 'PGSOFT', name: 'PGSoft'},
-            {code: 'HABANERO', name: 'Habanero'},
-            {code: 'PLAYSON', name: 'Playson'},
-            {code: 'EVOPLAY', name: 'Evoplay'},
-            {code: 'AMUSNET', name: 'Amusnet'},
-            {code: 'EGT', name: 'EGT Digital'},
-            {code: 'BOOONGO', name: 'Booongo'},
-            {code: 'CQ9', name: 'CQ9'},
-            {code: 'TOPTREND', name: 'TopTrend'},
-            {code: 'DREAMTECH', name: 'DreamTech'},
-            {code: 'FACHAI', name: 'FaChai'},
-            {code: 'SPADEGAMING', name: 'Spadegaming'},
-            {code: 'FASTSPIN', name: 'FastSpin'},
-            {code: 'JOKERGAMING', name: 'Joker Gaming'},
-            {code: 'RUBYPLAY', name: 'RubyPlay'},
-            {code: 'AMATIC', name: 'Amatic'}
+            { code: 'PRAGMATIC', name: 'Pragmatic Slot' },
+            { code: 'HACKSAW', name: 'Hacksaw' },
+            { code: 'SPRIBE', name: 'Spribe' },
+            { code: 'PLAYNGO', name: "Play'n Go" },
+            { code: 'PGSOFT', name: 'PGSoft' },
+            { code: 'HABANERO', name: 'Habanero' },
+            { code: 'PLAYSON', name: 'Playson' },
+            { code: 'EVOPLAY', name: 'Evoplay' },
+            { code: 'AMUSNET', name: 'Amusnet' },
+            { code: 'EGT', name: 'EGT Digital' },
+            { code: 'BOOONGO', name: 'Booongo' },
+            { code: 'CQ9', name: 'CQ9' },
+            { code: 'TOPTREND', name: 'TopTrend' },
+            { code: 'DREAMTECH', name: 'DreamTech' },
+            { code: 'FACHAI', name: 'FaChai' },
+            { code: 'SPADEGAMING', name: 'Spadegaming' },
+            { code: 'FASTSPIN', name: 'FastSpin' },
+            { code: 'JOKERGAMING', name: 'Joker Gaming' },
+            { code: 'RUBYPLAY', name: 'RubyPlay' },
+            { code: 'AMATIC', name: 'Amatic' }
         ];
 
         let currentDisplayLimit = 50;
@@ -1047,8 +1050,8 @@
             try {
                 const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({provider_code: providerCode})
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider_code: providerCode })
                 });
 
                 if (!res.ok) throw new Error("HTTP Status: " + res.status);
@@ -1122,7 +1125,7 @@
                                 renderCasinoGrid();
                             }
                         });
-                    }, {rootMargin: '300px'});
+                    }, { rootMargin: '300px' });
                 }
                 gamesObserver.observe(sentinel);
             } else if (sentinel) {
@@ -1227,8 +1230,8 @@
             try {
                 const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({provider_code: "SPRIBE"})
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider_code: "SPRIBE" })
                 });
                 const data = await res.json();
                 window.currentProviderGames = data.games || data.data || [];
@@ -1251,8 +1254,8 @@
                 // يفترض وجود مزود TVBET أو BetGames في الـ API الخاص بك
                 const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({provider_code: "TVBET"})
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider_code: "TVBET" })
                 });
                 const data = await res.json();
                 window.currentProviderGames = data.games || data.data || [];
@@ -1284,8 +1287,8 @@
                     try {
                         const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
                             method: 'POST',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify({provider_code: pCode})
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ provider_code: pCode })
                         });
 
                         if (res.ok) {
@@ -1298,7 +1301,7 @@
                             else if (Array.isArray(data)) games = data;
 
                             if (games && games.length > 0) {
-                                games.slice(0, 4).forEach(g => mixedGames.push({...g, provider: pCode}));
+                                games.slice(0, 4).forEach(g => mixedGames.push({ ...g, provider: pCode }));
                             }
                         }
                     } catch (err) {
@@ -1311,7 +1314,7 @@
                 if (mixedGames.length > 0) {
                     grid.innerHTML = mixedGames.map(g => {
                         const rawName = String(g.game_name || g.name || "Game");
-                        const title = rawName.replace(/[&<>'"]/g, tag => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'}[tag] || tag));
+                        const title = rawName.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
 
                         const img = g.banner || g.image || g.thumb || `https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}`;
                         const code = g.game_code || g.id;
@@ -1346,7 +1349,7 @@
             if (!playerSession) return openLoginModal();
 
             // 🌟 إضافة حالة في سجل هاتف اللاعب لدعم زر الرجوع
-            history.pushState({modalOpen: true, type: 'casino'}, "", "");
+            history.pushState({ modalOpen: true, type: 'casino' }, "", "");
 
             const container = document.getElementById('casino-iframe-container');
             const iframe = document.getElementById('casino-iframe');
@@ -1358,11 +1361,11 @@
 
             try {
                 let endpointUrl = `${BACKEND_URL}/api/provider/launch-casino`;
-                let requestBody = {game_code: gameCode, provider_code: providerCode, user_code: playerSession.username};
+                let requestBody = { game_code: gameCode, provider_code: providerCode, user_code: playerSession.username };
 
                 if (providerCode === 'SMPL') {
                     endpointUrl = `${BACKEND_URL}/api/smpl/launch`;
-                    requestBody = {game_uuid: gameCode, user_code: playerSession.username};
+                    requestBody = { game_uuid: gameCode, user_code: playerSession.username };
                 }
 
                 const res = await fetch(endpointUrl, {
@@ -1375,7 +1378,7 @@
 
                 if (data.launch_url) {
                     iframe.src = data.launch_url;
-                    iframe.onload = () => {iframe.style.opacity = '1';};
+                    iframe.onload = () => { iframe.style.opacity = '1'; };
                 } else {
                     showNotification(data.error || "Jeu non disponible", "error");
                     closeCasinoGame();
@@ -1413,8 +1416,8 @@
             if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Chargement Live...</div>';
             try {
                 const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({provider_code: 'PP_LIVE_PRO'})
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider_code: 'PP_LIVE_PRO' })
                 });
                 const data = await res.json();
                 if (grid) grid.innerHTML = (data.games || []).map(g => {
@@ -1462,16 +1465,16 @@
             if (!playerSession) return openLoginModal();
 
             // 🌟 إضافة حالة في سجل هاتف اللاعب لدعم زر الرجوع
-            history.pushState({modalOpen: true, type: 'virtual'}, "", "");
+            history.pushState({ modalOpen: true, type: 'virtual' }, "", "");
 
             const container = document.getElementById('casino-iframe-container');
             const iframe = document.getElementById('casino-iframe');
-            if (container) {container.classList.remove('hidden'); container.classList.add('flex');}
+            if (container) { container.classList.remove('hidden'); container.classList.add('flex'); }
             if (iframe) iframe.src = '';
             try {
-                const res = await fetch(`${BACKEND_URL}/https://alpha-backend-server.onrender.com`, {
+                const res = await fetch(`${BACKEND_URL}/api/provider/launch-eurovirtuals`, {
                     method: 'POST', headers: getAuthHeaders(),
-                    body: JSON.stringify({user_code: playerSession.username, game_uuid: uuid})
+                    body: JSON.stringify({ user_code: playerSession.username, game_uuid: uuid })
                 });
                 const data = await res.json();
                 if (data.launch_url) {
@@ -1576,7 +1579,7 @@
                 const response = await fetch(`${BACKEND_URL}/api/admin/request-transaction`, {
                     method: 'POST',
                     // لا نستخدم getAuthHeaders() هنا لأن FormData يحتاج أن يحدد المتصفح الـ Content-Type بنفسه
-                    headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`},
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                     body: formData
                 });
 
@@ -1602,8 +1605,8 @@
             if (!playerSession) return;
             let amountInput, accountInfo;
 
-            
-            
+
+
             if (method === 'mandat') {
                 amountInput = document.getElementById('mandat-amount');
                 accountInfo = `Mandat: ${document.getElementById('mandat-nom').value} | Tel: ${document.getElementById('mandat-phone').value}`;
@@ -1617,18 +1620,18 @@
             if (amount > parseFloat(playerSession.balance || 0)) return showNotification("Solde insuffisant!", "error");
 
             try {
-                
+
                 const formData = new FormData();
                 formData.append("target_username", playerSession.username);
                 formData.append("action", "withdraw_request");
                 formData.append("amount", amount);
-                
+
                 formData.append("tx_id", accountInfo);
 
                 const response = await fetch(`${BACKEND_URL}/api/admin/request-transaction`, {
                     method: 'POST',
-                    
-                    headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`},
+
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                     body: formData
                 });
 
@@ -1645,14 +1648,14 @@
                 showNotification("Erreur réseau", "error");
             }
         }
-        
+
         function setActiveMenuBtn(activeBtnId) {
-            
+
             document.querySelectorAll('.main-nav-btn').forEach(btn => {
                 btn.className = "main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all";
             });
 
-            
+
             const activeBtn = document.getElementById(activeBtnId);
             if (activeBtn) {
                 activeBtn.className = "main-nav-btn bg-emerald text-black px-4 py-1.5 rounded-xl border border-emerald flex items-center gap-2 flex-shrink-0 transition-all shadow";
@@ -1663,11 +1666,11 @@
             closeChat();
             if (!playerSession) return openLoginModal();
 
-            
+
             localStorage.setItem('active_section', 'sport');
             localStorage.setItem('sport_provider', providerCode || 'nexus');
 
-            
+
             switchSection('sport');
 
             if (!providerCode || providerCode === 'nexus' || providerCode === 'SABA') {
@@ -1678,7 +1681,7 @@
             const loader = document.getElementById('sport-loader');
 
             if (loader) loader.classList.remove('hidden');
-            if (iframe) {iframe.classList.add('hidden'); iframe.src = '';}
+            if (iframe) { iframe.classList.add('hidden'); iframe.src = ''; }
 
             try {
                 const response = await fetch(`${BACKEND_URL}/api/provider/launch-sportsbook`, {
@@ -1709,7 +1712,7 @@
                 switchSection('accueil');
             }
         }
-        
+
         function generateLiveWinnersTicker() {
             const track = document.getElementById('winners-ticker-track');
             if (!track) return;
@@ -1733,10 +1736,10 @@
                     <span class="text-purple-400">${game}</span>
                 </div>`;
             }
-            track.innerHTML = tickerHTML + tickerHTML; 
+            track.innerHTML = tickerHTML + tickerHTML;
         }
 
-        
+
         function openPolicyModal(type) {
             const modal = document.getElementById('policy-modal');
             const titleEl = document.getElementById('policy-modal-title');
@@ -1794,7 +1797,7 @@
             modal.classList.remove('hidden');
             modal.classList.add('flex');
 
-            
+
             setTimeout(() => {
                 document.getElementById('policy-modal-content').classList.remove('scale-95');
                 document.getElementById('policy-modal-content').classList.add('scale-100');
@@ -1831,23 +1834,23 @@
             const overlay = document.getElementById('profile-overlay');
 
             if (sidebar.classList.contains('translate-x-full')) {
-               
+
                 sidebar.classList.remove('translate-x-full');
                 overlay.classList.remove('hidden');
             } else {
-               
+
                 sidebar.classList.add('translate-x-full');
                 overlay.classList.add('hidden');
             }
         }
         function openHistoryModal() {
-            
+
             const sidebar = document.getElementById('profile-sidebar');
             if (!sidebar.classList.contains('translate-x-full')) {
                 toggleProfileSidebar();
             }
 
-            
+
             const modal = document.getElementById('history-modal');
             const content = document.getElementById('history-modal-content');
 
@@ -1885,17 +1888,17 @@
             loader.classList.remove('hidden');
             emptyState.classList.add('hidden');
 
-            
+
             setTimeout(() => {
                 loader.classList.add('hidden');
 
-                
+
                 const dummyData = [
-                    {date: "2026-08-28 12:15", game: "Sweet Bonanza", provider: "Pragmatic", amount: 10.00, multiplier: 2.5, win: 25.00},
-                    {date: "2026-08-28 11:30", game: "Aviator", provider: "Spribe", amount: 5.00, multiplier: 0, win: -5.00},
-                    {date: "2026-08-27 20:45", game: "Gates of Olympus", provider: "Pragmatic", amount: 20.00, multiplier: 15.2, win: 304.00},
-                    {date: "2026-08-27 19:20", game: "Swift League", provider: "EuroVirtuals", amount: 10.00, multiplier: 2.0, win: 20.00},
-                    {date: "2026-08-26 15:10", game: "Wanted Dead or a Wild", provider: "Hacksaw", amount: 2.00, multiplier: 0, win: -2.00}
+                    { date: "2026-08-28 12:15", game: "Sweet Bonanza", provider: "Pragmatic", amount: 10.00, multiplier: 2.5, win: 25.00 },
+                    { date: "2026-08-28 11:30", game: "Aviator", provider: "Spribe", amount: 5.00, multiplier: 0, win: -5.00 },
+                    { date: "2026-08-27 20:45", game: "Gates of Olympus", provider: "Pragmatic", amount: 20.00, multiplier: 15.2, win: 304.00 },
+                    { date: "2026-08-27 19:20", game: "Swift League", provider: "EuroVirtuals", amount: 10.00, multiplier: 2.0, win: 20.00 },
+                    { date: "2026-08-26 15:10", game: "Wanted Dead or a Wild", provider: "Hacksaw", amount: 2.00, multiplier: 0, win: -2.00 }
                 ];
 
                 if (dummyData.length === 0) {
@@ -1924,10 +1927,10 @@
                         </tr>
                     `;
                 }).join('');
-            }, 800); 
+            }, 800);
         }
         function openTransactionsModal() {
-            
+
             const sidebar = document.getElementById('profile-sidebar');
             if (!sidebar.classList.contains('translate-x-full')) {
                 toggleProfileSidebar();
@@ -1970,7 +1973,7 @@
             emptyState.classList.add('hidden');
 
             try {
-                
+
                 const res = await fetch(`${BACKEND_URL}/api/user/transactions-history`, {
                     headers: getAuthHeaders()
                 });
@@ -1978,13 +1981,13 @@
 
                 loader.classList.add('hidden');
 
-                
+
                 if (!res.ok || !result.data || result.data.length === 0) {
                     emptyState.classList.remove('hidden');
                     return;
                 }
 
-                
+
                 tbody.innerHTML = result.data.map(tx => {
                     const isDeposit = tx.type === "Dépôt";
                     const typeColor = isDeposit ? 'text-emerald' : 'text-blue-400';
@@ -2013,44 +2016,44 @@
             }
         }
 
-            function toggleNotificationsPanel() {
+        function toggleNotificationsPanel() {
             const panel = document.getElementById('notifications-panel');
             panel.classList.toggle('hidden');
             panel.classList.toggle('flex');
         }
 
         async function fetchNotifications() {
-    if (!playerSession) return;
-    try {
-        const res = await fetch(`${BACKEND_URL}/api/user/notifications`, {headers: getAuthHeaders()});
-        const data = await res.json();
+            if (!playerSession) return;
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/user/notifications`, { headers: getAuthHeaders() });
+                const data = await res.json();
 
-        const badge = document.getElementById('notif-badge');
-        
-        if (data?.unread > 0) {
-            badge.innerText = data.unread;
-            badge.classList.remove('hidden');
-        } else {
-            badge.classList.add('hidden');
-        }
+                const badge = document.getElementById('notif-badge');
 
-        const list = document.getElementById('notifs-list');
-        
-        const notifications = data?.notifications || [];
+                if (data?.unread > 0) {
+                    badge.innerText = data.unread;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
 
-        if (notifications.length === 0) {
-            list.innerHTML = '<div class="text-center text-gray-500 text-xs py-4">Aucune notification</div>';
-            return;
-        }
+                const list = document.getElementById('notifs-list');
 
-        
-        let html = notifications.map(n => {
-            if (!n) return ''; 
-            
-            
-            const notifId = n?.id || n?.M_ID || '';
-            
-            return `
+                const notifications = data?.notifications || [];
+
+                if (notifications.length === 0) {
+                    list.innerHTML = '<div class="text-center text-gray-500 text-xs py-4">Aucune notification</div>';
+                    return;
+                }
+
+
+                let html = notifications.map(n => {
+                    if (!n) return '';
+
+
+                    const notifId = n?.id || n?.M_ID || '';
+
+                    return `
         <div class="relative p-2 rounded-xl border ${n?.is_read ? 'bg-[#0f1117] border-transparent' : 'bg-[#1a1e29] border-emerald/30'} hover:bg-gray-800 transition">
             <div class="flex justify-between items-start mb-1">
                 <div class="flex items-center gap-2 cursor-pointer w-full" onclick="markAsRead('${notifId}')">
@@ -2067,8 +2070,8 @@
         </div>
         `}).join('');
 
-        
-        html += `
+
+                html += `
         <div class="mt-2 pt-2 border-t border-[#212631]">
             <button onclick="deleteNotification('all')" class="w-full text-xs text-red-400 hover:text-red-500 font-bold py-1.5 bg-red-500/10 rounded-lg transition">
                 <i class="fas fa-trash-alt"></i> Effacer tout
@@ -2076,63 +2079,63 @@
         </div>
         `;
 
-        list.innerHTML = html;
-    } catch (e) { 
-        console.error("Error fetching notifications: ", e);
-    }
-}
+                list.innerHTML = html;
+            } catch (e) {
+                console.error("Error fetching notifications: ", e);
+            }
+        }
         async function markAsRead(id) {
             await fetch(`${BACKEND_URL}/api/user/read-notification`, {
                 method: 'POST', headers: getAuthHeaders(),
-                body: JSON.stringify({notif_id: id})
+                body: JSON.stringify({ notif_id: id })
             });
             fetchNotifications();
         }
 
         async function deleteNotification(id) {
-            
+
             if (id === 'all' && !confirm("Voulez-vous vraiment supprimer toutes les notifications ?")) return;
 
             try {
                 await fetch(`${BACKEND_URL}/api/user/delete-notification`, {
                     method: 'POST',
                     headers: getAuthHeaders(),
-                    body: JSON.stringify({notif_id: id})
+                    body: JSON.stringify({ notif_id: id })
                 });
-                
+
                 fetchNotifications();
             } catch (e) {
                 showNotification("Erreur de connexion", "error");
             }
         }
 
-        
+
         setInterval(fetchNotifications, 10000);
 
         async function loadFeaturedProvidersBlocks() {
             const container = document.getElementById('dynamic-featured-providers');
             if (!container) return;
 
-            
+
             if (container.dataset.loaded === 'true') return;
             container.dataset.loaded = 'true';
 
             container.innerHTML = '';
 
             const featured = [
-                {name: "Pragmatic Play", code: "PRAGMATIC", color: "bg-emerald-500", hover: "hover:border-emerald-500"},
-                {name: "Amatic", code: "AMATIC", color: "bg-blue-500", hover: "hover:border-blue-500"},
-                {name: "Hacksaw", code: "HACKSAW", color: "bg-purple-500", hover: "hover:border-purple-500"}
+                { name: "Pragmatic Play", code: "PRAGMATIC", color: "bg-emerald-500", hover: "hover:border-emerald-500" },
+                { name: "Amatic", code: "AMATIC", color: "bg-blue-500", hover: "hover:border-blue-500" },
+                { name: "Hacksaw", code: "HACKSAW", color: "bg-purple-500", hover: "hover:border-purple-500" }
             ];
 
-            let finalHtml = ''; 
+            let finalHtml = '';
 
             for (let provider of featured) {
                 try {
                     const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
                         method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({provider_code: provider.code})
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ provider_code: provider.code })
                     });
 
                     if (res.ok) {
@@ -2143,7 +2146,7 @@
                         else if (data.data) games = data.data;
                         else if (Array.isArray(data)) games = data;
 
-                        
+
                         games = games.slice(0, 6);
 
                         if (games.length > 0) {
@@ -2166,7 +2169,7 @@
                                 const imageUrl = game.banner || game.image || game.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
                                 const gameCode = game.game_code || game.id;
 
-                                
+
                                 providerHtml += `
                             <div class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer ${provider.hover} transition-all flex flex-col group shadow-lg" onclick="playCasinoGame('${provider.code}', '${gameCode}')">
                                 <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
@@ -2193,12 +2196,12 @@
                 }
             }
 
-            
+
             container.innerHTML = finalHtml;
         }
 
-        
-        let zeroOneAllGames = []; 
+
+        let zeroOneAllGames = [];
         async function fetchIsolatedZeroOneGames(categoryType) {
             const gridContainer = document.getElementById('grid-zeroone-test');
             const statusDisplay = document.getElementById('status-zeroone-test');
@@ -2224,12 +2227,12 @@
                     return;
                 }
 
-                
+
                 const uniqueProviders = [...new Set(zeroOneAllGames.map(g => g.provider))];
 
                 statusDisplay.innerHTML = `<span class="text-emerald font-bold">✅ نجاح! تم جلب ${zeroOneAllGames.length} لعبة من ${uniqueProviders.length} مزود.</span>`;
 
-                
+
                 if (providersFilter) {
                     providersFilter.innerHTML = uniqueProviders.map(prov =>
                         `<button onclick="renderZeroOneGamesByProvider('${prov}')" class="bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-3 py-1.5 rounded-lg border border-[#2e3648] hover:border-yellow-400 text-xs font-bold transition shadow-sm uppercase">
@@ -2238,7 +2241,7 @@
                     ).join('');
                 }
 
-                
+
                 if (uniqueProviders.length > 0) {
                     renderZeroOneGamesByProvider(uniqueProviders[0]);
                 }
@@ -2248,7 +2251,7 @@
             }
         }
 
-        
+
         function renderZeroOneGamesByProvider(providerName) {
             const gridContainer = document.getElementById('grid-zeroone-test');
             const filteredGames = zeroOneAllGames.filter(g => g.provider === providerName);
@@ -2288,14 +2291,14 @@
             try {
                 const req = await fetch(`${BACKEND_URL}/api/01tech/launch`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({game_id: targetGameId, account_id: accountUsername})
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ game_id: targetGameId, account_id: accountUsername })
                 });
 
                 const resData = await req.json();
 
                 if (resData.game_url) {
-                    window.open(resData.game_url, '_blank'); 
+                    window.open(resData.game_url, '_blank');
                 } else {
                     alert("خطأ في التشغيل: \n" + (resData.error || "مجهول"));
                 }
@@ -2305,8 +2308,8 @@
                 document.body.style.cursor = 'default';
             }
         }
-        
-        
+
+
         let currentSlideIndex = 0;
         let slideInterval;
 
@@ -2340,7 +2343,7 @@
                 showSlide(currentSlideIndex);
             }
 
-            
+
             dots.forEach((dot, i) => {
                 dot.addEventListener('click', () => {
                     currentSlideIndex = i;
@@ -2351,48 +2354,48 @@
 
             function resetInterval() {
                 clearInterval(slideInterval);
-                slideInterval = setInterval(nextSlide, 5000); 
+                slideInterval = setInterval(nextSlide, 5000);
             }
 
 
             resetInterval();
         }
 
-        
+
         window.addEventListener('DOMContentLoaded', () => {
             initHeroSlider();
         });
 
 
 
-        
+
         let allEuroGames = [];
 
-    async function loadEuroVirtualsStudios(categoryFilter, targetGridId, providersBarId) {
-        const container = document.getElementById(targetGridId);
-        const providersBar = document.getElementById(providersBarId);
+        async function loadEuroVirtualsStudios(categoryFilter, targetGridId, providersBarId) {
+            const container = document.getElementById(targetGridId);
+            const providersBar = document.getElementById(providersBarId);
 
-        if (!container) return;
+            if (!container) return;
 
-        container.innerHTML = '<p class="text-gray-400 text-center col-span-full py-10"><i class="fas fa-spinner fa-spin mr-2"></i> جاري تحميل كل البيانات الخام للتحقق (Debug Mode)...</p>';
-        if (providersBar) providersBar.innerHTML = ''; // إخفاء أزرار المزودين مؤقتاً
+            container.innerHTML = '<p class="text-gray-400 text-center col-span-full py-10"><i class="fas fa-spinner fa-spin mr-2"></i> جاري تحميل كل البيانات الخام للتحقق (Debug Mode)...</p>';
+            if (providersBar) providersBar.innerHTML = ''; // إخفاء أزرار المزودين مؤقتاً
 
-        try {
-            const res = await fetch('https://alpha-backend-server.onrender.com/api/get-eurovirtuals-games');
-            const data = await res.json();
+            try {
+                const res = await fetch('https://alpha-backend-server.onrender.com/api/get-eurovirtuals-games');
+                const data = await res.json();
 
-            let games = data.games || data.data || [];
+                let games = data.games || data.data || [];
 
-            if (games.length > 0) {
-                // استخراج أسماء المزودين الحقيقية الموجودة في الرد
-                const providersSet = new Set();
-                games.forEach(g => {
-                    providersSet.add(g.provider || g.partner_name || 'Unknown');
-                });
-                const realProviders = Array.from(providersSet).join(', ');
+                if (games.length > 0) {
+                    // استخراج أسماء المزودين الحقيقية الموجودة في الرد
+                    const providersSet = new Set();
+                    games.forEach(g => {
+                        providersSet.add(g.provider || g.partner_name || 'Unknown');
+                    });
+                    const realProviders = Array.from(providersSet).join(', ');
 
-                // رسم مربع إحصائيات علوي يثبت لكيلفن ما تم استلامه
-                let debugHeader = `
+                    // رسم مربع إحصائيات علوي يثبت لكيلفن ما تم استلامه
+                    let debugHeader = `
                     <div class="col-span-full bg-blue-900/30 border border-blue-500 p-4 rounded-xl mb-4 text-white text-xs font-mono shadow-lg">
                         <strong class="text-yellow-400 text-sm block mb-1">🚨 DEBUG MODE (RAW DATA)</strong>
                         Total Games Received: <span class="text-emerald font-bold">${games.length}</span><br>
@@ -2400,15 +2403,15 @@
                     </div>
                 `;
 
-                // رسم كل الألعاب بدون أي فلترة
-                let allGamesHtml = games.map(game => {
-                    const gameId = game.uuid || game.id || game.game_code;
-                    const gameName = game.name || game.game_name || 'Casino Game';
-                    const defaultImg = `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
-                    const gameImage = game.image || game.img || game.logo || defaultImg;
-                    const provider = game.provider || game.partner_name || 'EuroVirtuals';
+                    // رسم كل الألعاب بدون أي فلترة
+                    let allGamesHtml = games.map(game => {
+                        const gameId = game.uuid || game.id || game.game_code;
+                        const gameName = game.name || game.game_name || 'Casino Game';
+                        const defaultImg = `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
+                        const gameImage = game.image || game.img || game.logo || defaultImg;
+                        const provider = game.provider || game.partner_name || 'EuroVirtuals';
 
-                    return `
+                        return `
                         <div class="bg-gray-900 rounded-xl overflow-hidden shadow-lg border border-red-500/50 flex flex-col">
                             <div class="relative h-36 w-full">
                                 <img src="${gameImage}" class="w-full h-full object-cover" onerror="this.src='${defaultImg}'">
@@ -2421,40 +2424,40 @@
                             </div>
                         </div>
                     `;
-                }).join('');
+                    }).join('');
 
-                container.innerHTML = debugHeader + allGamesHtml;
+                    container.innerHTML = debugHeader + allGamesHtml;
 
-            } else {
-                container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">الرد فارغ تماماً. لا توجد ألعاب.</p>';
+                } else {
+                    container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">الرد فارغ تماماً. لا توجد ألعاب.</p>';
+                }
+            } catch (e) {
+                console.error("Fetch Error:", e);
+                container.innerHTML = '<p class="text-red-500 text-center col-span-full py-10">حدث خطأ أثناء جلب الألعاب.</p>';
             }
-        } catch (e) {
-            console.error("Fetch Error:", e);
-            container.innerHTML = '<p class="text-red-500 text-center col-span-full py-10">حدث خطأ أثناء جلب الألعاب.</p>';
         }
-    }
-    // دالة الفلترة المحلية (Local Filtering) لسرعة عرض فورية عند التبديل بين المزودين
-    function renderGamesLocally(providerName, targetGridId) {
-        const container = document.getElementById(targetGridId);
-        if (!container) return;
+        // دالة الفلترة المحلية (Local Filtering) لسرعة عرض فورية عند التبديل بين المزودين
+        function renderGamesLocally(providerName, targetGridId) {
+            const container = document.getElementById(targetGridId);
+            if (!container) return;
 
-        const filteredGames = allEuroGames.filter(g =>
-            (g.provider || g.partner_name || '').toLowerCase().includes(providerName.toLowerCase())
-        );
+            const filteredGames = allEuroGames.filter(g =>
+                (g.provider || g.partner_name || '').toLowerCase().includes(providerName.toLowerCase())
+            );
 
-        if (filteredGames.length === 0) {
-            container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">Aucun jeu trouvé pour ce fournisseur.</p>';
-            return;
-        }
+            if (filteredGames.length === 0) {
+                container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">Aucun jeu trouvé pour ce fournisseur.</p>';
+                return;
+            }
 
-        container.innerHTML = filteredGames.map(game => {
-            const gameId = game.uuid || game.id || game.game_code;
-            const gameName = game.name || game.game_name || 'Casino Game';
-            const defaultImg = `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
-            const gameImage = game.image || game.img || game.logo || defaultImg;
-            const provider = game.provider || game.partner_name || 'EuroVirtuals';
+            container.innerHTML = filteredGames.map(game => {
+                const gameId = game.uuid || game.id || game.game_code;
+                const gameName = game.name || game.game_name || 'Casino Game';
+                const defaultImg = `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
+                const gameImage = game.image || game.img || game.logo || defaultImg;
+                const provider = game.provider || game.partner_name || 'EuroVirtuals';
 
-            return `
+                return `
                 <div class="bg-gray-900 rounded-xl overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-105 border border-[#212631] hover:border-emerald-500 flex flex-col"
                      onclick="launchEuroVirtuals('${gameId}')">
                     <div class="relative h-36 w-full">
@@ -2468,8 +2471,8 @@
                     </div>
                 </div>
             `;
-        }).join('');
-    }
+            }).join('');
+        }
         async function launchEuroVirtuals(gameId) {
             const token = localStorage.getItem('access_token');
             if (!token) {
@@ -2484,7 +2487,7 @@
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + token
                     },
-                    body: JSON.stringify({game_uuid: gameId})
+                    body: JSON.stringify({ game_uuid: gameId })
                 });
 
                 const data = await response.json();
@@ -2502,174 +2505,171 @@
 
     </script>
 
-        
-        
-        <div id="profile-overlay" onclick="toggleProfileSidebar()"
-            class="fixed inset-0 bg-black/60 z-[190] hidden backdrop-blur-sm transition-opacity"></div>
 
-        <div id="profile-sidebar"
-            class="fixed right-0 top-0 h-full w-80 bg-[#12151d] border-l border-gray-800 z-[200] shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
-            
-            <div class="p-5 border-b border-gray-800 flex justify-between items-center bg-[#0f1117]">
-                <div class="flex items-center gap-3">
-                    <div
-                        class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center text-xl border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
-                        <i class="fas fa-user-astronaut"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-white font-bold text-base uppercase" id="sidebar-username">TEST1</h3>
-                        <p class="text-emerald-400 font-black text-sm" id="sidebar-balance">313.28 TND</p>
-                    </div>
+
+    <div id="profile-overlay" onclick="toggleProfileSidebar()"
+        class="fixed inset-0 bg-black/60 z-[190] hidden backdrop-blur-sm transition-opacity"></div>
+
+    <div id="profile-sidebar"
+        class="fixed right-0 top-0 h-full w-80 bg-[#12151d] border-l border-gray-800 z-[200] shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+
+        <div class="p-5 border-b border-gray-800 flex justify-between items-center bg-[#0f1117]">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center text-xl border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
+                    <i class="fas fa-user-astronaut"></i>
                 </div>
-                <button onclick="toggleProfileSidebar()"
-                    class="text-gray-400 hover:text-white transition w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                <div>
+                    <h3 class="text-white font-bold text-base uppercase" id="sidebar-username">TEST1</h3>
+                    <p class="text-emerald-400 font-black text-sm" id="sidebar-balance">313.28 TND</p>
+                </div>
+            </div>
+            <button onclick="toggleProfileSidebar()"
+                class="text-gray-400 hover:text-white transition w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+
+        <div class="p-5 border-b border-gray-800">
+            <button onclick="toggleProfileSidebar(); setTimeout(toggleCashier, 100);"
+                class="w-full bg-emerald hover:bg-emerald-400 text-[#0f1117] font-black py-3.5 rounded-lg flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition transform hover:scale-[1.02]">
+                <i class="fas fa-wallet text-lg"></i> FAIRE UN DÉPÔT
+            </button>
+        </div>
+
+
+        <div class="flex-1 overflow-y-auto p-3 space-y-1">
+            <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2 ml-2 mt-2">Mon Compte
+            </div>
+
+            <a href="javascript:void(0)" onclick="openHistoryModal()"
+                class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
+                <i class="fas fa-history text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
+                <span class="text-sm font-semibold">Historique des paris</span>
+            </a>
+
+            <a href="javascript:void(0)" onclick="openTransactionsModal()"
+                class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
+                <i class="fas fa-exchange-alt text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
+                <span class="text-sm font-semibold">Transactions</span>
+            </a>
+
+            <a href="javascript:void(0)" onclick="openBonusModal()"
+                class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
+                <i class="fas fa-gift text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
+                <span class="text-sm font-semibold">Bonus & Offres</span>
+                <span class="ml-auto bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">NEW</span>
+            </a>
+        </div>
+
+        <div class="p-4 bg-[#0f1117]">
+            <button onclick="toggleProfileSidebar(); logoutPlayer();"
+                class="w-full bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 border border-red-500/30 font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition">
+                <i class="fas fa-sign-out-alt"></i> DÉCONNEXION
+            </button>
+        </div>
+    </div>
+
+    <div id="history-modal"
+        class="fixed inset-0 z-[400] bg-black/80 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
+        <div class="bg-[#161922] border border-[#212631] rounded-2xl w-full max-w-4xl flex flex-col max-h-[85vh] shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300"
+            id="history-modal-content">
+
+
+            <div class="flex justify-between items-center p-5 border-b border-[#212631] bg-[#0f1117]">
+                <h3 class="text-white font-black uppercase tracking-wider text-lg flex items-center gap-2">
+                    <i class="fas fa-history text-emerald"></i> Historique des paris
+                </h3>
+                <button onclick="closeHistoryModal()"
+                    class="text-gray-400 hover:text-red-500 transition text-xl w-8 h-8 flex items-center justify-center rounded-full bg-[#161922] hover:bg-red-500/10 border border-transparent hover:border-red-500/30">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
 
-            
-            <div class="p-5 border-b border-gray-800">
-                <button onclick="toggleProfileSidebar(); setTimeout(toggleCashier, 100);"
-                    class="w-full bg-emerald hover:bg-emerald-400 text-[#0f1117] font-black py-3.5 rounded-lg flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition transform hover:scale-[1.02]">
-                    <i class="fas fa-wallet text-lg"></i> FAIRE UN DÉPÔT
+
+            <div class="p-4 overflow-y-auto hide-scroll flex-1 bg-[#0f1117]">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse whitespace-nowrap">
+                        <thead>
+                            <tr class="text-[10px] uppercase tracking-wider text-gray-500 border-b border-[#212631]">
+                                <th class="p-3 font-bold">Date</th>
+                                <th class="p-3 font-bold">Jeu / Provider</th>
+                                <th class="p-3 font-bold text-center">Montant (Mise)</th>
+                                <th class="p-3 font-bold text-center">Multiplicateur</th>
+                                <th class="p-3 font-bold text-right">Gain / Perte</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body" class="text-xs text-gray-300 divide-y divide-[#212631]">
+
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div id="history-loader" class="py-12 text-center hidden">
+                    <i class="fas fa-circle-notch fa-spin text-emerald text-4xl mb-4"></i>
+                    <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Chargement de
+                        l'historique...</p>
+                </div>
+
+
+                <div id="history-empty" class="py-12 text-center hidden">
+                    <i class="fas fa-ghost text-gray-700 text-5xl mb-4"></i>
+                    <p class="text-gray-500 text-xs font-bold uppercase tracking-widest">Aucun pari trouvé.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="transactions-modal"
+        class="fixed inset-0 z-[400] bg-black/80 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
+        <div class="bg-[#161922] border border-[#212631] rounded-2xl w-full max-w-3xl flex flex-col max-h-[85vh] shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300"
+            id="transactions-modal-content">
+
+
+            <div class="flex justify-between items-center p-5 border-b border-[#212631] bg-[#0f1117]">
+                <h3 class="text-white font-black uppercase tracking-wider text-lg flex items-center gap-2">
+                    <i class="fas fa-exchange-alt text-emerald"></i> Historique des Transactions
+                </h3>
+                <button onclick="closeTransactionsModal()"
+                    class="text-gray-400 hover:text-red-500 transition text-xl w-8 h-8 flex items-center justify-center rounded-full bg-[#161922] hover:bg-red-500/10 border border-transparent hover:border-red-500/30">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
 
-            
-            <div class="flex-1 overflow-y-auto p-3 space-y-1">
-                <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2 ml-2 mt-2">Mon Compte
+
+            <div class="p-4 overflow-y-auto hide-scroll flex-1 bg-[#0f1117]">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse whitespace-nowrap">
+                        <thead>
+                            <tr class="text-[10px] uppercase tracking-wider text-gray-500 border-b border-[#212631]">
+                                <th class="p-3 font-bold">Date</th>
+                                <th class="p-3 font-bold">Type</th>
+                                <th class="p-3 font-bold">Méthode</th>
+                                <th class="p-3 font-bold text-center">Montant</th>
+                                <th class="p-3 font-bold text-right">Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-table-body" class="text-xs text-gray-300 divide-y divide-[#212631]">
+
+                        </tbody>
+                    </table>
                 </div>
 
-                <a href="javascript:void(0)" onclick="openHistoryModal()"
-                    class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
-                    <i class="fas fa-history text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
-                    <span class="text-sm font-semibold">Historique des paris</span>
-                </a>
-
-                <a href="javascript:void(0)" onclick="openTransactionsModal()"
-                    class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
-                    <i
-                        class="fas fa-exchange-alt text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
-                    <span class="text-sm font-semibold">Transactions</span>
-                </a>
-
-                <a href="javascript:void(0)" onclick="openBonusModal()"
-                    class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
-                    <i class="fas fa-gift text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
-                    <span class="text-sm font-semibold">Bonus & Offres</span>
-                    <span class="ml-auto bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">NEW</span>
-                </a>
-            </div>
-            
-            <div class="p-4 bg-[#0f1117]">
-                <button onclick="toggleProfileSidebar(); logoutPlayer();"
-                    class="w-full bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 border border-red-500/30 font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition">
-                    <i class="fas fa-sign-out-alt"></i> DÉCONNEXION
-                </button>
-            </div>
-        </div>
-        
-        <div id="history-modal"
-            class="fixed inset-0 z-[400] bg-black/80 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
-            <div class="bg-[#161922] border border-[#212631] rounded-2xl w-full max-w-4xl flex flex-col max-h-[85vh] shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300"
-                id="history-modal-content">
-
-                
-                <div class="flex justify-between items-center p-5 border-b border-[#212631] bg-[#0f1117]">
-                    <h3 class="text-white font-black uppercase tracking-wider text-lg flex items-center gap-2">
-                        <i class="fas fa-history text-emerald"></i> Historique des paris
-                    </h3>
-                    <button onclick="closeHistoryModal()"
-                        class="text-gray-400 hover:text-red-500 transition text-xl w-8 h-8 flex items-center justify-center rounded-full bg-[#161922] hover:bg-red-500/10 border border-transparent hover:border-red-500/30">
-                        <i class="fas fa-times"></i>
-                    </button>
+                <div id="transactions-loader" class="py-12 text-center hidden">
+                    <i class="fas fa-circle-notch fa-spin text-emerald text-4xl mb-4"></i>
+                    <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Chargement...</p>
                 </div>
 
-                
-                <div class="p-4 overflow-y-auto hide-scroll flex-1 bg-[#0f1117]">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse whitespace-nowrap">
-                            <thead>
-                                <tr
-                                    class="text-[10px] uppercase tracking-wider text-gray-500 border-b border-[#212631]">
-                                    <th class="p-3 font-bold">Date</th>
-                                    <th class="p-3 font-bold">Jeu / Provider</th>
-                                    <th class="p-3 font-bold text-center">Montant (Mise)</th>
-                                    <th class="p-3 font-bold text-center">Multiplicateur</th>
-                                    <th class="p-3 font-bold text-right">Gain / Perte</th>
-                                </tr>
-                            </thead>
-                            <tbody id="history-table-body" class="text-xs text-gray-300 divide-y divide-[#212631]">
-                                
-                            </tbody>
-                        </table>
-                    </div>
-
-                    
-                    <div id="history-loader" class="py-12 text-center hidden">
-                        <i class="fas fa-circle-notch fa-spin text-emerald text-4xl mb-4"></i>
-                        <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Chargement de
-                            l'historique...</p>
-                    </div>
-
-                    
-                    <div id="history-empty" class="py-12 text-center hidden">
-                        <i class="fas fa-ghost text-gray-700 text-5xl mb-4"></i>
-                        <p class="text-gray-500 text-xs font-bold uppercase tracking-widest">Aucun pari trouvé.</p>
-                    </div>
+                <div id="transactions-empty" class="py-12 text-center hidden">
+                    <i class="fas fa-file-invoice-dollar text-gray-700 text-5xl mb-4"></i>
+                    <p class="text-gray-500 text-xs font-bold uppercase tracking-widest">Aucune transaction
+                        trouvée.</p>
                 </div>
             </div>
         </div>
-        
-        <div id="transactions-modal"
-            class="fixed inset-0 z-[400] bg-black/80 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
-            <div class="bg-[#161922] border border-[#212631] rounded-2xl w-full max-w-3xl flex flex-col max-h-[85vh] shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300"
-                id="transactions-modal-content">
-
-                
-                <div class="flex justify-between items-center p-5 border-b border-[#212631] bg-[#0f1117]">
-                    <h3 class="text-white font-black uppercase tracking-wider text-lg flex items-center gap-2">
-                        <i class="fas fa-exchange-alt text-emerald"></i> Historique des Transactions
-                    </h3>
-                    <button onclick="closeTransactionsModal()"
-                        class="text-gray-400 hover:text-red-500 transition text-xl w-8 h-8 flex items-center justify-center rounded-full bg-[#161922] hover:bg-red-500/10 border border-transparent hover:border-red-500/30">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-
-                
-                <div class="p-4 overflow-y-auto hide-scroll flex-1 bg-[#0f1117]">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse whitespace-nowrap">
-                            <thead>
-                                <tr
-                                    class="text-[10px] uppercase tracking-wider text-gray-500 border-b border-[#212631]">
-                                    <th class="p-3 font-bold">Date</th>
-                                    <th class="p-3 font-bold">Type</th>
-                                    <th class="p-3 font-bold">Méthode</th>
-                                    <th class="p-3 font-bold text-center">Montant</th>
-                                    <th class="p-3 font-bold text-right">Statut</th>
-                                </tr>
-                            </thead>
-                            <tbody id="transactions-table-body" class="text-xs text-gray-300 divide-y divide-[#212631]">
-                                
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div id="transactions-loader" class="py-12 text-center hidden">
-                        <i class="fas fa-circle-notch fa-spin text-emerald text-4xl mb-4"></i>
-                        <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Chargement...</p>
-                    </div>
-
-                    <div id="transactions-empty" class="py-12 text-center hidden">
-                        <i class="fas fa-file-invoice-dollar text-gray-700 text-5xl mb-4"></i>
-                        <p class="text-gray-500 text-xs font-bold uppercase tracking-widest">Aucune transaction
-                            trouvée.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+    </div>
 </body>
 
 </html>
