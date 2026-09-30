@@ -1345,49 +1345,42 @@
         }
         // ================= تشغيل الألعاب =================
         async function playCasinoGame(providerCode, gameCode) {
-            closeChat();
-            if (!playerSession) return openLoginModal();
+    closeChat();
+    if (!playerSession) return openLoginModal();
 
-            // 🌟 إضافة حالة في سجل هاتف اللاعب لدعم زر الرجوع
-            history.pushState({ modalOpen: true, type: 'casino' }, "", "");
+    // تغيير شكل المؤشر لانتظار التحميل
+    document.body.style.cursor = 'wait';
 
-            const container = document.getElementById('casino-iframe-container');
-            const iframe = document.getElementById('casino-iframe');
-            if (!container || !iframe) return;
+    try {
+        let endpointUrl = `${BACKEND_URL}/api/provider/launch-casino`;
+        let requestBody = { game_code: gameCode, provider_code: providerCode, user_code: playerSession.username };
 
-            container.classList.remove('hidden'); container.classList.add('flex');
-            iframe.style.opacity = '0';
-            // ... (باقي الكود كما هو بدون تغيير) ...
-
-            try {
-                let endpointUrl = `${BACKEND_URL}/api/provider/launch-casino`;
-                let requestBody = { game_code: gameCode, provider_code: providerCode, user_code: playerSession.username };
-
-                if (providerCode === 'SMPL') {
-                    endpointUrl = `${BACKEND_URL}/api/smpl/launch`;
-                    requestBody = { game_uuid: gameCode, user_code: playerSession.username };
-                }
-
-                const res = await fetch(endpointUrl, {
-                    method: 'POST',
-                    headers: getAuthHeaders(),
-                    body: JSON.stringify(requestBody)
-                });
-
-                const data = await res.json();
-
-                if (data.launch_url) {
-                    iframe.src = data.launch_url;
-                    iframe.onload = () => { iframe.style.opacity = '1'; };
-                } else {
-                    showNotification(data.error || "Jeu non disponible", "error");
-                    closeCasinoGame();
-                }
-            } catch (error) {
-                showNotification("Erreur de connexion", "error");
-                closeCasinoGame();
-            }
+        if (providerCode === 'SMPL') {
+            endpointUrl = `${BACKEND_URL}/api/smpl/launch`;
+            requestBody = { game_uuid: gameCode, user_code: playerSession.username };
         }
+
+        const res = await fetch(endpointUrl, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(requestBody)
+        });
+
+        const data = await res.json();
+
+        if (data.launch_url) {
+            // 🌟 فتح اللعبة في نافذة/علامة تبويب جديدة
+            window.open(data.launch_url, '_blank');
+        } else {
+            showNotification(data.error || "Jeu non disponible", "error");
+        }
+    } catch (error) {
+        showNotification("Erreur de connexion", "error");
+    } finally {
+        // 🌟 إعادة شكل المؤشر لطبيعته سواء نجح فتح اللعبة أم فشل
+        document.body.style.cursor = 'default';
+    }
+}
 
         window.playSMPLGame = playCasinoGame;
         window.playNexusGame = playCasinoGame;
@@ -1460,34 +1453,31 @@
         }
 
         async function launchSpecificVirtualGame(uuid) {
-            console.log("🖱️ Clicked game with UUID:", uuid);
-            closeChat();
-            if (!playerSession) return openLoginModal();
+    if (!playerSession) return openLoginModal();
+    
+    // تغيير شكل المؤشر لانتظار التحميل
+    document.body.style.cursor = 'wait';
 
-            // 🌟 إضافة حالة في سجل هاتف اللاعب لدعم زر الرجوع
-            history.pushState({ modalOpen: true, type: 'virtual' }, "", "");
-
-            const container = document.getElementById('casino-iframe-container');
-            const iframe = document.getElementById('casino-iframe');
-            if (container) { container.classList.remove('hidden'); container.classList.add('flex'); }
-            if (iframe) iframe.src = '';
-            try {
-                const res = await fetch(`${BACKEND_URL}/api/provider/launch-eurovirtuals`, {
-                    method: 'POST', headers: getAuthHeaders(),
-                    body: JSON.stringify({ user_code: playerSession.username, game_uuid: uuid })
-                });
-                const data = await res.json();
-                if (data.launch_url) {
-                    if (iframe) iframe.src = data.launch_url;
-                } else {
-                    showNotification("Jeu non disponible", "error");
-                    closeCasinoGame();
-                }
-            } catch (e) {
-                showNotification("Erreur réseau", "error");
-                closeCasinoGame();
-            }
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/provider/launch-eurovirtuals`, {
+            method: 'POST', headers: getAuthHeaders(),
+            body: JSON.stringify({user_code: playerSession.username, game_uuid: uuid})
+        });
+        const data = await res.json();
+        
+        if (data.launch_url) {
+            // فتح اللعبة في نافذة جديدة
+            window.open(data.launch_url, '_blank');
+        } else {
+            showNotification("Jeu non disponible", "error");
         }
+    } catch (e) { 
+        showNotification("Erreur réseau", "error"); 
+    } finally {
+        // إعادة المؤشر لطبيعته
+        document.body.style.cursor = 'default';
+    }
+}
 
         // ================= 5. الكاشير =================
         function toggleCashier() {
