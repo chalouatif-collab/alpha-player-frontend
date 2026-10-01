@@ -1430,7 +1430,7 @@
             if (grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10 animate-pulse font-bold">Chargement Virtuels...</div>';
             
             try {
-                const res = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games`);
+                const res = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games?t=${Date.now()}`);
                 const data = await res.json();
                 let games = data.games || data.data || data || [];
 
@@ -2396,7 +2396,7 @@
             if (providersBar) providersBar.innerHTML = ''; // إخفاء أزرار المزودين مؤقتاً
 
             try {
-                const res = await fetch('https://alpha-backend-server.onrender.com/api/get-eurovirtuals-games');
+                const res = await fetch('https://alpha-backend-server.onrender.com/api/get-eurovirtuals-games?t=' + Date.now());
                 const data = await res.json();
 
                 let games = data.games || data.data || [];
