@@ -1427,26 +1427,51 @@
 
         async function initVirtualsLobby() {
             const grid = document.getElementById('virtuals-games-grid');
-            if (grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10">Chargement Virtuels...</div>';
+            if (grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10 animate-pulse font-bold">Chargement Virtuels...</div>';
+            
             try {
                 const res = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games`);
                 const data = await res.json();
                 let games = data.games || data.data || data || [];
 
-                if (grid) grid.innerHTML = games.map(g => {
-                    const uuid = g.uuid || g.game_uuid || g.id || g.game_code;
-                    const safeName = escapeHTML(g.game_name || g.name || "Virtual Game");
-                    return `
-                    <div onclick="launchSpecificVirtualGame('${uuid}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-blue-500 transition-all shadow-lg group">
-                        <div class="relative w-full aspect-square overflow-hidden bg-black/50">
-                            <img src="${g.banner || g.image || 'https://placehold.co/400x400/180A2B/FFF'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-                                <span class="bg-blue-500 text-white text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
+                // 🌟 قائمة المزودين أو الألعاب المسموح لها بالظهور (بحروف صغيرة للمطابقة)
+                const allowedProviders = [
+                    'eurovirtuelle', 'eurovirtual', 'eurovirtuals',
+                    'aviator', 'aviatron', 'aviatrix', 'spribe', 'spride', 
+                    'maya crash', 'beon', 'black lagoon', 'skay control'
+                ];
+
+                // 🌟 تصفية الألعاب بناءً على القائمة
+                const filteredGames = games.filter(g => {
+                    const prov = String(g.provider || g.partner_name || g.game_name || '').toLowerCase();
+                    return allowedProviders.some(allowed => prov.includes(allowed));
+                });
+
+                if (filteredGames.length > 0) {
+                    if (grid) grid.innerHTML = filteredGames.map(g => {
+                        const uuid = g.uuid || g.game_uuid || g.id || g.game_code;
+                        const safeName = escapeHTML(g.game_name || g.name || "Virtual Game");
+                        const img = g.banner || g.image || `https://placehold.co/400x400/180A2B/FFF?text=${encodeURIComponent(safeName.substring(0, 10))}`;
+                        const provider = escapeHTML(g.provider || g.partner_name || 'Virtuals');
+
+                        return `
+                        <div onclick="launchSpecificVirtualGame('${uuid}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-blue-500 transition-all shadow-lg group relative">
+                            <!-- شريط المزود أعلى الكرت -->
+                            <div class="absolute top-0 right-0 bg-black/80 text-blue-400 text-[8px] font-black px-2 py-1 rounded-bl-lg z-20 border-b border-l border-[#212631]">
+                                ${provider}
                             </div>
+                            <div class="relative w-full aspect-square overflow-hidden bg-black/50">
+                                <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/FFF';">
+                                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
+                                    <span class="bg-blue-500 text-white text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
+                                </div>
+                            </div>
+                            <div class="p-2 text-[10px] text-white font-bold truncate text-center">${safeName}</div>
                         </div>
-                        <div class="p-2 text-[10px] text-white font-bold truncate text-center">${safeName}</div>
-                    </div>
-                `}).join('');
+                    `}).join('');
+                } else {
+                    if (grid) grid.innerHTML = '<div class="col-span-full text-yellow-500 text-center py-10 font-bold">Aucun jeu autorisé trouvé.</div>';
+                }
             } catch (e) {
                 if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de chargement</div>';
             }
