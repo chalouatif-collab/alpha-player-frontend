@@ -14,6 +14,39 @@
     <script src="https://ui.invisiblesport.com/bt-renderer.min.js"></script>
 
     <style>
+         /* تأثير لمعة الكازينو (Shine Effect) */
+.card-shine {
+    position: relative;
+}
+.card-shine::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-25deg);
+    z-index: 25;
+    transition: all 0.7s ease;
+    pointer-events: none;
+}
+.card-shine:hover::after {
+    left: 125%;
+}
+
+/* تأثير الطفو الديناميكي (Floating Effect) */
+@keyframes float-card {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0px); }
+}
+.card-float:hover {
+    animation: float-card 2s ease-in-out infinite;
+    border-color: #10b981;
+    box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+}
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #0f1117;
@@ -1095,7 +1128,7 @@
                 const code = g.game_code || g.id;
 
                 return `
-                <div onclick="playCasinoGame('${currentActiveProviderCode}', '${code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg">
+                <div onclick="playCasinoGame('${currentActiveProviderCode}', '${code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer transition-all flex flex-col group shadow-lg card-shine card-float">
                     <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
                         <img src="${img}" alt="${title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}';">
                         <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
