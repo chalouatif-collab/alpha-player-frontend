@@ -35,6 +35,17 @@
     left: 125%;
 }
 
+/* حركة الزووم المستمرة للصور (تلقائية بدون لمس) */
+@keyframes continuous-zoom {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.12); } /* تكبير الصورة بنسبة 12% */
+    100% { transform: scale(1); }
+}
+
+.auto-zoom-img {
+    animation: continuous-zoom 6s ease-in-out infinite; /* تستغرق 6 ثواني وتتكرر للأبد */
+}
+
 /* تأثير الطفو الديناميكي (Floating Effect) */
 @keyframes float-card {
     0% { transform: translateY(0px); }
@@ -1130,7 +1141,7 @@
                 return `
                 <div onclick="playCasinoGame('${currentActiveProviderCode}', '${code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer transition-all flex flex-col group shadow-lg card-shine card-float">
                     <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
-                        <img src="${img}" alt="${title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}';">
+                        <img src="${img}" alt="${title}" loading="lazy" class="w-full h-full object-cover auto-zoom-img" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}';">
                         <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
                             <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
                         </div>
@@ -1214,7 +1225,7 @@
                 return `
                 <div onclick="playCasinoGame('${currentActiveProviderCode}', '${code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg">
                     <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
-                        <img src="${img}" alt="${title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}';">
+                        <img src="${img}" alt="${title}" loading="lazy" class="w-full h-full object-cover auto-zoom-img" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}';">
                         <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
                             <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
                         </div>
@@ -1352,7 +1363,7 @@
                         <div class="absolute top-0 right-0 bg-black/80 text-emerald text-[8px] font-black px-2 py-1 rounded-bl-lg z-20 border-b border-l border-[#212631]">
                             ${pCode}
                         </div>
-                        <img src="${img}" alt="${title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}';">
+                        <img src="${img}" alt="${title}" loading="lazy" class="w-full h-full object-cover auto-zoom-img" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}';">
                         <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
                             <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
                         </div>
@@ -1487,7 +1498,7 @@
                                 ${provider}
                             </div>
                             <div class="relative w-full aspect-square overflow-hidden bg-black/50">
-                                <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/FFF';">
+                                <img src="${img}" class="w-full h-full object-cover auto-zoom-img" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/FFF';">
                                 <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
                                     <span class="bg-blue-500 text-white text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
                                 </div>
@@ -2214,7 +2225,7 @@
                                 providerHtml += `
                             <div class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer ${provider.hover} transition-all flex flex-col group shadow-lg" onclick="playCasinoGame('${provider.code}', '${gameCode}')">
                                 <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
-                                    <img src="${imageUrl}" alt="${gameName}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}';">
+                                    // <img src="${imageUrl}" alt="${gameName}" loading="lazy" class="w-full h-full object-cover auto-zoom-img" onerror="this.onerror=null; this.src='https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}';">
                                     <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
                                         <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
                                     </div>
