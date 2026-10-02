@@ -173,7 +173,7 @@
                 </button>
 
                 <!-- 📊 Résultats -->
-                <button id="btn-nav-resultats" onclick="setActiveMenuBtn('btn-nav-resultats'); openResultsModal();"
+                <button id="btn-nav-resultats" onclick="window.open('https://www.flashscore.fr', '_blank');"
                     class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
                     <i class="fas fa-chart-bar text-emerald"></i> Résultats
                 </button>
@@ -513,8 +513,8 @@
                         <!-- ستظهر الألعاب هنا -->
                     </div>
                 </div>
-                </div>
-                </div>
+            </div>
+        </div>
     </main>
 
     <!-- ⚽ PANE: SPORT -->
@@ -1266,19 +1266,12 @@
             }
         }
 
-        // 3. نافذة النتائج (مجهزة للربط مع API أو Iframe رياضي)
-        function openResultsModal() {
-            showNotification("L'intégration du widget de résultats est en cours.", "info");
-            // هنا يمكنك لاحقاً فتح نافذة Iframe تحتوي على موقع Livescore أو خدمة النتائج الخاصة بمزود الرياضة لديك
-        }
-
 
         async function loadGamesOfTheDay() {
             const grid = document.getElementById('games-of-the-day-grid');
             if (!grid) return;
 
             grid.innerHTML = '<div class="col-span-full text-emerald text-center py-5 animate-pulse font-bold text-xs">Chargement de la sélection du jour... ⚡</div>';
-
             try {
                 const selectedProviders = ['PRAGMATIC', 'HACKSAW', 'PLAYNGO'];
                 let mixedGames = [];
@@ -1345,42 +1338,42 @@
         }
         // ================= تشغيل الألعاب =================
         async function playCasinoGame(providerCode, gameCode) {
-    closeChat();
-    if (!playerSession) return openLoginModal();
+            closeChat();
+            if (!playerSession) return openLoginModal();
 
-    // تغيير شكل المؤشر لانتظار التحميل
-    document.body.style.cursor = 'wait';
+            // تغيير شكل المؤشر لانتظار التحميل
+            document.body.style.cursor = 'wait';
 
-    try {
-        let endpointUrl = `${BACKEND_URL}/api/provider/launch-casino`;
-        let requestBody = { game_code: gameCode, provider_code: providerCode, user_code: playerSession.username };
+            try {
+                let endpointUrl = `${BACKEND_URL}/api/provider/launch-casino`;
+                let requestBody = { game_code: gameCode, provider_code: providerCode, user_code: playerSession.username };
 
-        if (providerCode === 'SMPL') {
-            endpointUrl = `${BACKEND_URL}/api/smpl/launch`;
-            requestBody = { game_uuid: gameCode, user_code: playerSession.username };
+                if (providerCode === 'SMPL') {
+                    endpointUrl = `${BACKEND_URL}/api/smpl/launch`;
+                    requestBody = { game_uuid: gameCode, user_code: playerSession.username };
+                }
+
+                const res = await fetch(endpointUrl, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await res.json();
+
+                if (data.launch_url) {
+                    // 🌟 فتح اللعبة في نافذة/علامة تبويب جديدة
+                    window.open(data.launch_url, '_blank');
+                } else {
+                    showNotification(data.error || "Jeu non disponible", "error");
+                }
+            } catch (error) {
+                showNotification("Erreur de connexion", "error");
+            } finally {
+                // 🌟 إعادة شكل المؤشر لطبيعته سواء نجح فتح اللعبة أم فشل
+                document.body.style.cursor = 'default';
+            }
         }
-
-        const res = await fetch(endpointUrl, {
-            method: 'POST',
-            headers: getAuthHeaders(),
-            body: JSON.stringify(requestBody)
-        });
-
-        const data = await res.json();
-
-        if (data.launch_url) {
-            // 🌟 فتح اللعبة في نافذة/علامة تبويب جديدة
-            window.open(data.launch_url, '_blank');
-        } else {
-            showNotification(data.error || "Jeu non disponible", "error");
-        }
-    } catch (error) {
-        showNotification("Erreur de connexion", "error");
-    } finally {
-        // 🌟 إعادة شكل المؤشر لطبيعته سواء نجح فتح اللعبة أم فشل
-        document.body.style.cursor = 'default';
-    }
-}
 
         window.playSMPLGame = playCasinoGame;
         window.playNexusGame = playCasinoGame;
@@ -1428,7 +1421,7 @@
         async function initVirtualsLobby() {
             const grid = document.getElementById('virtuals-games-grid');
             if (grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10 animate-pulse font-bold">Chargement Virtuels...</div>';
-            
+
             try {
                 const res = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games?t=${Date.now()}`);
                 const data = await res.json();
@@ -1437,7 +1430,7 @@
                 // 🌟 قائمة المزودين أو الألعاب المسموح لها بالظهور (بحروف صغيرة للمطابقة)
                 const allowedProviders = [
                     'eurovirtuelle', 'eurovirtual', 'eurovirtuals',
-                    'aviator', 'aviatron', 'aviatrix', 'spribe', 'spride', 
+                    'aviator', 'aviatron', 'aviatrix', 'spribe', 'spride',
                     'maya crash', 'beon', 'black lagoon', 'skay control'
                 ];
 
@@ -1478,31 +1471,31 @@
         }
 
         async function launchSpecificVirtualGame(uuid) {
-    if (!playerSession) return openLoginModal();
-    
-    // تغيير شكل المؤشر لانتظار التحميل
-    document.body.style.cursor = 'wait';
+            if (!playerSession) return openLoginModal();
 
-    try {
-        const res = await fetch(`${BACKEND_URL}/api/provider/launch-eurovirtuals`, {
-            method: 'POST', headers: getAuthHeaders(),
-            body: JSON.stringify({user_code: playerSession.username, game_uuid: uuid})
-        });
-        const data = await res.json();
-        
-        if (data.launch_url) {
-            // فتح اللعبة في نافذة جديدة
-            window.open(data.launch_url, '_blank');
-        } else {
-            showNotification("Jeu non disponible", "error");
+            // تغيير شكل المؤشر لانتظار التحميل
+            document.body.style.cursor = 'wait';
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/provider/launch-eurovirtuals`, {
+                    method: 'POST', headers: getAuthHeaders(),
+                    body: JSON.stringify({ user_code: playerSession.username, game_uuid: uuid })
+                });
+                const data = await res.json();
+
+                if (data.launch_url) {
+                    // فتح اللعبة في نافذة جديدة
+                    window.open(data.launch_url, '_blank');
+                } else {
+                    showNotification("Jeu non disponible", "error");
+                }
+            } catch (e) {
+                showNotification("Erreur réseau", "error");
+            } finally {
+                // إعادة المؤشر لطبيعته
+                document.body.style.cursor = 'default';
+            }
         }
-    } catch (e) { 
-        showNotification("Erreur réseau", "error"); 
-    } finally {
-        // إعادة المؤشر لطبيعته
-        document.body.style.cursor = 'default';
-    }
-}
 
         // ================= 5. الكاشير =================
         function toggleCashier() {
@@ -2392,9 +2385,8 @@
 
             if (!container) return;
 
-            container.innerHTML = '<p class="text-gray-400 text-center col-span-full py-10"><i class="fas fa-spinner fa-spin mr-2"></i> جاري تحميل كل البيانات الخام للتحقق (Debug Mode)...</p>';
-            if (providersBar) providersBar.innerHTML = ''; // إخفاء أزرار المزودين مؤقتاً
-
+            container.innerHTML = '<p class="text-gray-400 text-center col-span-full py-10"><i class="fas fa-spinner fa-spin mr-2"></i>Chargement....(Debug Mode)...</p>';
+            if (providersBar) providersBar.innerHTML = '';
             try {
                 const res = await fetch('https://alpha-backend-server.onrender.com/api/get-eurovirtuals-games?t=' + Date.now());
                 const data = await res.json();
