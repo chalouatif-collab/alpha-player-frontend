@@ -2856,7 +2856,75 @@
             initVipSystem();
         });
 
+// ================= نظام عجلة الحظ اليومية =================
+function openLuckyWheelModal() {
+    if (!playerSession) return openLoginModal();
+    const modal = document.getElementById('lucky-wheel-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    checkWheelCooldown();
+}
 
+function closeLuckyWheelModal() {
+    const modal = document.getElementById('lucky-wheel-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+function checkWheelCooldown() {
+    const lastSpin = localStorage.getItem('alpha_last_spin_time');
+    const btn = document.getElementById('spin-wheel-btn');
+    const timerEl = document.getElementById('wheel-timer');
+    
+    if (lastSpin) {
+        const now = new Date().getTime();
+        const cooldownTime = 24 * 60 * 60 * 1000; // 24 ساعة
+        const distance = cooldownTime - (now - parseInt(lastSpin));
+        
+        if (distance > 0) {
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            timerEl.innerText = `Revenez dans : ${hours}h ${minutes}m`;
+            timerEl.classList.remove('hidden');
+        } else {
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            timerEl.classList.add('hidden');
+        }
+    }
+}
+
+let currentRotation = 0;
+function spinWheel() {
+    const btn = document.getElementById('spin-wheel-btn');
+    const wheel = document.getElementById('wheel-element');
+    
+    btn.disabled = true;
+    
+    // تدوير العجلة بعدة دورات كاملة وزاوية عشوائية
+    const randomDegree = Math.floor(Math.random() * 360) + 1800; 
+    currentRotation += randomDegree;
+    
+    wheel.style.transform = `rotate(${currentRotation}deg)`;
+    
+    setTimeout(() => {
+        const prizes = ["50 XP VIP", "100 XP VIP", "Bonus Spécial", "25 XP VIP"];
+        const wonPrize = prizes[Math.floor(Math.random() * prizes.length)];
+        
+        showNotification(`🎉 Félicitations ! Vous avez gagné : ${wonPrize}`, "success");
+        
+        // منح نقاط XP للاعب عند الفوز
+        if (typeof addVipXp === 'function') {
+            addVipXp(50);
+        }
+        
+        // حفظ وقت التدوير الحالي لمنع اللعب مرة أخرى قبل 24 ساعة
+        localStorage.setItem('alpha_last_spin_time', new Date().getTime().toString());
+        checkWheelCooldown();
+    }, 4000);
+}
     </script>
 
 
@@ -2909,7 +2977,13 @@
                 <i class="fas fa-download"></i> Installer l'application
             </button>
         </div>
-
+        <a href="javascript:void(0)" onclick="toggleProfileSidebar(); openLuckyWheelModal();"
+            class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
+            <i
+                class="fas fa-dharmachakra text-yellow-500 w-5 text-center transition group-hover:rotate-180 duration-500"></i>
+            <span class="text-sm font-semibold">Roue de la Fortune</span>
+            <span class="ml-auto bg-yellow-500 text-black text-[9px] font-bold px-1.5 py-0.5 rounded">JOURNALIER</span>
+        </a>
         <!-- روابط القائمة -->
         <div class="p-3 space-y-1">
             <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2 ml-2 mt-2">Mon Compte</div>
@@ -3091,6 +3165,46 @@
                 <i class="fas fa-futbol text-lg text-blue-500"></i>
                 <span class="text-[9px] font-bold uppercase tracking-widest text-gray-400 mt-0.5">Sport</span>
             </button>
+        </div>
+    </div>
+    <!-- 🎡 نافذة عجلة الحظ اليومية -->
+    <div id="lucky-wheel-modal"
+        class="fixed inset-0 z-[500] bg-black/80 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
+        <div
+            class="bg-[#161922] border border-[#212631] rounded-3xl w-full max-w-sm p-6 relative shadow-2xl text-center flex flex-col items-center">
+            <button onclick="closeLuckyWheelModal()"
+                class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <h3 class="text-white font-black text-xl mb-1 flex items-center gap-2">
+                <i class="fas fa-dharmachakra text-yellow-500"></i> Roue de la Fortune
+            </h3>
+            <p class="text-xs text-gray-400 mb-6">Tournez la roue chaque jour pour gagner des cadeaux exclusifs !</p>
+
+            <!-- تصميم العجلة المتحركة -->
+            <div class="relative w-64 h-64 mb-6 flex items-center justify-center">
+                <div id="wheel-element"
+                    class="w-full h-full rounded-full border-4 border-yellow-500 bg-gradient-to-tr from-yellow-600 via-emerald-600 to-purple-600 shadow-[0_0_20px_rgba(234,179,8,0.4)] flex items-center justify-center transition-all duration-[4000ms] ease-out relative overflow-hidden">
+                    <div
+                        class="absolute inset-0 flex items-center justify-center text-white font-black text-xs opacity-90">
+                        <span class="absolute top-3">50 XP</span>
+                        <span class="absolute right-4">Bonus</span>
+                        <span class="absolute bottom-3">100 XP</span>
+                        <span class="absolute left-4">Free Spin</span>
+                    </div>
+                    <div
+                        class="w-12 h-12 rounded-full bg-[#0f1117] border-2 border-yellow-500 z-10 flex items-center justify-center text-yellow-400 font-bold text-xs">
+                        VIP
+                    </div>
+                </div>
+                <!-- المؤشر العلوي للعجلة -->
+                <div class="absolute -top-3 w-4 h-6 bg-yellow-400 z-20 shadow-md"
+                    style="clip-path: polygon(50% 100%, 0 0, 100% 0);"></div>
+            </div>
+
+            <button id="spin-wheel-btn" onclick="spinWheel()"
+                class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-3 rounded-xl transition shadow-[0_0_15px_rgba(234,179,8,0.4)] uppercase text-xs tracking-wider">
+                Tourner la Roue 🎡
+            </button>
+            <p id="wheel-timer" class="text-[11px] text-gray-400 mt-3 hidden font-mono font-bold"></p>
         </div>
     </div>
 </body>
