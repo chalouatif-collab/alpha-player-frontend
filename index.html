@@ -3287,27 +3287,28 @@
                     style="width: 35%;"></div>
             </div>
         </div>
-        <!-- 💰 خزنة الكاش باك اليومي (Coffre-fort Cashback) -->
-        <div class="m-4 bg-gradient-to-br from-[#1a1e29] to-[#0f1117] border border-emerald/30 rounded-2xl p-4 relative overflow-hidden shadow-[0_0_15px_rgba(16,185,129,0.1)] shrink-0">
-            <div class="absolute -right-4 -top-4 opacity-[0.03] text-7xl"><i class="fas fa-vault"></i></div>
+        <!-- 💰 خزنة الكاش باك اليومي (مضغوطة للهاتف) -->
+        <div class="mx-4 my-2 bg-gradient-to-br from-[#1a1e29] to-[#0f1117] border border-emerald/30 rounded-xl p-3 relative overflow-hidden shadow-[0_0_15px_rgba(16,185,129,0.1)] shrink-0">
+            <!-- أيقونة خلفية مصغرة -->
+            <div class="absolute -right-3 -top-3 opacity-[0.03] text-6xl"><i class="fas fa-vault"></i></div>
             
-            <div class="flex items-center gap-2 mb-1.5 relative z-10">
-                <i class="fas fa-shield-check text-emerald"></i>
-                <h4 class="text-white font-black text-xs uppercase tracking-wider">Mon Coffre-fort</h4>
+            <div class="flex items-center gap-1.5 mb-1 relative z-10">
+                <i class="fas fa-shield-check text-emerald text-[10px]"></i>
+                <h4 class="text-white font-black text-[10px] uppercase tracking-wider">Mon Coffre-fort</h4>
             </div>
-            <p class="text-[9px] text-gray-400 mb-3 relative z-10">Votre Cashback (10%) s'accumule ici.</p>
+            <p class="text-[8px] text-gray-400 mb-2 relative z-10">Votre Cashback (10%) s'accumule ici.</p>
             
-            <div class="bg-[#0f1117] border border-[#212631] rounded-xl p-3 flex justify-between items-center mb-3 relative z-10">
-                <span class="text-[10px] text-gray-500 font-bold uppercase">Disponible:</span>
-                <span class="text-emerald font-black text-lg drop-shadow-[0_0_8px_rgba(16,185,129,0.4)]" id="vault-amount">0.00 <span class="text-[10px]">TND</span></span>
+            <div class="bg-[#0f1117] border border-[#212631] rounded-lg py-1.5 px-3 flex justify-between items-center mb-2 relative z-10">
+                <span class="text-[9px] text-gray-500 font-bold uppercase">Disponible:</span>
+                <span class="text-emerald font-black text-sm drop-shadow-[0_0_8px_rgba(16,185,129,0.4)]" id="vault-amount">0.00 <span class="text-[9px]">TND</span></span>
             </div>
             
-            <button onclick="claimCashback()" id="claim-cashback-btn" class="relative z-10 w-full bg-emerald hover:bg-emerald-400 text-black font-black text-[11px] uppercase tracking-wider py-2.5 rounded-xl transition-all shadow-[0_0_10px_rgba(16,185,129,0.3)] flex items-center justify-center gap-2">
-                Récupérer <i class="fas fa-hand-holding-usd text-sm"></i>
+            <button onclick="claimCashback()" id="claim-cashback-btn" class="relative z-10 w-full bg-emerald hover:bg-emerald-400 text-black font-black text-[10px] uppercase tracking-wider py-1.5 rounded-lg transition-all shadow-[0_0_10px_rgba(16,185,129,0.3)] flex items-center justify-center gap-1.5">
+                Récupérer <i class="fas fa-hand-holding-usd text-xs"></i>
             </button>
             
-            <!-- 🌟 مؤشر الوقت التنازلي الجديد -->
-            <p id="cashback-timer" class="text-[10px] text-yellow-500 font-mono mt-2 text-center font-bold hidden"></p>
+            <!-- مؤشر الوقت التنازلي -->
+            <p id="cashback-timer" class="text-[9px] text-yellow-500 font-mono mt-1.5 text-center font-bold hidden"></p>
         </div>
         <!-- زر تثبيت التطبيق -->
         <div class="p-4 border-b border-gray-800 shrink-0">
