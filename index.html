@@ -524,50 +524,41 @@
                     <i class="fas fa-trophy text-2xl text-yellow-500 animate-bounce"></i>
                     <h2 class="text-white font-extrabold text-xl">Tournois & Leaderboard</h2>
                 </div>
-
+                
                 <!-- بانر البطولة النشطة -->
-                <div
-                    class="bg-gradient-to-r from-yellow-600/20 via-[#161922] to-yellow-600/10 border border-yellow-500/40 rounded-2xl p-5 relative overflow-hidden shadow-xl">
-                    <div
-                        class="absolute top-0 right-0 bg-yellow-500 text-black text-[10px] font-black px-3 py-1 rounded-bl-xl uppercase">
-                        En cours ⚡</div>
+                <div class="bg-gradient-to-r from-yellow-600/20 via-[#161922] to-yellow-600/10 border border-yellow-500/40 rounded-2xl p-5 relative overflow-hidden shadow-xl space-y-4">
+                    <div class="absolute top-0 right-0 bg-yellow-500 text-black text-[10px] font-black px-3 py-1 rounded-bl-xl uppercase">En cours ⚡</div>
                     <h3 class="text-yellow-400 font-black text-lg mb-1">Grand Tournoi Pragmatic Play</h3>
-                    <p class="text-gray-300 text-xs mb-3">Affrontez les meilleurs joueurs et remportez une part de la
-                        cagnotte !</p>
+                    <p class="text-gray-300 text-xs mb-3">Affrontez les meilleurs joueurs et remportez une part de la cagnotte !</p>
                     <div class="flex flex-wrap gap-4 text-xs font-bold text-white">
-                        <div class="bg-[#0f1117] px-3 py-1.5 rounded-xl border border-[#212631]">💰 Cagnotte : <span
-                                class="text-emerald">15,000 TND</span></div>
+                        <div class="bg-[#0f1117] px-3 py-1.5 rounded-xl border border-[#212631]">💰 Cagnotte : <span class="text-emerald">15,000 TND</span></div>
                         <div class="bg-[#0f1117] px-3 py-1.5 rounded-xl border border-[#212631]">
-                            ⏳ Fin dans : <span id="tourney-timer" class="text-yellow-400 font-mono">04h 00m 00s</span>
-                        </div>
-                    </div>
-
-                    <!-- جدول المتصدرين -->
-                    <div class="bg-[#161922] border border-[#212631] rounded-2xl overflow-hidden shadow-xl">
-                        <div class="p-4 border-b border-[#212631] bg-[#0f1117] flex justify-between items-center">
-                            <span class="text-white font-bold text-sm">Classement en direct 🏆</span>
-                            <span class="text-[10px] text-emerald animate-pulse font-bold">● Mise à jour en temps
-                                réel</span>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse whitespace-nowrap">
-                                <thead>
-                                    <tr
-                                        class="text-[10px] uppercase tracking-wider text-gray-500 border-b border-[#212631]">
-                                        <th class="p-3 text-center">Rang</th>
-                                        <th class="p-3">Joueur</th>
-                                        <th class="p-3 text-center">Points / Score</th>
-                                        <th class="p-3 text-right">Prix Estimé</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="leaderboard-table-body"
-                                    class="text-xs text-gray-300 divide-y divide-[#212631]">
-                                    <!-- سيتم تعبئتها ديناميكياً -->
-                                </tbody>
-                            </table>
+                            ⏳ Fin dans : <span id="tourney-timer" class="text-yellow-400 font-mono">06j 23h 59m 59s</span>
                         </div>
                     </div>
                 </div>
+
+                <!-- جدول المتصدرين -->
+                <div class="bg-[#161922] border border-[#212631] rounded-2xl overflow-hidden shadow-xl">
+                    <div class="p-4 border-b border-[#212631] bg-[#0f1117] flex justify-between items-center">
+                        <span class="text-white font-bold text-sm">Classement en direct 🏆</span>
+                        <span class="text-[10px] text-emerald animate-pulse font-bold">● Mise à jour en temps réel</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse whitespace-nowrap">
+                            <thead>
+                                <tr class="text-[10px] uppercase tracking-wider text-gray-500 border-b border-[#212631]">
+                                    <th class="p-3 text-center">Rang</th>
+                                    <th class="p-3">Joueur</th>
+                                    <th class="p-3 text-center">Points / Score</th>
+                                    <th class="p-3 text-right">Prix Estimé</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboard-table-body" class="text-xs text-gray-300 divide-y divide-[#212631]"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
                 <!-- PANE: FAVORIS (الألعاب المفضلة) -->
                 <div id="pane-favoris" class="player-view-section hidden w-full">
                     <div class="flex items-center gap-2 mb-4">
