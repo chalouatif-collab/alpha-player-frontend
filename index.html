@@ -1507,7 +1507,7 @@
         async function playCasinoGame(providerCode, gameCode) {
             closeChat();
             if (!playerSession) return openLoginModal();
-
+            addVipXp(25);
             // تغيير شكل المؤشر لانتظار التحميل
             document.body.style.cursor = 'wait';
 
@@ -2805,6 +2805,59 @@
             });
         }
 
+// ================= نظام شريط تقدم مستوى اللاعب (VIP System) =================
+        function initVipSystem() {
+            let vipData = JSON.parse(localStorage.getItem('alpha_vip_data') || '{"level": 1, "xp": 350, "nextXp": 1000, "rank": "Bronze"}');
+            updateVipUI(vipData);
+        }
+
+        function addVipXp(amount) {
+            let vipData = JSON.parse(localStorage.getItem('alpha_vip_data') || '{"level": 1, "xp": 350, "nextXp": 1000, "rank": "Bronze"}');
+            vipData.xp += amount;
+            
+            // التحقق من وصول اللاعب للمستوى التالي
+            if (vipData.xp >= vipData.nextXp) {
+                vipData.level += 1;
+                vipData.xp = vipData.xp - vipData.nextXp;
+                vipData.nextXp = Math.floor(vipData.nextXp * 1.5); // زيادة صعوبة المستوى التالي تدريجياً
+                
+                // تحديد الرتبة حسب المستوى
+                if (vipData.level >= 5) vipData.rank = "Diamant 💎";
+                else if (vipData.level >= 4) vipData.rank = "Platine 👑";
+                else if (vipData.level >= 3) vipData.rank = "Or 🥇";
+                else if (vipData.level >= 2) vipData.rank = "Argent 🥈";
+                
+                showNotification(`🎉 Félicitations ! Niveau VIP ${vipData.level} atteint !`, "success");
+            }
+            
+            localStorage.setItem('alpha_vip_data', JSON.stringify(vipData));
+            updateVipUI(vipData);
+        }
+
+        function updateVipUI(data) {
+            const levelEl = document.getElementById('vip-level-num');
+            const rankEl = document.getElementById('vip-rank-name');
+            const currentXpEl = document.getElementById('vip-current-xp');
+            const nextXpEl = document.getElementById('vip-next-xp');
+            const fillEl = document.getElementById('vip-progress-fill');
+            
+            if (levelEl) levelEl.innerText = data.level;
+            if (rankEl) rankEl.innerText = data.rank;
+            if (currentXpEl) currentXpEl.innerText = data.xp;
+            if (nextXpEl) nextXpEl.innerText = data.nextXp;
+            
+            if (fillEl) {
+                const percent = Math.min(Math.floor((data.xp / data.nextXp) * 100), 100);
+                fillEl.style.width = percent + '%';
+            }
+        }
+
+        // تشغيل نظام الـ VIP تلقائياً عند تحميل الصفحة
+        window.addEventListener('DOMContentLoaded', () => {
+            initVipSystem();
+        });
+
+
     </script>
 
 
@@ -2831,7 +2884,21 @@
                 <i class="fas fa-times"></i>
             </button>
         </div>
-
+<!-- 🌟 شريط تقدم مستوى اللاعب (VIP Progress Bar) -->
+        <div class="px-5 py-3 border-b border-gray-800 bg-[#0f1117]">
+            <div class="flex justify-between items-center mb-1 text-[11px]">
+                <span class="text-yellow-400 font-extrabold flex items-center gap-1.5">
+                    <i class="fas fa-crown text-yellow-500"></i> VIP <span id="vip-level-num">1</span> (<span id="vip-rank-name">Bronze</span>)
+                </span>
+                <span class="text-gray-400 font-mono text-[10px]">
+                    <span id="vip-current-xp">350</span> / <span id="vip-next-xp">1000</span> XP
+                </span>
+            </div>
+            <!-- شريط التعبئة -->
+            <div class="w-full bg-[#1a1e29] h-2 rounded-full overflow-hidden border border-gray-800 shadow-inner">
+                <div id="vip-progress-fill" class="bg-gradient-to-r from-yellow-600 to-yellow-400 h-full rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(234,179,8,0.5)]" style="width: 35%;"></div>
+            </div>
+        </div>
 
         <div class="p-5 border-b border-gray-800">
             <button onclick="toggleProfileSidebar(); setTimeout(toggleCashier, 100);"
