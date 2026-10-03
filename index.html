@@ -207,21 +207,26 @@
                         </button>
                     </div>
 
-                    <!-- 1️⃣ بروفايل الرصيد (مستقل الآن ولن يختفي) -->
-                    <div id="top-user-profile" class="hidden items-center gap-2 cursor-pointer group shrink-0"
+                    <!-- 1️⃣ بروفايل الرصيد مع هالة الـ VIP 🌟 -->
+                    <div id="top-user-profile" class="hidden items-center gap-2 md:gap-3 cursor-pointer group shrink-0"
                         onclick="toggleProfileSidebar()">
-                        <!-- أيقونة المحفظة -->
-                        <div
-                            class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] text-emerald-500 md:text-emerald-600 flex items-center justify-center text-[10px] md:text-xs border border-emerald-500/30 md:border-[#212631] group-hover:border-emerald-500 transition shrink-0 shadow-sm md:shadow-none">
-                            <i class="fas fa-wallet"></i>
+                        
+                        <!-- 🌟 هالة تقدم الـ VIP حول الصورة (Progress Ring) -->
+                        <div class="relative w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center p-[2px] transition-transform duration-300 group-hover:scale-105 shadow-[0_0_12px_rgba(234,179,8,0.2)]" 
+                             id="top-vip-ring" style="background: conic-gradient(#eab308 0%, #212631 0%);">
+                            <!-- الأيقونة الداخلية -->
+                            <div class="w-full h-full bg-[#12151d] rounded-full flex items-center justify-center text-yellow-500 text-[11px] md:text-sm border-2 border-[#161922]">
+                                <i class="fas fa-user-astronaut"></i>
+                            </div>
+                            <!-- شارة المستوى المنبثقة في الزاوية -->
+                            <div class="absolute -bottom-1 -right-1 bg-gradient-to-br from-yellow-400 to-yellow-600 text-black text-[8px] md:text-[9px] font-black w-4 h-4 md:w-5 md:h-5 flex items-center justify-center rounded-full border-[1.5px] border-[#161922] shadow-md" id="top-vip-badge">1</div>
                         </div>
+
                         <!-- الرصيد -->
-                        <div
-                            class="text-right opacity-100 md:opacity-50 group-hover:opacity-100 transition-opacity duration-300">
-                            <div
-                                class="font-mono text-white md:text-gray-300 text-[11px] md:text-xs leading-none font-bold">
-                                <span id="player-balance-val" class="tracking-tight">0.00</span> <span
-                                    class="text-emerald-400 md:text-emerald-500 text-[8px] md:text-[9px]">TND</span>
+                        <div class="text-right transition-opacity duration-300">
+                            <div class="font-mono text-white text-[11px] md:text-xs leading-none font-bold tracking-tight">
+                                <span id="player-balance-val">0.00</span> 
+                                <span class="text-emerald-500 text-[8px] md:text-[9px]">TND</span>
                             </div>
                         </div>
                     </div>
@@ -2879,20 +2884,36 @@
         }
 
         function updateVipUI(data) {
+            // عناصر القائمة الجانبية القديمة
             const levelEl = document.getElementById('vip-level-num');
             const rankEl = document.getElementById('vip-rank-name');
             const currentXpEl = document.getElementById('vip-current-xp');
             const nextXpEl = document.getElementById('vip-next-xp');
             const fillEl = document.getElementById('vip-progress-fill');
 
+            // 🌟 عناصر الهالة الجديدة في الشريط العلوي
+            const topRingEl = document.getElementById('top-vip-ring');
+            const topBadgeEl = document.getElementById('top-vip-badge');
+            
             if (levelEl) levelEl.innerText = data.level;
             if (rankEl) rankEl.innerText = data.rank;
             if (currentXpEl) currentXpEl.innerText = data.xp;
             if (nextXpEl) nextXpEl.innerText = data.nextXp;
-
+            
+            // حساب النسبة المئوية للتقدم
+            const percent = Math.min(Math.floor((data.xp / data.nextXp) * 100), 100);
+            
+            // تعبئة الشريط في القائمة الجانبية
             if (fillEl) {
-                const percent = Math.min(Math.floor((data.xp / data.nextXp) * 100), 100);
                 fillEl.style.width = percent + '%';
+            }
+
+            // 🌟 تلوين هالة الشريط العلوي بشكل دائري بناءً على النسبة وتحديث رقم المستوى
+            if (topRingEl) {
+                topRingEl.style.background = `conic-gradient(#eab308 ${percent}%, #212631 ${percent}%)`;
+            }
+            if (topBadgeEl) {
+                topBadgeEl.innerText = data.level;
             }
         }
 
