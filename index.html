@@ -2685,108 +2685,141 @@
 
         let allEuroGames = [];
 
+        let allEuroGamesData = [];
+        let currentEuroProvider = 'Tous';
+
         async function loadEuroVirtualsStudios(categoryFilter, targetGridId, providersBarId) {
             const container = document.getElementById(targetGridId);
             const providersBar = document.getElementById(providersBarId);
 
             if (!container) return;
 
-            container.innerHTML = '<p class="text-gray-400 text-center col-span-full py-10"><i class="fas fa-spinner fa-spin mr-2"></i>Chargement....(Debug Mode)...</p>';
+            container.innerHTML = '<div class="col-span-full text-emerald text-center py-10 animate-pulse text-lg font-bold"><i class="fas fa-spinner fa-spin mr-2"></i>Chargement des jeux EuroVirtuals... 🎰</div>';
             if (providersBar) providersBar.innerHTML = '';
+
             try {
                 const res = await fetch('https://alpha-backend-server.onrender.com/api/get-eurovirtuals-games?t=' + Date.now());
                 const data = await res.json();
 
-                let games = data.games || data.data || [];
+                allEuroGamesData = data.games || data.data || [];
 
-                if (games.length > 0) {
-                    // استخراج أسماء المزودين الحقيقية الموجودة في الرد
+                if (allEuroGamesData.length > 0) {
+                    // استخراج المزودين الفريدين لتوليد الأزرار الخاصة بهم
                     const providersSet = new Set();
-                    games.forEach(g => {
-                        providersSet.add(g.provider || g.partner_name || 'Unknown');
+                    allEuroGamesData.forEach(g => {
+                        providersSet.add(g.provider || g.partner_name || 'EuroVirtuals');
                     });
-                    const realProviders = Array.from(providersSet).join(', ');
+                    const providers = ['Tous', ...Array.from(providersSet)];
 
-                    // رسم مربع إحصائيات علوي يثبت لكيلفن ما تم استلامه
-                    let debugHeader = `
-                    <div class="col-span-full bg-blue-900/30 border border-blue-500 p-4 rounded-xl mb-4 text-white text-xs font-mono shadow-lg">
-                        <strong class="text-yellow-400 text-sm block mb-1">🚨 DEBUG MODE (RAW DATA)</strong>
-                        Total Games Received: <span class="text-emerald font-bold">${games.length}</span><br>
-                        Providers Found in Payload: <span class="text-blue-300">${realProviders}</span>
-                    </div>
-                `;
-
-                    // رسم كل الألعاب بدون أي فلترة
-                    let allGamesHtml = games.map(game => {
-                        const gameId = game.uuid || game.id || game.game_code;
-                        const gameName = game.name || game.game_name || 'Casino Game';
-                        const defaultImg = `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
-                        const gameImage = game.image || game.img || game.logo || defaultImg;
-                        const provider = game.provider || game.partner_name || 'EuroVirtuals';
-
-                        return `
-                        <div class="bg-gray-900 rounded-xl overflow-hidden shadow-lg border border-red-500/50 flex flex-col">
-                            <div class="relative h-36 w-full">
-                                <img src="${gameImage}" class="w-full h-full object-cover" onerror="this.src='${defaultImg}'">
-                                <div class="absolute top-2 right-2 bg-red-600 bg-opacity-90 text-[10px] text-white font-bold px-2 py-1 rounded shadow-md">
-                                    ${provider}
+                    // 🌟 رسم محرك البحث وأزرار المزودين في شريط الفلاتر العلوي
+                    if (providersBar) {
+                        providersBar.innerHTML = `
+                            <div class="w-full flex flex-col md:flex-row gap-3 mb-4">
+                                <!-- محرك البحث الفوري -->
+                                <div class="relative flex-1">
+                                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                    <input type="text" id="euro-search-input" onkeyup="filterEuroGamesLocally('${targetGridId}')"
+                                        placeholder="Rechercher un jeu EuroVirtuals..."
+                                        class="w-full bg-[#161922] border border-[#212631] rounded-xl py-3 pl-11 pr-4 text-white text-sm outline-none focus:border-emerald transition-all shadow-md font-bold">
                                 </div>
                             </div>
-                            <div class="p-3 text-center bg-[#1c212d] flex-grow flex flex-col justify-center">
-                                <h3 class="text-white text-[10px] font-bold truncate">${gameName}</h3>
+                            <!-- أزرار فلاتر المزودين (Chips) -->
+                            <div class="flex overflow-x-auto hide-scroll gap-2 pb-2 w-full" id="euro-chips-container">
+                                ${providers.map((p, idx) => `
+                                    <button onclick="filterEuroByProvider('${p}', '${targetGridId}')" 
+                                        class="euro-provider-chip px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border ${idx === 0 ? 'bg-emerald text-black border-emerald shadow' : 'bg-[#161922] text-gray-300 border-[#212631] hover:border-emerald'}">
+                                        ${p}
+                                    </button>
+                                `).join('')}
                             </div>
-                        </div>
-                    `;
-                    }).join('');
+                        `;
+                    }
 
-                    container.innerHTML = debugHeader + allGamesHtml;
+                    // عرض الألعاب أول مرة بدون فلترة
+                    renderEuroGridFiltered(allEuroGamesData, targetGridId);
 
                 } else {
-                    container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">الرد فارغ تماماً. لا توجد ألعاب.</p>';
+                    container.innerHTML = '<div class="col-span-full text-yellow-500 text-center py-10 font-bold">Aucun jeu trouvé.</div>';
                 }
             } catch (e) {
                 console.error("Fetch Error:", e);
-                container.innerHTML = '<p class="text-red-500 text-center col-span-full py-10">حدث خطأ أثناء جلب الألعاب.</p>';
+                container.innerHTML = '<div class="col-span-full text-red-500 text-center py-10 font-bold">Erreur de chargement des jeux.</div>';
             }
         }
-        // دالة الفلترة المحلية (Local Filtering) لسرعة عرض فورية عند التبديل بين المزودين
-        function renderGamesLocally(providerName, targetGridId) {
+
+        // دالة تصفية الألعاب حسب المزود عند النقر على الزر
+        function filterEuroByProvider(providerName, targetGridId) {
+            currentEuroProvider = providerName;
+            
+            // تحديث تصميم الأزرار (تلوين الزر النشط وإطفاء البقية)
+            document.querySelectorAll('.euro-provider-chip').forEach(btn => {
+                if (btn.innerText.trim() === providerName) {
+                    btn.className = "euro-provider-chip px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border bg-emerald text-black border-emerald shadow";
+                } else {
+                    btn.className = "euro-provider-chip px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border bg-[#161922] text-gray-300 border-[#212631] hover:border-emerald";
+                }
+            });
+
+            applyEuroFilters(targetGridId);
+        }
+
+        // دالة التصفية عبر محرك البحث
+        function filterEuroGamesLocally(targetGridId) {
+            applyEuroFilters(targetGridId);
+        }
+
+        // تطبيق الفلترين معاً (المزود + نص البحث)
+        function applyEuroFilters(targetGridId) {
+            const searchInput = document.getElementById('euro-search-input');
+            const term = searchInput ? searchInput.value.toLowerCase() : '';
+
+            let filtered = allEuroGamesData.filter(g => {
+                const prov = g.provider || g.partner_name || 'EuroVirtuals';
+                const name = g.name || g.game_name || '';
+                
+                const matchesProvider = (currentEuroProvider === 'Tous' || prov === currentEuroProvider);
+                const matchesSearch = name.toLowerCase().includes(term);
+
+                return matchesProvider && matchesSearch;
+            });
+
+            renderEuroGridFiltered(filtered, targetGridId);
+        }
+
+        // رسم شبكة الألعاب النهائية بكرت أنيق وقابل للضغط لتجربة اللعبة
+        function renderEuroGridFiltered(gamesList, targetGridId) {
             const container = document.getElementById(targetGridId);
             if (!container) return;
 
-            const filteredGames = allEuroGames.filter(g =>
-                (g.provider || g.partner_name || '').toLowerCase().includes(providerName.toLowerCase())
-            );
-
-            if (filteredGames.length === 0) {
-                container.innerHTML = '<p class="text-yellow-500 text-center col-span-full py-10">Aucun jeu trouvé pour ce fournisseur.</p>';
+            if (gamesList.length === 0) {
+                container.innerHTML = '<div class="col-span-full text-gray-500 text-center py-10 font-bold">Aucun jeu trouvé pour cette recherche.</div>';
                 return;
             }
 
-            container.innerHTML = filteredGames.map(game => {
+            container.innerHTML = gamesList.map(game => {
                 const gameId = game.uuid || game.id || game.game_code;
-                const gameName = game.name || game.game_name || 'Casino Game';
+                const gameName = escapeHTML(game.name || game.game_name || 'Casino Game');
                 const defaultImg = `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
                 const gameImage = game.image || game.img || game.logo || defaultImg;
-                const provider = game.provider || game.partner_name || 'EuroVirtuals';
+                const provider = escapeHTML(game.provider || game.partner_name || 'EuroVirtuals');
 
                 return `
-                <div class="bg-gray-900 rounded-xl overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-105 border border-[#212631] hover:border-emerald-500 flex flex-col"
+                <div class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg relative"
                      onclick="launchEuroVirtuals('${gameId}')">
-                    <div class="relative h-36 w-full">
-                        <img src="${gameImage}" alt="${gameName}" class="w-full h-full object-cover" onerror="this.src='${defaultImg}'">
-                        <div class="absolute top-2 right-2 bg-black bg-opacity-70 text-[10px] text-emerald-400 font-bold px-2 py-1 rounded">
-                            ${provider}
+                    <div class="absolute top-0 right-0 bg-black/80 text-emerald text-[8px] font-black px-2 py-1 rounded-bl-lg z-20 border-b border-l border-[#212631]">
+                        ${provider}
+                    </div>
+                    <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
+                        <img src="${gameImage}" alt="${gameName}" loading="lazy" class="w-full h-full object-cover auto-zoom-img" onerror="this.onerror=null; this.src='${defaultImg}';">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
+                            <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
                         </div>
                     </div>
-                    <div class="p-3 text-center bg-[#1c212d] flex-grow flex flex-col justify-center">
-                        <h3 class="text-white text-xs font-bold truncate">${gameName}</h3>
-                    </div>
+                    <div class="p-2 text-[10px] text-white font-bold truncate text-center">${gameName}</div>
                 </div>
             `;
             }).join('');
-        }
-        async function launchEuroVirtuals(gameId) {
+        }        async function launchEuroVirtuals(gameId) {
             const token = localStorage.getItem('access_token');
             if (!token) {
                 alert('Veuillez d abord vous connecter pour jouer ! !');
