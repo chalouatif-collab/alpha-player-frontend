@@ -27,6 +27,14 @@
     <!-- مكتبة عرض الرياضة SMPL -->
     <script src="https://ui.invisiblesport.com/bt-renderer.min.js"></script>
 
+    <!-- إعدادات تطبيق PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#10b981">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Alphabet216">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3132/3132634.png">
+
     <style>
         /* تأثير دوران العملة (لأيقونة الشعار) */
         @keyframes coin-flip {
@@ -2759,6 +2767,44 @@
                 </div>
             `).join('');
         }
+// ================= نظام تثبيت التطبيق (PWA) =================
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // منع ظهور نافذة المتصفح الافتراضية المؤقتة
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // إظهار زر التثبيت الخاص بنا في القائمة الجانبية
+            const installBtn = document.getElementById('install-pwa-btn');
+            if (installBtn) installBtn.style.display = 'flex';
+        });
+
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        showNotification("Application en cours d'installation... 📱", "success");
+                    }
+                    deferredPrompt = null;
+                    const installBtn = document.getElementById('install-pwa-btn');
+                    if (installBtn) installBtn.style.display = 'none';
+                });
+            } else {
+                showNotification("L'application est déjà installée ou non supportée par ce navigateur.", "info");
+            }
+        }
+
+        // تسجيل الـ Service Worker عند تحميل الصفحة
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => {
+                    console.log('SW registration failed: ', err);
+                });
+            });
+        }
+
     </script>
 
 
@@ -2792,9 +2838,12 @@
                 class="w-full bg-emerald hover:bg-emerald-400 text-[#0f1117] font-black py-3.5 rounded-lg flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition transform hover:scale-[1.02]">
                 <i class="fas fa-wallet text-lg"></i> FAIRE UN DÉPÔT
             </button>
+        <button id="install-pwa-btn" onclick="installPWA()" style="display:none;"
+                class="w-full bg-[#1a1e29] hover:bg-[#212631] text-emerald-400 border border-emerald-500/30 font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition">
+                <i class="fas fa-download"></i> Installer l'application
+            </button>
         </div>
-
-
+        
         <div class="flex-1 overflow-y-auto p-3 space-y-1">
             <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2 ml-2 mt-2">Mon Compte
             </div>
