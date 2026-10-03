@@ -2863,12 +2863,12 @@
         class="fixed inset-0 bg-black/60 z-[190] hidden backdrop-blur-sm transition-opacity"></div>
 
     <div id="profile-sidebar"
-        class="fixed right-0 top-0 h-full w-80 bg-[#12151d] border-l border-gray-800 z-[200] shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+        class="fixed right-0 top-0 h-full w-80 bg-[#12151d] border-l border-gray-800 z-[200] shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col overflow-y-auto hide-scroll">
 
-        <div class="p-5 border-b border-gray-800 flex justify-between items-center bg-[#0f1117]">
+        <!-- 1. رأس القائمة (معلومات المستخدم وزر الإغلاق) -->
+        <div class="p-5 border-b border-gray-800 flex justify-between items-center bg-[#0f1117] shrink-0">
             <div class="flex items-center gap-3">
-                <div
-                    class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center text-xl border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
+                <div class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center text-xl border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
                     <i class="fas fa-user-astronaut"></i>
                 </div>
                 <div>
@@ -2881,35 +2881,33 @@
                 <i class="fas fa-times"></i>
             </button>
         </div>
+
         <!-- 🌟 شريط تقدم مستوى اللاعب (VIP Progress Bar) -->
-        <div class="px-5 py-3 border-b border-gray-800 bg-[#0f1117]">
+        <div class="px-5 py-3 border-b border-gray-800 bg-[#0f1117] shrink-0">
             <div class="flex justify-between items-center mb-1 text-[11px]">
                 <span class="text-yellow-400 font-extrabold flex items-center gap-1.5">
-                    <i class="fas fa-crown text-yellow-500"></i> VIP <span id="vip-level-num">1</span> (<span
-                        id="vip-rank-name">Bronze</span>)
+                    <i class="fas fa-crown text-yellow-500"></i> VIP <span id="vip-level-num">1</span> (<span id="vip-rank-name">Bronze</span>)
                 </span>
                 <span class="text-gray-400 font-mono text-[10px]">
                     <span id="vip-current-xp">350</span> / <span id="vip-next-xp">1000</span> XP
                 </span>
             </div>
-            <!-- شريط التعبئة -->
             <div class="w-full bg-[#1a1e29] h-2 rounded-full overflow-hidden border border-gray-800 shadow-inner">
-                <div id="vip-progress-fill"
-                    class="bg-gradient-to-r from-yellow-600 to-yellow-400 h-full rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(234,179,8,0.5)]"
-                    style="width: 35%;"></div>
+                <div id="vip-progress-fill" class="bg-gradient-to-r from-yellow-600 to-yellow-400 h-full rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(234,179,8,0.5)]" style="width: 35%;"></div>
             </div>
         </div>
 
-        <div class="p-5 border-b border-gray-800">
+        <!-- زر تثبيت التطبيق -->
+        <div class="p-4 border-b border-gray-800 shrink-0">
             <button id="install-pwa-btn" onclick="installPWA()"
                 class="w-full bg-[#1a1e29] hover:bg-[#212631] text-emerald-400 border border-emerald-500/30 font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition">
                 <i class="fas fa-download"></i> Installer l'application
             </button>
         </div>
 
-        <div class="flex-1 overflow-y-auto p-3 space-y-1">
-            <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2 ml-2 mt-2">Mon Compte
-            </div>
+        <!-- روابط القائمة -->
+        <div class="p-3 space-y-1">
+            <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2 ml-2 mt-2">Mon Compte</div>
             <a href="javascript:void(0)" onclick="toggleProfileSidebar(); loadFavorites();"
                 class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
                 <i class="fas fa-heart text-gray-500 group-hover:text-red-500 w-5 text-center transition"></i>
@@ -2920,13 +2918,11 @@
                 <i class="fas fa-history text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
                 <span class="text-sm font-semibold">Historique des paris</span>
             </a>
-
             <a href="javascript:void(0)" onclick="openTransactionsModal()"
                 class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
                 <i class="fas fa-exchange-alt text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
                 <span class="text-sm font-semibold">Transactions</span>
             </a>
-
             <a href="javascript:void(0)" onclick="openBonusModal()"
                 class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
                 <i class="fas fa-gift text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
@@ -2935,7 +2931,8 @@
             </a>
         </div>
 
-        <div class="p-4 bg-[#0f1117]">
+        <!-- زر تسجيل الخروج في نهاية القائمة -->
+        <div class="p-4 bg-[#0f1117] mt-auto shrink-0">
             <button onclick="toggleProfileSidebar(); logoutPlayer();"
                 class="w-full bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 border border-red-500/30 font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition">
                 <i class="fas fa-sign-out-alt"></i> DÉCONNEXION
