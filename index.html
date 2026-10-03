@@ -1800,12 +1800,11 @@
         }
 
         function updateBottomBar(activeId) {
-            // إرجاع كل الأزرار للحالة غير النشطة (شفافية 50% وحجم طبيعي ونص رمادي)
+            // إرجاع كل الأزرار للوضع الرمادي
             document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
-                btn.classList.remove('opacity-100', 'scale-110');
+                btn.classList.remove('opacity-100');
                 btn.classList.add('opacity-50');
                 
-                // استهداف نص الزر فقط لتحويله للرمادي
                 const textSpan = btn.querySelector('span:last-of-type');
                 if(textSpan) {
                     textSpan.classList.remove('text-white');
@@ -1813,11 +1812,11 @@
                 }
             });
             
-            // تكبير وإضاءة الزر النشط وتبييض نصه
+            // إضاءة الزر النشط وتبييض نصه
             const activeBtn = document.getElementById(activeId);
             if (activeBtn) {
                 activeBtn.classList.remove('opacity-50');
-                activeBtn.classList.add('opacity-100', 'scale-110');
+                activeBtn.classList.add('opacity-100');
                 
                 const textSpan = activeBtn.querySelector('span:last-of-type');
                 if(textSpan) {
