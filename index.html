@@ -508,6 +508,52 @@
                             class="slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-600 hover:bg-gray-400 transition-all"></button>
                     </div>
                 </div>
+                
+                <!-- 🌟 أيقونات التصنيفات الدائرية السريعة (Quick Categories) -->
+                <div class="flex overflow-x-auto hide-scroll gap-3 md:gap-8 py-2 mb-2 items-center justify-start md:justify-center px-1">
+                    
+                    <!-- السلوتس -->
+                    <button onclick="switchSection('casino'); initCasinoLobby();" class="flex flex-col items-center gap-2 group min-w-[65px]">
+                        <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#161922] border border-[#212631] group-hover:border-emerald group-hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center justify-center transition-all duration-300">
+                            <span class="text-2xl md:text-3xl group-hover:scale-110 transition-transform duration-300 drop-shadow-md">🍒</span>
+                        </div>
+                        <span class="text-[10px] md:text-xs font-bold text-gray-400 group-hover:text-white transition-colors uppercase tracking-wider">Slots</span>
+                    </button>
+
+                    <!-- الكازينو المباشر -->
+                    <button onclick="switchSection('live-casino'); openLiveCasino();" class="flex flex-col items-center gap-2 group min-w-[65px]">
+                        <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#161922] border border-[#212631] group-hover:border-red-500 group-hover:shadow-[0_0_15px_rgba(239,68,68,0.3)] flex items-center justify-center transition-all duration-300">
+                            <span class="text-2xl md:text-3xl group-hover:scale-110 transition-transform duration-300 drop-shadow-md">🎡</span>
+                        </div>
+                        <span class="text-[10px] md:text-xs font-bold text-gray-400 group-hover:text-white transition-colors uppercase tracking-wider">Live</span>
+                    </button>
+
+                    <!-- ألعاب الكراش (Mini Jeux) -->
+                    <button onclick="loadMiniJeux();" class="flex flex-col items-center gap-2 group min-w-[65px]">
+                        <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#161922] border border-[#212631] group-hover:border-purple-500 group-hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] flex items-center justify-center transition-all duration-300">
+                            <span class="text-2xl md:text-3xl group-hover:scale-110 transition-transform duration-300 drop-shadow-md">💣</span>
+                        </div>
+                        <span class="text-[10px] md:text-xs font-bold text-gray-400 group-hover:text-white transition-colors uppercase tracking-wider">Crash</span>
+                    </button>
+
+                    <!-- البلاك جاك (بحث تلقائي) -->
+                    <button onclick="switchSection('casino'); initCasinoLobby(); setTimeout(() => { document.getElementById('game-search-input').value = 'blackjack'; filterGames(); }, 500);" class="flex flex-col items-center gap-2 group min-w-[65px]">
+                        <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#161922] border border-[#212631] group-hover:border-blue-500 group-hover:shadow-[0_0_15px_rgba(59,130,246,0.3)] flex items-center justify-center transition-all duration-300">
+                            <span class="text-2xl md:text-3xl group-hover:scale-110 transition-transform duration-300 drop-shadow-md">🃏</span>
+                        </div>
+                        <span class="text-[10px] md:text-xs font-bold text-gray-400 group-hover:text-white transition-colors uppercase tracking-wider">Blackjack</span>
+                    </button>
+
+                    <!-- الألعاب الافتراضية -->
+                    <button onclick="switchSection('virtuals'); initVirtualsLobby();" class="flex flex-col items-center gap-2 group min-w-[65px]">
+                        <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#161922] border border-[#212631] group-hover:border-yellow-500 group-hover:shadow-[0_0_15px_rgba(234,179,8,0.3)] flex items-center justify-center transition-all duration-300">
+                            <span class="text-2xl md:text-3xl group-hover:scale-110 transition-transform duration-300 drop-shadow-md">🎮</span>
+                        </div>
+                        <span class="text-[10px] md:text-xs font-bold text-gray-400 group-hover:text-white transition-colors uppercase tracking-wider">Virtuels</span>
+                    </button>
+
+                </div>
+
                 <!-- قسم أبرز المزودين (يُعبأ تلقائياً عبر API) -->
                 <!-- ============================================== -->
                 <div id="dynamic-featured-providers" class="flex flex-col gap-6 mb-8 w-full mt-4">
