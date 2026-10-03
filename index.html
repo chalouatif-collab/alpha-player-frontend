@@ -2704,14 +2704,12 @@
                 allEuroGamesData = data.games || data.data || [];
 
                 if (allEuroGamesData.length > 0) {
-                    // استخراج المزودين الفريدين لتوليد الأزرار الخاصة بهم
                     const providersSet = new Set();
                     allEuroGamesData.forEach(g => {
                         providersSet.add(g.provider || g.partner_name || 'EuroVirtuals');
                     });
                     const providers = ['Tous', ...Array.from(providersSet)];
 
-                    // 🌟 رسم محرك البحث وأزرار المزودين في شريط الفلاتر العلوي
                     if (providersBar) {
                         providersBar.innerHTML = `
                             <div class="w-full flex flex-col md:flex-row gap-3 mb-4">
@@ -2723,19 +2721,48 @@
                                         class="w-full bg-[#161922] border border-[#212631] rounded-xl py-3 pl-11 pr-4 text-white text-sm outline-none focus:border-emerald transition-all shadow-md font-bold">
                                 </div>
                             </div>
-                            <!-- أزرار فلاتر المزودين (Chips) -->
-                            <div class="flex overflow-x-auto hide-scroll gap-2 pb-2 w-full" id="euro-chips-container">
+                            <!-- أزرار فلاتر المزودين مع ميزة السحب بالماوس -->
+                            <div class="flex overflow-x-auto hide-scroll gap-2 pb-2 w-full cursor-grab active:cursor-grabbing select-none" id="euro-chips-container">
                                 ${providers.map((p, idx) => `
                                     <button onclick="filterEuroByProvider('${p}', '${targetGridId}')" 
-                                        class="euro-provider-chip px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border ${idx === 0 ? 'bg-emerald text-black border-emerald shadow' : 'bg-[#161922] text-gray-300 border-[#212631] hover:border-emerald'}">
+                                        class="euro-provider-chip px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border shrink-0 ${idx === 0 ? 'bg-emerald text-black border-emerald shadow' : 'bg-[#161922] text-gray-300 border-[#212631] hover:border-emerald'}">
                                         ${p}
                                     </button>
                                 `).join('')}
                             </div>
                         `;
+
+                        // 🌟 تفعيل خاصية السحب والإفلات بالماوس (Drag to Scroll) للشريط الأفقي على الحاسوب
+                        const slider = document.getElementById('euro-chips-container');
+                        let isDown = false;
+                        let startX, scrollLeft;
+
+                        slider.addEventListener('mousedown', (e) => {
+                            isDown = true;
+                            slider.classList.add('cursor-grabbing');
+                            startX = e.pageX - slider.offsetLeft;
+                            scrollLeft = slider.scrollLeft;
+                        });
+
+                        slider.addEventListener('mouseleave', () => {
+                            isDown = false;
+                            slider.classList.remove('cursor-grabbing');
+                        });
+
+                        slider.addEventListener('mouseup', () => {
+                            isDown = false;
+                            slider.classList.remove('cursor-grabbing');
+                        });
+
+                        slider.addEventListener('mousemove', (e) => {
+                            if (!isDown) return;
+                            e.preventDefault();
+                            const x = e.pageX - slider.offsetLeft;
+                            const walk = (x - startX) * 2; // سرعة وسلاسة التحريك
+                            slider.scrollLeft = scrollLeft - walk;
+                        });
                     }
 
-                    // عرض الألعاب أول مرة بدون فلترة
                     renderEuroGridFiltered(allEuroGamesData, targetGridId);
 
                 } else {
@@ -2746,7 +2773,6 @@
                 container.innerHTML = '<div class="col-span-full text-red-500 text-center py-10 font-bold">Erreur de chargement des jeux.</div>';
             }
         }
-
         // دالة تصفية الألعاب حسب المزود عند النقر على الزر
         function filterEuroByProvider(providerName, targetGridId) {
             currentEuroProvider = providerName;
