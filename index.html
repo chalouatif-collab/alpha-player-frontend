@@ -392,111 +392,87 @@
             </style>
             <!-- PANE: ACCUEIL (الصفحة الرئيسية المتكاملة) -->
             <div id="pane-accueil" class="player-view-section block space-y-6 w-full">
-
-                <!-- 🌟 1. شريط الفائزين المباشر (Live Winners Ticker) -->
-                <div class="relative w-full mx-auto mb-2 overflow-hidden">
-                    <div
-                        class="bg-[#161922]/80 backdrop-blur-xl border border-emerald/30 rounded-2xl p-2 flex items-center shadow-lg relative overflow-hidden w-full">
-                        <div
-                            class="bg-red-500/20 border border-red-500 rounded-lg px-2.5 py-1 flex items-center gap-1.5 z-20 shrink-0">
+                
+                <!-- 🌟 حاوية ملتصقة بالحواف للهواتف (Edge-to-Edge Container) -->
+                <div class="-mx-4 -mt-6 md:mx-0 md:mt-0 flex flex-col z-10 relative">
+                    
+                    <!-- 1. شريط الفائزين المباشر (ملتصق بالأعلى وبدون حواف جانبية) -->
+                    <div class="relative w-full overflow-hidden bg-[#161922]/90 backdrop-blur-xl border-b border-emerald/30 md:border md:rounded-2xl p-2 flex items-center shadow-md">
+                        <div class="bg-red-500/20 border border-red-500 rounded-lg px-2.5 py-1 flex items-center gap-1.5 z-20 shrink-0">
                             <div class="w-2 h-2 rounded-full bg-red-500 animate-ping"></div>
                             <span class="text-red-500 text-[9px] font-black uppercase tracking-wider">Live</span>
                         </div>
                         <div class="endless-ticker-container flex-grow h-6 ml-2 w-full overflow-hidden relative">
-                            <div id="winners-ticker-track" class="flex gap-4 items-center cursor-pointer ticker-move"
-                                style="width: max-content;">
+                            <div id="winners-ticker-track" class="flex gap-4 items-center cursor-pointer ticker-move" style="width: max-content;">
                                 <!-- سيتم تعبئتها أوتوماتيكياً بالجافاسكريبت -->
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- 🌟 سلايدر البنرات الترويجية (Hero Banner Slider) -->
-                <div
-                    class="relative w-full h-[180px] md:h-[260px] rounded-2xl overflow-hidden mb-6 group bg-[#161922] border border-[#212631] shadow-xl">
 
-                    <!-- حاوية البنرات -->
-                    <div id="hero-slider" class="w-full h-full relative">
-
-                        <!-- البنر الأول (الكازينو) -->
-                        <div
-                            class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100 z-20">
-                            <!-- خلفية متدرجة أنيقة -->
-                            <div
-                                class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/90 to-[#10b981]/20">
-                            </div>
-                            <!-- نمط شبكي خفيف (Grid Pattern) -->
-                            <div
-                                class="absolute inset-0 opacity-10 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:20px_20px]">
-                            </div>
-
-                            <div class="relative h-full flex flex-col justify-center px-6 md:px-12 w-full md:w-2/3">
-                                <div
-                                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] md:text-xs font-bold mb-3 w-fit">
-                                    <i class="fas fa-slot-machine"></i> CASINO PREMIUM
+                    <!-- 2. سلايدر البنرات الترويجية (ملتصق بالشريط ويأخذ العرض كاملاً) -->
+                    <div class="relative w-full h-[190px] md:h-[260px] md:rounded-2xl overflow-hidden group bg-[#161922] border-b border-[#212631] md:border md:mt-4 shadow-xl">
+                        <div id="hero-slider" class="w-full h-full relative">
+                            
+                            <!-- البنر الأول -->
+                            <div class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100 z-20">
+                                <div class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/90 to-[#10b981]/20"></div>
+                                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:20px_20px]"></div>
+                                <div class="relative h-full flex flex-col justify-center px-6 md:px-12 w-full md:w-2/3">
+                                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] md:text-xs font-bold mb-3 w-fit">
+                                        <i class="fas fa-slot-machine"></i> CASINO PREMIUM
+                                    </div>
+                                    <h2 class="text-white text-lg md:text-3xl font-black uppercase tracking-wide leading-tight mb-2">
+                                        L'Expérience Casino <br><span class="text-emerald">Ultime</span>
+                                    </h2>
+                                    <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md">
+                                        Plongez dans un univers de divertissement sans limite avec les meilleurs fournisseurs mondiaux.
+                                    </p>
                                 </div>
-                                <h2
-                                    class="text-white text-lg md:text-3xl font-black uppercase tracking-wide leading-tight mb-2">
-                                    L'Expérience Casino <br><span class="text-emerald">Ultime</span>
-                                </h2>
-                                <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md">
-                                    Plongez dans un univers de divertissement sans limite avec les meilleurs
-                                    fournisseurs mondiaux.
-                                </p>
+                            </div>
+
+                            <!-- البنر الثاني -->
+                            <div class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-10">
+                                <div class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/90 to-blue-600/20"></div>
+                                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px]"></div>
+                                <div class="relative h-full flex flex-col justify-center px-6 md:px-12 w-full md:w-2/3">
+                                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[10px] md:text-xs font-bold mb-3 w-fit">
+                                        <i class="fas fa-futbol"></i> SPORTSBOOK
+                                    </div>
+                                    <h2 class="text-white text-lg md:text-3xl font-black uppercase tracking-wide leading-tight mb-2">
+                                        Vivez le Sport <br><span class="text-blue-500">En Direct</span>
+                                    </h2>
+                                    <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md">
+                                        Une couverture mondiale, des statistiques en temps réel et les cotes les plus compétitives du marché.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- البنر الثالث -->
+                            <div class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-10">
+                                <div class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/90 to-purple-600/20"></div>
+                                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#a855f7_1px,transparent_1px)] [background-size:20px_20px]"></div>
+                                <div class="relative h-full flex flex-col justify-center px-6 md:px-12 w-full md:w-2/3">
+                                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-[10px] md:text-xs font-bold mb-3 w-fit">
+                                        <i class="fas fa-shield-check"></i> FIABILITÉ ABSOLUE
+                                    </div>
+                                    <h2 class="text-white text-lg md:text-3xl font-black uppercase tracking-wide leading-tight mb-2">
+                                        Transactions Rapides <br><span class="text-purple-500">& Sécurisées</span>
+                                    </h2>
+                                    <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md">
+                                        Profitez d'un environnement de jeu sûr avec des dépôts instantanés et des retraits garantis.
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- البنر الثاني (الرياضة) -->
-                        <div
-                            class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-10">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/90 to-blue-600/20">
-                            </div>
-                            <div
-                                class="absolute inset-0 opacity-10 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px]">
-                            </div>
-
-                            <div class="relative h-full flex flex-col justify-center px-6 md:px-12 w-full md:w-2/3">
-                                <div
-                                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[10px] md:text-xs font-bold mb-3 w-fit">
-                                    <i class="fas fa-futbol"></i> SPORTSBOOK
-                                </div>
-                                <h2
-                                    class="text-white text-lg md:text-3xl font-black uppercase tracking-wide leading-tight mb-2">
-                                    Vivez le Sport <br><span class="text-blue-500">En Direct</span>
-                                </h2>
-                                <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md">
-                                    Une couverture mondiale, des statistiques en temps réel et les cotes les plus
-                                    compétitives du marché.
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- البنر الثالث (الموثوقية والسرعة) -->
-                        <div
-                            class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-10">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/90 to-purple-600/20">
-                            </div>
-                            <div
-                                class="absolute inset-0 opacity-10 bg-[radial-gradient(#a855f7_1px,transparent_1px)] [background-size:20px_20px]">
-                            </div>
-
-                            <div class="relative h-full flex flex-col justify-center px-6 md:px-12 w-full md:w-2/3">
-                                <div
-                                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-[10px] md:text-xs font-bold mb-3 w-fit">
-                                    <i class="fas fa-shield-check"></i> FIABILITÉ ABSOLUE
-                                </div>
-                                <h2
-                                    class="text-white text-lg md:text-3xl font-black uppercase tracking-wide leading-tight mb-2">
-                                    Transactions Rapides <br><span class="text-purple-500">& Sécurisées</span>
-                                </h2>
-                                <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md">
-                                    Profitez d'un environnement de jeu sûr avec des dépôts instantanés et des retraits
-                                    garantis.
-                                </p>
-                            </div>
+                        <!-- أزرار التحكم في البنر -->
+                        <div class="absolute bottom-3 md:bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-30">
+                            <button class="slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-emerald shadow-[0_0_8px_rgba(16,185,129,0.8)] transition-all"></button>
+                            <button class="slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-600 hover:bg-gray-400 transition-all"></button>
+                            <button class="slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-600 hover:bg-gray-400 transition-all"></button>
                         </div>
                     </div>
+                </div>
 
                     <!-- أزرار التحكم (النقاط السفلية) -->
                     <div class="absolute bottom-3 md:bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-30">
