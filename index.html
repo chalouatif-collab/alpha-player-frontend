@@ -2980,8 +2980,7 @@
             }, 4000);
         }
 
-     // ================= نظام لوحة المتصدرين والبطولة الأسبوعية الحية =================
-        // 6 أيام، 23 ساعة، 59 دقيقة، و59 ثانية بالثواني
+     // ================= نظام لوحة المتصدرين والبطولة الأسبوعية الحية (مصحح ومنظم) =================
         let tournamentSeconds = (6 * 24 * 3600) + (23 * 3600) + (59 * 60) + 59; 
         let currentLeaderboardData = [];
 
@@ -2991,20 +2990,19 @@
             }
             renderLeaderboardData();
 
-            // تشغيل العد التنازلي للوقت (ينقص ثانية كل ثانية)
+            // تشغيل العد التنازلي للوقت
             if (!window.tourneyTimerInterval) {
                 window.tourneyTimerInterval = setInterval(() => {
                     if (tournamentSeconds > 0) {
                         tournamentSeconds--;
                         updateTimerDisplay();
                     } else {
-                        // عند انتهاء المدة (أسبوع): إعادة تعيين الوقت وتوليد متصدرين جدد كلياً
                         resetAndRotateTournament();
                     }
                 }, 1000);
             }
 
-            // تحديث طفيف عشوائي للنقاط والجائزة كل 5 ثوانٍ لإعطاء حيوية وتنافس مستمر
+            // تحديث النقاط وترتيب المراكز حياً كل 5 ثوانٍ
             if (!window.leaderboardInterval) {
                 window.leaderboardInterval = setInterval(() => {
                     const panel = document.getElementById('pane-leaderboard');
@@ -3031,25 +3029,36 @@
             const prefixes = ["562", "981", "221", "554", "298", "534", "941", "203", "587", "923", "271", "543"];
             const shuffledPrefixes = prefixes.sort(() => 0.5 - Math.random()).slice(0, 8);
             
-            let scorePool = 75000;
-            currentLeaderboardData = shuffledPrefixes.map((prefix, index) => {
-                scorePool -= Math.floor(Math.random() * 5000) + 3000;
-                const score = Math.max(10000, scorePool);
-                
-                // حساب الجائزة ديناميكياً لتتوافق مع النقاط والترتيب وتتجه نحو هدف 15,000 TND إجمالاً
-                let prizeVal = Math.floor((score / 75000) * (15000 / (index + 1)) * 1.2);
-                if (index === 0) {
-                    prizeVal = Math.min(6000, Math.floor(score * 0.08)); // المركز الأول يحصل على الحصة الكبرى وتزيد بزيادة نقاطه
-                } else {
-                    prizeVal = Math.max(100, Math.floor(prizeVal));
-                }
+            let baseScore = 75000;
+            currentLeaderboardData = shuffledPrefixes.map((prefix) => {
+                baseScore -= Math.floor(Math.random() * 4000) + 2000;
+                const score = Math.max(10000, baseScore);
                 
                 return {
-                    rank: index + 1,
                     name: prefix + "******",
                     score: score,
-                    prize: prizeVal
+                    prize: 0
                 };
+            });
+
+            // فرز النقاط تنازلياً وضبط المراكز والجوائز بناءً عليها
+            sortAndAssignPrizes();
+        }
+
+        function sortAndAssignPrizes() {
+            // ترتيب المتصدرين دائماً من الأعلى نقاطاً إلى الأقل (المركز الأول للأعلى)
+            currentLeaderboardData.sort((a, b) => b.score - a.score);
+
+            const totalPool = 15000;
+            // نسب التوزيع المئوية الثابتة حسب الترتيب الصحيح (المركز الأول يحظى بالنسب الأكبر)
+            const rankWeights = [0.40, 0.22, 0.14, 0.08, 0.05, 0.035, 0.025, 0.02];
+
+            currentLeaderboardData.forEach((item, index) => {
+                item.rank = index + 1;
+                // حساب الجائزة مطابقة للترتيب والنقاط معاً
+                let basePrize = totalPool * rankWeights[index];
+                let dynamicPrize = Math.floor(basePrize * (1 + (item.score / 100000) * 0.1));
+                item.prize = dynamicPrize;
             });
         }
 
@@ -3087,19 +3096,14 @@
         }
 
         function updateLeaderboardRandomly() {
+            // تغيير طفيف عشوائي على النقاط
             currentLeaderboardData.forEach(item => {
-                let delta = Math.floor(Math.random() * 400) - 150;
+                let delta = Math.floor(Math.random() * 500) - 200;
                 item.score = Math.max(8000, item.score + delta);
-                
-                // تحديث الجائزة ديناميكياً فوراً مع كل تغير في النقاط
-                let prizeVal = Math.floor((item.score / 75000) * (15000 / item.rank) * 1.2);
-                if (item.rank === 1) {
-                    prizeVal = Math.min(6000, Math.floor(item.score * 0.08));
-                } else {
-                    prizeVal = Math.max(100, Math.floor(prizeVal));
-                }
-                item.prize = prizeVal;
             });
+
+            // إعادة الفرز والترتيب الحقيقي لضمان بقاء صاحب النقاط الأعلى في المركز الأول دائماً مع جائزته الأكبر
+            sortAndAssignPrizes();
             renderLeaderboardData();
         }
     </script>
