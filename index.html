@@ -3,60 +3,138 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- تحسين العرض على الهاتف ومنع التكبير العشوائي عند النقر -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- عنوان الموقع ووصف لمحركات البحث -->
     <title>Alphabet216 | Premium Casino & Sports</title>
-    <!-- مكتبات التصميم -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    <meta name="description" content="La meilleure plateforme de Casino et Paris Sportifs en ligne.">
+
+    <!-- أيقونة المتصفح (Favicon) - يمكنك تغيير الرابط لاحقاً لصورة شعارك -->
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3132/3132634.png">
+
+    <!-- تسريع تحميل الخطوط من جوجل (Preconnect) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- جلب الخط بجميع الأوزان بما فيها 900 للخطوط العريضة جداً -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
+
+    <!-- مكتبات الأيقونات والتصميم -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <!-- مكتبة عرض الرياضة SMPL -->
     <script src="https://ui.invisiblesport.com/bt-renderer.min.js"></script>
 
     <style>
-         /* تأثير لمعة الكازينو (Shine Effect) */
-.card-shine {
-    position: relative;
-}
-.card-shine::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
-    transform: skewX(-25deg);
-    z-index: 25;
-    transition: all 0.7s ease;
-    pointer-events: none;
-}
-.card-shine:hover::after {
-    left: 125%;
-}
+        /* تأثير دوران العملة (لأيقونة الشعار) */
+        @keyframes coin-flip {
 
-/* حركة الزووم المستمرة للصور (تلقائية بدون لمس) */
-@keyframes continuous-zoom {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.12); } /* تكبير الصورة بنسبة 12% */
-    100% { transform: scale(1); }
-}
+            0%,
+            75% {
+                transform: perspective(400px) rotateY(0deg);
+            }
 
-.auto-zoom-img {
-    animation: continuous-zoom 6s ease-in-out infinite; /* تستغرق 6 ثواني وتتكرر للأبد */
-}
+            85% {
+                transform: perspective(400px) rotateY(180deg);
+            }
 
-/* تأثير الطفو الديناميكي (Floating Effect) */
-@keyframes float-card {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-8px); }
-    100% { transform: translateY(0px); }
-}
-.card-float:hover {
-    animation: float-card 2s ease-in-out infinite;
-    border-color: #10b981;
-    box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
-}
+            100% {
+                transform: perspective(400px) rotateY(360deg);
+            }
+        }
+
+        .logo-coin-animated {
+            animation: coin-flip 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+
+        /* تأثير لمعة الكازينو (Shine Effect) */
+        .card-shine {
+            position: relative;
+        }
+
+        .card-shine::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: skewX(-25deg);
+            z-index: 25;
+            transition: all 0.7s ease;
+            pointer-events: none;
+        }
+
+        .card-shine:hover::after {
+            left: 125%;
+        }
+
+        /* تأثير النبض المتوهج لأزرار الهيدر */
+        @keyframes btn-glow-pulse {
+            0% {
+                box-shadow: 0 0 5px rgba(16, 185, 129, 0.2);
+                transform: scale(1);
+            }
+
+            50% {
+                box-shadow: 0 0 15px rgba(16, 185, 129, 0.7);
+                transform: scale(1.04);
+            }
+
+            100% {
+                box-shadow: 0 0 5px rgba(16, 185, 129, 0.2);
+                transform: scale(1);
+            }
+        }
+
+        .btn-animated {
+            animation: btn-glow-pulse 2.5s infinite;
+        }
+
+        /* حركة الزووم المستمرة للصور (تلقائية بدون لمس) */
+        @keyframes continuous-zoom {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.12);
+            }
+
+            /* تكبير الصورة بنسبة 12% */
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .auto-zoom-img {
+            animation: continuous-zoom 6s ease-in-out infinite;
+            /* تستغرق 6 ثواني وتتكرر للأبد */
+        }
+
+        /* تأثير الطفو الديناميكي (Floating Effect) */
+        @keyframes float-card {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .card-float:hover {
+            animation: float-card 2s ease-in-out infinite;
+            border-color: #10b981;
+            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+        }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -94,6 +172,24 @@
 
 <body class="antialiased text-sm flex flex-col min-h-screen">
     <div>
+        <!-- 🚀 شاشة التحميل الابتدائية (Splash Screen) -->
+        <div id="splash-screen"
+            class="fixed inset-0 z-[9999] bg-[#0f1117] flex flex-col items-center justify-center transition-opacity duration-700 ease-out">
+            <!-- الشعار مع تأثير العملة الذي أضفناه سابقاً -->
+            <div
+                class="logo-coin-animated w-16 h-16 rounded-2xl bg-emerald flex items-center justify-center text-black font-black text-4xl shadow-[0_0_40px_rgba(16,185,129,0.4)] mb-4">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <!-- اسم المنصة ينبض -->
+            <h1 class="font-extrabold text-3xl md:text-4xl tracking-tight text-white mb-6 animate-pulse">Alphabet<span
+                    class="text-emerald">216</span></h1>
+
+            <!-- أيقونة التحميل الدوارة -->
+            <div
+                class="flex items-center gap-2 text-emerald text-[10px] md:text-xs font-bold tracking-widest uppercase">
+                <i class="fas fa-circle-notch fa-spin text-lg"></i> Chargement...
+            </div>
+        </div>
         <!-- 1. الشريط العلوي (الرصيد وتسجيل الدخول - متجاوب وأنيق للهاتف) -->
         <header class="bg-[#161922] border-b border-[#212631] sticky top-0 z-50">
             <div
@@ -117,51 +213,49 @@
                     <div id="auth-buttons-container" class="flex items-center gap-2">
                         <button onclick="openLoginModal()"
                             class="text-[10px] md:text-xs font-bold text-gray-300 hover:text-white uppercase px-2 md:px-3 py-2">Connexion</button>
-                        <button onclick="openRegisterModal()"
-                            class="bg-emerald text-black font-extrabold text-[10px] md:text-xs uppercase px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition shadow-md">S'inscrire</button>
-                    </div>
 
-                    <!-- 1️⃣ بروفايل الرصيد (واضح وأبيض على الهاتف، ومخفي للسرية على الكمبيوتر) -->
-                    <div id="top-user-profile" class="hidden items-center gap-2 cursor-pointer group shrink-0"
-                        onclick="toggleProfileSidebar()">
-                        <!-- أيقونة المحفظة -->
-                        <div
-                            class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] text-emerald-500 md:text-emerald-600 flex items-center justify-center text-[10px] md:text-xs border border-emerald-500/30 md:border-[#212631] group-hover:border-emerald-500 transition shrink-0 shadow-sm md:shadow-none">
-                            <i class="fas fa-wallet"></i>
-                        </div>
-                        <!-- الرصيد (opacity-100 للهاتف، و md:opacity-50 للكمبيوتر) -->
-                        <div
-                            class="text-right opacity-100 md:opacity-50 group-hover:opacity-100 transition-opacity duration-300">
-                            <!-- text-white للهاتف، و md:text-gray-300 للكمبيوتر -->
+                        <!-- 1️⃣ بروفايل الرصيد (واضح وأبيض على الهاتف، ومخفي للسرية على الكمبيوتر) -->
+                        <div id="top-user-profile" class="hidden items-center gap-2 cursor-pointer group shrink-0"
+                            onclick="toggleProfileSidebar()">
+                            <!-- أيقونة المحفظة -->
                             <div
-                                class="font-mono text-white md:text-gray-300 text-[11px] md:text-xs leading-none font-bold">
-                                <span id="player-balance-val" class="tracking-tight">0.00</span> <span
-                                    class="text-emerald-400 md:text-emerald-500 text-[8px] md:text-[9px]">TND</span>
+                                class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] text-emerald-500 md:text-emerald-600 flex items-center justify-center text-[10px] md:text-xs border border-emerald-500/30 md:border-[#212631] group-hover:border-emerald-500 transition shrink-0 shadow-sm md:shadow-none">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                            <!-- الرصيد (opacity-100 للهاتف، و md:opacity-50 للكمبيوتر) -->
+                            <div
+                                class="text-right opacity-100 md:opacity-50 group-hover:opacity-100 transition-opacity duration-300">
+                                <!-- text-white للهاتف، و md:text-gray-300 للكمبيوتر -->
+                                <div
+                                    class="font-mono text-white md:text-gray-300 text-[11px] md:text-xs leading-none font-bold">
+                                    <span id="player-balance-val" class="tracking-tight">0.00</span> <span
+                                        class="text-emerald-400 md:text-emerald-500 text-[8px] md:text-[9px]">TND</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2️⃣ جرس الإشعارات (دائري وصغير أقصى اليمين) -->
+                        <div id="top-notification-bell"
+                            class="hidden relative cursor-pointer items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] border border-[#212631] hover:border-emerald-500 hover:text-white transition shrink-0 ml-1"
+                            onclick="toggleNotificationsPanel()">
+                            <i class="fas fa-bell text-gray-400 text-[10px] md:text-xs transition"></i>
+                            <span id="notif-badge"
+                                class="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold px-1 py-0.5 rounded-full hidden leading-none shadow-md">0</span>
+                        </div>
+
+                        <!-- النافذة المنسدلة للإشعارات -->
+                        <div id="notifications-panel"
+                            class="absolute top-12 md:top-14 right-2 md:right-4 w-[280px] md:w-80 bg-[#161922] border border-[#212631] rounded-2xl shadow-2xl hidden flex-col z-[100] overflow-hidden">
+                            <div class="p-3 border-b border-[#212631] bg-[#0f1117] flex justify-between items-center">
+                                <h2 class="text-white font-bold text-sm"> notifications🔔</h2>
+                            </div>
+                            <div id="notifs-list"
+                                class="max-h-[300px] overflow-y-auto hide-scroll p-2 flex flex-col gap-1">
+                                <!-- الإشعارات ستظهر هنا -->
                             </div>
                         </div>
                     </div>
-
-                    <!-- 2️⃣ جرس الإشعارات (دائري وصغير أقصى اليمين) -->
-                    <div id="top-notification-bell"
-                        class="hidden relative cursor-pointer items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] border border-[#212631] hover:border-emerald-500 hover:text-white transition shrink-0 ml-1"
-                        onclick="toggleNotificationsPanel()">
-                        <i class="fas fa-bell text-gray-400 text-[10px] md:text-xs transition"></i>
-                        <span id="notif-badge"
-                            class="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold px-1 py-0.5 rounded-full hidden leading-none shadow-md">0</span>
-                    </div>
-
-                    <!-- النافذة المنسدلة للإشعارات -->
-                    <div id="notifications-panel"
-                        class="absolute top-12 md:top-14 right-2 md:right-4 w-[280px] md:w-80 bg-[#161922] border border-[#212631] rounded-2xl shadow-2xl hidden flex-col z-[100] overflow-hidden">
-                        <div class="p-3 border-b border-[#212631] bg-[#0f1117] flex justify-between items-center">
-                            <h2 class="text-white font-bold text-sm"> notifications🔔</h2>
-                        </div>
-                        <div id="notifs-list" class="max-h-[300px] overflow-y-auto hide-scroll p-2 flex flex-col gap-1">
-                            <!-- الإشعارات ستظهر هنا -->
-                        </div>
-                    </div>
                 </div>
-            </div>
         </header>
 
         <!-- 2. شريط التصنيفات السريع الذكي -->
@@ -178,14 +272,16 @@
                     class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
                         class="fas fa-futbol text-emerald"></i> Sport</button>
 
+                <!-- زر الكازينو مع حركة النبض -->
                 <button id="btn-nav-casino"
                     onclick="setActiveMenuBtn('btn-nav-casino'); switchSection('casino'); initCasinoLobby();"
-                    class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
+                    class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all btn-animated"><i
                         class="fas fa-slot-machine text-emerald"></i> Casino</button>
 
+                <!-- زر اللايف كازينو مع حركة النبض -->
                 <button id="btn-nav-live"
                     onclick="setActiveMenuBtn('btn-nav-live'); switchSection('live-casino'); openLiveCasino();"
-                    class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
+                    class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all btn-animated"><i
                         class="fas fa-video text-red-500"></i> Casino Live</button>
 
                 <button id="btn-nav-virtuals"
@@ -193,10 +289,12 @@
                     class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
                         class="fas fa-gamepad text-blue-400"></i> Virtuels</button>
 
+                <!-- زر أفياتور مع حركة النبض -->
                 <button id="btn-nav-aviator"
                     onclick="setActiveMenuBtn('btn-nav-aviator'); playCasinoGame('SPRIBE', 'aviator')"
-                    class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
+                    class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all btn-animated"><i
                         class="fas fa-plane text-red-500"></i> Aviator</button>
+
                 <!-- 🚀 Mini Jeux -->
                 <button id="btn-nav-mini-jeux" onclick="setActiveMenuBtn('btn-nav-mini-jeux'); loadMiniJeux();"
                     class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all">
@@ -229,6 +327,7 @@
                 </button>
             </div>
         </div>
+    </div>
     </div>
     <main class="max-w-[1700px] mx-auto px-4 py-6 w-full flex-grow flex flex-col xl:flex-row gap-6">
 
@@ -573,7 +672,7 @@
 
     <!-- 🌟 تذييل الصفحة (الذي تم حذفه بالخطأ) -->
     <div
-        class="mt-8 pt-6 border-t border-[#212631] flex flex-col items-center justify-center text-center space-y-4 pb-8 w-full">
+        class="mt-8 pt-6 border-t border-[#212631] flex flex-col items-center justify-center text-center space-y-4 pb-24 w-full">
         <div class="flex flex-wrap justify-center gap-3 md:gap-6 text-xs font-bold text-gray-400">
             <button onclick="openPolicyModal('termes')"
                 class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Termes &
@@ -860,6 +959,18 @@
         }
 
         window.onload = () => {
+            // 🚀 إخفاء شاشة التحميل بسلاسة بعد تجهيز الموقع
+            const splash = document.getElementById('splash-screen');
+            if (splash) {
+                // ننتظر قليلاً (800 ملي ثانية) ليقرأ اللاعب الشعار، ثم نخفيها
+                setTimeout(() => {
+                    splash.style.opacity = '0';
+                    setTimeout(() => {
+                        splash.style.display = 'none';
+                    }, 700); // وقت تلاشي الشاشة
+                }, 800); 
+            }
+
             // 1. استرجاع بيانات اللاعب إذا كان مسجلاً
             const savedSession = localStorage.getItem('alpha_player_session');
             if (savedSession) {
@@ -870,6 +981,7 @@
             // 2. استرجاع القسم الذي كان فيه اللاعب قبل الريفرش
             const savedSection = localStorage.getItem('active_section') || 'accueil';
             switchSection(savedSection);
+            
             // 3. تشغيل ميزات الصفحة الرئيسية
             loadGamesOfTheDay();
             loadFeaturedProvidersBlocks();
@@ -880,6 +992,7 @@
                 generateLiveWinnersTicker();
             }
         };
+        
         // ================= محرك الجاكبوت الحي (Real-time WebSocket) =================
         function startLiveJackpots() {
             // تحويل رابط الباك إند العادي إلى رابط WebSocket (ws:// أو wss://)
@@ -1702,15 +1815,33 @@
         }
 
         function setActiveMenuBtn(activeBtnId) {
-
             document.querySelectorAll('.main-nav-btn').forEach(btn => {
-                btn.className = "main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all";
+                // إزالة ألوان الزر النشط دون المساس بكلاسات الحركة
+                btn.classList.remove('bg-emerald', 'text-black', 'border-emerald', 'shadow');
+                // إضافة ألوان الزر العادي
+                btn.classList.add('bg-[#1a1e29]', 'hover:bg-[#212631]', 'text-gray-300', 'hover:text-white', 'border-[#2e3648]', 'hover:border-emerald');
             });
-
 
             const activeBtn = document.getElementById(activeBtnId);
             if (activeBtn) {
-                activeBtn.className = "main-nav-btn bg-emerald text-black px-4 py-1.5 rounded-xl border border-emerald flex items-center gap-2 flex-shrink-0 transition-all shadow";
+                // إزالة ألوان الزر العادي
+                activeBtn.classList.remove('bg-[#1a1e29]', 'hover:bg-[#212631]', 'text-gray-300', 'hover:text-white', 'border-[#2e3648]', 'hover:border-emerald');
+                // إضافة ألوان الزر النشط
+                activeBtn.classList.add('bg-emerald', 'text-black', 'border-emerald', 'shadow');
+            }
+        }
+
+        function updateBottomBar(activeId) {
+            // إرجاع كل أزرار الهاتف للون الرمادي
+            document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+                btn.classList.remove('text-emerald');
+                btn.classList.add('text-gray-500');
+            });
+            // تلوين الزر النشط الحالي بالأخضر
+            const activeBtn = document.getElementById(activeId);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-gray-500');
+                activeBtn.classList.add('text-emerald');
             }
         }
 
@@ -2225,7 +2356,7 @@
                                 providerHtml += `
                             <div class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer ${provider.hover} transition-all flex flex-col group shadow-lg" onclick="playCasinoGame('${provider.code}', '${gameCode}')">
                                 <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
-                                 <img src="${imageUrl}" alt="${gameName}" loading="lazy" class="w-full h-full object-cover auto-zoom-img" onerror="this.onerror=null; this.src='https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}';">
+                                    <img src="${imageUrl}" alt="${gameName}" loading="lazy" class="w-full h-full object-cover auto-zoom-img" onerror="this.onerror=null; this.src='https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}';">
                                     <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
                                         <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
                                     </div>
@@ -2721,6 +2852,56 @@
             </div>
         </div>
     </div>
+
+    <!-- 📱 شريط التنقل السفلي للهواتف (Mobile Bottom App-Bar) -->
+    <div id="mobile-bottom-bar"
+        class="md:hidden fixed bottom-0 left-0 w-full bg-[#12151d] border-t border-[#212631] z-[900] shadow-[0_-5px_15px_rgba(0,0,0,0.5)]">
+        <div class="flex justify-between items-center px-1 py-2">
+            <!-- 1. الرئيسية -->
+            <button
+                onclick="setActiveMenuBtn('btn-nav-accueil'); switchSection('accueil'); updateBottomBar('nav-mob-accueil')"
+                id="nav-mob-accueil"
+                class="mobile-nav-btn flex-1 flex flex-col items-center justify-center gap-1 text-emerald transition-colors">
+                <i class="fas fa-home text-lg"></i>
+                <span class="text-[9px] font-extrabold uppercase tracking-widest">Accueil</span>
+            </button>
+
+            <!-- 2. الكازينو -->
+            <button
+                onclick="setActiveMenuBtn('btn-nav-casino'); switchSection('casino'); initCasinoLobby(); updateBottomBar('nav-mob-casino')"
+                id="nav-mob-casino"
+                class="mobile-nav-btn flex-1 flex flex-col items-center justify-center gap-1 text-gray-500 hover:text-gray-300 transition-colors">
+                <i class="fas fa-slot-machine text-lg"></i>
+                <span class="text-[9px] font-extrabold uppercase tracking-widest">Casino</span>
+            </button>
+
+            <!-- 3. كازينو لايف (مع نقطة حمراء تنبض) -->
+            <button
+                onclick="setActiveMenuBtn('btn-nav-live'); switchSection('live-casino'); openLiveCasino(); updateBottomBar('nav-mob-live')"
+                id="nav-mob-live"
+                class="mobile-nav-btn flex-1 flex flex-col items-center justify-center gap-1 text-gray-500 hover:text-gray-300 transition-colors">
+                <div class="relative">
+                    <i class="fas fa-video text-lg"></i>
+                    <span class="absolute -top-1 -right-1.5 flex h-2.5 w-2.5">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                    </span>
+                </div>
+                <span class="text-[9px] font-extrabold uppercase tracking-widest">Live</span>
+            </button>
+
+            <!-- 4. الرياضة -->
+            <button
+                onclick="setActiveMenuBtn('btn-nav-sport'); openSportsbookForProvider('nexus'); updateBottomBar('nav-mob-sport')"
+                id="nav-mob-sport"
+                class="mobile-nav-btn flex-1 flex flex-col items-center justify-center gap-1 text-gray-500 hover:text-gray-300 transition-colors">
+                <i class="fas fa-futbol text-lg"></i>
+                <span class="text-[9px] font-extrabold uppercase tracking-widest">Sport</span>
+            </button>
+        </div>
+    </div>
+
 </body>
 
 </html>
