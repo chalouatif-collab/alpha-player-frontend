@@ -200,12 +200,9 @@
                 <!-- أزرار الدخول أو رصيد اللاعب -->
                 <div class="flex items-center gap-2 md:gap-3">
 
-                    <!-- أزرار تسجيل الدخول -->
                     <div id="auth-buttons-container" class="flex items-center gap-2">
                         <button onclick="openLoginModal()"
                             class="text-[10px] md:text-xs font-bold text-gray-300 hover:text-white uppercase px-2 md:px-3 py-2">Connexion</button>
-                        <button onclick="openRegisterModal()"
-                            class="text-[10px] md:text-xs font-bold text-gray-300 hover:text-white uppercase px-2 md:px-3 py-2">Inscription</button>
                     </div>
 
                     <!-- 1️⃣ بروفايل الرصيد (مستقل الآن ولن يختفي) -->
@@ -330,7 +327,7 @@
                 <a href="javascript:void(0)" onclick="switchSection('casino'); initCasinoLobby();"
                     class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
                         class="fas fa-slot-machine text-emerald text-lg"></i> Casino & Slots</a>
-                        <a href="javascript:void(0)" onclick="loadFavorites();"
+                <a href="javascript:void(0)" onclick="loadFavorites();"
                     class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
                         class="fas fa-heart text-red-500 text-lg"></i> Mes Favoris</a>
                 <a href="javascript:void(0)" onclick="switchSection('live-casino'); openLiveCasino();"
@@ -2767,14 +2764,14 @@
                 </div>
             `).join('');
         }
-// ================= نظام تثبيت التطبيق (PWA) =================
+        // ================= نظام تثبيت التطبيق (PWA) =================
         let deferredPrompt;
-        
+
         window.addEventListener('beforeinstallprompt', (e) => {
             // منع ظهور نافذة المتصفح الافتراضية المؤقتة
             e.preventDefault();
             deferredPrompt = e;
-            
+
             // إظهار زر التثبيت الخاص بنا في القائمة الجانبية
             const installBtn = document.getElementById('install-pwa-btn');
             if (installBtn) installBtn.style.display = 'flex';
@@ -2805,7 +2802,7 @@
             });
         }
 
-// ================= نظام شريط تقدم مستوى اللاعب (VIP System) =================
+        // ================= نظام شريط تقدم مستوى اللاعب (VIP System) =================
         function initVipSystem() {
             let vipData = JSON.parse(localStorage.getItem('alpha_vip_data') || '{"level": 1, "xp": 350, "nextXp": 1000, "rank": "Bronze"}');
             updateVipUI(vipData);
@@ -2814,22 +2811,22 @@
         function addVipXp(amount) {
             let vipData = JSON.parse(localStorage.getItem('alpha_vip_data') || '{"level": 1, "xp": 350, "nextXp": 1000, "rank": "Bronze"}');
             vipData.xp += amount;
-            
+
             // التحقق من وصول اللاعب للمستوى التالي
             if (vipData.xp >= vipData.nextXp) {
                 vipData.level += 1;
                 vipData.xp = vipData.xp - vipData.nextXp;
                 vipData.nextXp = Math.floor(vipData.nextXp * 1.5); // زيادة صعوبة المستوى التالي تدريجياً
-                
+
                 // تحديد الرتبة حسب المستوى
                 if (vipData.level >= 5) vipData.rank = "Diamant 💎";
                 else if (vipData.level >= 4) vipData.rank = "Platine 👑";
                 else if (vipData.level >= 3) vipData.rank = "Or 🥇";
                 else if (vipData.level >= 2) vipData.rank = "Argent 🥈";
-                
+
                 showNotification(`🎉 Félicitations ! Niveau VIP ${vipData.level} atteint !`, "success");
             }
-            
+
             localStorage.setItem('alpha_vip_data', JSON.stringify(vipData));
             updateVipUI(vipData);
         }
@@ -2840,12 +2837,12 @@
             const currentXpEl = document.getElementById('vip-current-xp');
             const nextXpEl = document.getElementById('vip-next-xp');
             const fillEl = document.getElementById('vip-progress-fill');
-            
+
             if (levelEl) levelEl.innerText = data.level;
             if (rankEl) rankEl.innerText = data.rank;
             if (currentXpEl) currentXpEl.innerText = data.xp;
             if (nextXpEl) nextXpEl.innerText = data.nextXp;
-            
+
             if (fillEl) {
                 const percent = Math.min(Math.floor((data.xp / data.nextXp) * 100), 100);
                 fillEl.style.width = percent + '%';
@@ -2884,11 +2881,12 @@
                 <i class="fas fa-times"></i>
             </button>
         </div>
-<!-- 🌟 شريط تقدم مستوى اللاعب (VIP Progress Bar) -->
+        <!-- 🌟 شريط تقدم مستوى اللاعب (VIP Progress Bar) -->
         <div class="px-5 py-3 border-b border-gray-800 bg-[#0f1117]">
             <div class="flex justify-between items-center mb-1 text-[11px]">
                 <span class="text-yellow-400 font-extrabold flex items-center gap-1.5">
-                    <i class="fas fa-crown text-yellow-500"></i> VIP <span id="vip-level-num">1</span> (<span id="vip-rank-name">Bronze</span>)
+                    <i class="fas fa-crown text-yellow-500"></i> VIP <span id="vip-level-num">1</span> (<span
+                        id="vip-rank-name">Bronze</span>)
                 </span>
                 <span class="text-gray-400 font-mono text-[10px]">
                     <span id="vip-current-xp">350</span> / <span id="vip-next-xp">1000</span> XP
@@ -2896,21 +2894,19 @@
             </div>
             <!-- شريط التعبئة -->
             <div class="w-full bg-[#1a1e29] h-2 rounded-full overflow-hidden border border-gray-800 shadow-inner">
-                <div id="vip-progress-fill" class="bg-gradient-to-r from-yellow-600 to-yellow-400 h-full rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(234,179,8,0.5)]" style="width: 35%;"></div>
+                <div id="vip-progress-fill"
+                    class="bg-gradient-to-r from-yellow-600 to-yellow-400 h-full rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(234,179,8,0.5)]"
+                    style="width: 35%;"></div>
             </div>
         </div>
 
         <div class="p-5 border-b border-gray-800">
-            <button onclick="toggleProfileSidebar(); setTimeout(toggleCashier, 100);"
-                class="w-full bg-emerald hover:bg-emerald-400 text-[#0f1117] font-black py-3.5 rounded-lg flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition transform hover:scale-[1.02]">
-                <i class="fas fa-wallet text-lg"></i> FAIRE UN DÉPÔT
-            </button>
-        <button id="install-pwa-btn" onclick="installPWA()" 
+            <button id="install-pwa-btn" onclick="installPWA()"
                 class="w-full bg-[#1a1e29] hover:bg-[#212631] text-emerald-400 border border-emerald-500/30 font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition">
                 <i class="fas fa-download"></i> Installer l'application
             </button>
         </div>
-        
+
         <div class="flex-1 overflow-y-auto p-3 space-y-1">
             <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2 ml-2 mt-2">Mon Compte
             </div>
