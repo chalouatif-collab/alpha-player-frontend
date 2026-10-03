@@ -2782,17 +2782,17 @@
 
         function installPWA() {
             if (deferredPrompt) {
+                // إذا كان المتصفح يدعم التثبيت المباشر (مثل أندرويد وبعض متصفحات الكمبيوتر)
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
                         showNotification("Application en cours d'installation... 📱", "success");
                     }
                     deferredPrompt = null;
-                    const installBtn = document.getElementById('install-pwa-btn');
-                    if (installBtn) installBtn.style.display = 'none';
                 });
             } else {
-                showNotification("L'application est déjà installée ou non supportée par ce navigateur.", "info");
+                // للآيفون أو المتصفحات التي لا تدعم التثبيت المباشر، نُظهر إرشاداً واضحاً
+                alert("Pour installer l'application sur votre appareil :\n- Sur iPhone/iPad : Appuyez sur le bouton 'Partager' 📤 puis 'Sur l'écran d'accueil'.\n- Sur PC/Android : Utilisez le menu de votre navigateur pour 'Installer l'application'.");
             }
         }
 
@@ -2838,7 +2838,7 @@
                 class="w-full bg-emerald hover:bg-emerald-400 text-[#0f1117] font-black py-3.5 rounded-lg flex justify-center items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition transform hover:scale-[1.02]">
                 <i class="fas fa-wallet text-lg"></i> FAIRE UN DÉPÔT
             </button>
-        <button id="install-pwa-btn" onclick="installPWA()" style="display:none;"
+        <button id="install-pwa-btn" onclick="installPWA()" 
                 class="w-full bg-[#1a1e29] hover:bg-[#212631] text-emerald-400 border border-emerald-500/30 font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition">
                 <i class="fas fa-download"></i> Installer l'application
             </button>
