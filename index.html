@@ -174,49 +174,63 @@
         </div>
         <!-- 1. الشريط العلوي (الرصيد وتسجيل الدخول - متجاوب وأنيق للهاتف) -->
         <header class="bg-[#161922] border-b border-[#212631] sticky top-0 z-50">
-            <div class="max-w-[1700px] mx-auto px-3 md:px-4 h-16 md:h-18 flex justify-between items-center py-2 md:py-3">
+            <div
+                class="max-w-[1700px] mx-auto px-3 md:px-4 h-16 md:h-18 flex justify-between items-center py-2 md:py-3">
 
                 <div class="flex items-center gap-2 md:gap-6">
                     <div class="flex items-center gap-1.5 md:gap-2 cursor-pointer" onclick="switchSection('accueil')">
                         <!-- تصغير الشعار في الهاتف -->
-                        <div class="logo-coin-animated w-7 h-7 md:w-9 md:h-9 rounded-lg md:rounded-xl bg-emerald flex items-center justify-center text-black font-black text-sm md:text-xl shadow-md">
+                        <div
+                            class="logo-coin-animated w-7 h-7 md:w-9 md:h-9 rounded-lg md:rounded-xl bg-emerald flex items-center justify-center text-black font-black text-sm md:text-xl shadow-md">
                             <i class="fas fa-bolt"></i>
                         </div>
-                        <h1 class="font-extrabold text-lg md:text-2xl tracking-tight text-white m-0">Alphabet<span class="text-emerald">216</span></h1>
+                        <h1 class="font-extrabold text-lg md:text-2xl tracking-tight text-white m-0">Alphabet<span
+                                class="text-emerald">216</span></h1>
                     </div>
                 </div>
-                
+
                 <!-- أزرار الدخول أو رصيد اللاعب -->
                 <div class="flex items-center gap-2 md:gap-3">
 
                     <!-- أزرار تسجيل الدخول -->
                     <div id="auth-buttons-container" class="flex items-center gap-2">
-                        <button onclick="openLoginModal()" class="text-[10px] md:text-xs font-bold text-gray-300 hover:text-white uppercase px-2 md:px-3 py-2">Connexion</button>
-                        <button onclick="openRegisterModal()" class="text-[10px] md:text-xs font-bold text-gray-300 hover:text-white uppercase px-2 md:px-3 py-2">Inscription</button>
+                        <button onclick="openLoginModal()"
+                            class="text-[10px] md:text-xs font-bold text-gray-300 hover:text-white uppercase px-2 md:px-3 py-2">Connexion</button>
+                        <button onclick="openRegisterModal()"
+                            class="text-[10px] md:text-xs font-bold text-gray-300 hover:text-white uppercase px-2 md:px-3 py-2">Inscription</button>
                     </div>
 
                     <!-- 1️⃣ بروفايل الرصيد (مستقل الآن ولن يختفي) -->
-                    <div id="top-user-profile" class="hidden items-center gap-2 cursor-pointer group shrink-0" onclick="toggleProfileSidebar()">
+                    <div id="top-user-profile" class="hidden items-center gap-2 cursor-pointer group shrink-0"
+                        onclick="toggleProfileSidebar()">
                         <!-- أيقونة المحفظة -->
-                        <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] text-emerald-500 md:text-emerald-600 flex items-center justify-center text-[10px] md:text-xs border border-emerald-500/30 md:border-[#212631] group-hover:border-emerald-500 transition shrink-0 shadow-sm md:shadow-none">
+                        <div
+                            class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] text-emerald-500 md:text-emerald-600 flex items-center justify-center text-[10px] md:text-xs border border-emerald-500/30 md:border-[#212631] group-hover:border-emerald-500 transition shrink-0 shadow-sm md:shadow-none">
                             <i class="fas fa-wallet"></i>
                         </div>
                         <!-- الرصيد -->
-                        <div class="text-right opacity-100 md:opacity-50 group-hover:opacity-100 transition-opacity duration-300">
-                            <div class="font-mono text-white md:text-gray-300 text-[11px] md:text-xs leading-none font-bold">
-                                <span id="player-balance-val" class="tracking-tight">0.00</span> <span class="text-emerald-400 md:text-emerald-500 text-[8px] md:text-[9px]">TND</span>
+                        <div
+                            class="text-right opacity-100 md:opacity-50 group-hover:opacity-100 transition-opacity duration-300">
+                            <div
+                                class="font-mono text-white md:text-gray-300 text-[11px] md:text-xs leading-none font-bold">
+                                <span id="player-balance-val" class="tracking-tight">0.00</span> <span
+                                    class="text-emerald-400 md:text-emerald-500 text-[8px] md:text-[9px]">TND</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- 2️⃣ جرس الإشعارات -->
-                    <div id="top-notification-bell" class="hidden relative cursor-pointer items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] border border-[#212631] hover:border-emerald-500 hover:text-white transition shrink-0 ml-1" onclick="toggleNotificationsPanel()">
+                    <div id="top-notification-bell"
+                        class="hidden relative cursor-pointer items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] border border-[#212631] hover:border-emerald-500 hover:text-white transition shrink-0 ml-1"
+                        onclick="toggleNotificationsPanel()">
                         <i class="fas fa-bell text-gray-400 text-[10px] md:text-xs transition"></i>
-                        <span id="notif-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold px-1 py-0.5 rounded-full hidden leading-none shadow-md">0</span>
+                        <span id="notif-badge"
+                            class="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold px-1 py-0.5 rounded-full hidden leading-none shadow-md">0</span>
                     </div>
 
                     <!-- النافذة المنسدلة للإشعارات -->
-                    <div id="notifications-panel" class="absolute top-12 md:top-14 right-2 md:right-4 w-[280px] md:w-80 bg-[#161922] border border-[#212631] rounded-2xl shadow-2xl hidden flex-col z-[100] overflow-hidden">
+                    <div id="notifications-panel"
+                        class="absolute top-12 md:top-14 right-2 md:right-4 w-[280px] md:w-80 bg-[#161922] border border-[#212631] rounded-2xl shadow-2xl hidden flex-col z-[100] overflow-hidden">
                         <div class="p-3 border-b border-[#212631] bg-[#0f1117] flex justify-between items-center">
                             <h2 class="text-white font-bold text-sm"> notifications🔔</h2>
                         </div>
@@ -308,6 +322,9 @@
                 <a href="javascript:void(0)" onclick="switchSection('casino'); initCasinoLobby();"
                     class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
                         class="fas fa-slot-machine text-emerald text-lg"></i> Casino & Slots</a>
+                        <a href="javascript:void(0)" onclick="loadFavorites();"
+                    class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
+                        class="fas fa-heart text-red-500 text-lg"></i> Mes Favoris</a>
                 <a href="javascript:void(0)" onclick="switchSection('live-casino'); openLiveCasino();"
                     class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
                         class="fas fa-video text-red-500 text-lg"></i> Live Casino</a>
@@ -494,7 +511,17 @@
                     <div id="games-of-the-day-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
                 </div>
             </div>
-
+            <!-- PANE: FAVORIS (الألعاب المفضلة) -->
+            <div id="pane-favoris" class="player-view-section hidden w-full">
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fas fa-heart text-2xl text-red-500 animate-pulse"></i>
+                    <h2 class="text-white font-extrabold text-xl">Mes Favoris</h2>
+                </div>
+                <div id="favoris-games-grid"
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10">
+                    <!-- سيتم عرض الألعاب المفضلة هنا -->
+                </div>
+            </div>
             <!-- PANE: CASINO -->
             <div id="pane-casino" class="player-view-section hidden w-full">
                 <div class="flex items-center gap-2 mb-4">
@@ -936,7 +963,7 @@
                     setTimeout(() => {
                         splash.style.display = 'none';
                     }, 700); // وقت تلاشي الشاشة
-                }, 800); 
+                }, 800);
             }
 
             // 1. استرجاع بيانات اللاعب إذا كان مسجلاً
@@ -949,7 +976,7 @@
             // 2. استرجاع القسم الذي كان فيه اللاعب قبل الريفرش
             const savedSection = localStorage.getItem('active_section') || 'accueil';
             switchSection(savedSection);
-            
+
             // 3. تشغيل ميزات الصفحة الرئيسية
             loadGamesOfTheDay();
             loadFeaturedProvidersBlocks();
@@ -1220,8 +1247,15 @@
                 const code = g.game_code || g.id;
 
                 return `
-                <div onclick="playCasinoGame('${currentActiveProviderCode}', '${code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer transition-all flex flex-col group shadow-lg card-shine card-float">
-                    <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
+            <div onclick="playCasinoGame('${currentActiveProviderCode}', '${code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer transition-all flex flex-col group shadow-lg card-shine card-float relative">
+                
+                <!-- زر القلب لإضافة اللعبة للمفضلة -->
+                <button onclick="toggleFavorite(event, '${currentActiveProviderCode}', '${code}', '${title}', '${img}')" 
+                    class="absolute top-2 left-2 z-30 bg-black/60 rounded-full w-7 h-7 flex items-center justify-center hover:bg-black/90 border border-[#212631] transition-all">
+                    <i class="${isFavorite(code) ? 'fas text-red-500' : 'far text-white'} fa-heart text-sm transition-colors"></i>
+                </button>
+
+                <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
                         <img src="${img}" alt="${title}" loading="lazy" class="w-full h-full object-cover auto-zoom-img" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/10b981?text=${encodeURIComponent(title.substring(0, 15))}';">
                         <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
                             <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
@@ -1522,6 +1556,8 @@
             }
         }
 
+
+
         async function openLiveCasino() {
             const grid = document.getElementById('live-games-grid');
             if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Chargement Live...</div>';
@@ -1804,22 +1840,22 @@
             document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
                 btn.classList.remove('opacity-100');
                 btn.classList.add('opacity-50');
-                
+
                 const textSpan = btn.querySelector('span:last-of-type');
-                if(textSpan) {
+                if (textSpan) {
                     textSpan.classList.remove('text-white');
                     textSpan.classList.add('text-gray-400');
                 }
             });
-            
+
             // إضاءة الزر النشط وتبييض نصه
             const activeBtn = document.getElementById(activeId);
             if (activeBtn) {
                 activeBtn.classList.remove('opacity-50');
                 activeBtn.classList.add('opacity-100');
-                
+
                 const textSpan = activeBtn.querySelector('span:last-of-type');
-                if(textSpan) {
+                if (textSpan) {
                     textSpan.classList.remove('text-gray-400');
                     textSpan.classList.add('text-white');
                 }
@@ -2666,6 +2702,63 @@
             }
         }
 
+
+
+        // ================= نظام الألعاب المفضلة =================
+        function isFavorite(gameCode) {
+            let favs = JSON.parse(localStorage.getItem('alpha_favorites') || '[]');
+            return favs.some(f => f.gameCode === gameCode);
+        }
+
+        function toggleFavorite(event, providerCode, gameCode, title, img) {
+            event.stopPropagation(); // منع فتح اللعبة عند الضغط على القلب
+            let favs = JSON.parse(localStorage.getItem('alpha_favorites') || '[]');
+            const index = favs.findIndex(f => f.gameCode === gameCode);
+
+            const heartIcon = event.currentTarget.querySelector('i');
+
+            if (index > -1) {
+                // حذف من المفضلة
+                favs.splice(index, 1);
+                heartIcon.classList.remove('fas', 'text-red-500');
+                heartIcon.classList.add('far', 'text-white');
+                showNotification("Retiré des favoris", "info");
+            } else {
+                // إضافة للمفضلة
+                favs.push({ providerCode, gameCode, title, img });
+                heartIcon.classList.remove('far', 'text-white');
+                heartIcon.classList.add('fas', 'text-red-500');
+                showNotification("Ajouté aux favoris ❤️", "success");
+            }
+            localStorage.setItem('alpha_favorites', JSON.stringify(favs));
+        }
+
+        function loadFavorites() {
+            switchSection('favoris');
+            const grid = document.getElementById('favoris-games-grid');
+            let favs = JSON.parse(localStorage.getItem('alpha_favorites') || '[]');
+
+            if (favs.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-16"><i class="far fa-heart text-4xl mb-3 block"></i>Aucun jeu favori pour le moment.</div>';
+                return;
+            }
+
+            grid.innerHTML = favs.map(g => `
+                <div onclick="playCasinoGame('${g.providerCode}', '${g.gameCode}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg relative">
+                    <button onclick="toggleFavorite(event, '${g.providerCode}', '${g.gameCode}', '${g.title}', '${g.img}'); loadFavorites();" 
+                        class="absolute top-2 left-2 z-30 bg-black/60 rounded-full w-7 h-7 flex items-center justify-center hover:bg-black/90 border border-[#212631] transition-all">
+                        <i class="fas fa-heart text-red-500 text-sm"></i>
+                    </button>
+                    <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
+                        <img src="${g.img}" alt="${g.title}" loading="lazy" class="w-full h-full object-cover auto-zoom-img">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
+                            <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
+                        </div>
+                    </div>
+                    <div class="p-2 text-[10px] text-white font-bold truncate text-center">${g.title}</div>
+                </div>
+            `).join('');
+        }
     </script>
 
 
@@ -2705,7 +2798,11 @@
         <div class="flex-1 overflow-y-auto p-3 space-y-1">
             <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2 ml-2 mt-2">Mon Compte
             </div>
-
+            <a href="javascript:void(0)" onclick="toggleProfileSidebar(); loadFavorites();"
+                class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
+                <i class="fas fa-heart text-gray-500 group-hover:text-red-500 w-5 text-center transition"></i>
+                <span class="text-sm font-semibold">Mes Favoris</span>
+            </a>
             <a href="javascript:void(0)" onclick="openHistoryModal()"
                 class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
                 <i class="fas fa-history text-gray-500 group-hover:text-emerald w-5 text-center transition"></i>
@@ -2864,7 +2961,8 @@
                 <div class="relative">
                     <i class="fas fa-video text-lg text-red-500"></i>
                     <span class="absolute -top-1 -right-1.5 flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
                     </span>
                 </div>
