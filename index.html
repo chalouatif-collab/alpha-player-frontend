@@ -2980,9 +2980,12 @@
             }, 4000);
         }
 
-     // ================= نظام لوحة المتصدرين والبطولة الأسبوعية الحية (مصحح ومنظم) =================
+     // ================= نظام لوحة المتصدرين والبطولة الأسبوعية (حساب رياضي دقيق) =================
         let tournamentSeconds = (6 * 24 * 3600) + (23 * 3600) + (59 * 60) + 59; 
         let currentLeaderboardData = [];
+
+        // الجوائز الثابتة المرتبطة بدقة بالبطولة (مجموعها الإجمالي = 15,000 TND)
+        const fixedPrizePool = [5000, 3000, 2000, 1500, 1200, 1000, 800, 500];
 
         function initLeaderboard() {
             if (currentLeaderboardData.length === 0) {
@@ -3029,36 +3032,31 @@
             const prefixes = ["562", "981", "221", "554", "298", "534", "941", "203", "587", "923", "271", "543"];
             const shuffledPrefixes = prefixes.sort(() => 0.5 - Math.random()).slice(0, 8);
             
-            let baseScore = 75000;
-            currentLeaderboardData = shuffledPrefixes.map((prefix) => {
-                baseScore -= Math.floor(Math.random() * 4000) + 2000;
-                const score = Math.max(10000, baseScore);
-                
+            currentLeaderboardData = shuffledPrefixes.map((prefix, index) => {
+                const prize = fixedPrizePool[index];
+                // القاعدة الرياضية: كل 1 دينار = 10 نقاط تقريباً، مع إضافة تباين عشوائي بسيط
+                const basePoints = prize * 10;
+                const randomVariation = Math.floor(Math.random() * 600) - 300;
+                const score = basePoints + randomVariation;
+
                 return {
                     name: prefix + "******",
-                    score: score,
-                    prize: 0
+                    score: Math.max(5000, score),
+                    prize: prize
                 };
             });
 
-            // فرز النقاط تنازلياً وضبط المراكز والجوائز بناءً عليها
-            sortAndAssignPrizes();
+            sortAndAlignData();
         }
 
-        function sortAndAssignPrizes() {
-            // ترتيب المتصدرين دائماً من الأعلى نقاطاً إلى الأقل (المركز الأول للأعلى)
+        function sortAndAlignData() {
+            // ترتيب تنازلي صارم حسب النقاط (الأعلى نقاطاً يصبح الأول تلقائياً)
             currentLeaderboardData.sort((a, b) => b.score - a.score);
 
-            const totalPool = 15000;
-            // نسب التوزيع المئوية الثابتة حسب الترتيب الصحيح (المركز الأول يحظى بالنسب الأكبر)
-            const rankWeights = [0.40, 0.22, 0.14, 0.08, 0.05, 0.035, 0.025, 0.02];
-
+            // إعادة ربط الجوائز بالترتيب الصحيح (الأول يحصل على أكبر جائزة 5000 TND، وهكذا)
             currentLeaderboardData.forEach((item, index) => {
                 item.rank = index + 1;
-                // حساب الجائزة مطابقة للترتيب والنقاط معاً
-                let basePrize = totalPool * rankWeights[index];
-                let dynamicPrize = Math.floor(basePrize * (1 + (item.score / 100000) * 0.1));
-                item.prize = dynamicPrize;
+                item.prize = fixedPrizePool[index];
             });
         }
 
@@ -3096,14 +3094,14 @@
         }
 
         function updateLeaderboardRandomly() {
-            // تغيير طفيف عشوائي على النقاط
+            // تحديث طفيف عشوائي على النقاط لإعطاء حيوية
             currentLeaderboardData.forEach(item => {
-                let delta = Math.floor(Math.random() * 500) - 200;
-                item.score = Math.max(8000, item.score + delta);
+                let delta = Math.floor(Math.random() * 300) - 100;
+                item.score = Math.max(5000, item.score + delta);
             });
 
-            // إعادة الفرز والترتيب الحقيقي لضمان بقاء صاحب النقاط الأعلى في المركز الأول دائماً مع جائزته الأكبر
-            sortAndAssignPrizes();
+            // إعادة الفرز فوراً لضمان عدم حدوث أي خطأ منطقي في الترتيب أو الجوائز
+            sortAndAlignData();
             renderLeaderboardData();
         }
     </script>
