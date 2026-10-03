@@ -2848,7 +2848,6 @@
         }        
         
         async function launchEuroVirtuals(gameId) {
-            // 🌟 تصحيح اسم المفتاح ليطابق نظام تسجيل الدخول (token بدلاً من access_token)
             const token = localStorage.getItem('token');
             if (!token) {
                 showNotification("Veuillez d'abord vous connecter pour jouer !", "error");
@@ -2856,26 +2855,25 @@
                 return;
             }
 
-            // التحقق من وجود جلسة اللاعب
             const userCode = playerSession ? playerSession.username : (JSON.parse(localStorage.getItem('alpha_player_session') || '{}').username || '');
 
             try {
-                // تغيير شكل المؤشر لانتظار التحميل
                 document.body.style.cursor = 'wait';
 
-                const response = await fetch(`${BACKEND_URL}/api/provider/launch-eurovirtuals`, {
+                // 🌟 إرسال الطلب بنفس طريقة قسم Virtuels الناجحة
+                const res = await fetch(`${BACKEND_URL}/api/provider/launch-eurovirtuals`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + token
                     },
                     body: JSON.stringify({ 
-                        game_uuid: gameId, 
-                        user_code: userCode 
+                        user_code: userCode,
+                        game_uuid: gameId 
                     })
                 });
 
-                const data = await response.json();
+                const data = await res.json();
 
                 if (data.launch_url) {
                     window.open(data.launch_url, '_blank');
@@ -2889,7 +2887,6 @@
                 document.body.style.cursor = 'default';
             }
         }
-
 
         // ================= نظام الألعاب المفضلة =================
         function isFavorite(gameCode) {
