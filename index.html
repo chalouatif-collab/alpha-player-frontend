@@ -396,7 +396,7 @@
                 <!-- 🌟 حاوية ملتصقة بالحواف للهواتف (Edge-to-Edge Container) -->
                 <div class="-mx-4 -mt-6 md:mx-0 md:mt-0 flex flex-col z-10 relative">
                     
-                    <!-- 1. شريط الفائزين المباشر (ملتصق بالأعلى وبدون حواف جانبية) -->
+                    <!-- 1. شريط الفائزين المباشر -->
                     <div class="relative w-full overflow-hidden bg-[#161922]/90 backdrop-blur-xl border-b border-emerald/30 md:border md:rounded-2xl p-2 flex items-center shadow-md">
                         <div class="bg-red-500/20 border border-red-500 rounded-lg px-2.5 py-1 flex items-center gap-1.5 z-20 shrink-0">
                             <div class="w-2 h-2 rounded-full bg-red-500 animate-ping"></div>
@@ -404,12 +404,12 @@
                         </div>
                         <div class="endless-ticker-container flex-grow h-6 ml-2 w-full overflow-hidden relative">
                             <div id="winners-ticker-track" class="flex gap-4 items-center cursor-pointer ticker-move" style="width: max-content;">
-                                <!-- سيتم تعبئتها أوتوماتيكياً بالجافاسكريبت -->
+                                <!-- سيتم تعبئتها أوتوماتيكياً -->
                             </div>
                         </div>
                     </div>
 
-                    <!-- 2. سلايدر البنرات الترويجية (ملتصق بالشريط ويأخذ العرض كاملاً) -->
+                    <!-- 2. سلايدر البنرات الترويجية -->
                     <div class="relative w-full h-[190px] md:h-[260px] md:rounded-2xl overflow-hidden group bg-[#161922] border-b border-[#212631] md:border md:mt-4 shadow-xl">
                         <div id="hero-slider" class="w-full h-full relative">
                             
@@ -474,19 +474,8 @@
                     </div>
                 </div>
 
-                    <!-- أزرار التحكم (النقاط السفلية) -->
-                    <div class="absolute bottom-3 md:bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-30">
-                        <button
-                            class="slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-emerald shadow-[0_0_8px_rgba(16,185,129,0.8)] transition-all"></button>
-                        <button
-                            class="slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-600 hover:bg-gray-400 transition-all"></button>
-                        <button
-                            class="slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-600 hover:bg-gray-400 transition-all"></button>
-                    </div>
-                </div>
-                
                 <!-- 🌟 أيقونات التصنيفات الدائرية السريعة (3D Premium Icons) -->
-                <div class="flex overflow-x-auto hide-scroll gap-3 md:gap-8 py-2 mb-2 items-center justify-start md:justify-center px-1">
+                <div class="flex overflow-x-auto hide-scroll gap-3 md:gap-8 py-2 mb-2 items-center justify-start md:justify-center px-1 mt-4">
                     
                     <!-- السلوتس -->
                     <button onclick="switchSection('casino'); initCasinoLobby();" class="flex flex-col items-center gap-2 group min-w-[65px]">
@@ -504,7 +493,7 @@
                         <span class="text-[10px] md:text-xs font-bold text-gray-400 group-hover:text-white transition-colors uppercase tracking-wider">Live</span>
                     </button>
 
-                    <!-- ألعاب الكراش (Mini Jeux) -->
+                    <!-- ألعاب الكراش -->
                     <button onclick="loadMiniJeux();" class="flex flex-col items-center gap-2 group min-w-[65px]">
                         <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#161922] border border-[#212631] group-hover:border-purple-500 group-hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] flex items-center justify-center transition-all duration-300">
                             <img src="https://img.icons8.com/3d-fluency/94/rocket.png" alt="Crash" class="w-8 h-8 md:w-10 md:h-10 object-contain group-hover:scale-110 transition-transform duration-300 drop-shadow-lg">
@@ -512,7 +501,7 @@
                         <span class="text-[10px] md:text-xs font-bold text-gray-400 group-hover:text-white transition-colors uppercase tracking-wider">Crash</span>
                     </button>
 
-                    <!-- البلاك جاك (بحث تلقائي) -->
+                    <!-- البلاك جاك -->
                     <button onclick="switchSection('casino'); initCasinoLobby(); setTimeout(() => { document.getElementById('game-search-input').value = 'blackjack'; filterGames(); }, 500);" class="flex flex-col items-center gap-2 group min-w-[65px]">
                         <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#161922] border border-[#212631] group-hover:border-blue-500 group-hover:shadow-[0_0_15px_rgba(59,130,246,0.3)] flex items-center justify-center transition-all duration-300">
                             <img src="https://img.icons8.com/3d-fluency/94/cards.png" alt="Blackjack" class="w-8 h-8 md:w-10 md:h-10 object-contain group-hover:scale-110 transition-transform duration-300 drop-shadow-lg">
@@ -530,21 +519,20 @@
 
                 </div>
 
-                <!-- قسم أبرز المزودين (يُعبأ تلقائياً عبر API) -->
-                <!-- ============================================== -->
+                <!-- قسم أبرز المزودين -->
                 <div id="dynamic-featured-providers" class="flex flex-col gap-6 mb-8 w-full mt-4">
-                    <!-- الجافاسكريبت سيضع ألعاب Pragmatic و Amatic و Hacksaw هنا مع صورهم الأصلية -->
                 </div>
-                <!-- ============================================== --><!-- ============================================== -->
 
-                <!-- اختيار اليوم (الألعاب المتغيرة) -->
+                <!-- اختيار اليوم -->
                 <div>
                     <h3 class="font-bold text-white uppercase text-xs tracking-wider mb-3 flex items-center gap-2">
                         <i class="fas fa-star text-emerald animate-pulse"></i> Sélection du Jour
                     </h3>
                     <div id="games-of-the-day-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
                 </div>
-            </div>
+
+            </div> <!-- 🔴 الإغلاق الصحيح لقسم Accueil -->
+            
             <!-- PANE: LEADERBOARD / TOURNOIS -->
             <div id="pane-leaderboard" class="player-view-section hidden w-full space-y-6">
                 <div class="flex items-center gap-2 mb-2">
