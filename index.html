@@ -202,7 +202,9 @@
 
                     <div id="auth-buttons-container" class="flex items-center gap-2">
                         <button onclick="openLoginModal()"
-                            class="text-[10px] md:text-xs font-bold text-gray-300 hover:text-white uppercase px-2 md:px-3 py-2">Connexion</button>
+                            class="bg-[#1a1e29] hover:bg-emerald text-emerald hover:text-black font-extrabold text-[10px] md:text-xs uppercase px-3 md:px-4 py-1.5 md:py-2 rounded-lg border border-emerald/50 hover:border-emerald transition-all shadow-md">
+                            Connexion
+                        </button>
                     </div>
 
                     <!-- 1️⃣ بروفايل الرصيد (مستقل الآن ولن يختفي) -->
@@ -2867,7 +2869,8 @@
         <!-- 1. رأس القائمة (معلومات المستخدم وزر الإغلاق) -->
         <div class="p-5 border-b border-gray-800 flex justify-between items-center bg-[#0f1117] shrink-0">
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center text-xl border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
+                <div
+                    class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center text-xl border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
                     <i class="fas fa-user-astronaut"></i>
                 </div>
                 <div>
@@ -2885,14 +2888,17 @@
         <div class="px-5 py-3 border-b border-gray-800 bg-[#0f1117] shrink-0">
             <div class="flex justify-between items-center mb-1 text-[11px]">
                 <span class="text-yellow-400 font-extrabold flex items-center gap-1.5">
-                    <i class="fas fa-crown text-yellow-500"></i> VIP <span id="vip-level-num">1</span> (<span id="vip-rank-name">Bronze</span>)
+                    <i class="fas fa-crown text-yellow-500"></i> VIP <span id="vip-level-num">1</span> (<span
+                        id="vip-rank-name">Bronze</span>)
                 </span>
                 <span class="text-gray-400 font-mono text-[10px]">
                     <span id="vip-current-xp">350</span> / <span id="vip-next-xp">1000</span> XP
                 </span>
             </div>
             <div class="w-full bg-[#1a1e29] h-2 rounded-full overflow-hidden border border-gray-800 shadow-inner">
-                <div id="vip-progress-fill" class="bg-gradient-to-r from-yellow-600 to-yellow-400 h-full rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(234,179,8,0.5)]" style="width: 35%;"></div>
+                <div id="vip-progress-fill"
+                    class="bg-gradient-to-r from-yellow-600 to-yellow-400 h-full rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(234,179,8,0.5)]"
+                    style="width: 35%;"></div>
             </div>
         </div>
 
