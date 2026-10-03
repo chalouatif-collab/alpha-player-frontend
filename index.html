@@ -3139,14 +3139,16 @@
             renderLeaderboardData();
         }
 
-        // ================= نظام استلام خزنة الكاش باك =================
+        // ================= نظام استلام خزنة الكاش باك والوقت التنازلي =================
+        
+        // 1. دالة السحب
         async function claimCashback() {
             if (!playerSession) return openLoginModal();
             
             const vaultEl = document.getElementById('vault-amount');
             const currentAmount = parseFloat(vaultEl.innerText);
             
-            // فحص الحد الأدنى من جهة الواجهة
+            // فحص الحد الأدنى من جهة الواجهة قبل إرسال الطلب للسيرفر
             if (isNaN(currentAmount) || currentAmount < 10.0) {
                 showNotification("Le montant minimum pour récupérer est de 10 TND.", "error");
                 return;
@@ -3154,7 +3156,6 @@
 
             const btn = document.getElementById('claim-cashback-btn');
             
-            // تغيير حالة الزر أثناء المعالجة
             btn.innerHTML = '<i class="fas fa-spinner fa-spin text-sm"></i> Traitement...';
             btn.classList.add('opacity-75', 'cursor-not-allowed');
             btn.disabled = true;
@@ -3170,32 +3171,78 @@
                 if (res.ok && data.status === 'success') {
                     showNotification(`🎉 ${data.message}`, "success");
                     
-                    // تصفير الخزنة في الواجهة
                     vaultEl.innerHTML = `0.00 <span class="text-[10px]">TND</span>`;
                     
-                    // تحديث الأرصدة المعروضة
+                    // تحديث الأرصدة
                     if (data.new_balance !== undefined) {
                         playerSession.balance = data.new_balance;
                         const formattedBalance = parseFloat(data.new_balance).toFixed(2);
-                        
-                        const balDisplay = document.getElementById('player-balance-val');
-                        if (balDisplay) balDisplay.innerText = formattedBalance;
-                        
-                        const sidebarBalDisplay = document.getElementById('sidebar-balance');
-                        if (sidebarBalDisplay) sidebarBalDisplay.innerText = formattedBalance + ' TND';
+                        document.getElementById('player-balance-val').innerText = formattedBalance;
+                        document.getElementById('sidebar-balance').innerText = formattedBalance + ' TND';
                     }
+                    
+                    // 🌟 بدء المؤشر التنازلي لـ 24 ساعة وحفظ الوقت محلياً
+                    localStorage.setItem('alpha_last_cashback_claim', new Date().getTime().toString());
+                    startCashbackCooldown();
+
                 } else {
                     showNotification(data.detail || "Erreur lors de la récupération", "error");
+                    // إعادة الزر لشكله الطبيعي في حال الفشل فقط
+                    btn.innerHTML = 'Récupérer <i class="fas fa-hand-holding-usd text-sm"></i>';
+                    btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                    btn.disabled = false;
                 }
             } catch (error) {
                 showNotification("Erreur de connexion au serveur", "error");
-            } finally {
-                // إرجاع الزر لشكله الطبيعي
                 btn.innerHTML = 'Récupérer <i class="fas fa-hand-holding-usd text-sm"></i>';
                 btn.classList.remove('opacity-75', 'cursor-not-allowed');
                 btn.disabled = false;
             }
         }
+
+        // 2. دالة المؤشر التنازلي (تعمل أوتوماتيكياً)
+        function startCashbackCooldown() {
+            const lastClaim = localStorage.getItem('alpha_last_cashback_claim');
+            if (!lastClaim) return;
+
+            const btn = document.getElementById('claim-cashback-btn');
+            const timerEl = document.getElementById('cashback-timer');
+            const cooldownTime = 24 * 60 * 60 * 1000; // 24 ساعة بالملي ثانية
+
+            if (window.cashbackInterval) clearInterval(window.cashbackInterval);
+
+            window.cashbackInterval = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = cooldownTime - (now - parseInt(lastClaim));
+
+                if (distance > 0) {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-50', 'cursor-not-allowed', 'bg-gray-600', 'text-gray-400');
+                    btn.classList.remove('bg-emerald', 'hover:bg-emerald-400', 'text-black');
+                    btn.innerHTML = '<i class="fas fa-lock text-sm"></i> Verrouillé';
+                    
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    
+                    timerEl.innerText = `⏳ Disponible dans : ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                    timerEl.classList.remove('hidden');
+                } else {
+                    clearInterval(window.cashbackInterval);
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-gray-600', 'text-gray-400');
+                    btn.classList.add('bg-emerald', 'hover:bg-emerald-400', 'text-black');
+                    btn.innerHTML = 'Récupérer <i class="fas fa-hand-holding-usd text-sm"></i>';
+                    timerEl.classList.add('hidden');
+                    localStorage.removeItem('alpha_last_cashback_claim');
+                }
+            }, 1000);
+        }
+
+        // 🌟 تشغيل فحص المؤشر التنازلي عند تحميل الصفحة
+        window.addEventListener('DOMContentLoaded', () => {
+            startCashbackCooldown();
+        });
     </script>
 
 
@@ -3258,6 +3305,9 @@
             <button onclick="claimCashback()" id="claim-cashback-btn" class="relative z-10 w-full bg-emerald hover:bg-emerald-400 text-black font-black text-[11px] uppercase tracking-wider py-2.5 rounded-xl transition-all shadow-[0_0_10px_rgba(16,185,129,0.3)] flex items-center justify-center gap-2">
                 Récupérer <i class="fas fa-hand-holding-usd text-sm"></i>
             </button>
+            
+            <!-- 🌟 مؤشر الوقت التنازلي الجديد -->
+            <p id="cashback-timer" class="text-[10px] text-yellow-500 font-mono mt-2 text-center font-bold hidden"></p>
         </div>
         <!-- زر تثبيت التطبيق -->
         <div class="p-4 border-b border-gray-800 shrink-0">
