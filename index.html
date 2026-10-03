@@ -3243,6 +3243,93 @@
         window.addEventListener('DOMContentLoaded', () => {
             startCashbackCooldown();
         });
+
+        // ================= نظام إشعارات الأرباح الكبرى (Real-time Big Win Toasts) =================
+        
+        function showBigWinToast(playerName, amount, gameName, gameImg) {
+            // 1. إنشاء حاوية الإشعارات في الزاوية السفلية اليسرى إذا لم تكن موجودة
+            let container = document.getElementById('big-win-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'big-win-container';
+                // موضعها: فوق شريط الهاتف (bottom-24) وفي الزاوية للكمبيوتر (bottom-6)
+                container.className = 'fixed bottom-24 md:bottom-6 left-4 md:left-6 z-[600] flex flex-col gap-3 pointer-events-none';
+                document.body.appendChild(container);
+            }
+
+            // 2. إنشاء عنصر الإشعار الأنيق
+            const toast = document.createElement('div');
+            // تصميم فخم بحدود ذهبية وخلفية زجاجية داكنة
+            toast.className = 'bg-[#12151d]/95 backdrop-blur-xl border border-yellow-500/40 rounded-2xl p-3 shadow-[0_0_20px_rgba(234,179,8,0.15)] flex items-center gap-3 transform transition-all duration-500 translate-y-10 opacity-0 max-w-[280px] md:max-w-sm';
+
+            toast.innerHTML = `
+                <div class="relative w-11 h-11 md:w-12 md:h-12 rounded-xl overflow-hidden shrink-0 border border-[#212631] shadow-inner">
+                    <img src="${gameImg}" class="w-full h-full object-cover" onerror="this.src='https://img.icons8.com/3d-fluency/94/slot-machine.png'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                </div>
+                <div class="flex flex-col">
+                    <div class="text-[9px] text-gray-400 font-black uppercase tracking-widest flex items-center gap-1 mb-0.5">
+                        <i class="fas fa-bolt text-yellow-500 animate-pulse"></i> Gros Gain !
+                    </div>
+                    <div class="text-[11px] text-gray-300 leading-tight">
+                        <span class="font-bold text-white">${playerName}</span> a gagné
+                    </div>
+                    <div class="text-sm md:text-base font-black text-emerald drop-shadow-[0_0_5px_rgba(16,185,129,0.4)]">
+                        ${amount} TND
+                    </div>
+                    <div class="text-[9px] text-gray-500 truncate mt-0.5">sur <span class="text-purple-400 font-semibold">${gameName}</span></div>
+                </div>
+            `;
+
+            container.appendChild(toast);
+
+            // 3. تحريك الإشعار للظهور (Animation In)
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            });
+
+            // 4. إخفاء وإزالة الإشعار بعد 5 ثوانٍ
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => {
+                    toast.remove();
+                }, 500); // الانتظار حتى تنتهي حركة الاختفاء قبل الحذف من الـ DOM
+            }, 5000);
+        }
+
+        // ================= الاتصال الحقيقي بالسيرفر للأرباح الكبرى (Real WebSocket) =================
+        function connectBigWinsWebSocket() {
+            // تحويل رابط الباك إند إلى رابط WebSocket (ws:// أو wss://)
+            const wsUrl = BACKEND_URL.replace("http", "ws").replace("https", "wss") + "/ws/bigwins";
+            const socket = new WebSocket(wsUrl);
+
+            socket.onmessage = function(event) {
+                try {
+                    const data = JSON.parse(event.data);
+                    
+                    // تنسيق المبلغ ليكون جميلاً
+                    const amountFormatted = parseFloat(data.amount).toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                    
+                    // صورة افتراضية لألعاب اليورو فيرتوالز
+                    const gameImg = "https://img.icons8.com/3d-fluency/94/controller.png"; 
+                    
+                    // استدعاء دالة إظهار الإشعار بالبيانات الحقيقية
+                    showBigWinToast(data.player, amountFormatted, data.game, gameImg);
+                } catch (e) {
+                    console.error("Erreur de traitement du gain:", e);
+                }
+            };
+
+            socket.onclose = function() {
+                // إعادة الاتصال الصامت أوتوماتيكياً إذا انقطع الإنترنت
+                setTimeout(connectBigWinsWebSocket, 5000);
+            };
+        }
+
+        // تشغيل الاتصال الحقيقي بدلاً من المحاكي عند اكتمال تحميل الصفحة
+        window.addEventListener('DOMContentLoaded', () => {
+            connectBigWinsWebSocket();
+        });
     </script>
 
 
