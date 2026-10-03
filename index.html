@@ -518,6 +518,55 @@
                     <div id="games-of-the-day-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
                 </div>
             </div>
+            <!-- PANE: LEADERBOARD / TOURNOIS -->
+            <div id="pane-leaderboard" class="player-view-section hidden w-full space-y-6">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fas fa-trophy text-2xl text-yellow-500 animate-bounce"></i>
+                    <h2 class="text-white font-extrabold text-xl">Tournois & Leaderboard</h2>
+                </div>
+
+                <!-- بانر البطولة النشطة -->
+                <div
+                    class="bg-gradient-to-r from-yellow-600/20 via-[#161922] to-yellow-600/10 border border-yellow-500/40 rounded-2xl p-5 relative overflow-hidden shadow-xl">
+                    <div
+                        class="absolute top-0 right-0 bg-yellow-500 text-black text-[10px] font-black px-3 py-1 rounded-bl-xl uppercase">
+                        En cours ⚡</div>
+                    <h3 class="text-yellow-400 font-black text-lg mb-1">Grand Tournoi Pragmatic Play</h3>
+                    <p class="text-gray-300 text-xs mb-3">Affrontez les meilleurs joueurs et remportez une part de la
+                        cagnotte !</p>
+                    <div class="flex flex-wrap gap-4 text-xs font-bold text-white">
+                        <div class="bg-[#0f1117] px-3 py-1.5 rounded-xl border border-[#212631]">💰 Cagnotte : <span
+                                class="text-emerald">15,000 TND</span></div>
+                        <div class="bg-[#0f1117] px-3 py-1.5 rounded-xl border border-[#212631]">⏳ Fin dans : <span
+                                class="text-yellow-400 font-mono">03h 45m</span></div>
+                    </div>
+                </div>
+
+                <!-- جدول المتصدرين -->
+                <div class="bg-[#161922] border border-[#212631] rounded-2xl overflow-hidden shadow-xl">
+                    <div class="p-4 border-b border-[#212631] bg-[#0f1117] flex justify-between items-center">
+                        <span class="text-white font-bold text-sm">Classement en direct 🏆</span>
+                        <span class="text-[10px] text-emerald animate-pulse font-bold">● Mise à jour en temps
+                            réel</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse whitespace-nowrap">
+                            <thead>
+                                <tr
+                                    class="text-[10px] uppercase tracking-wider text-gray-500 border-b border-[#212631]">
+                                    <th class="p-3 text-center">Rang</th>
+                                    <th class="p-3">Joueur</th>
+                                    <th class="p-3 text-center">Points / Score</th>
+                                    <th class="p-3 text-right">Prix Estimé</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboard-table-body" class="text-xs text-gray-300 divide-y divide-[#212631]">
+                                <!-- سيتم تعبئتها ديناميكياً -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
             <!-- PANE: FAVORIS (الألعاب المفضلة) -->
             <div id="pane-favoris" class="player-view-section hidden w-full">
                 <div class="flex items-center gap-2 mb-4">
@@ -2856,75 +2905,136 @@
             initVipSystem();
         });
 
-// ================= نظام عجلة الحظ اليومية =================
-function openLuckyWheelModal() {
-    if (!playerSession) return openLoginModal();
-    const modal = document.getElementById('lucky-wheel-modal');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-    checkWheelCooldown();
-}
+        // ================= نظام عجلة الحظ اليومية =================
+        function openLuckyWheelModal() {
+            if (!playerSession) return openLoginModal();
+            const modal = document.getElementById('lucky-wheel-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            checkWheelCooldown();
+        }
 
-function closeLuckyWheelModal() {
-    const modal = document.getElementById('lucky-wheel-modal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-}
+        function closeLuckyWheelModal() {
+            const modal = document.getElementById('lucky-wheel-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
 
-function checkWheelCooldown() {
-    const lastSpin = localStorage.getItem('alpha_last_spin_time');
-    const btn = document.getElementById('spin-wheel-btn');
-    const timerEl = document.getElementById('wheel-timer');
-    
-    if (lastSpin) {
-        const now = new Date().getTime();
-        const cooldownTime = 24 * 60 * 60 * 1000; // 24 ساعة
-        const distance = cooldownTime - (now - parseInt(lastSpin));
-        
-        if (distance > 0) {
+        function checkWheelCooldown() {
+            const lastSpin = localStorage.getItem('alpha_last_spin_time');
+            const btn = document.getElementById('spin-wheel-btn');
+            const timerEl = document.getElementById('wheel-timer');
+
+            if (lastSpin) {
+                const now = new Date().getTime();
+                const cooldownTime = 24 * 60 * 60 * 1000; // 24 ساعة
+                const distance = cooldownTime - (now - parseInt(lastSpin));
+
+                if (distance > 0) {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-50', 'cursor-not-allowed');
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    timerEl.innerText = `Revenez dans : ${hours}h ${minutes}m`;
+                    timerEl.classList.remove('hidden');
+                } else {
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    timerEl.classList.add('hidden');
+                }
+            }
+        }
+
+        let currentRotation = 0;
+        function spinWheel() {
+            const btn = document.getElementById('spin-wheel-btn');
+            const wheel = document.getElementById('wheel-element');
+
             btn.disabled = true;
-            btn.classList.add('opacity-50', 'cursor-not-allowed');
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            timerEl.innerText = `Revenez dans : ${hours}h ${minutes}m`;
-            timerEl.classList.remove('hidden');
-        } else {
-            btn.disabled = false;
-            btn.classList.remove('opacity-50', 'cursor-not-allowed');
-            timerEl.classList.add('hidden');
-        }
-    }
-}
 
-let currentRotation = 0;
-function spinWheel() {
-    const btn = document.getElementById('spin-wheel-btn');
-    const wheel = document.getElementById('wheel-element');
-    
-    btn.disabled = true;
-    
-    // تدوير العجلة بعدة دورات كاملة وزاوية عشوائية
-    const randomDegree = Math.floor(Math.random() * 360) + 1800; 
-    currentRotation += randomDegree;
-    
-    wheel.style.transform = `rotate(${currentRotation}deg)`;
-    
-    setTimeout(() => {
-        const prizes = ["50 XP VIP", "100 XP VIP", "Bonus Spécial", "25 XP VIP"];
-        const wonPrize = prizes[Math.floor(Math.random() * prizes.length)];
-        
-        showNotification(`🎉 Félicitations ! Vous avez gagné : ${wonPrize}`, "success");
-        
-        // منح نقاط XP للاعب عند الفوز
-        if (typeof addVipXp === 'function') {
-            addVipXp(50);
+            // تدوير العجلة بعدة دورات كاملة وزاوية عشوائية
+            const randomDegree = Math.floor(Math.random() * 360) + 1800;
+            currentRotation += randomDegree;
+
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+            setTimeout(() => {
+                const prizes = ["50 XP VIP", "100 XP VIP", "Bonus Spécial", "25 XP VIP"];
+                const wonPrize = prizes[Math.floor(Math.random() * prizes.length)];
+
+                showNotification(`🎉 Félicitations ! Vous avez gagné : ${wonPrize}`, "success");
+
+                // منح نقاط XP للاعب عند الفوز
+                if (typeof addVipXp === 'function') {
+                    addVipXp(50);
+                }
+
+                // حفظ وقت التدوير الحالي لمنع اللعب مرة أخرى قبل 24 ساعة
+                localStorage.setItem('alpha_last_spin_time', new Date().getTime().toString());
+                checkWheelCooldown();
+            }, 4000);
         }
-        
-        // حفظ وقت التدوير الحالي لمنع اللعب مرة أخرى قبل 24 ساعة
-        localStorage.setItem('alpha_last_spin_time', new Date().getTime().toString());
-        checkWheelCooldown();
-    }, 4000);
-}
+
+        // ================= نظام لوحة المتصدرين (Leaderboard) =================
+        function initLeaderboard() {
+            renderLeaderboardData();
+            
+            // محاكاة حركة حية للتحديث كل 5 ثوانٍ لإعطاء طابع تنافسي واقعي
+            if (!window.leaderboardInterval) {
+                window.leaderboardInterval = setInterval(() => {
+                    const panel = document.getElementById('pane-leaderboard');
+                    if (panel && !panel.classList.contains('hidden')) {
+                        updateLeaderboardRandomly();
+                    }
+                }, 5000);
+            }
+        }
+
+        let currentLeaderboardData = [
+            { rank: 1, name: "246***", score: "48,520 pts", prize: "5,000 TND" },
+            { rank: 2, name: "Ka***", score: "42,100 pts", prize: "3,000 TND" },
+            { rank: 3, name: "975***", score: "39,850 pts", prize: "2,000 TND" },
+            { rank: 4, name: "Sa***", score: "31,200 pts", prize: "1,000 TND" },
+            { rank: 5, name: "425***", score: "28,900 pts", prize: "500 TND" },
+            { rank: 6, name: "552***", score: "24,400 pts", prize: "300 TND" },
+            { rank: 7, name: "962***", score: "19,150 pts", prize: "200 TND" },
+            { rank: 8, name: "jok***", score: "15,800 pts", prize: "100 TND" }
+        ];
+
+        function renderLeaderboardData() {
+            const tbody = document.getElementById('leaderboard-table-body');
+            if (!tbody) return;
+
+            tbody.innerHTML = currentLeaderboardData.map(item => {
+                let rankBadge = `<span class="font-mono font-bold text-gray-400">${item.rank}</span>`;
+                if (item.rank === 1) rankBadge = `<span class="bg-yellow-500 text-black font-black w-6 h-6 rounded-full inline-flex items-center justify-center shadow-md">1</span>`;
+                else if (item.rank === 2) rankBadge = `<span class="bg-gray-300 text-black font-black w-6 h-6 rounded-full inline-flex items-center justify-center shadow-md">2</span>`;
+                else if (item.rank === 3) rankBadge = `<span class="bg-amber-600 text-white font-black w-6 h-6 rounded-full inline-flex items-center justify-center shadow-md">3</span>`;
+
+                return `
+                    <tr class="hover:bg-[#1a1e29] transition-colors">
+                        <td class="p-3 text-center">${rankBadge}</td>
+                        <td class="p-3 font-bold text-white flex items-center gap-2">
+                            <i class="fas fa-user-circle text-gray-500"></i> ${item.name}
+                        </td>
+                        <td class="p-3 text-center font-mono text-emerald font-bold">${item.score}</td>
+                        <td class="p-3 text-right font-black text-yellow-400">${item.prize}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateLeaderboardRandomly() {
+            // تحديث طفيف عشوائي في النقاط لإظهار الحيوية والتنافس
+            currentLeaderboardData.forEach(item => {
+                let delta = Math.floor(Math.random() * 300) - 100;
+                let currentScore = parseInt(item.score.replace(/[^0-9]/g, ''));
+                let newScore = Math.max(1000, currentScore + delta);
+                item.score = newScore.toLocaleString() + " pts";
+            });
+            // إعادة ترتيب عشوائي طفيف أو إبقاء الترتيب مع تحديث الأرقام
+            renderLeaderboardData();
+        }
     </script>
 
 
@@ -2984,6 +3094,9 @@ function spinWheel() {
             <span class="text-sm font-semibold">Roue de la Fortune</span>
             <span class="ml-auto bg-yellow-500 text-black text-[9px] font-bold px-1.5 py-0.5 rounded">JOURNALIER</span>
         </a>
+        <a href="javascript:void(0)" onclick="switchSection('leaderboard'); initLeaderboard();"
+            class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
+                class="fas fa-trophy text-yellow-500 text-lg"></i> Tournois & Classement</a>
         <!-- روابط القائمة -->
         <div class="p-3 space-y-1">
             <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2 ml-2 mt-2">Mon Compte</div>
