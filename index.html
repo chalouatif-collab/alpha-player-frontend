@@ -2980,9 +2980,9 @@
             }, 4000);
         }
 
-        
-        // ================= نظام لوحة المتصدرين والبطولة الحية =================
-        let tournamentSeconds = 4 * 3600; // وقت البطولة الافتراضي (4 ساعات بالثواني)
+     // ================= نظام لوحة المتصدرين والبطولة الأسبوعية الحية =================
+        // 6 أيام، 23 ساعة، 59 دقيقة، و59 ثانية بالثواني
+        let tournamentSeconds = (6 * 24 * 3600) + (23 * 3600) + (59 * 60) + 59; 
         let currentLeaderboardData = [];
 
         function initLeaderboard() {
@@ -2998,13 +2998,13 @@
                         tournamentSeconds--;
                         updateTimerDisplay();
                     } else {
-                        // عند انتهاء الوقت: إعادة ضبط البطولة وتوليد أسماء وهمية جديدة تماماً!
+                        // عند انتهاء المدة (أسبوع): إعادة تعيين الوقت وتوليد متصدرين جدد كلياً
                         resetAndRotateTournament();
                     }
                 }, 1000);
             }
 
-            // تحديث طفيف عشوائي للنقاط كل 5 ثوانٍ لإعطاء حيوية
+            // تحديث طفيف عشوائي للنقاط كل 5 ثوانٍ لإعطاء حيوية وتنافس مستمر
             if (!window.leaderboardInterval) {
                 window.leaderboardInterval = setInterval(() => {
                     const panel = document.getElementById('pane-leaderboard');
@@ -3019,22 +3019,24 @@
             const timerEl = document.getElementById('tourney-timer');
             if (!timerEl) return;
 
-            const h = Math.floor(tournamentSeconds / 3600);
+            const days = Math.floor(tournamentSeconds / (3600 * 24));
+            const h = Math.floor((tournamentSeconds % (3600 * 24)) / 3600);
             const m = Math.floor((tournamentSeconds % 3600) / 60);
             const s = tournamentSeconds % 60;
 
-            timerEl.innerText = `${String(h).padStart(2, '0')}h ${String(m).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
+            // عرض الأيام بجانب الساعات والدقائق والثواني (مثال: 6j 23h 59m 59s)
+            timerEl.innerText = `${days}j ${String(h).padStart(2, '0')}h ${String(m).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
         }
 
         function generateRandomLeaderboard() {
-            // توليد أسماء وهمية بالتنسيق المطلوبة 562******
+            // توليد أسماء وهمية بالتنسيق المطلوب 562******
             const prefixes = ["562", "981", "221", "554", "298", "534", "941", "203", "587", "923", "271", "543"];
             const shuffledPrefixes = prefixes.sort(() => 0.5 - Math.random()).slice(0, 8);
             
-            let scorePool = 55000;
+            let scorePool = 75000;
             currentLeaderboardData = shuffledPrefixes.map((prefix, index) => {
-                scorePool -= Math.floor(Math.random() * 4000) + 2000;
-                const score = Math.max(8000, scorePool);
+                scorePool -= Math.floor(Math.random() * 5000) + 3000;
+                const score = Math.max(10000, scorePool);
                 const prizes = ["5,000 TND", "3,000 TND", "2,000 TND", "1,000 TND", "500 TND", "300 TND", "200 TND", "100 TND"];
                 
                 return {
@@ -3047,12 +3049,13 @@
         }
 
         function resetAndRotateTournament() {
-            tournamentSeconds = 4 * 3600;
+            // إعادة ضبط الوقت لـ 6 أيام و 23 ساعة و 59 دقيقة و 59 ثانية
+            tournamentSeconds = (6 * 24 * 3600) + (23 * 3600) + (59 * 60) + 59;
             generateRandomLeaderboard();
             renderLeaderboardData();
             
             if (typeof showNotification === 'function') {
-                showNotification("🏆 Une nouvelle édition du tournoi a commencé avec de nouveaux participants !", "info");
+                showNotification("🏆 Une nouvelle édition hebdomadaire du tournoi a commencé !", "info");
             }
         }
 
@@ -3081,9 +3084,9 @@
 
         function updateLeaderboardRandomly() {
             currentLeaderboardData.forEach(item => {
-                let delta = Math.floor(Math.random() * 300) - 100;
+                let delta = Math.floor(Math.random() * 400) - 150;
                 let currentScore = parseInt(item.score.replace(/[^0-9]/g, ''));
-                let newScore = Math.max(5000, currentScore + delta);
+                let newScore = Math.max(8000, currentScore + delta);
                 item.score = newScore.toLocaleString() + " pts";
             });
             renderLeaderboardData();
