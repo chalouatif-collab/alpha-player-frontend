@@ -36,6 +36,37 @@
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3132/3132634.png">
 
     <style>
+
+        /* ================= حركات نرد الحظ السحري ================= */
+        /* 1. حركة الطفو البطيئة الدائمة للنرد */
+        @keyframes float-dice {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+        .animate-bounce-slow {
+            animation: float-dice 3s ease-in-out infinite;
+        }
+
+        /* 2. رجة الشاشة العنيفة عند رمي النرد (Camera Shake) */
+        @keyframes screen-shake {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            10%, 30%, 50%, 70%, 90% { transform: translate(-4px, 4px) rotate(-1deg); }
+            20%, 40%, 60%, 80% { transform: translate(4px, -4px) rotate(1deg); }
+        }
+        .shake-active {
+            animation: screen-shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
+            overflow: hidden; /* لمنع ظهور الأشرطة الجانبية أثناء الرجة */
+        }
+
+        /* 3. دوران النرد وتكبيره عند النقر */
+        @keyframes spin-dice {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.4) rotate(360deg); filter: brightness(1.5); }
+            100% { transform: scale(1) rotate(720deg); }
+        }
+        .spin-active {
+            animation: spin-dice 1.2s ease-in-out;
+        }
         /* تأثير دوران العملة (لأيقونة الشعار) */
         @keyframes coin-flip {
 
@@ -532,7 +563,7 @@
                 </div>
 
             </div> <!-- 🔴 الإغلاق الصحيح لقسم Accueil -->
-            
+
             <!-- PANE: LEADERBOARD / TOURNOIS -->
             <div id="pane-leaderboard" class="player-view-section hidden w-full space-y-6">
                 <div class="flex items-center gap-2 mb-2">
@@ -966,7 +997,23 @@
         </div>
         <iframe id="casino-iframe" class="w-full flex-grow border-0"></iframe>
     </div>
+    <!-- 🎲 نرد الحظ السحري (Magic Dice) -->
+    <div id="magic-dice-container" class="fixed bottom-28 md:bottom-12 right-4 md:right-8 z-[700] cursor-pointer group" onclick="rollMagicDice()">
+        <!-- هالة التوهج الخلفية -->
+        <div class="absolute inset-0 bg-gradient-to-tr from-purple-600 via-pink-500 to-yellow-500 rounded-2xl blur-lg opacity-40 group-hover:opacity-100 transition-opacity duration-500"></div>
+        
+        <!-- النرد نفسه -->
+        <div class="relative flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-tr from-purple-600/90 via-pink-500/90 to-yellow-500/90 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl transform transition-transform duration-300 group-hover:scale-110 animate-bounce-slow">
+            <img id="dice-img" src="https://img.icons8.com/3d-fluency/94/dice.png" alt="Magic Dice" class="w-8 h-8 md:w-11 md:h-11 drop-shadow-xl pointer-events-none">
+            <!-- لمعة داخلية -->
+            <div class="absolute inset-0 bg-white/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+        </div>
 
+        <!-- رسالة التلميح (Tooltip) -->
+        <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-[#12151d] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg border border-purple-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none shadow-xl flex items-center gap-1">
+            <i class="fas fa-sparkles text-yellow-400"></i> Jeu Chanceux
+        </div>
+    </div>
     <!-- Toasts -->
     <div id="toast-container" class="fixed top-5 right-5 z-[500] flex flex-col gap-2 w-full max-w-sm px-4">
     </div>
@@ -3318,6 +3365,51 @@
         window.addEventListener('DOMContentLoaded', () => {
             connectBigWinsWebSocket();
         });
+
+        // ================= نظام نرد الحظ السحري (The 3D Magic Dice) =================
+        function rollMagicDice() {
+            if (!playerSession) {
+                showNotification("Veuillez vous connecter pour lancer le dé magique ! 🎲", "error");
+                return openLoginModal();
+            }
+
+            const diceImg = document.getElementById('dice-img');
+            const mainBody = document.body;
+
+            // منع اللاعب من الضغط المتكرر بينما النرد لا يزال يدور
+            if (diceImg.classList.contains('spin-active')) return;
+
+            // 1. تشغيل الحركة السحرية (دوران النرد ورجة الشاشة)
+            diceImg.classList.add('spin-active');
+            mainBody.classList.add('shake-active');
+
+            // إزالة حركات الـ CSS بعد انتهائها
+            setTimeout(() => {
+                diceImg.classList.remove('spin-active');
+                mainBody.classList.remove('shake-active');
+            }, 1200);
+
+            // 2. الذكاء الاصطناعي لاختيار اللعبة الساخنة (Hot Games Pool)
+            // يمكنك تغيير هذه الألعاب لأكثر الألعاب ربحاً في منصتك
+            const hotGames = [
+                { provider: 'PRAGMATIC', code: 'vs20olympus', name: 'Gates of Olympus ⚡' },
+                { provider: 'PRAGMATIC', code: 'vs20doghouse', name: 'The Dog House 🐶' },
+                { provider: 'SPRIBE', code: 'aviator', name: 'Aviator 🚀' },
+                { provider: 'HACKSAW', code: 'wanted_dead_or_a_wild', name: 'Wanted Dead or a Wild 🤠' },
+                { provider: 'PLAYNGO', code: 'book_of_dead', name: 'Book of Dead 📖' }
+            ];
+
+            // اختيار لعبة عشوائية من القائمة
+            const randomGame = hotGames[Math.floor(Math.random() * hotGames.length)];
+
+            // 3. تأخير فتح اللعبة قليلاً ليتمكن اللاعب من الاستمتاع بالتأثير البصري
+            setTimeout(() => {
+                showNotification(`🎲 Les esprits ont choisi : ${randomGame.name} !`, "success");
+                
+                // إطلاق اللعبة فوراً
+                playCasinoGame(randomGame.provider, randomGame.code);
+            }, 1000);
+        }
     </script>
 
 
