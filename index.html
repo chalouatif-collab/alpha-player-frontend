@@ -2812,7 +2812,6 @@
             renderEuroGridFiltered(filtered, targetGridId);
         }
 
-        // رسم شبكة الألعاب النهائية بكرت أنيق وقابل للضغط لتجربة اللعبة
         function renderEuroGridFiltered(gamesList, targetGridId) {
             const container = document.getElementById(targetGridId);
             if (!container) return;
@@ -2823,8 +2822,8 @@
             }
 
             container.innerHTML = gamesList.map(game => {
-                // 🌟 التصحيح السحري: إعطاء الأولوية لـ game_code و uuid لكي يتطابق تماماً مع قسم Virtuels
-                const gameId = game.game_code || game.uuid || game.game_uuid || game.id;
+                // 🌟 التصحيح الجذري هنا: الأولوية القصوى لـ uuid كما يطلب سيرفر EuroVirtuals لتشغيل ألعاب اللايف
+                const gameId = game.uuid || game.game_uuid || game.id || game.game_code;
                 const gameName = escapeHTML(game.name || game.game_name || 'Casino Game');
                 const defaultImg = `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
                 const gameImage = game.image || game.img || game.logo || defaultImg;
@@ -2846,7 +2845,9 @@
                 </div>
             `;
             }).join('');
-        }    
+        }
+
+        
         async function launchEuroVirtuals(gameId) {
             const token = localStorage.getItem('token');
             if (!token) {
