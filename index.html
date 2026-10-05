@@ -3,31 +3,31 @@
 
 <head>
     <meta charset="UTF-8">
-    
+    <!-- تحسين العرض على الهاتف ومنع التكبير العشوائي عند النقر -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    
+    <!-- عنوان الموقع ووصف لمحركات البحث -->
     <title>Alphabet216 | Premium Casino & Sports</title>
     <meta name="description" content="La meilleure plateforme de Casino et Paris Sportifs en ligne.">
 
-    
+    <!-- أيقونة المتصفح (Favicon) - يمكنك تغيير الرابط لاحقاً لصورة شعارك -->
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3132/3132634.png">
 
-    
+    <!-- تسريع تحميل الخطوط من جوجل (Preconnect) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
+    <!-- جلب الخط بجميع الأوزان بما فيها 900 للخطوط العريضة جداً -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
 
-    
+    <!-- مكتبات الأيقونات والتصميم -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
 
-    
+    <!-- مكتبة عرض الرياضة SMPL -->
     <script src="https://ui.invisiblesport.com/bt-renderer.min.js"></script>
 
-    
+    <!-- إعدادات تطبيق PWA -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#10b981">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -37,7 +37,8 @@
 
     <style>
 
-        
+        /* ================= حركات نرد الحظ السحري ================= */
+        /* 1. حركة الطفو البطيئة الدائمة للنرد */
         @keyframes float-dice {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-12px); }
@@ -46,7 +47,7 @@
             animation: float-dice 3s ease-in-out infinite;
         }
 
-        
+        /* 2. رجة الشاشة العنيفة عند رمي النرد (Camera Shake) */
         @keyframes screen-shake {
             0%, 100% { transform: translate(0, 0) rotate(0deg); }
             10%, 30%, 50%, 70%, 90% { transform: translate(-4px, 4px) rotate(-1deg); }
@@ -54,10 +55,10 @@
         }
         .shake-active {
             animation: screen-shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
-            overflow: hidden; 
+            overflow: hidden; /* لمنع ظهور الأشرطة الجانبية أثناء الرجة */
         }
 
-        
+        /* 3. دوران النرد وتكبيره عند النقر */
         @keyframes spin-dice {
             0% { transform: scale(1) rotate(0deg); }
             50% { transform: scale(1.4) rotate(360deg); filter: brightness(1.5); }
@@ -66,7 +67,7 @@
         .spin-active {
             animation: spin-dice 1.2s ease-in-out;
         }
-        
+        /* تأثير دوران العملة (لأيقونة الشعار) */
         @keyframes coin-flip {
 
             0%,
@@ -87,7 +88,7 @@
             animation: coin-flip 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
 
-        
+        /* تأثير لمعة الكازينو (Shine Effect) */
         .card-shine {
             position: relative;
         }
@@ -110,11 +111,11 @@
             left: 125%;
         }
 
-        
+        /* تم إلغاء تأثير النبض للحفاظ على فخامة التصميم */
         /*.btn-animated {
-   
+    /* تم التعطيل */
 
-        
+        /* حركة الزووم المستمرة للصور (تلقائية بدون لمس) */
         @keyframes continuous-zoom {
             0% {
                 transform: scale(1);
@@ -124,7 +125,7 @@
                 transform: scale(1.12);
             }
 
-            
+            /* تكبير الصورة بنسبة 12% */
             100% {
                 transform: scale(1);
             }
@@ -132,10 +133,10 @@
 
         .auto-zoom-img {
             animation: continuous-zoom 6s ease-in-out infinite;
-           
+            /* تستغرق 6 ثواني وتتكرر للأبد */
         }
 
-        
+        /* تأثير الطفو الديناميكي (Floating Effect) */
         @keyframes float-card {
             0% {
                 transform: translateY(0px);
@@ -192,32 +193,32 @@
 
 <body class="antialiased text-sm flex flex-col min-h-screen">
     <div>
-
+        <!-- 🚀 شاشة التحميل الابتدائية (Splash Screen) -->
         <div id="splash-screen"
             class="fixed inset-0 z-[9999] bg-[#0f1117] flex flex-col items-center justify-center transition-opacity duration-700 ease-out">
-            
+            <!-- الشعار مع تأثير العملة الذي أضفناه سابقاً -->
             <div
                 class="logo-coin-animated w-16 h-16 rounded-2xl bg-emerald flex items-center justify-center text-black font-black text-4xl shadow-[0_0_40px_rgba(16,185,129,0.4)] mb-4">
                 <i class="fas fa-bolt"></i>
             </div>
-            
+            <!-- اسم المنصة ينبض -->
             <h1 class="font-extrabold text-3xl md:text-4xl tracking-tight text-white mb-6 animate-pulse">Alphabet<span
                     class="text-emerald">216</span></h1>
 
-           
+            <!-- أيقونة التحميل الدوارة -->
             <div
                 class="flex items-center gap-2 text-emerald text-[10px] md:text-xs font-bold tracking-widest uppercase">
                 <i class="fas fa-circle-notch fa-spin text-lg"></i> Chargement...
             </div>
         </div>
-        
+        <!-- 1. الشريط العلوي (الرصيد وتسجيل الدخول - متجاوب وأنيق للهاتف) -->
         <header class="bg-[#161922] border-b border-[#212631] sticky top-0 z-50">
             <div
                 class="max-w-[1700px] mx-auto px-3 md:px-4 h-16 md:h-18 flex justify-between items-center py-2 md:py-3">
 
                 <div class="flex items-center gap-2 md:gap-6">
                     <div class="flex items-center gap-1.5 md:gap-2 cursor-pointer" onclick="switchSection('accueil')">
-                        
+                        <!-- تصغير الشعار في الهاتف -->
                         <div
                             class="logo-coin-animated w-7 h-7 md:w-9 md:h-9 rounded-lg md:rounded-xl bg-emerald flex items-center justify-center text-black font-black text-sm md:text-xl shadow-md">
                             <i class="fas fa-bolt"></i>
@@ -227,7 +228,7 @@
                     </div>
                 </div>
 
-               
+                <!-- أزرار الدخول أو رصيد اللاعب -->
                 <div class="flex items-center gap-2 md:gap-3">
 
                     <div id="auth-buttons-container" class="flex items-center gap-2">
@@ -237,22 +238,22 @@
                         </button>
                     </div>
 
-                    
+                    <!-- 1️⃣ بروفايل الرصيد مع هالة الـ VIP 🌟 -->
                     <div id="top-user-profile" class="hidden items-center gap-2 md:gap-3 cursor-pointer group shrink-0"
                         onclick="toggleProfileSidebar()">
                         
-
+                        <!-- 🌟 هالة تقدم الـ VIP حول الصورة (Progress Ring) -->
                         <div class="relative w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center p-[2px] transition-transform duration-300 group-hover:scale-105 shadow-[0_0_12px_rgba(234,179,8,0.2)]" 
                              id="top-vip-ring" style="background: conic-gradient(#eab308 0%, #212631 0%);">
-                            
+                            <!-- الأيقونة الداخلية -->
                             <div class="w-full h-full bg-[#12151d] rounded-full flex items-center justify-center text-yellow-500 text-[11px] md:text-sm border-2 border-[#161922]">
                                 <i class="fas fa-user-astronaut"></i>
                             </div>
-                            
+                            <!-- شارة المستوى المنبثقة في الزاوية -->
                             <div class="absolute -bottom-1 -right-1 bg-gradient-to-br from-yellow-400 to-yellow-600 text-black text-[8px] md:text-[9px] font-black w-4 h-4 md:w-5 md:h-5 flex items-center justify-center rounded-full border-[1.5px] border-[#161922] shadow-md" id="top-vip-badge">1</div>
                         </div>
 
-                       
+                        <!-- الرصيد -->
                         <div class="text-right transition-opacity duration-300">
                             <div class="font-mono text-white text-[11px] md:text-xs leading-none font-bold tracking-tight">
                                 <span id="player-balance-val">0.00</span> 
@@ -261,7 +262,7 @@
                         </div>
                     </div>
 
-                    
+                    <!-- 2️⃣ جرس الإشعارات -->
                     <div id="top-notification-bell"
                         class="hidden relative cursor-pointer items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#12151d] border border-[#212631] hover:border-emerald-500 hover:text-white transition shrink-0 ml-1"
                         onclick="toggleNotificationsPanel()">
@@ -270,20 +271,20 @@
                             class="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold px-1 py-0.5 rounded-full hidden leading-none shadow-md">0</span>
                     </div>
 
-                    
+                    <!-- النافذة المنسدلة للإشعارات -->
                     <div id="notifications-panel"
                         class="absolute top-12 md:top-14 right-2 md:right-4 w-[280px] md:w-80 bg-[#161922] border border-[#212631] rounded-2xl shadow-2xl hidden flex-col z-[100] overflow-hidden">
                         <div class="p-3 border-b border-[#212631] bg-[#0f1117] flex justify-between items-center">
                             <h2 class="text-white font-bold text-sm"> notifications🔔</h2>
                         </div>
                         <div id="notifs-list" class="max-h-[300px] overflow-y-auto hide-scroll p-2 flex flex-col gap-1">
-                            
+                            <!-- الإشعارات ستظهر هنا -->
                         </div>
                     </div>
                 </div>
             </div>
         </header>
-        
+        <!-- 2. شريط التصنيفات السريع الذكي -->
         <div class="bg-[#12151d] border-b border-[#212631] py-2.5">
             <div
                 class="max-w-[1700px] mx-auto px-4 flex gap-2 overflow-x-auto text-xs font-bold text-gray-300 hide-scroll">
@@ -297,13 +298,13 @@
                     class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
                         class="fas fa-futbol text-emerald"></i> Sport</button>
 
-                
+                <!-- زر الكازينو مع حركة النبض -->
                 <button id="btn-nav-casino"
                     onclick="setActiveMenuBtn('btn-nav-casino'); switchSection('casino'); initCasinoLobby();"
                     class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all btn-animated"><i
                         class="fas fa-slot-machine text-emerald"></i> Casino</button>
 
-                
+                <!-- زر اللايف كازينو مع حركة النبض -->
                 <button id="btn-nav-live"
                     onclick="setActiveMenuBtn('btn-nav-live'); switchSection('live-casino'); openLiveCasino();"
                     class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all btn-animated"><i
@@ -314,7 +315,7 @@
                     class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all"><i
                         class="fas fa-gamepad text-blue-400"></i> Virtuels</button>
 
-                
+                <!-- زر أفياتور مع حركة النبض -->
                 <button id="btn-nav-aviator"
                     onclick="setActiveMenuBtn('btn-nav-aviator'); playCasinoGame('SPRIBE', 'aviator')"
                     class="main-nav-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white px-4 py-1.5 rounded-xl border border-[#2e3648] hover:border-emerald flex items-center gap-2 flex-shrink-0 transition-all btn-animated"><i
@@ -400,7 +401,7 @@
         <!-- CENTER: Dynamic Content Area (Panes) -->
         <div class="w-full xl:w-[55%] space-y-6">
             <style>
-               
+                /* محرك حركة شريط الفائزين */
                 @keyframes scroll-ticker {
                     0% {
                         transform: translateX(0);
@@ -417,16 +418,16 @@
 
                 .ticker-move:hover {
                     animation-play-state: paused;
-                    
+                    /* يتوقف الشريط عند وضع الفأرة عليه */
                 }
             </style>
-            
+            <!-- PANE: ACCUEIL (الصفحة الرئيسية المتكاملة) -->
             <div id="pane-accueil" class="player-view-section block space-y-6 w-full">
                 
-                
+                <!-- 🌟 حاوية ملتصقة بالحواف للهواتف (Edge-to-Edge Container) -->
                 <div class="-mx-4 -mt-6 md:mx-0 md:mt-0 flex flex-col z-10 relative">
                     
-                    
+                    <!-- 1. شريط الفائزين المباشر -->
                     <div class="relative w-full overflow-hidden bg-[#161922]/90 backdrop-blur-xl border-b border-emerald/30 md:border md:rounded-2xl p-2 flex items-center shadow-md">
                         <div class="bg-red-500/20 border border-red-500 rounded-lg px-2.5 py-1 flex items-center gap-1.5 z-20 shrink-0">
                             <div class="w-2 h-2 rounded-full bg-red-500 animate-ping"></div>
@@ -434,16 +435,16 @@
                         </div>
                         <div class="endless-ticker-container flex-grow h-6 ml-2 w-full overflow-hidden relative">
                             <div id="winners-ticker-track" class="flex gap-4 items-center cursor-pointer ticker-move" style="width: max-content;">
-                                
+                                <!-- سيتم تعبئتها أوتوماتيكياً -->
                             </div>
                         </div>
                     </div>
 
-                    
+                    <!-- 2. سلايدر البنرات الترويجية -->
                     <div class="relative w-full h-[190px] md:h-[260px] md:rounded-2xl overflow-hidden group bg-[#161922] border-b border-[#212631] md:border md:mt-4 shadow-xl">
                         <div id="hero-slider" class="w-full h-full relative">
                             
-                            
+                            <!-- البنر الأول -->
                             <div class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100 z-20">
                                 <div class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/90 to-[#10b981]/20"></div>
                                 <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:20px_20px]"></div>
@@ -460,7 +461,7 @@
                                 </div>
                             </div>
 
-                            
+                            <!-- البنر الثاني -->
                             <div class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-10">
                                 <div class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/90 to-blue-600/20"></div>
                                 <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px]"></div>
@@ -477,7 +478,7 @@
                                 </div>
                             </div>
 
-                            
+                            <!-- البنر الثالث -->
                             <div class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-10">
                                 <div class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/90 to-purple-600/20"></div>
                                 <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#a855f7_1px,transparent_1px)] [background-size:20px_20px]"></div>
@@ -495,7 +496,7 @@
                             </div>
                         </div>
 
-                        
+                        <!-- أزرار التحكم في البنر -->
                         <div class="absolute bottom-3 md:bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-30">
                             <button class="slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-emerald shadow-[0_0_8px_rgba(16,185,129,0.8)] transition-all"></button>
                             <button class="slide-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-600 hover:bg-gray-400 transition-all"></button>
@@ -504,10 +505,10 @@
                     </div>
                 </div>
 
-
+                <!-- 🌟 أيقونات التصنيفات الدائرية السريعة (3D Premium Icons) -->
                 <div class="flex overflow-x-auto hide-scroll gap-3 md:gap-8 py-2 mb-2 items-center justify-start md:justify-center px-1 mt-4">
                     
-
+                    <!-- السلوتس -->
                     <button onclick="switchSection('casino'); initCasinoLobby();" class="flex flex-col items-center gap-2 group min-w-[65px]">
                         <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#161922] border border-[#212631] group-hover:border-emerald group-hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center justify-center transition-all duration-300">
                             <img src="https://img.icons8.com/3d-fluency/94/slot-machine.png" alt="Slots" class="w-8 h-8 md:w-10 md:h-10 object-contain group-hover:scale-110 transition-transform duration-300 drop-shadow-lg">
@@ -515,7 +516,7 @@
                         <span class="text-[10px] md:text-xs font-bold text-gray-400 group-hover:text-white transition-colors uppercase tracking-wider">Slots</span>
                     </button>
 
-
+                    <!-- الكازينو المباشر -->
                     <button onclick="switchSection('live-casino'); openLiveCasino();" class="flex flex-col items-center gap-2 group min-w-[65px]">
                         <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#161922] border border-[#212631] group-hover:border-red-500 group-hover:shadow-[0_0_15px_rgba(239,68,68,0.3)] flex items-center justify-center transition-all duration-300">
                             <img src="https://img.icons8.com/3d-fluency/94/roulette.png" alt="Live" class="w-8 h-8 md:w-10 md:h-10 object-contain group-hover:scale-110 transition-transform duration-300 drop-shadow-lg">
@@ -523,7 +524,7 @@
                         <span class="text-[10px] md:text-xs font-bold text-gray-400 group-hover:text-white transition-colors uppercase tracking-wider">Live</span>
                     </button>
 
-
+                    <!-- ألعاب الكراش -->
                     <button onclick="loadMiniJeux();" class="flex flex-col items-center gap-2 group min-w-[65px]">
                         <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#161922] border border-[#212631] group-hover:border-purple-500 group-hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] flex items-center justify-center transition-all duration-300">
                             <img src="https://img.icons8.com/3d-fluency/94/rocket.png" alt="Crash" class="w-8 h-8 md:w-10 md:h-10 object-contain group-hover:scale-110 transition-transform duration-300 drop-shadow-lg">
@@ -531,7 +532,7 @@
                         <span class="text-[10px] md:text-xs font-bold text-gray-400 group-hover:text-white transition-colors uppercase tracking-wider">Crash</span>
                     </button>
 
-                    
+                    <!-- البلاك جاك -->
                     <button onclick="switchSection('casino'); initCasinoLobby(); setTimeout(() => { document.getElementById('game-search-input').value = 'blackjack'; filterGames(); }, 500);" class="flex flex-col items-center gap-2 group min-w-[65px]">
                         <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#161922] border border-[#212631] group-hover:border-blue-500 group-hover:shadow-[0_0_15px_rgba(59,130,246,0.3)] flex items-center justify-center transition-all duration-300">
                             <img src="https://img.icons8.com/3d-fluency/94/cards.png" alt="Blackjack" class="w-8 h-8 md:w-10 md:h-10 object-contain group-hover:scale-110 transition-transform duration-300 drop-shadow-lg">
@@ -539,7 +540,7 @@
                         <span class="text-[10px] md:text-xs font-bold text-gray-400 group-hover:text-white transition-colors uppercase tracking-wider">Blackjack</span>
                     </button>
 
-                    
+                    <!-- الألعاب الافتراضية -->
                     <button onclick="switchSection('virtuals'); initVirtualsLobby();" class="flex flex-col items-center gap-2 group min-w-[65px]">
                         <div class="w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#161922] border border-[#212631] group-hover:border-yellow-500 group-hover:shadow-[0_0_15px_rgba(234,179,8,0.3)] flex items-center justify-center transition-all duration-300">
                             <img src="https://img.icons8.com/3d-fluency/94/controller.png" alt="Virtuels" class="w-8 h-8 md:w-10 md:h-10 object-contain group-hover:scale-110 transition-transform duration-300 drop-shadow-lg">
@@ -549,11 +550,11 @@
 
                 </div>
 
-                
+                <!-- قسم أبرز المزودين -->
                 <div id="dynamic-featured-providers" class="flex flex-col gap-6 mb-8 w-full mt-4">
                 </div>
 
-                
+                <!-- اختيار اليوم -->
                 <div>
                     <h3 class="font-bold text-white uppercase text-xs tracking-wider mb-3 flex items-center gap-2">
                         <i class="fas fa-star text-emerald animate-pulse"></i> Sélection du Jour
@@ -561,7 +562,7 @@
                     <div id="games-of-the-day-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
                 </div>
 
-            </div> 
+            </div> <!-- 🔴 الإغلاق الصحيح لقسم Accueil -->
 
             <!-- PANE: LEADERBOARD / TOURNOIS -->
             <div id="pane-leaderboard" class="player-view-section hidden w-full space-y-6">
@@ -570,7 +571,7 @@
                     <h2 class="text-white font-extrabold text-xl">Tournois & Leaderboard</h2>
                 </div>
                 
-               
+                <!-- بانر البطولة النشطة -->
                 <div class="bg-gradient-to-r from-yellow-600/20 via-[#161922] to-yellow-600/10 border border-yellow-500/40 rounded-2xl p-5 relative overflow-hidden shadow-xl space-y-4">
                     <div class="absolute top-0 right-0 bg-yellow-500 text-black text-[10px] font-black px-3 py-1 rounded-bl-xl uppercase">En cours ⚡</div>
                     <h3 class="text-yellow-400 font-black text-lg mb-1">Grand Tournoi Alphabet216</h3>
@@ -583,7 +584,7 @@
                     </div>
                 </div>
 
-               
+                <!-- جدول المتصدرين -->
                 <div class="bg-[#161922] border border-[#212631] rounded-2xl overflow-hidden shadow-xl">
                     <div class="p-4 border-b border-[#212631] bg-[#0f1117] flex justify-between items-center">
                         <span class="text-white font-bold text-sm">Classement en direct 🏆</span>
@@ -604,7 +605,7 @@
                     </div>
                 </div>
             </div>
-               
+                <!-- PANE: FAVORIS (الألعاب المفضلة) -->
                 <div id="pane-favoris" class="player-view-section hidden w-full">
                     <div class="flex items-center gap-2 mb-4">
                         <i class="fas fa-heart text-2xl text-red-500 animate-pulse"></i>
@@ -612,19 +613,19 @@
                     </div>
                     <div id="favoris-games-grid"
                         class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10">
-                        
+                        <!-- سيتم عرض الألعاب المفضلة هنا -->
                     </div>
                 </div>
-                
+                <!-- PANE: CASINO -->
                 <div id="pane-casino" class="player-view-section hidden w-full">
                     <div class="flex items-center gap-2 mb-4">
                         <i class="fas fa-slot-machine text-2xl text-emerald"></i>
                         <h2 class="text-white font-extrabold text-xl">Casino & Slots</h2>
                     </div>
 
-                    
+                    <!-- 🌟 محرك البحث وقائمة المزودين الجديدة -->
                     <div class="flex flex-col md:flex-row gap-3 mb-6 relative z-20">
-                        
+                        <!-- 1. البحث عن الألعاب -->
                         <div class="relative flex-1">
                             <i
                                 class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
@@ -633,7 +634,7 @@
                                 class="w-full bg-[#161922] border border-[#212631] rounded-xl py-3 pl-11 pr-4 text-white text-sm outline-none focus:border-emerald transition-all shadow-md font-bold">
                         </div>
 
-                        
+                        <!-- 2. زر وقائمة المزودين -->
                         <div class="relative">
                             <button onclick="toggleProviderDropdown()"
                                 class="w-full md:w-auto bg-[#161922] border border-[#212631] hover:border-emerald px-6 py-3 rounded-xl text-sm font-bold text-gray-300 hover:text-white flex items-center justify-between gap-4 transition-all shadow-md">
@@ -642,10 +643,10 @@
                                 <i class="fas fa-chevron-down text-xs text-gray-500"></i>
                             </button>
 
-                            
+                            <!-- القائمة المنسدلة (Dropdown) -->
                             <div id="provider-dropdown"
                                 class="absolute right-0 top-full mt-2 w-full md:w-72 bg-[#161922] border border-[#212631] rounded-xl shadow-2xl hidden flex-col overflow-hidden z-50">
-                                
+                                <!-- بحث المزودين -->
                                 <div class="p-3 border-b border-[#212631] bg-[#0f1117]">
                                     <div class="relative">
                                         <i
@@ -655,15 +656,16 @@
                                             class="w-full bg-[#1a1e29] border border-[#212631] rounded-lg py-2 pl-9 pr-3 text-white text-xs outline-none focus:border-emerald">
                                     </div>
                                 </div>
-                               
+                                <!-- قائمة المزودين -->
                                 <div id="provider-dropdown-list"
                                     class="max-h-[300px] overflow-y-auto hide-scroll p-2 flex flex-col gap-1 bg-[#161922]">
-                                   
+                                    <!-- سيتم وضع المزودين هنا برمجياً -->
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- شبكة الألعاب (هذا هو مكانها الصحيح في الأسفل!) -->
                     <div id="games-grid"
                         class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10">
                     </div>
@@ -675,7 +677,7 @@
                         <i class="fas fa-video text-xl text-red-500"></i>
                         <h2 class="text-white font-bold text-lg">Live Casino</h2>
                     </div>
-                    
+                    <!-- وهذا شريط اللايف كازينو! 👇 -->
                     <div id="live-providers-bar" class="flex overflow-x-auto gap-2 hide-scroll py-2 mb-4"></div>
 
                     <div id="live-games-grid"
@@ -697,7 +699,7 @@
                     <div class="flex items-center justify-between mb-3">
                         <h2 class="text-white font-bold text-lg">EuroVirtuals Casino</h2>
                     </div>
-                    
+                    <!-- 🌟 حاوية أزرار المزودين الديناميكية -->
                     <div id="euro-casino-providers" class="flex flex-wrap gap-2 mb-4"></div>
                     <div id="euro-casino-grid"
                         class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 pb-10">
@@ -709,13 +711,13 @@
                     <div class="flex items-center justify-between mb-3">
                         <h2 class="text-white font-bold text-lg">EuroVirtuals Live</h2>
                     </div>
-                    
+                    <!-- 🌟 حاوية أزرار المزودين الديناميكية -->
                     <div id="euro-live-providers" class="flex flex-wrap gap-2 mb-4"></div>
                     <div id="euro-live-grid"
                         class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 pb-10">
                     </div>
                 </div>
-                <!-- PANE: 01.TECH TEST  -->
+                <!-- PANE: 01.TECH TEST (منطقة معزولة كلياً) -->
                 <div id="pane-zeroone-test" class="player-view-section hidden w-full space-y-6">
                     <div class="bg-panel p-6 rounded-2xl border border-yellow-500/30 text-center shadow-2xl">
                         <h2 class="text-yellow-400 font-extrabold text-xl mb-2">🧪 Le laboratoire isolé - 01.TECH</h2>
@@ -724,12 +726,12 @@
                             at your leisure!</p>
 
                         <div class="flex justify-center gap-4 mb-8">
-                           
+                            <!-- زر السلوتس -->
                             <button onclick="fetchIsolatedZeroOneGames('slots')"
                                 class="bg-[#1b4ed8] hover:bg-[#1e40af] text-white px-6 py-2 rounded-lg font-bold transition shadow-lg flex items-center gap-2">
                                 <i class="fas fa-slot-machine"></i> Casino (Slots)
                             </button>
-                            
+                            <!-- زر الكازينو المباشر -->
                             <button onclick="fetchIsolatedZeroOneGames('live')"
                                 class="bg-[#b91c1c] hover:bg-[#991b1b] text-white px-6 py-2 rounded-lg font-bold transition shadow-lg flex items-center gap-2">
                                 <i class="fas fa-video"></i> Casino Live
@@ -740,11 +742,11 @@
                             class="text-sm text-gray-300 mb-6 font-semibold bg-[#0f1117] py-3 rounded-xl border border-[#212631]">
                             Appuyez sur l'un des boutons ci-dessus pour vous connecter et récupérer les jeux....
                         </div>
-                        
+                        <!-- 🌟 شريط أزرار المزودين (سيتم تعبئته آلياً) -->
                         <div id="zeroone-providers-filter" class="flex flex-wrap gap-2 justify-center mb-6"></div>
                         <div id="grid-zeroone-test"
                             class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 text-left">
-                            
+                            <!-- ستظهر الألعاب هنا -->
                         </div>
                     </div>
                 </div>
@@ -761,7 +763,7 @@
         <iframe id="sportsbook-iframe" class="w-full h-full border-0 block m-0 p-0" allowfullscreen></iframe>
     </div>
 
-    
+    <!-- 🌟 تذييل الصفحة (الذي تم حذفه بالخطأ) -->
     <div
         class="mt-8 pt-6 border-t border-[#212631] flex flex-col items-center justify-center text-center space-y-4 pb-24 w-full">
         <div class="flex flex-wrap justify-center gap-3 md:gap-6 text-xs font-bold text-gray-400">
@@ -957,13 +959,13 @@
                 class="w-full bg-emerald text-black font-bold p-3 rounded-xl">Entrer</button>
         </div>
     </div>
-   
+    <!-- 🌟 نافذة الشروط والأحكام (Policy Modal) -->
     <div id="policy-modal"
         class="fixed inset-0 z-[200] bg-black/90 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
         <div class="bg-[#161922] border border-[#212631] rounded-2xl w-full max-w-2xl flex flex-col max-h-[85vh] shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300"
             id="policy-modal-content">
 
-            
+            <!-- رأس النافذة -->
             <div class="flex justify-between items-center p-5 border-b border-[#212631] bg-[#0f1117]">
                 <h3 id="policy-modal-title" class="text-white font-black uppercase tracking-wider text-lg">Titre
                 </h3>
@@ -973,12 +975,12 @@
                 </button>
             </div>
 
-           
+            <!-- محتوى النص (قابل للتمرير) -->
             <div id="policy-modal-body" class="p-6 overflow-y-auto text-sm text-gray-300 space-y-4 custom-scrollbar">
-                
+                <!-- سيتم حقن النص هنا عبر الجافاسكريبت -->
             </div>
 
-           
+            <!-- زر الإغلاق السفلي -->
             <div class="p-4 border-t border-[#212631] bg-[#0f1117] flex justify-end">
                 <button onclick="closePolicyModal()"
                     class="bg-emerald text-black font-bold text-xs uppercase px-6 py-2.5 rounded-xl hover:bg-emerald-600 transition">J'ai
@@ -989,25 +991,25 @@
 
     <!-- 🎰 Casino Iframe Container -->
     <div id="casino-iframe-container" class="fixed inset-0 z-[300] bg-black hidden flex-col">
-        
+        <!-- تركنا الشريط العلوي لاسم المنصة فقط، وحذفنا زر الإغلاق -->
         <div class="h-10 bg-[#12151d] flex justify-center items-center px-4">
             <span class="text-emerald font-bold text-xs">Alphabet216</span>
         </div>
         <iframe id="casino-iframe" class="w-full flex-grow border-0"></iframe>
     </div>
-    
+    <!-- 🎲 نرد الحظ السحري (Magic Dice) -->
     <div id="magic-dice-container" class="fixed bottom-28 md:bottom-12 right-4 md:right-8 z-[700] cursor-pointer group" onclick="rollMagicDice()">
-        
+        <!-- هالة التوهج الخلفية -->
         <div class="absolute inset-0 bg-gradient-to-tr from-purple-600 via-pink-500 to-yellow-500 rounded-2xl blur-lg opacity-40 group-hover:opacity-100 transition-opacity duration-500"></div>
         
-        
+        <!-- النرد نفسه -->
         <div class="relative flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-tr from-purple-600/90 via-pink-500/90 to-yellow-500/90 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl transform transition-transform duration-300 group-hover:scale-110 animate-bounce-slow">
             <img id="dice-img" src="https://img.icons8.com/3d-fluency/94/dice.png" alt="Magic Dice" class="w-8 h-8 md:w-11 md:h-11 drop-shadow-xl pointer-events-none">
-            
+            <!-- لمعة داخلية -->
             <div class="absolute inset-0 bg-white/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
         </div>
 
-        <!-- (Tooltip) -->
+        <!-- رسالة التلميح (Tooltip) -->
         <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-[#12151d] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg border border-purple-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none shadow-xl flex items-center gap-1">
             <i class="fas fa-sparkles text-yellow-400"></i> Jeu Chanceux
         </div>
@@ -1016,7 +1018,7 @@
     <div id="toast-container" class="fixed top-5 right-5 z-[500] flex flex-col gap-2 w-full max-w-sm px-4">
     </div>
 
-   
+    <!-- ================= JAVASCRIPT (محرك الألفابت الشامل) ================= -->
     <script>
 
 
@@ -1033,7 +1035,7 @@
             );
         }
 
-        
+        // ================= دوال التحكم في النوافذ والإشعارات المفقودة =================
         function openLoginModal() {
             const modal = document.getElementById('player-login-modal');
             if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
@@ -1066,43 +1068,43 @@
         }
 
         window.onload = () => {
-         
+            // 🚀 إخفاء شاشة التحميل بسلاسة بعد تجهيز الموقع
             const splash = document.getElementById('splash-screen');
             if (splash) {
-                
+                // ننتظر قليلاً (800 ملي ثانية) ليقرأ اللاعب الشعار، ثم نخفيها
                 setTimeout(() => {
                     splash.style.opacity = '0';
                     setTimeout(() => {
                         splash.style.display = 'none';
-                    }, 700); 
+                    }, 700); // وقت تلاشي الشاشة
                 }, 800);
             }
 
-            
+            // 1. استرجاع بيانات اللاعب إذا كان مسجلاً
             const savedSession = localStorage.getItem('alpha_player_session');
             if (savedSession) {
                 playerSession = JSON.parse(savedSession);
                 setupLoggedInUI();
             }
 
-          
+            // 2. استرجاع القسم الذي كان فيه اللاعب قبل الريفرش
             const savedSection = localStorage.getItem('active_section') || 'accueil';
             switchSection(savedSection);
 
-            
+            // 3. تشغيل ميزات الصفحة الرئيسية
             loadGamesOfTheDay();
             loadFeaturedProvidersBlocks();
             startLiveJackpots();
 
-           
+            // 🌟 4. السحر هنا: تشغيل محرك شريط الفائزين! 🌟
             if (typeof generateLiveWinnersTicker === 'function') {
                 generateLiveWinnersTicker();
             }
         };
 
-
+        // ================= محرك الجاكبوت الحي (Real-time WebSocket) =================
         function startLiveJackpots() {
-
+            // تحويل رابط الباك إند العادي إلى رابط WebSocket (ws:// أو wss://)
             const wsUrl = BACKEND_URL.replace("http", "ws").replace("https", "wss") + "/ws/jackpot";
             const socket = new WebSocket(wsUrl);
 
@@ -1113,6 +1115,8 @@
                 const elMinor = document.getElementById('jackpot-minor');
                 const elMajor = document.getElementById('jackpot-major');
                 const elGrand = document.getElementById('jackpot-grand');
+
+                // تحديث الأرقام في الواجهة وتنسيقها كعملة
                 if (elMini) elMini.innerText = parseFloat(data.mini).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TND';
                 if (elMinor) elMinor.innerText = parseFloat(data.minor).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TND';
                 if (elMajor) elMajor.innerText = parseFloat(data.major).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TND';
@@ -1124,36 +1128,36 @@
             };
 
             socket.onclose = function () {
-              
+                // إعادة الاتصال الصامت تلقائياً إذا انقطع الإنترنت أو السيرفر
                 setTimeout(startLiveJackpots, 5000);
             };
         }
         function switchSection(sectionId, fromPopState = false) {
             localStorage.setItem('active_section', sectionId);
 
-           
+            // إخفاء كل الأقسام
             document.querySelectorAll('.player-view-section').forEach(el => {
                 el.classList.add('hidden');
                 el.classList.remove('block');
             });
 
-           
+            // إظهار القسم المطلوب
             const panel = document.getElementById(`pane-${sectionId}`);
             if (panel) {
                 panel.classList.remove('hidden');
                 panel.classList.add('block');
             }
 
-           
+            // التقاط حاوية الموقع والفوتر
             const mainTag = document.querySelector('main');
             const footerTag = document.querySelector('.mt-8.pt-6');
 
             if (sectionId === 'sport') {
-               
+                // إخفاء الموقع وترك السبور بوك
                 if (mainTag) mainTag.style.display = 'none';
                 if (footerTag) footerTag.style.display = 'none';
                 document.body.style.overflow = 'hidden';
-                window.scrollTo(0, 0);  
+                window.scrollTo(0, 0); // الصعود للأعلى بعد إخفاء المحتوى لضمان ظهور اللوغو
             } else {
                 // إرجاع الموقع لشكله الطبيعي
                 if (mainTag) mainTag.style.display = 'flex';
@@ -1203,7 +1207,7 @@
             const userProfile = document.getElementById('top-user-profile');
             if (userProfile) { userProfile.classList.remove('hidden'); userProfile.classList.add('flex'); }
 
-             
+            // 🔔 إظهار جرس الإشعارات
             const notifBell = document.getElementById('top-notification-bell');
             if (notifBell) { notifBell.classList.remove('hidden'); notifBell.classList.add('flex'); }
 
@@ -1216,7 +1220,7 @@
             refreshBalance();
             setInterval(refreshBalance, 5000);
 
-         
+            // جلب الإشعارات مباشرة عند الدخول
             if (typeof fetchNotifications === 'function') fetchNotifications();
         }
 
@@ -1238,15 +1242,15 @@
                     playerSession.balance = data.user_balance;
                     const formattedBalance = parseFloat(data.user_balance).toFixed(2);
 
-                   
+                    // 1. تحديث الرصيد في الشريط العلوي المخفي
                     const balDisplay = document.getElementById('player-balance-val');
                     if (balDisplay) balDisplay.innerText = formattedBalance;
 
-                   
+                    // 2. تحديث الرصيد في القائمة الجانبية (Sidebar)
                     const sidebarBalDisplay = document.getElementById('sidebar-balance');
                     if (sidebarBalDisplay) sidebarBalDisplay.innerText = formattedBalance + ' TND';
 
-                    
+                    // 3. تحديث الرصيد في نافذة السحب (Cashier)
                     const modalBalDisplay = document.getElementById('modal-balance');
                     if (modalBalDisplay) modalBalDisplay.innerText = formattedBalance;
                 }
@@ -1255,6 +1259,7 @@
 
         function getAuthHeaders() { return { 'Authorization': `Bearer ${localStorage.getItem('token')}`, 'Content-Type': 'application/json' }; }
 
+        // ================= 3. الكازينو والسلوتس (محرك نكسيس النهائي + Infinite Scroll) =================
         window.currentProviderGames = [];
         window.nexusProviders = [
             { code: 'PRAGMATIC', name: 'Pragmatic Slot' },
@@ -1284,10 +1289,10 @@
         let gamesObserver = null;
 
         async function initCasinoLobby() {
-        
+            // رسم المزودين في القائمة المنسدلة فوراً
             filterProviders();
 
-           
+            // تحميل ألعاب أول مزود في القائمة تلقائياً
             if (window.nexusProviders.length > 0) {
                 const firstCode = window.nexusProviders[0].code;
                 loadProviderGames(firstCode, window.nexusProviders[0].name);
@@ -1330,12 +1335,12 @@
                     throw new Error("Format de données inattendu du serveur");
                 }
 
-               
+                // 💡 السر هنا: عكس المصفوفة لتظهر الألعاب المضافة حديثاً في أعلى الصفحة
                 window.currentProviderGames = gamesList.reverse();
 
                 renderCasinoGrid();
             } catch (e) {
-                console.error("=== Erreur lors de la récupération des jeux ===", e);
+                console.error("=== خطأ جلب الألعاب ===", e);
                 if (grid) grid.innerHTML = `<div class="col-span-full text-red-500 text-center py-10 font-bold">Erreur de connexion<br><span class="text-xs text-gray-500 font-mono mt-2 block">${e.message}</span></div>`;
             }
         }
@@ -1358,7 +1363,7 @@
                 return `
             <div onclick="playCasinoGame('${currentActiveProviderCode}', '${code}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer transition-all flex flex-col group shadow-lg card-shine card-float relative">
                 
-                
+                <!-- زر القلب لإضافة اللعبة للمفضلة -->
                 <button onclick="toggleFavorite(event, '${currentActiveProviderCode}', '${code}', '${title}', '${img}')" 
                     class="absolute top-2 left-2 z-30 bg-black/60 rounded-full w-7 h-7 flex items-center justify-center hover:bg-black/90 border border-[#212631] transition-all">
                     <i class="${isFavorite(code) ? 'fas text-red-500' : 'far text-white'} fa-heart text-sm transition-colors"></i>
@@ -1400,7 +1405,7 @@
                 sentinel.remove();
             }
         }
-       
+        // ================= 
         function toggleProviderDropdown() {
             const dropdown = document.getElementById('provider-dropdown');
             if (dropdown) {
@@ -1408,6 +1413,7 @@
                 dropdown.classList.toggle('flex');
             }
         }
+        // ================= البحث عن المزودين والألعاب =================
         function filterProviders() {
             const input = document.getElementById('provider-search-input');
             const list = document.getElementById('provider-dropdown-list');
@@ -1422,7 +1428,7 @@
                 `<button onclick="loadProviderGames('${p.code}', '${p.name}'); toggleProviderDropdown();" class="text-left px-4 py-3 text-xs font-bold text-gray-300 hover:text-emerald hover:bg-[#212631] rounded-xl transition-all border border-transparent hover:border-[#2e3648]">${p.name}</button>`
             ).join('');
         }
-
+        // ================ البحث عن الألعاب =================
         function filterGames() {
             const input = document.getElementById('game-search-input');
             if (!input || !window.currentProviderGames) return;
@@ -1460,7 +1466,7 @@
             const sentinel = document.getElementById('games-scroll-sentinel');
             if (sentinel) sentinel.remove();
         }
-       
+        // فتح وإغلاق الشات 
         function toggleChat() {
             const chatBox = document.getElementById('live-chat-sidebar');
             if (!chatBox) return;
@@ -1474,7 +1480,7 @@
             }
         }
 
-        
+        // إغلاق الشات حصراً 
         function closeChat() {
             const chatBox = document.getElementById('live-chat-sidebar');
             if (chatBox && !chatBox.classList.contains('hidden')) {
@@ -1484,9 +1490,9 @@
         }
 
 
-      
+        // ================= ربط الأزرار الجديدة =================
 
-        
+        // 1. تشغيل الـ Mini Jeux (يجلب ألعاب Spribe أو ألعاب الكراش فوراً)
         async function loadMiniJeux() {
             switchSection('casino');
             const grid = document.getElementById('games-grid');
@@ -1509,7 +1515,7 @@
             }
         }
 
-       
+        // 2. تشغيل الـ Jeux TV (يجلب مزود ألعاب التلفاز المباشرة)
         async function loadTVGames() {
             switchSection('casino');
             const grid = document.getElementById('games-grid');
@@ -1518,7 +1524,7 @@
             if (grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10 animate-pulse text-lg font-bold">Chargement Jeux TV... 📺</div>';
 
             try {
-                 
+                // يفترض وجود مزود TVBET أو BetGames في الـ API الخاص بك
                 const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1554,6 +1560,7 @@
                         if (res.ok) {
                             const data = await res.json();
 
+                            // قراءة البيانات بذكاء لتعمل مع الـ API الخاص بك
                             let games = [];
                             if (data.status === 1 && data.games) games = data.games;
                             else if (data.data) games = data.data;
@@ -1597,17 +1604,17 @@
                     grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-5 font-bold">Aucun jeu disponible pour le moment.</div>';
                 }
             } catch (e) {
-                console.error("===Erreur dans les jeux d'aujourd'hui ===", e);
+                console.error("=== خطأ ألعاب اليوم ===", e);
                 grid.innerHTML = `<div class="col-span-full text-red-500 text-center py-5 font-bold">Erreur de chargement<br><span class="text-xs text-gray-500 font-mono mt-2 block">${e.message}</span></div>`;
             }
             loadFeaturedProvidersBlocks();
         }
-        
+        // ================= تشغيل الألعاب =================
         async function playCasinoGame(providerCode, gameCode) {
             closeChat();
             if (!playerSession) return openLoginModal();
             addVipXp(25);
-           
+            // تغيير شكل المؤشر لانتظار التحميل
             document.body.style.cursor = 'wait';
 
             try {
@@ -1628,7 +1635,7 @@
                 const data = await res.json();
 
                 if (data.launch_url) {
-                   
+                    // 🌟 فتح اللعبة في نافذة/علامة تبويب جديدة
                     window.open(data.launch_url, '_blank');
                 } else {
                     showNotification(data.error || "Jeu non disponible", "error");
@@ -1636,14 +1643,14 @@
             } catch (error) {
                 showNotification("Erreur de connexion", "error");
             } finally {
-               
+                // 🌟 إعادة شكل المؤشر لطبيعته سواء نجح فتح اللعبة أم فشل
                 document.body.style.cursor = 'default';
             }
         }
 
         window.playSMPLGame = playCasinoGame;
         window.playNexusGame = playCasinoGame;
-       
+        // ================= إغلاق نافذة اللعبة =================
         function closeCasinoGame(fromPopState = false) {
             const container = document.getElementById('casino-iframe-container');
             if (container) {
@@ -1657,7 +1664,7 @@
                 refreshBalance();
             }
 
-            
+            // 🌟 الرجوع خطوة للوراء في الهاتف إذا كان الإغلاق برمجياً وليس من زر الهاتف
             if (!fromPopState && history.state && history.state.modalOpen) {
                 history.back();
             }
@@ -1695,14 +1702,14 @@
                 const data = await res.json();
                 let games = data.games || data.data || data || [];
 
-
+                // 🌟 قائمة المزودين أو الألعاب المسموح لها بالظهور (بحروف صغيرة للمطابقة)
                 const allowedProviders = [
                     'eurovirtuelle', 'eurovirtual', 'eurovirtuals',
                     'aviator', 'aviatron', 'aviatrix', 'spribe', 'spride',
                     'maya crash', 'beon', 'black lagoon', 'skay control', 'Only Play', 'onlyplay', 
                 ];
 
-             
+                // 🌟 تصفية الألعاب بناءً على القائمة
                 const filteredGames = games.filter(g => {
                     const prov = String(g.provider || g.partner_name || g.game_name || '').toLowerCase();
                     return allowedProviders.some(allowed => prov.includes(allowed));
@@ -1741,7 +1748,7 @@
         async function launchSpecificVirtualGame(uuid) {
             if (!playerSession) return openLoginModal();
 
-           
+            // تغيير شكل المؤشر لانتظار التحميل
             document.body.style.cursor = 'wait';
 
             try {
@@ -1752,7 +1759,7 @@
                 const data = await res.json();
 
                 if (data.launch_url) {
-                   
+                    // فتح اللعبة في نافذة جديدة
                     window.open(data.launch_url, '_blank');
                 } else {
                     showNotification("Jeu non disponible", "error");
@@ -1760,12 +1767,12 @@
             } catch (e) {
                 showNotification("Erreur réseau", "error");
             } finally {
-                
+                // إعادة المؤشر لطبيعته
                 document.body.style.cursor = 'default';
             }
         }
 
-
+        // ================= 5. الكاشير =================
         function toggleCashier() {
             if (!playerSession) return openLoginModal();
             const modal = document.getElementById('cashier-modal');
@@ -1800,13 +1807,13 @@
 
         function updateFileName(method) {
             const fileInput = document.getElementById(method + '-file');
-            
+            // تم إصلاح الخطأ البرمجي هنا (استهداف العنصر الصحيح مباشرة)
             const labelSpan = fileInput.previousElementSibling;
 
             if (fileInput.files && fileInput.files.length > 0) {
                 const file = fileInput.files[0];
 
-                
+                // قراءة الصورة المرفوعة وعرضها كمعاينة حية للمستخدم
                 const reader = new FileReader();
                 reader.onload = function (e) {
                     labelSpan.innerHTML = `
@@ -1838,13 +1845,13 @@
             }
 
             try {
-            
+                // استخدام FormData لدعم رفع الصور والنصوص معاً إلى مسار SQL الموحد
                 const formData = new FormData();
                 formData.append("target_username", playerSession.username);
                 formData.append("action", "deposit_request");
-                formData.append("amount", 1); 
+                formData.append("amount", 1); // قيمة مؤقتة لتخطي شرط (المبلغ > 0) في الباك إند، المالك سيحدد المبلغ الحقيقي لاحقاً
 
-                
+                // دمج نوع الطريقة مع الكود (أو كلمة FILE إذا كان صورة فقط) في حقل tx_id
                 const details = pinCode ? `${method.toUpperCase()}-${pinCode}` : `${method.toUpperCase()}-FILE`;
                 formData.append("tx_id", details);
 
@@ -1854,7 +1861,7 @@
 
                 const response = await fetch(`${BACKEND_URL}/api/admin/request-transaction`, {
                     method: 'POST',
-                    
+                    // لا نستخدم getAuthHeaders() هنا لأن FormData يحتاج أن يحدد المتصفح الـ Content-Type بنفسه
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                     body: formData
                 });
@@ -1927,23 +1934,23 @@
 
         function setActiveMenuBtn(activeBtnId) {
             document.querySelectorAll('.main-nav-btn').forEach(btn => {
-                
+                // إزالة ألوان الزر النشط دون المساس بكلاسات الحركة
                 btn.classList.remove('bg-emerald', 'text-black', 'border-emerald', 'shadow');
-              
+                // إضافة ألوان الزر العادي
                 btn.classList.add('bg-[#1a1e29]', 'hover:bg-[#212631]', 'text-gray-300', 'hover:text-white', 'border-[#2e3648]', 'hover:border-emerald');
             });
 
             const activeBtn = document.getElementById(activeBtnId);
             if (activeBtn) {
-                
+                // إزالة ألوان الزر العادي
                 activeBtn.classList.remove('bg-[#1a1e29]', 'hover:bg-[#212631]', 'text-gray-300', 'hover:text-white', 'border-[#2e3648]', 'hover:border-emerald');
-               
+                // إضافة ألوان الزر النشط
                 activeBtn.classList.add('bg-emerald', 'text-black', 'border-emerald', 'shadow');
             }
         }
 
         function updateBottomBar(activeId) {
-            
+            // إرجاع كل الأزرار للوضع الرمادي
             document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
                 btn.classList.remove('opacity-100');
                 btn.classList.add('opacity-50');
@@ -1955,7 +1962,7 @@
                 }
             });
 
-            
+            // إضاءة الزر النشط وتبييض نصه
             const activeBtn = document.getElementById(activeId);
             if (activeBtn) {
                 activeBtn.classList.remove('opacity-50');
@@ -2554,7 +2561,7 @@
                 }
 
             } catch (err) {
-                statusDisplay.innerHTML = `<span class="text-red-500 font-bold">🚨 Échec de la connexion ! Vérifiez que le serveur backend est opérationnel..</span>`;
+                statusDisplay.innerHTML = `<span class="text-red-500 font-bold">🚨 فشل الاتصال! تأكد أن السيرفر الخلفي يعمل.</span>`;
             }
         }
 
@@ -2589,7 +2596,7 @@
             const accountUsername = sessionStr ? JSON.parse(sessionStr).username : null;
 
             if (!accountUsername) {
-                showNotification("Veuillez vous connecter pour  jeuer.", "error");
+                showNotification("يرجى تسجيل الدخول لتجربة اللعبة.", "error");
                 openLoginModal();
                 return;
             }
@@ -2607,10 +2614,10 @@
                 if (resData.game_url) {
                     window.open(resData.game_url, '_blank');
                 } else {
-                    alert("Erreur d'exécution: \n" + (resData.error || "Inconnu"));
+                    alert("خطأ في التشغيل: \n" + (resData.error || "مجهول"));
                 }
             } catch (err) {
-                alert("Une erreur  survenue lors du lancement..");
+                alert("حدث خطأ في الشبكة أثناء الإطلاق.");
             } finally {
                 document.body.style.cursor = 'default';
             }
@@ -2706,7 +2713,7 @@
                     if (providersBar) {
                         providersBar.innerHTML = `
                             <div class="w-full flex flex-col md:flex-row gap-3 mb-4">
-                                
+                                <!-- محرك البحث الفوري -->
                                 <div class="relative flex-1">
                                     <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                                     <input type="text" id="euro-search-input" onkeyup="filterEuroGamesLocally('${targetGridId}')"
@@ -2714,7 +2721,7 @@
                                         class="w-full bg-[#161922] border border-[#212631] rounded-xl py-3 pl-11 pr-4 text-white text-sm outline-none focus:border-emerald transition-all shadow-md font-bold">
                                 </div>
                             </div>
-                            
+                            <!-- أزرار فلاتر المزودين مع ميزة السحب بالماوس -->
                             <div class="flex overflow-x-auto hide-scroll gap-2 pb-2 w-full cursor-grab active:cursor-grabbing select-none" id="euro-chips-container">
                                 ${providers.map((p, idx) => `
                                     <button onclick="filterEuroByProvider('${p}', '${targetGridId}')" 
@@ -2725,7 +2732,7 @@
                             </div>
                         `;
 
-                          
+                        // 🌟 تفعيل خاصية السحب والإفلات بالماوس (Drag to Scroll) للشريط الأفقي على الحاسوب
                         const slider = document.getElementById('euro-chips-container');
                         let isDown = false;
                         let startX, scrollLeft;
@@ -2751,7 +2758,7 @@
                             if (!isDown) return;
                             e.preventDefault();
                             const x = e.pageX - slider.offsetLeft;
-                            const walk = (x - startX) * 2; 
+                            const walk = (x - startX) * 2; // سرعة وسلاسة التحريك
                             slider.scrollLeft = scrollLeft - walk;
                         });
                     }
@@ -2766,11 +2773,11 @@
                 container.innerHTML = '<div class="col-span-full text-red-500 text-center py-10 font-bold">Erreur de chargement des jeux.</div>';
             }
         }
-       
+        // دالة تصفية الألعاب حسب المزود عند النقر على الزر
         function filterEuroByProvider(providerName, targetGridId) {
             currentEuroProvider = providerName;
             
-          
+            // تحديث تصميم الأزرار (تلوين الزر النشط وإطفاء البقية)
             document.querySelectorAll('.euro-provider-chip').forEach(btn => {
                 if (btn.innerText.trim() === providerName) {
                     btn.className = "euro-provider-chip px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border bg-emerald text-black border-emerald shadow";
@@ -2782,12 +2789,12 @@
             applyEuroFilters(targetGridId);
         }
 
-        
+        // دالة التصفية عبر محرك البحث
         function filterEuroGamesLocally(targetGridId) {
             applyEuroFilters(targetGridId);
         }
 
-       
+        // تطبيق الفلترين معاً (المزود + نص البحث)
         function applyEuroFilters(targetGridId) {
             const searchInput = document.getElementById('euro-search-input');
             const term = searchInput ? searchInput.value.toLowerCase() : '';
@@ -2815,7 +2822,7 @@
             }
 
             container.innerHTML = gamesList.map(game => {
-              
+                // 🌟 التصحيح الجذري هنا: الأولوية القصوى لـ uuid كما يطلب سيرفر EuroVirtuals لتشغيل ألعاب اللايف
                 const gameId = game.uuid || game.game_uuid || game.id || game.game_code;
                 const gameName = escapeHTML(game.name || game.game_name || 'Casino Game');
                 const defaultImg = `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
@@ -2854,7 +2861,7 @@
             try {
                 document.body.style.cursor = 'wait';
 
-               
+                // 🌟 إرسال الطلب بنفس طريقة قسم Virtuels الناجحة
                 const res = await fetch(`${BACKEND_URL}/api/provider/launch-eurovirtuals`, {
                     method: 'POST',
                     headers: {
@@ -2882,27 +2889,27 @@
             }
         }
 
-       
+        // ================= نظام الألعاب المفضلة =================
         function isFavorite(gameCode) {
             let favs = JSON.parse(localStorage.getItem('alpha_favorites') || '[]');
             return favs.some(f => f.gameCode === gameCode);
         }
 
         function toggleFavorite(event, providerCode, gameCode, title, img) {
-            event.stopPropagation(); 
+            event.stopPropagation(); // منع فتح اللعبة عند الضغط على القلب
             let favs = JSON.parse(localStorage.getItem('alpha_favorites') || '[]');
             const index = favs.findIndex(f => f.gameCode === gameCode);
 
             const heartIcon = event.currentTarget.querySelector('i');
 
             if (index > -1) {
-                
+                // حذف من المفضلة
                 favs.splice(index, 1);
                 heartIcon.classList.remove('fas', 'text-red-500');
                 heartIcon.classList.add('far', 'text-white');
                 showNotification("Retiré des favoris", "info");
             } else {
-                
+                // إضافة للمفضلة
                 favs.push({ providerCode, gameCode, title, img });
                 heartIcon.classList.remove('far', 'text-white');
                 heartIcon.classList.add('fas', 'text-red-500');
@@ -2937,22 +2944,22 @@
                 </div>
             `).join('');
         }
-        
+        // ================= نظام تثبيت التطبيق (PWA) =================
         let deferredPrompt;
 
         window.addEventListener('beforeinstallprompt', (e) => {
-         
+            // منع ظهور نافذة المتصفح الافتراضية المؤقتة
             e.preventDefault();
             deferredPrompt = e;
 
-           
+            // إظهار زر التثبيت الخاص بنا في القائمة الجانبية
             const installBtn = document.getElementById('install-pwa-btn');
             if (installBtn) installBtn.style.display = 'flex';
         });
 
         function installPWA() {
             if (deferredPrompt) {
-
+                // إذا كان المتصفح يدعم التثبيت المباشر (مثل أندرويد وبعض متصفحات الكمبيوتر)
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
@@ -2961,12 +2968,12 @@
                     deferredPrompt = null;
                 });
             } else {
-                
+                // للآيفون أو المتصفحات التي لا تدعم التثبيت المباشر، نُظهر إرشاداً واضحاً
                 alert("Pour installer l'application sur votre appareil :\n- Sur iPhone/iPad : Appuyez sur le bouton 'Partager' 📤 puis 'Sur l'écran d'accueil'.\n- Sur PC/Android : Utilisez le menu de votre navigateur pour 'Installer l'application'.");
             }
         }
 
-        
+        // تسجيل الـ Service Worker عند تحميل الصفحة
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').catch(err => {
@@ -2975,7 +2982,7 @@
             });
         }
 
- 
+        // ================= نظام شريط تقدم مستوى اللاعب (VIP System) =================
         function initVipSystem() {
             let vipData = JSON.parse(localStorage.getItem('alpha_vip_data') || '{"level": 1, "xp": 350, "nextXp": 1000, "rank": "Bronze"}');
             updateVipUI(vipData);
@@ -2985,13 +2992,13 @@
             let vipData = JSON.parse(localStorage.getItem('alpha_vip_data') || '{"level": 1, "xp": 350, "nextXp": 1000, "rank": "Bronze"}');
             vipData.xp += amount;
 
-            
+            // التحقق من وصول اللاعب للمستوى التالي
             if (vipData.xp >= vipData.nextXp) {
                 vipData.level += 1;
                 vipData.xp = vipData.xp - vipData.nextXp;
-                vipData.nextXp = Math.floor(vipData.nextXp * 1.5);  
+                vipData.nextXp = Math.floor(vipData.nextXp * 1.5); // زيادة صعوبة المستوى التالي تدريجياً
 
-                
+                // تحديد الرتبة حسب المستوى
                 if (vipData.level >= 5) vipData.rank = "Diamant 💎";
                 else if (vipData.level >= 4) vipData.rank = "Platine 👑";
                 else if (vipData.level >= 3) vipData.rank = "Or 🥇";
@@ -3005,14 +3012,14 @@
         }
 
         function updateVipUI(data) {
-            
+            // عناصر القائمة الجانبية القديمة
             const levelEl = document.getElementById('vip-level-num');
             const rankEl = document.getElementById('vip-rank-name');
             const currentXpEl = document.getElementById('vip-current-xp');
             const nextXpEl = document.getElementById('vip-next-xp');
             const fillEl = document.getElementById('vip-progress-fill');
 
-          
+            // 🌟 عناصر الهالة الجديدة في الشريط العلوي
             const topRingEl = document.getElementById('top-vip-ring');
             const topBadgeEl = document.getElementById('top-vip-badge');
             
@@ -3021,15 +3028,15 @@
             if (currentXpEl) currentXpEl.innerText = data.xp;
             if (nextXpEl) nextXpEl.innerText = data.nextXp;
             
-            
+            // حساب النسبة المئوية للتقدم
             const percent = Math.min(Math.floor((data.xp / data.nextXp) * 100), 100);
             
-            
+            // تعبئة الشريط في القائمة الجانبية
             if (fillEl) {
                 fillEl.style.width = percent + '%';
             }
 
-          
+            // 🌟 تلوين هالة الشريط العلوي بشكل دائري بناءً على النسبة وتحديث رقم المستوى
             if (topRingEl) {
                 topRingEl.style.background = `conic-gradient(#eab308 ${percent}%, #212631 ${percent}%)`;
             }
@@ -3038,11 +3045,12 @@
             }
         }
 
+        // تشغيل نظام الـ VIP تلقائياً عند تحميل الصفحة
         window.addEventListener('DOMContentLoaded', () => {
             initVipSystem();
         });
 
-      
+        // ================= نظام عجلة الحظ اليومية =================
         function openLuckyWheelModal() {
             if (!playerSession) return openLoginModal();
             const modal = document.getElementById('lucky-wheel-modal');
@@ -3064,7 +3072,7 @@
 
             if (lastSpin) {
                 const now = new Date().getTime();
-                const cooldownTime = 24 * 60 * 60 * 1000; // 
+                const cooldownTime = 24 * 60 * 60 * 1000; // 24 ساعة
                 const distance = cooldownTime - (now - parseInt(lastSpin));
 
                 if (distance > 0) {
@@ -3089,7 +3097,7 @@
 
             btn.disabled = true;
 
-         
+            // تدوير العجلة بعدة دورات كاملة وزاوية عشوائية
             const randomDegree = Math.floor(Math.random() * 360) + 1800;
             currentRotation += randomDegree;
 
@@ -3101,22 +3109,22 @@
 
                 showNotification(`🎉 Félicitations ! Vous avez gagné : ${wonPrize}`, "success");
 
-                
+                // منح نقاط XP للاعب عند الفوز
                 if (typeof addVipXp === 'function') {
                     addVipXp(50);
                 }
 
-               
+                // حفظ وقت التدوير الحالي لمنع اللعب مرة أخرى قبل 24 ساعة
                 localStorage.setItem('alpha_last_spin_time', new Date().getTime().toString());
                 checkWheelCooldown();
             }, 4000);
         }
 
-     
+     // ================= نظام لوحة المتصدرين والبطولة الأسبوعية (حساب رياضي دقيق) =================
         let tournamentSeconds = (6 * 24 * 3600) + (23 * 3600) + (59 * 60) + 59; 
         let currentLeaderboardData = [];
 
-        
+        // الجوائز الثابتة المرتبطة بدقة بالبطولة (مجموعها الإجمالي = 15,000 TND)
         const fixedPrizePool = [5000, 3000, 2000, 1500, 1200, 1000, 800, 500];
 
         function initLeaderboard() {
@@ -3125,7 +3133,7 @@
             }
             renderLeaderboardData();
 
-           
+            // تشغيل العد التنازلي للوقت
             if (!window.tourneyTimerInterval) {
                 window.tourneyTimerInterval = setInterval(() => {
                     if (tournamentSeconds > 0) {
@@ -3137,7 +3145,7 @@
                 }, 1000);
             }
 
-          
+            // تحديث النقاط وترتيب المراكز حياً كل 5 ثوانٍ
             if (!window.leaderboardInterval) {
                 window.leaderboardInterval = setInterval(() => {
                     const panel = document.getElementById('pane-leaderboard');
@@ -3166,14 +3174,14 @@
             
             currentLeaderboardData = shuffledPrefixes.map((prefix, index) => {
                 const prize = fixedPrizePool[index];
-                
-                const basePoints = prize * 300;
-                const randomVariation = Math.floor(Math.random() * 2000) - 30000;
+                // القاعدة الرياضية: كل 1 دينار = 10 نقاط تقريباً، مع إضافة تباين عشوائي بسيط
+                const basePoints = prize * 10;
+                const randomVariation = Math.floor(Math.random() * 600) - 300;
                 const score = basePoints + randomVariation;
 
                 return {
                     name: prefix + "******",
-                    score: Math.max(50000, score),
+                    score: Math.max(5000, score),
                     prize: prize
                 };
             });
@@ -3182,9 +3190,10 @@
         }
 
         function sortAndAlignData() {
+            // ترتيب تنازلي صارم حسب النقاط (الأعلى نقاطاً يصبح الأول تلقائياً)
             currentLeaderboardData.sort((a, b) => b.score - a.score);
 
-           
+            // إعادة ربط الجوائز بالترتيب الصحيح (الأول يحصل على أكبر جائزة 5000 TND، وهكذا)
             currentLeaderboardData.forEach((item, index) => {
                 item.rank = index + 1;
                 item.prize = fixedPrizePool[index];
@@ -3225,27 +3234,27 @@
         }
 
         function updateLeaderboardRandomly() {
-           
+            // تحديث طفيف عشوائي على النقاط لإعطاء حيوية
             currentLeaderboardData.forEach(item => {
                 let delta = Math.floor(Math.random() * 300) - 100;
                 item.score = Math.max(5000, item.score + delta);
             });
 
-           
+            // إعادة الفرز فوراً لضمان عدم حدوث أي خطأ منطقي في الترتيب أو الجوائز
             sortAndAlignData();
             renderLeaderboardData();
         }
 
-       
+        // ================= نظام استلام خزنة الكاش باك والوقت التنازلي =================
         
-       
+        // 1. دالة السحب
         async function claimCashback() {
             if (!playerSession) return openLoginModal();
             
             const vaultEl = document.getElementById('vault-amount');
             const currentAmount = parseFloat(vaultEl.innerText);
             
-            
+            // فحص الحد الأدنى من جهة الواجهة قبل إرسال الطلب للسيرفر
             if (isNaN(currentAmount) || currentAmount < 10.0) {
                 showNotification("Le montant minimum pour récupérer est de 10 TND.", "error");
                 return;
@@ -3270,7 +3279,7 @@
                     
                     vaultEl.innerHTML = `0.00 <span class="text-[10px]">TND</span>`;
                     
-                    
+                    // تحديث الأرصدة
                     if (data.new_balance !== undefined) {
                         playerSession.balance = data.new_balance;
                         const formattedBalance = parseFloat(data.new_balance).toFixed(2);
@@ -3278,13 +3287,13 @@
                         document.getElementById('sidebar-balance').innerText = formattedBalance + ' TND';
                     }
                     
-                    
+                    // 🌟 بدء المؤشر التنازلي لـ 24 ساعة وحفظ الوقت محلياً
                     localStorage.setItem('alpha_last_cashback_claim', new Date().getTime().toString());
                     startCashbackCooldown();
 
                 } else {
                     showNotification(data.detail || "Erreur lors de la récupération", "error");
-                    
+                    // إعادة الزر لشكله الطبيعي في حال الفشل فقط
                     btn.innerHTML = 'Récupérer <i class="fas fa-hand-holding-usd text-sm"></i>';
                     btn.classList.remove('opacity-75', 'cursor-not-allowed');
                     btn.disabled = false;
@@ -3297,14 +3306,14 @@
             }
         }
 
-        
+        // 2. دالة المؤشر التنازلي (تعمل أوتوماتيكياً)
         function startCashbackCooldown() {
             const lastClaim = localStorage.getItem('alpha_last_cashback_claim');
             if (!lastClaim) return;
 
             const btn = document.getElementById('claim-cashback-btn');
             const timerEl = document.getElementById('cashback-timer');
-            const cooldownTime = 24 * 60 * 60 * 1000; 
+            const cooldownTime = 24 * 60 * 60 * 1000; // 24 ساعة بالملي ثانية
 
             if (window.cashbackInterval) clearInterval(window.cashbackInterval);
 
@@ -3336,27 +3345,27 @@
             }, 1000);
         }
 
-        
+        // 🌟 تشغيل فحص المؤشر التنازلي عند تحميل الصفحة
         window.addEventListener('DOMContentLoaded', () => {
             startCashbackCooldown();
         });
 
-        
+        // ================= نظام إشعارات الأرباح الكبرى (Real-time Big Win Toasts) =================
         
         function showBigWinToast(playerName, amount, gameName, gameImg) {
-           
+            // 1. إنشاء حاوية الإشعارات في الزاوية السفلية اليسرى إذا لم تكن موجودة
             let container = document.getElementById('big-win-container');
             if (!container) {
                 container = document.createElement('div');
                 container.id = 'big-win-container';
-               
+                // موضعها: فوق شريط الهاتف (bottom-24) وفي الزاوية للكمبيوتر (bottom-6)
                 container.className = 'fixed bottom-24 md:bottom-6 left-4 md:left-6 z-[600] flex flex-col gap-3 pointer-events-none';
                 document.body.appendChild(container);
             }
 
-            
+            // 2. إنشاء عنصر الإشعار الأنيق
             const toast = document.createElement('div');
-            
+            // تصميم فخم بحدود ذهبية وخلفية زجاجية داكنة
             toast.className = 'bg-[#12151d]/95 backdrop-blur-xl border border-yellow-500/40 rounded-2xl p-3 shadow-[0_0_20px_rgba(234,179,8,0.15)] flex items-center gap-3 transform transition-all duration-500 translate-y-10 opacity-0 max-w-[280px] md:max-w-sm';
 
             toast.innerHTML = `
@@ -3380,23 +3389,23 @@
 
             container.appendChild(toast);
 
-            
+            // 3. تحريك الإشعار للظهور (Animation In)
             requestAnimationFrame(() => {
                 toast.classList.remove('translate-y-10', 'opacity-0');
             });
 
-           
+            // 4. إخفاء وإزالة الإشعار بعد 5 ثوانٍ
             setTimeout(() => {
                 toast.classList.add('translate-y-10', 'opacity-0');
                 setTimeout(() => {
                     toast.remove();
-                }, 500); 
+                }, 500); // الانتظار حتى تنتهي حركة الاختفاء قبل الحذف من الـ DOM
             }, 5000);
         }
 
-        
+        // ================= الاتصال الحقيقي بالسيرفر للأرباح الكبرى (Real WebSocket) =================
         function connectBigWinsWebSocket() {
-
+            // تحويل رابط الباك إند إلى رابط WebSocket (ws:// أو wss://)
             const wsUrl = BACKEND_URL.replace("http", "ws").replace("https", "wss") + "/ws/bigwins";
             const socket = new WebSocket(wsUrl);
 
@@ -3404,13 +3413,13 @@
                 try {
                     const data = JSON.parse(event.data);
                     
-                    
+                    // تنسيق المبلغ ليكون جميلاً
                     const amountFormatted = parseFloat(data.amount).toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                     
-
+                    // صورة افتراضية لألعاب اليورو فيرتوالز
                     const gameImg = "https://img.icons8.com/3d-fluency/94/controller.png"; 
                     
-                    
+                    // استدعاء دالة إظهار الإشعار بالبيانات الحقيقية
                     showBigWinToast(data.player, amountFormatted, data.game, gameImg);
                 } catch (e) {
                     console.error("Erreur de traitement du gain:", e);
@@ -3418,16 +3427,17 @@
             };
 
             socket.onclose = function() {
-               
+                // إعادة الاتصال الصامت أوتوماتيكياً إذا انقطع الإنترنت
                 setTimeout(connectBigWinsWebSocket, 5000);
             };
         }
 
-         window.addEventListener('DOMContentLoaded', () => {
+        // تشغيل الاتصال الحقيقي بدلاً من المحاكي عند اكتمال تحميل الصفحة
+        window.addEventListener('DOMContentLoaded', () => {
             connectBigWinsWebSocket();
         });
 
-
+        // ================= نظام نرد الحظ السحري (The 3D Magic Dice) =================
         function rollMagicDice() {
             if (!playerSession) {
                 showNotification("Veuillez vous connecter pour lancer le dé magique ! 🎲", "error");
@@ -3437,21 +3447,21 @@
             const diceImg = document.getElementById('dice-img');
             const mainBody = document.body;
 
-            
+            // منع اللاعب من الضغط المتكرر بينما النرد لا يزال يدور
             if (diceImg.classList.contains('spin-active')) return;
 
-            
+            // 1. تشغيل الحركة السحرية (دوران النرد ورجة الشاشة)
             diceImg.classList.add('spin-active');
             mainBody.classList.add('shake-active');
 
-            
+            // إزالة حركات الـ CSS بعد انتهائها
             setTimeout(() => {
                 diceImg.classList.remove('spin-active');
                 mainBody.classList.remove('shake-active');
             }, 1200);
 
-            
-            
+            // 2. الذكاء الاصطناعي لاختيار اللعبة الساخنة (Hot Games Pool)
+            // يمكنك تغيير هذه الألعاب لأكثر الألعاب ربحاً في منصتك
             const hotGames = [
                 { provider: 'PRAGMATIC', code: 'vs20olympus', name: 'Gates of Olympus ⚡' },
                 { provider: 'PRAGMATIC', code: 'vs20doghouse', name: 'The Dog House 🐶' },
@@ -3460,14 +3470,14 @@
                 { provider: 'PLAYNGO', code: 'book_of_dead', name: 'Book of Dead 📖' }
             ];
 
-            
+            // اختيار لعبة عشوائية من القائمة
             const randomGame = hotGames[Math.floor(Math.random() * hotGames.length)];
 
-            
+            // 3. تأخير فتح اللعبة قليلاً ليتمكن اللاعب من الاستمتاع بالتأثير البصري
             setTimeout(() => {
                 showNotification(`🎲 Les esprits ont choisi : ${randomGame.name} !`, "success");
                 
-                
+                // إطلاق اللعبة فوراً
                 playCasinoGame(randomGame.provider, randomGame.code);
             }, 1000);
         }
@@ -3480,7 +3490,7 @@
 
     <div id="profile-sidebar"
         class="fixed right-0 top-0 bottom-16 w-80 bg-[#12151d] border-l border-gray-800 z-[200] shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col overflow-y-auto hide-scroll">
-        
+        <!-- 1. رأس القائمة (معلومات المستخدم وزر الإغلاق) -->
         <div class="p-5 border-b border-gray-800 flex justify-between items-center bg-[#0f1117] shrink-0">
             <div class="flex items-center gap-3">
                 <div
@@ -3498,7 +3508,7 @@
             </button>
         </div>
 
-       
+        <!-- 🌟 شريط تقدم مستوى اللاعب (VIP Progress Bar) -->
         <div class="px-5 py-3 border-b border-gray-800 bg-[#0f1117] shrink-0">
             <div class="flex justify-between items-center mb-1 text-[11px]">
                 <span class="text-yellow-400 font-extrabold flex items-center gap-1.5">
@@ -3515,9 +3525,9 @@
                     style="width: 35%;"></div>
             </div>
         </div>
-       
+        <!-- 💰 خزنة الكاش باك اليومي (مضغوطة للهاتف) -->
         <div class="mx-4 my-2 bg-gradient-to-br from-[#1a1e29] to-[#0f1117] border border-emerald/30 rounded-xl p-3 relative overflow-hidden shadow-[0_0_15px_rgba(16,185,129,0.1)] shrink-0">
-            
+            <!-- أيقونة خلفية مصغرة -->
             <div class="absolute -right-3 -top-3 opacity-[0.03] text-6xl"><i class="fas fa-vault"></i></div>
             
             <div class="flex items-center gap-1.5 mb-1 relative z-10">
@@ -3535,10 +3545,10 @@
                 Récupérer <i class="fas fa-hand-holding-usd text-xs"></i>
             </button>
             
-            
+            <!-- مؤشر الوقت التنازلي -->
             <p id="cashback-timer" class="text-[9px] text-yellow-500 font-mono mt-1.5 text-center font-bold hidden"></p>
         </div>
-       
+        <!-- زر تثبيت التطبيق -->
         <div class="p-4 border-b border-gray-800 shrink-0">
             <button id="install-pwa-btn" onclick="installPWA()"
                 class="w-full bg-[#1a1e29] hover:bg-[#212631] text-emerald-400 border border-emerald-500/30 font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition">
@@ -3581,7 +3591,7 @@
             </a>
         </div>
 
-       
+        <!-- زر تسجيل الخروج في نهاية القائمة -->
         <div class="p-4 bg-[#0f1117] mt-auto shrink-0">
             <button onclick="toggleProfileSidebar(); logoutPlayer();"
                 class="w-full bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 border border-red-500/30 font-bold py-2.5 rounded-lg flex justify-center items-center gap-2 transition">
@@ -3690,11 +3700,11 @@
         </div>
     </div>
 
-    
+    <!-- 📱 شريط التنقل السفلي للهواتف (Mobile Bottom App-Bar) -->
     <div id="mobile-bottom-bar"
         class="md:hidden fixed bottom-0 left-0 w-full bg-[#161922] border-t border-[#212631] z-[900] shadow-[0_-5px_15px_rgba(0,0,0,0.5)]">
         <div class="flex justify-around items-center px-2 py-2">
-            
+            <!-- 1. الرئيسية -->
             <button
                 onclick="setActiveMenuBtn('btn-nav-accueil'); switchSection('accueil'); updateBottomBar('nav-mob-accueil')"
                 id="nav-mob-accueil"
@@ -3703,7 +3713,7 @@
                 <span class="text-[9px] font-bold uppercase tracking-widest text-white mt-0.5">Accueil</span>
             </button>
 
-            
+            <!-- 2. الكازينو (بأيقونة العملات المضمونة والواضحة) -->
             <button
                 onclick="setActiveMenuBtn('btn-nav-casino'); switchSection('casino'); initCasinoLobby(); updateBottomBar('nav-mob-casino')"
                 id="nav-mob-casino"
@@ -3712,7 +3722,7 @@
                 <span class="text-[9px] font-bold uppercase tracking-widest text-gray-400 mt-0.5">Casino</span>
             </button>
 
-           
+            <!-- 3. كازينو لايف -->
             <button
                 onclick="setActiveMenuBtn('btn-nav-live'); switchSection('live-casino'); openLiveCasino(); updateBottomBar('nav-mob-live')"
                 id="nav-mob-live"
@@ -3728,7 +3738,7 @@
                 <span class="text-[9px] font-bold uppercase tracking-widest text-gray-400 mt-0.5">Live</span>
             </button>
 
-            
+            <!-- 4. الرياضة -->
             <button
                 onclick="setActiveMenuBtn('btn-nav-sport'); openSportsbookForProvider('nexus'); updateBottomBar('nav-mob-sport')"
                 id="nav-mob-sport"
@@ -3738,7 +3748,7 @@
             </button>
         </div>
     </div>
-   
+    <!-- 🎡 نافذة عجلة الحظ اليومية -->
     <div id="lucky-wheel-modal"
         class="fixed inset-0 z-[500] bg-black/80 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
         <div
@@ -3750,7 +3760,7 @@
             </h3>
             <p class="text-xs text-gray-400 mb-6">Tournez la roue chaque jour pour gagner des cadeaux exclusifs !</p>
 
-           
+            <!-- تصميم العجلة المتحركة -->
             <div class="relative w-64 h-64 mb-6 flex items-center justify-center">
                 <div id="wheel-element"
                     class="w-full h-full rounded-full border-4 border-yellow-500 bg-gradient-to-tr from-yellow-600 via-emerald-600 to-purple-600 shadow-[0_0_20px_rgba(234,179,8,0.4)] flex items-center justify-center transition-all duration-[4000ms] ease-out relative overflow-hidden">
@@ -3766,7 +3776,7 @@
                         VIP
                     </div>
                 </div>
-               
+                <!-- المؤشر العلوي للعجلة -->
                 <div class="absolute -top-3 w-4 h-6 bg-yellow-400 z-20 shadow-md"
                     style="clip-path: polygon(50% 100%, 0 0, 100% 0);"></div>
             </div>
