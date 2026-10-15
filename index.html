@@ -527,7 +527,7 @@
                             </div>
                         </div>
                     </div>
-
+                    </div>
                 <!-- 🌟 أيقونات التصنيفات الدائرية السريعة (3D Premium Icons) -->
                 <div class="flex overflow-x-auto hide-scroll gap-3 md:gap-8 py-2 mb-2 items-center justify-start md:justify-center px-1 mt-4">
                     
@@ -1200,6 +1200,11 @@
             if (sectionId === 'casino' && typeof initCasinoLobby === 'function') initCasinoLobby();
             else if (sectionId === 'live-casino' && typeof openLiveCasino === 'function') openLiveCasino();
             else if (sectionId === 'virtuals' && typeof initVirtualsLobby === 'function') initVirtualsLobby();
+            else if (sectionId === 'zeroone-test' && typeof fetchIsolatedZeroOneGames === 'function') fetchIsolatedZeroOneGames('slots');
+            else if (sectionId === 'euro-casino' && typeof loadEuroVirtualsStudios === 'function') loadEuroVirtualsStudios('casino', 'euro-casino-grid', 'euro-casino-providers');
+            else if (sectionId === 'euro-live' && typeof loadEuroVirtualsStudios === 'function') loadEuroVirtualsStudios('live', 'euro-live-grid', 'euro-live-providers');
+            else if (sectionId === 'leaderboard' && typeof initLeaderboard === 'function') initLeaderboard();
+            else if (sectionId === 'favoris' && typeof loadFavorites === 'function') loadFavorites();
         }
 
         async function handlePlayerAuth() {
@@ -2454,10 +2459,9 @@
             if (!container) return;
 
 
-            if (container.dataset.loaded === 'true') return;
-            container.dataset.loaded = 'true';
+            if (container.dataset.loaded === 'true' && container.children.length > 0) return;
 
-            container.innerHTML = '';
+            container.innerHTML = '<div class="text-emerald text-center py-6 animate-pulse font-bold text-xs">Chargement des fournisseurs populaires... 🎰</div>';
 
             const featured = [
                 { name: "Pragmatic Play", code: "PRAGMATIC", color: "bg-emerald-500", hover: "hover:border-emerald-500" },
@@ -2543,7 +2547,12 @@
             }
 
 
-            container.innerHTML = finalHtml;
+           if (finalHtml !== '') {
+                container.innerHTML = finalHtml;
+                container.dataset.loaded = 'true';
+            } else {
+                container.innerHTML = '<div class="text-gray-500 text-center py-4 text-xs font-bold">Impossible de charger les jeux pour le moment.</div>';
+            }
         }
 
 
