@@ -498,13 +498,14 @@
                     </div>
 
                     <!-- 2. سلايدر البنرات الترويجية (مع 3D Pop-out متطابق بين الهاتف والحاسوب) -->
-                    <!-- 🌟 تم ضبط الارتفاع للهاتف (220px) مع إعطاء مساحة علوية (mt-8) ليتنفس رأس الشخصية -->
-                    <div class="relative w-full h-[220px] md:h-[280px] mt-8 md:mt-6">
+                    <!-- 🌟 1. أعطينا مساحة علوية أكبر (mt-12) لكي يجد رأس الشخصية مساحة ليبرز فيها -->
+                    <div class="relative w-full h-[210px] md:h-[280px] mt-12 md:mt-8 mb-4">
 
-                        <!-- 🌟 الشخصية: الارتفاع 145% في الهاتف لتكسر السقف، مثبتة بالأسفل (bottom-0 و object-bottom) -->
+                        <!-- 🌟 2. الصورة توضع هنا (خارج صندوق الـ overflow-hidden) لكي تبرز وتكسر السقف -->
                         <img src="https://i.postimg.cc/tTKz01dj/banner.png" alt="Banner 3D"
-                            class="block absolute -right-4 sm:right-0 md:right-8 bottom-0 h-[145%] sm:h-[140%] md:h-[155%] max-w-[190px] sm:max-w-[220px] md:max-w-[400px] w-auto object-contain object-bottom z-[60] pointer-events-none filter contrast-[1.08] saturate-[1.05] drop-shadow-[-15px_15px_30px_rgba(0,0,0,0.95)]">
+                            class="block absolute -right-2 sm:right-4 md:right-8 bottom-0 h-[135%] sm:h-[140%] md:h-[150%] max-w-[170px] sm:max-w-[220px] md:max-w-[400px] w-auto object-contain object-bottom z-[60] pointer-events-none filter contrast-[1.08] saturate-[1.05] drop-shadow-[-15px_15px_30px_rgba(0,0,0,0.85)]">
                         
+                        <!-- 🌟 3. هذا هو صندوق البانر الذي يحتوي على الخلفية والنصوص (وهو الذي يخفي الزوائد) -->
                         <div class="relative w-full h-full md:rounded-2xl overflow-hidden bg-[#161922] border-b border-[#212631] md:border md:border-emerald/30 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
                             <div id="hero-slider" class="w-full h-full relative">
 
@@ -512,12 +513,12 @@
                                 <div class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100 z-20">
                                     <div class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/95 to-[#10b981]/30"></div>
                                     <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:20px_20px]"></div>
-                                    <!-- 🌟 النص يأخذ 58% فقط في الهاتف ليتجنب الصورة تماماً -->
-                                    <div class="relative h-full flex flex-col justify-center pl-4 sm:pl-8 md:px-12 w-[58%] sm:w-[65%] md:w-2/3 z-20">
+                                    <!-- 🌟 النص يأخذ 55% فقط في الهاتف ليتجنب الصورة تماماً -->
+                                    <div class="relative h-full flex flex-col justify-center pl-4 sm:pl-8 md:px-12 w-[55%] sm:w-[60%] md:w-2/3 z-20">
                                         <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 text-[8px] md:text-xs font-extrabold mb-1.5 md:mb-2.5 w-fit">
                                             <i class="fas fa-gem"></i> CASINO PREMIUM
                                         </div>
-                                        <h2 class="text-white text-[17px] md:text-4xl font-black uppercase tracking-wide leading-[1.15] md:leading-tight mb-1.5 md:mb-2">
+                                        <h2 class="text-white text-[16px] md:text-4xl font-black uppercase tracking-wide leading-[1.15] md:leading-tight mb-1.5 md:mb-2">
                                             L'Expérience Casino <br><span class="text-emerald drop-shadow-[0_0_12px_rgba(16,185,129,0.4)]">Ultime</span>
                                         </h2>
                                         <p class="text-gray-400 text-[9px] md:text-sm font-semibold max-w-md mb-3 md:mb-4 line-clamp-3 md:line-clamp-none pr-1">
@@ -533,11 +534,11 @@
                                 <div class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-10">
                                     <div class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/95 to-blue-600/30"></div>
                                     <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px]"></div>
-                                    <div class="relative h-full flex flex-col justify-center pl-4 sm:pl-8 md:px-12 w-[58%] sm:w-[65%] md:w-2/3 z-20">
+                                    <div class="relative h-full flex flex-col justify-center pl-4 sm:pl-8 md:px-12 w-[55%] sm:w-[60%] md:w-2/3 z-20">
                                         <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/15 border border-blue-500/40 text-blue-400 text-[8px] md:text-xs font-extrabold mb-1.5 md:mb-2.5 w-fit">
                                             <i class="fas fa-futbol"></i> SPORTSBOOK
                                         </div>
-                                        <h2 class="text-white text-[17px] md:text-4xl font-black uppercase tracking-wide leading-[1.15] md:leading-tight mb-1.5 md:mb-2">
+                                        <h2 class="text-white text-[16px] md:text-4xl font-black uppercase tracking-wide leading-[1.15] md:leading-tight mb-1.5 md:mb-2">
                                             Vivez le Sport <br><span class="text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.4)]">En Direct</span>
                                         </h2>
                                         <p class="text-gray-400 text-[9px] md:text-sm font-semibold max-w-md mb-3 md:mb-4 line-clamp-3 md:line-clamp-none pr-1">
@@ -553,11 +554,11 @@
                                 <div class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-10">
                                     <div class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/95 to-purple-600/30"></div>
                                     <div class="absolute inset-0 opacity-15 bg-[radial-gradient(#a855f7_1px,transparent_1px)] [background-size:20px_20px]"></div>
-                                    <div class="relative h-full flex flex-col justify-center pl-4 sm:pl-8 md:px-12 w-[58%] sm:w-[65%] md:w-2/3 z-20">
+                                    <div class="relative h-full flex flex-col justify-center pl-4 sm:pl-8 md:px-12 w-[55%] sm:w-[60%] md:w-2/3 z-20">
                                         <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-500/15 border border-purple-500/40 text-purple-400 text-[8px] md:text-xs font-extrabold mb-1.5 md:mb-2.5 w-fit">
                                             <i class="fas fa-shield-halved"></i> FIABILITÉ ABSOLUE
                                         </div>
-                                        <h2 class="text-white text-[17px] md:text-4xl font-black uppercase tracking-wide leading-[1.15] md:leading-tight mb-1.5 md:mb-2">
+                                        <h2 class="text-white text-[16px] md:text-4xl font-black uppercase tracking-wide leading-[1.15] md:leading-tight mb-1.5 md:mb-2">
                                             Transactions Rapides <br><span class="text-purple-400 drop-shadow-[0_0_12px_rgba(168,85,247,0.4)]">& Sécurisées</span>
                                         </h2>
                                         <p class="text-gray-400 text-[9px] md:text-sm font-semibold max-w-md mb-3 md:mb-4 line-clamp-3 md:line-clamp-none pr-1">
