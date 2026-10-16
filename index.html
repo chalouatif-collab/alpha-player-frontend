@@ -36,6 +36,19 @@
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3132/3132634.png">
 
     <style>
+        /* 🌟 حركة الشعار ثلاثية الأبعاد (يمين يسار + طفو) */
+        @keyframes logo-3d-swing {
+            0%, 100% { transform: perspective(800px) rotateY(-20deg) translateY(0); }
+            50% { transform: perspective(800px) rotateY(20deg) translateY(-4px); }
+        }
+        .animated-logo-3d {
+            animation: logo-3d-swing 5s ease-in-out infinite;
+            filter: drop-shadow(0 8px 16px rgba(16, 185, 129, 0.4)); /* توهج أخضر خفيف حول الشعار */
+            transform-style: preserve-3d;
+            will-change: transform;
+            object-fit: contain;
+        }
+
         /* ================= حركات نرد الحظ السحري ================= */
         /* 1. حركة الطفو البطيئة الدائمة للنرد */
         @keyframes float-dice {
@@ -233,15 +246,10 @@
         <!-- 🚀 شاشة التحميل الابتدائية (Splash Screen) -->
         <div id="splash-screen"
             class="fixed inset-0 z-[9999] bg-[#0f1117] flex flex-col items-center justify-center transition-opacity duration-700 ease-out">
-            <!-- الشعار مع تأثير العملة الذي أضفناه سابقاً -->
-            <div
-                class="logo-coin-animated w-16 h-16 rounded-2xl bg-emerald flex items-center justify-center text-black font-black text-4xl shadow-[0_0_40px_rgba(16,185,129,0.4)] mb-4">
-                <i class="fas fa-bolt"></i>
-            </div>
-            <!-- اسم المنصة ينبض -->
-            <h1 class="font-extrabold text-3xl md:text-4xl tracking-tight text-white mb-6 animate-pulse">Alphabet<span
-                    class="text-emerald">216</span></h1>
-
+            <!-- 🌟 الشعار الجديد 3D في شاشة التحميل -->
+            <img src="https://i.postimg.cc/tgPG6cq2/Logo-(2).png" 
+                 alt="Alphabet216 Logo" 
+                 class="animated-logo-3d h-20 md:h-28 w-auto mb-6">
             <!-- أيقونة التحميل الدوارة -->
             <div
                 class="flex items-center gap-2 text-emerald text-[10px] md:text-xs font-bold tracking-widest uppercase">
@@ -254,14 +262,11 @@
                 class="max-w-[1700px] mx-auto px-3 md:px-4 h-16 md:h-18 flex justify-between items-center py-2 md:py-3">
 
                 <div class="flex items-center gap-2 md:gap-6">
-                    <div class="flex items-center gap-1.5 md:gap-2 cursor-pointer" onclick="switchSection('accueil')">
-                        <!-- تصغير الشعار في الهاتف -->
-                        <div
-                            class="logo-coin-animated w-7 h-7 md:w-9 md:h-9 rounded-lg md:rounded-xl bg-emerald flex items-center justify-center text-black font-black text-sm md:text-xl shadow-md">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <h1 class="font-extrabold text-lg md:text-2xl tracking-tight text-white m-0">Alphabet<span
-                                class="text-emerald">216</span></h1>
+                    <!-- 🌟 الشعار الجديد 3D في الشريط العلوي -->
+                    <div class="flex items-center cursor-pointer" onclick="switchSection('accueil')">
+                        <img src="https://i.postimg.cc/tgPG6cq2/Logo-(2).png" 
+                             alt="Alphabet216" 
+                             class="animated-logo-3d h-9 md:h-12 w-auto">
                     </div>
                 </div>
 
