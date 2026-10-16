@@ -450,10 +450,33 @@
                     <div class="relative w-full h-[210px] md:h-[275px] mt-4 md:mt-6">
                         
                         <!-- 🌟 شخصية الـ 3D البارزة خارج الإطار في اليمين (ثابتة فوق كل الشرائح) -->
-                        <img src="static/banner.png" 
-                             onerror="if(this.src.includes('static/banner.png') && !this.dataset.retried){this.dataset.retried='1'; this.src='/static/banner.png';} else {this.style.display='none';}" 
-                             alt="" 
-                             class="block absolute right-1 sm:right-4 md:right-10 bottom-0 h-[106%] sm:h-[115%] md:h-[124%] max-w-[135px] sm:max-w-[210px] md:max-w-[300px] w-auto object-contain z-30 pointer-events-none drop-shadow-[-10px_10px_25px_rgba(0,0,0,0.85)]"><div class="relative w-full h-full md:rounded-2xl overflow-hidden bg-[#161922] border-b border-[#212631] md:border md:border-emerald/30 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                        <img id="alphabet-hero-3d"
+                             src="static/banner.png" 
+                             alt="Banner 3D" 
+                             class="block absolute right-1 sm:right-4 md:right-10 bottom-0 h-[106%] sm:h-[115%] md:h-[124%] max-w-[135px] sm:max-w-[210px] md:max-w-[300px] w-auto object-contain z-30 pointer-events-none drop-shadow-[-10px_10px_25px_rgba(0,0,0,0.85)]">
+                        <script>
+                            (function() {
+                                const imgEl = document.getElementById('alphabet-hero-3d');
+                                const fallbacks = [
+                                    '/static/banner.png',
+                                    'coutabet-player/static/banner.png',
+                                    '/coutabet-static/banner.png',
+                                    'images/banner.png',
+                                    '/images/banner.png',
+                                    'images/gatesbenner.png',
+                                    '/images/gatesbenner.png'
+                                ];
+                                let idx = 0;
+                                imgEl.onerror = function() {
+                                    if (idx < fallbacks.length) {
+                                        this.src = fallbacks[idx++];
+                                    } else {
+                                        this.style.display = 'none';
+                                    }
+                                };
+                            })();
+                        </script>
+                        <div class="relative w-full h-full md:rounded-2xl overflow-hidden bg-[#161922] border-b border-[#212631] md:border md:border-emerald/30 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
                             <div id="hero-slider" class="w-full h-full relative">
                                 
                                 <!-- البنر الأول -->
