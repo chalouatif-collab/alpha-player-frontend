@@ -495,226 +495,223 @@
                     <!-- 2. سلايدر البنرات الترويجية (مع 3D Pop-out و CTA) -->
                     <div class="relative w-full h-[210px] md:h-[275px] mt-4 md:mt-6">
 
-                        <img src="https://i.postimg.cc/tTKz01dj/banner.png" alt="Banner 3D" class="...">
+                        <img src="https://i.postimg.cc/tTKz01dj/banner.png" alt="Banner 3D"
                             class="block absolute right-1 sm:right-4 md:right-10 bottom-0 h-[118%] md:h-[130%] max-w-[190px] md:max-w-[340px] w-auto object-contain z-[50] pointer-events-none filter contrast-[1.08] saturate-[1.05] drop-shadow-[-15px_15px_30px_rgba(0,0,0,0.95)]">
-                        <div id="hero-slider" class="w-full h-full relative">
-
-                            <!-- البنر الأول -->
+                        <!-- البنر الأول -->
+                        <div
+                            class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100 z-20">
                             <div
-                                class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100 z-20">
-                                <div
-                                    class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/95 to-[#10b981]/30">
-                                </div>
-                                <div
-                                    class="absolute inset-0 opacity-15 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:20px_20px]">
-                                </div>
-                                <div
-                                    class="relative h-full flex flex-col justify-center pl-5 pr-[130px] sm:px-8 md:px-12 w-full sm:w-2/3 z-20">
-                                    <div
-                                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 text-[10px] md:text-xs font-extrabold mb-2.5 w-fit">
-                                        <i class="fas fa-gem"></i> CASINO PREMIUM
-                                    </div>
-                                    <h2
-                                        class="text-white text-xl md:text-4xl font-black uppercase tracking-wide leading-tight mb-2">
-                                        L'Expérience Casino <br><span
-                                            class="text-emerald drop-shadow-[0_0_12px_rgba(16,185,129,0.4)]">Ultime</span>
-                                    </h2>
-                                    <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md mb-4">
-                                        Plongez dans un univers de divertissement sans limite avec les meilleurs
-                                        fournisseurs mondiaux.
-                                    </p>
-                                    <button onclick="switchSection('casino'); initCasinoLobby();"
-                                        class="w-fit bg-emerald hover:bg-emerald-400 text-black font-black text-[10px] md:text-xs uppercase px-5 py-2.5 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all transform hover:scale-105 flex items-center gap-2">
-                                        Jouer Maintenant <i class="fas fa-play text-[10px]"></i>
-                                    </button>
-                                </div>
+                                class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/95 to-[#10b981]/30">
                             </div>
-
-                            <!-- البنر الثاني -->
                             <div
-                                class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-10">
-                                <div
-                                    class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/95 to-blue-600/30">
-                                </div>
-                                <div
-                                    class="absolute inset-0 opacity-15 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px]">
-                                </div>
-                                <div
-                                    class="relative h-full flex flex-col justify-center pl-5 pr-[130px] sm:px-8 md:px-12 w-full sm:w-2/3 z-20">
-                                    <div
-                                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/15 border border-blue-500/40 text-blue-400 text-[10px] md:text-xs font-extrabold mb-2.5 w-fit">
-                                        <i class="fas fa-futbol"></i> SPORTSBOOK
-                                    </div>
-                                    <h2
-                                        class="text-white text-xl md:text-4xl font-black uppercase tracking-wide leading-tight mb-2">
-                                        Vivez le Sport <br><span
-                                            class="text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.4)]">En
-                                            Direct</span>
-                                    </h2>
-                                    <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md mb-4">
-                                        Une couverture mondiale, des statistiques en temps réel et les cotes les plus
-                                        compétitives du marché.
-                                    </p>
-                                    <button onclick="openSportsbookForProvider('nexus')"
-                                        class="w-fit bg-blue-500 hover:bg-blue-400 text-white font-black text-[10px] md:text-xs uppercase px-5 py-2.5 rounded-full shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all transform hover:scale-105 flex items-center gap-2">
-                                        Parier en Direct <i class="fas fa-bolt text-[10px]"></i>
-                                    </button>
-                                </div>
+                                class="absolute inset-0 opacity-15 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:20px_20px]">
                             </div>
-
-                            <!-- البنر الثالث -->
                             <div
-                                class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-10">
+                                class="relative h-full flex flex-col justify-center pl-5 pr-[130px] sm:px-8 md:px-12 w-full sm:w-2/3 z-20">
                                 <div
-                                    class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/95 to-purple-600/30">
+                                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 text-[10px] md:text-xs font-extrabold mb-2.5 w-fit">
+                                    <i class="fas fa-gem"></i> CASINO PREMIUM
                                 </div>
-                                <div
-                                    class="absolute inset-0 opacity-15 bg-[radial-gradient(#a855f7_1px,transparent_1px)] [background-size:20px_20px]">
-                                </div>
-                                <div
-                                    class="relative h-full flex flex-col justify-center pl-5 pr-[130px] sm:px-8 md:px-12 w-full sm:w-2/3 z-20">
-                                    <div
-                                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/15 border border-purple-500/40 text-purple-400 text-[10px] md:text-xs font-extrabold mb-2.5 w-fit">
-                                        <i class="fas fa-shield-halved"></i> FIABILITÉ ABSOLUE
-                                    </div>
-                                    <h2
-                                        class="text-white text-xl md:text-4xl font-black uppercase tracking-wide leading-tight mb-2">
-                                        Transactions Rapides <br><span
-                                            class="text-purple-400 drop-shadow-[0_0_12px_rgba(168,85,247,0.4)]">&
-                                            Sécurisées</span>
-                                    </h2>
-                                    <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md mb-4">
-                                        Profitez d'un environnement de jeu sûr avec des dépôts instantanés et des
-                                        retraits garantis.
-                                    </p>
-                                    <button onclick="toggleCashier()"
-                                        class="w-fit bg-purple-500 hover:bg-purple-400 text-white font-black text-[10px] md:text-xs uppercase px-5 py-2.5 rounded-full shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all transform hover:scale-105 flex items-center gap-2">
-                                        Caisse Rapide <i class="fas fa-wallet text-[10px]"></i>
-                                    </button>
-                                </div>
+                                <h2
+                                    class="text-white text-xl md:text-4xl font-black uppercase tracking-wide leading-tight mb-2">
+                                    L'Expérience Casino <br><span
+                                        class="text-emerald drop-shadow-[0_0_12px_rgba(16,185,129,0.4)]">Ultime</span>
+                                </h2>
+                                <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md mb-4">
+                                    Plongez dans un univers de divertissement sans limite avec les meilleurs
+                                    fournisseurs mondiaux.
+                                </p>
+                                <button onclick="switchSection('casino'); initCasinoLobby();"
+                                    class="w-fit bg-emerald hover:bg-emerald-400 text-black font-black text-[10px] md:text-xs uppercase px-5 py-2.5 rounded-full shadow-[0_0_20px_rgba(16,185,129,0.5)] transition-all transform hover:scale-105 flex items-center gap-2">
+                                    Jouer Maintenant <i class="fas fa-play text-[10px]"></i>
+                                </button>
                             </div>
                         </div>
 
-                        <!-- أزرار التحكم في البنر -->
-                        <div class="absolute bottom-3 md:bottom-4 left-6 md:left-12 flex gap-2 z-30">
-                            <button
-                                class="slide-dot w-2.5 h-2.5 rounded-full bg-emerald shadow-[0_0_8px_rgba(16,185,129,0.8)] transition-all"></button>
-                            <button
-                                class="slide-dot w-2.5 h-2.5 rounded-full bg-gray-600 hover:bg-gray-400 transition-all"></button>
-                            <button
-                                class="slide-dot w-2.5 h-2.5 rounded-full bg-gray-600 hover:bg-gray-400 transition-all"></button>
+                        <!-- البنر الثاني -->
+                        <div
+                            class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-10">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/95 to-blue-600/30">
+                            </div>
+                            <div
+                                class="absolute inset-0 opacity-15 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:20px_20px]">
+                            </div>
+                            <div
+                                class="relative h-full flex flex-col justify-center pl-5 pr-[130px] sm:px-8 md:px-12 w-full sm:w-2/3 z-20">
+                                <div
+                                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/15 border border-blue-500/40 text-blue-400 text-[10px] md:text-xs font-extrabold mb-2.5 w-fit">
+                                    <i class="fas fa-futbol"></i> SPORTSBOOK
+                                </div>
+                                <h2
+                                    class="text-white text-xl md:text-4xl font-black uppercase tracking-wide leading-tight mb-2">
+                                    Vivez le Sport <br><span
+                                        class="text-blue-400 drop-shadow-[0_0_12px_rgba(59,130,246,0.4)]">En
+                                        Direct</span>
+                                </h2>
+                                <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md mb-4">
+                                    Une couverture mondiale, des statistiques en temps réel et les cotes les plus
+                                    compétitives du marché.
+                                </p>
+                                <button onclick="openSportsbookForProvider('nexus')"
+                                    class="w-fit bg-blue-500 hover:bg-blue-400 text-white font-black text-[10px] md:text-xs uppercase px-5 py-2.5 rounded-full shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all transform hover:scale-105 flex items-center gap-2">
+                                    Parier en Direct <i class="fas fa-bolt text-[10px]"></i>
+                                </button>
+                            </div>
                         </div>
+
+                        <!-- البنر الثالث -->
+                        <div
+                            class="slide-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 z-10">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-[#0f1117] via-[#161922]/95 to-purple-600/30">
+                            </div>
+                            <div
+                                class="absolute inset-0 opacity-15 bg-[radial-gradient(#a855f7_1px,transparent_1px)] [background-size:20px_20px]">
+                            </div>
+                            <div
+                                class="relative h-full flex flex-col justify-center pl-5 pr-[130px] sm:px-8 md:px-12 w-full sm:w-2/3 z-20">
+                                <div
+                                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/15 border border-purple-500/40 text-purple-400 text-[10px] md:text-xs font-extrabold mb-2.5 w-fit">
+                                    <i class="fas fa-shield-halved"></i> FIABILITÉ ABSOLUE
+                                </div>
+                                <h2
+                                    class="text-white text-xl md:text-4xl font-black uppercase tracking-wide leading-tight mb-2">
+                                    Transactions Rapides <br><span
+                                        class="text-purple-400 drop-shadow-[0_0_12px_rgba(168,85,247,0.4)]">&
+                                        Sécurisées</span>
+                                </h2>
+                                <p class="text-gray-400 text-[10px] md:text-sm font-semibold max-w-md mb-4">
+                                    Profitez d'un environnement de jeu sûr avec des dépôts instantanés et des retraits
+                                    garantis.
+                                </p>
+                                <button onclick="toggleCashier()"
+                                    class="w-fit bg-purple-500 hover:bg-purple-400 text-white font-black text-[10px] md:text-xs uppercase px-5 py-2.5 rounded-full shadow-[0_0_20px_rgba(168,85,247,0.5)] transition-all transform hover:scale-105 flex items-center gap-2">
+                                    Caisse Rapide <i class="fas fa-wallet text-[10px]"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- أزرار التحكم في البنر -->
+                    <div class="absolute bottom-3 md:bottom-4 left-6 md:left-12 flex gap-2 z-30">
+                        <button
+                            class="slide-dot w-2.5 h-2.5 rounded-full bg-emerald shadow-[0_0_8px_rgba(16,185,129,0.8)] transition-all"></button>
+                        <button
+                            class="slide-dot w-2.5 h-2.5 rounded-full bg-gray-600 hover:bg-gray-400 transition-all"></button>
+                        <button
+                            class="slide-dot w-2.5 h-2.5 rounded-full bg-gray-600 hover:bg-gray-400 transition-all"></button>
                     </div>
                 </div>
             </div>
-            <!-- 🌟 بطاقات التصنيفات السريعة العريضة (Full-Width Bento Category Cards) -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 w-full my-5">
+        </div>
+        <!-- 🌟 بطاقات التصنيفات السريعة العريضة (Full-Width Bento Category Cards) -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 w-full my-5">
 
-                <!-- 1. السلوتس (Slots) -->
-                <button onclick="switchSection('casino'); initCasinoLobby();"
-                    class="group relative overflow-hidden bg-gradient-to-br from-[#161922] via-[#161922] to-emerald-500/15 border border-[#212631] hover:border-emerald rounded-2xl p-3.5 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(16,185,129,0.25)] text-left">
-                    <div class="flex flex-col z-10">
-                        <span class="text-[9px] font-black text-emerald uppercase tracking-widest mb-0.5">●
-                            Populaire</span>
-                        <span
-                            class="text-white font-black text-xs md:text-sm uppercase tracking-wide group-hover:text-emerald transition-colors">Slots
-                            & Casino</span>
-                        <span class="text-[10px] text-gray-500 font-semibold mt-0.5">+1,500 Jeux</span>
-                    </div>
-                    <div
-                        class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                        <img src="https://img.icons8.com/3d-fluency/94/slot-machine.png" alt="Slots"
-                            class="w-8 h-8 object-contain drop-shadow-md">
-                    </div>
-                </button>
+            <!-- 1. السلوتس (Slots) -->
+            <button onclick="switchSection('casino'); initCasinoLobby();"
+                class="group relative overflow-hidden bg-gradient-to-br from-[#161922] via-[#161922] to-emerald-500/15 border border-[#212631] hover:border-emerald rounded-2xl p-3.5 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(16,185,129,0.25)] text-left">
+                <div class="flex flex-col z-10">
+                    <span class="text-[9px] font-black text-emerald uppercase tracking-widest mb-0.5">● Populaire</span>
+                    <span
+                        class="text-white font-black text-xs md:text-sm uppercase tracking-wide group-hover:text-emerald transition-colors">Slots
+                        & Casino</span>
+                    <span class="text-[10px] text-gray-500 font-semibold mt-0.5">+1,500 Jeux</span>
+                </div>
+                <div
+                    class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                    <img src="https://img.icons8.com/3d-fluency/94/slot-machine.png" alt="Slots"
+                        class="w-8 h-8 object-contain drop-shadow-md">
+                </div>
+            </button>
 
-                <!-- 2. الكازينو المباشر (Live Casino) -->
-                <button onclick="switchSection('live-casino'); openLiveCasino();"
-                    class="group relative overflow-hidden bg-gradient-to-br from-[#161922] via-[#161922] to-red-500/15 border border-[#212631] hover:border-red-500 rounded-2xl p-3.5 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(239,68,68,0.25)] text-left">
-                    <div class="flex flex-col z-10">
-                        <span
-                            class="text-[9px] font-black text-red-400 uppercase tracking-widest mb-0.5 flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span> En Direct
-                        </span>
-                        <span
-                            class="text-white font-black text-xs md:text-sm uppercase tracking-wide group-hover:text-red-400 transition-colors">Live
-                            Casino</span>
-                        <span class="text-[10px] text-gray-500 font-semibold mt-0.5">Tables VIP</span>
-                    </div>
-                    <div
-                        class="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                        <img src="https://img.icons8.com/3d-fluency/94/roulette.png" alt="Live"
-                            class="w-8 h-8 object-contain drop-shadow-md">
-                    </div>
-                </button>
+            <!-- 2. الكازينو المباشر (Live Casino) -->
+            <button onclick="switchSection('live-casino'); openLiveCasino();"
+                class="group relative overflow-hidden bg-gradient-to-br from-[#161922] via-[#161922] to-red-500/15 border border-[#212631] hover:border-red-500 rounded-2xl p-3.5 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(239,68,68,0.25)] text-left">
+                <div class="flex flex-col z-10">
+                    <span
+                        class="text-[9px] font-black text-red-400 uppercase tracking-widest mb-0.5 flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span> En Direct
+                    </span>
+                    <span
+                        class="text-white font-black text-xs md:text-sm uppercase tracking-wide group-hover:text-red-400 transition-colors">Live
+                        Casino</span>
+                    <span class="text-[10px] text-gray-500 font-semibold mt-0.5">Tables VIP</span>
+                </div>
+                <div
+                    class="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                    <img src="https://img.icons8.com/3d-fluency/94/roulette.png" alt="Live"
+                        class="w-8 h-8 object-contain drop-shadow-md">
+                </div>
+            </button>
 
-                <!-- 3. ألعاب الكراش (Crash & Mini Jeux) -->
-                <button onclick="loadMiniJeux();"
-                    class="group relative overflow-hidden bg-gradient-to-br from-[#161922] via-[#161922] to-purple-500/15 border border-[#212631] hover:border-purple-500 rounded-2xl p-3.5 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(168,85,247,0.25)] text-left">
-                    <div class="flex flex-col z-10">
-                        <span class="text-[9px] font-black text-purple-400 uppercase tracking-widest mb-0.5">⚡ Gains
-                            Rapides</span>
-                        <span
-                            class="text-white font-black text-xs md:text-sm uppercase tracking-wide group-hover:text-purple-400 transition-colors">Crash
-                            Games</span>
-                        <span class="text-[10px] text-gray-500 font-semibold mt-0.5">Aviator & Mines</span>
-                    </div>
-                    <div
-                        class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                        <img src="https://img.icons8.com/3d-fluency/94/rocket.png" alt="Crash"
-                            class="w-8 h-8 object-contain drop-shadow-md">
-                    </div>
-                </button>
+            <!-- 3. ألعاب الكراش (Crash & Mini Jeux) -->
+            <button onclick="loadMiniJeux();"
+                class="group relative overflow-hidden bg-gradient-to-br from-[#161922] via-[#161922] to-purple-500/15 border border-[#212631] hover:border-purple-500 rounded-2xl p-3.5 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(168,85,247,0.25)] text-left">
+                <div class="flex flex-col z-10">
+                    <span class="text-[9px] font-black text-purple-400 uppercase tracking-widest mb-0.5">⚡ Gains
+                        Rapides</span>
+                    <span
+                        class="text-white font-black text-xs md:text-sm uppercase tracking-wide group-hover:text-purple-400 transition-colors">Crash
+                        Games</span>
+                    <span class="text-[10px] text-gray-500 font-semibold mt-0.5">Aviator & Mines</span>
+                </div>
+                <div
+                    class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                    <img src="https://img.icons8.com/3d-fluency/94/rocket.png" alt="Crash"
+                        class="w-8 h-8 object-contain drop-shadow-md">
+                </div>
+            </button>
 
-                <!-- 4. البلاك جاك (Blackjack) -->
-                <button
-                    onclick="switchSection('casino'); initCasinoLobby(); setTimeout(() => { document.getElementById('game-search-input').value = 'blackjack'; filterGames(); }, 500);"
-                    class="group relative overflow-hidden bg-gradient-to-br from-[#161922] via-[#161922] to-blue-500/15 border border-[#212631] hover:border-blue-500 rounded-2xl p-3.5 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(59,130,246,0.25)] text-left">
-                    <div class="flex flex-col z-10">
-                        <span class="text-[9px] font-black text-blue-400 uppercase tracking-widest mb-0.5">♠️
-                            Classique</span>
-                        <span
-                            class="text-white font-black text-xs md:text-sm uppercase tracking-wide group-hover:text-blue-400 transition-colors">Blackjack
-                            21</span>
-                        <span class="text-[10px] text-gray-500 font-semibold mt-0.5">Haute Limite</span>
-                    </div>
-                    <div
-                        class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                        <img src="https://img.icons8.com/3d-fluency/94/cards.png" alt="Blackjack"
-                            class="w-8 h-8 object-contain drop-shadow-md">
-                    </div>
-                </button>
+            <!-- 4. البلاك جاك (Blackjack) -->
+            <button
+                onclick="switchSection('casino'); initCasinoLobby(); setTimeout(() => { document.getElementById('game-search-input').value = 'blackjack'; filterGames(); }, 500);"
+                class="group relative overflow-hidden bg-gradient-to-br from-[#161922] via-[#161922] to-blue-500/15 border border-[#212631] hover:border-blue-500 rounded-2xl p-3.5 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(59,130,246,0.25)] text-left">
+                <div class="flex flex-col z-10">
+                    <span class="text-[9px] font-black text-blue-400 uppercase tracking-widest mb-0.5">♠️
+                        Classique</span>
+                    <span
+                        class="text-white font-black text-xs md:text-sm uppercase tracking-wide group-hover:text-blue-400 transition-colors">Blackjack
+                        21</span>
+                    <span class="text-[10px] text-gray-500 font-semibold mt-0.5">Haute Limite</span>
+                </div>
+                <div
+                    class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                    <img src="https://img.icons8.com/3d-fluency/94/cards.png" alt="Blackjack"
+                        class="w-8 h-8 object-contain drop-shadow-md">
+                </div>
+            </button>
 
-                <!-- 5. الألعاب الافتراضية (Virtuels) -->
-                <button onclick="switchSection('virtuals'); initVirtualsLobby();"
-                    class="col-span-2 sm:col-span-1 group relative overflow-hidden bg-gradient-to-br from-[#161922] via-[#161922] to-yellow-500/15 border border-[#212631] hover:border-yellow-500 rounded-2xl p-3.5 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(234,179,8,0.25)] text-left">
-                    <div class="flex flex-col z-10">
-                        <span class="text-[9px] font-black text-yellow-400 uppercase tracking-widest mb-0.5">🏆 24/7
-                            Matchs</span>
-                        <span
-                            class="text-white font-black text-xs md:text-sm uppercase tracking-wide group-hover:text-yellow-400 transition-colors">Virtuels</span>
-                        <span class="text-[10px] text-gray-500 font-semibold mt-0.5">Foot & Courses</span>
-                    </div>
-                    <div
-                        class="w-12 h-12 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                        <img src="https://img.icons8.com/3d-fluency/94/controller.png" alt="Virtuels"
-                            class="w-8 h-8 object-contain drop-shadow-md">
-                    </div>
-                </button>
+            <!-- 5. الألعاب الافتراضية (Virtuels) -->
+            <button onclick="switchSection('virtuals'); initVirtualsLobby();"
+                class="col-span-2 sm:col-span-1 group relative overflow-hidden bg-gradient-to-br from-[#161922] via-[#161922] to-yellow-500/15 border border-[#212631] hover:border-yellow-500 rounded-2xl p-3.5 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(234,179,8,0.25)] text-left">
+                <div class="flex flex-col z-10">
+                    <span class="text-[9px] font-black text-yellow-400 uppercase tracking-widest mb-0.5">🏆 24/7
+                        Matchs</span>
+                    <span
+                        class="text-white font-black text-xs md:text-sm uppercase tracking-wide group-hover:text-yellow-400 transition-colors">Virtuels</span>
+                    <span class="text-[10px] text-gray-500 font-semibold mt-0.5">Foot & Courses</span>
+                </div>
+                <div
+                    class="w-12 h-12 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                    <img src="https://img.icons8.com/3d-fluency/94/controller.png" alt="Virtuels"
+                        class="w-8 h-8 object-contain drop-shadow-md">
+                </div>
+            </button>
 
-            </div>
+        </div>
 
-            <!-- قسم أبرز المزودين -->
-            <div id="dynamic-featured-providers" class="flex flex-col gap-6 mb-8 w-full mt-4">
-            </div>
+        <!-- قسم أبرز المزودين -->
+        <div id="dynamic-featured-providers" class="flex flex-col gap-6 mb-8 w-full mt-4">
+        </div>
 
-            <!-- اختيار اليوم -->
-            <div>
-                <h3 class="font-bold text-white uppercase text-xs tracking-wider mb-3 flex items-center gap-2">
-                    <i class="fas fa-star text-emerald animate-pulse"></i> Sélection du Jour
-                </h3>
-                <div id="games-of-the-day-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
-            </div>
+        <!-- اختيار اليوم -->
+        <div>
+            <h3 class="font-bold text-white uppercase text-xs tracking-wider mb-3 flex items-center gap-2">
+                <i class="fas fa-star text-emerald animate-pulse"></i> Sélection du Jour
+            </h3>
+            <div id="games-of-the-day-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
+        </div>
 
         </div> <!-- 🔴 الإغلاق الصحيح لقسم Accueil -->
 
