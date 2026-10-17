@@ -1617,17 +1617,10 @@
             const sentinel = document.getElementById('games-scroll-sentinel');
             if (sentinel) sentinel.remove();
         }
-        // فتح وإغلاق الشات 
         function toggleChat() {
-            const chatBox = document.getElementById('live-chat-sidebar');
-            if (!chatBox) return;
-
-            if (chatBox.classList.contains('hidden')) {
-                chatBox.classList.remove('hidden');
-                chatBox.classList.add('flex');
-            } else {
-                chatBox.classList.add('hidden');
-                chatBox.classList.remove('flex');
+            // استدعاء واجهة Tawk.to البرمجية لفتح نافذة الدردشة الجديدة
+            if (typeof Tawk_API !== 'undefined') {
+                Tawk_API.toggle();
             }
         }
 
@@ -4091,6 +4084,22 @@
             <p id="wheel-timer" class="text-[11px] text-gray-400 mt-3 hidden font-mono font-bold"></p>
         </div>
     </div>
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/6ad35ced262b6e34d0161433/1k54q60ni';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+</body>
+</html>
 </body>
 
 </html>
