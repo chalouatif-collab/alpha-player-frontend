@@ -590,8 +590,8 @@
                             </div>
                         </div>
                     </div>                    
-                    <!-- 🌟 بطاقات التصنيفات السريعة العريضة (بمقاسات أيقونات أنيقة ومصغرة) -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-3 gap-y-4 md:gap-y-5 w-full my-6">
+                   <!-- 🌟 بطاقات التصنيفات السريعة العريضة (6 بطاقات متوازنة تماماً) -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-3 gap-y-4 md:gap-y-5 w-full my-6">
 
             <!-- 1. السلوتس (Slots) -->
             <button onclick="switchSection('casino'); initCasinoLobby();"
@@ -601,7 +601,6 @@
                     <span class="text-white font-black text-[11px] md:text-[13px] uppercase tracking-wide group-hover:text-emerald transition-colors leading-tight">Slots & Casino</span>
                     <span class="text-[9px] text-gray-500 font-semibold mt-0.5">+1,500 Jeux</span>
                 </div>
-                <!-- أيقونة مصغرة وأنيقة -->
                 <img src="https://img.icons8.com/3d-fluency/250/slot-machine.png" alt="Slots"
                     class="absolute right-1 md:right-2 bottom-1.5 md:bottom-2 h-[85%] md:h-[105%] max-w-[45px] md:max-w-[55px] object-contain z-20 pointer-events-none drop-shadow-[-3px_5px_8px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-2 animate-bounce-slow" style="animation-delay: 0s;">
             </button>
@@ -647,7 +646,7 @@
 
             <!-- 5. الألعاب الافتراضية (Virtuels) -->
             <button onclick="switchSection('virtuals'); initVirtualsLobby();"
-                class="col-span-2 sm:col-span-1 group relative overflow-visible bg-gradient-to-br from-[#161922] via-[#161922] to-yellow-500/15 border border-[#212631] hover:border-yellow-500 rounded-2xl p-3 md:p-4 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(234,179,8,0.25)] text-left min-h-[75px] md:min-h-[85px]">
+                class="group relative overflow-visible bg-gradient-to-br from-[#161922] via-[#161922] to-yellow-500/15 border border-[#212631] hover:border-yellow-500 rounded-2xl p-3 md:p-4 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(234,179,8,0.25)] text-left min-h-[75px] md:min-h-[85px]">
                 <div class="flex flex-col z-10 w-[70%] md:w-3/4">
                     <span class="text-[8px] md:text-[9px] font-black text-yellow-400 uppercase tracking-widest mb-0.5">🏆 24/7 Matchs</span>
                     <span class="text-white font-black text-[11px] md:text-[13px] uppercase tracking-wide group-hover:text-yellow-400 transition-colors leading-tight">Virtuels</span>
@@ -657,7 +656,22 @@
                     class="absolute right-1 md:right-2 bottom-1.5 md:bottom-2 h-[80%] md:h-[100%] max-w-[45px] md:max-w-[55px] object-contain z-20 pointer-events-none drop-shadow-[-3px_5px_8px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-2 animate-bounce-slow" style="animation-delay: 0.8s;">
             </button>
 
+            <!-- 6. نرد الحظ السحري (Magic Dice - تمت إضافته كبطاقة سادسة) -->
+            <button onclick="rollMagicDice()"
+                class="group relative overflow-visible bg-gradient-to-br from-[#161922] via-[#161922] to-pink-500/15 border border-[#212631] hover:border-pink-500 rounded-2xl p-3 md:p-4 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(236,72,153,0.25)] text-left min-h-[75px] md:min-h-[85px]">
+                <div class="flex flex-col z-10 w-[70%] md:w-3/4">
+                    <span class="text-[8px] md:text-[9px] font-black text-pink-400 uppercase tracking-widest mb-0.5 flex items-center gap-1">
+                        <i class="fas fa-sparkles text-yellow-400"></i> Chance
+                    </span>
+                    <span class="text-white font-black text-[11px] md:text-[13px] uppercase tracking-wide group-hover:text-pink-400 transition-colors leading-tight">Jeu Magique</span>
+                    <span class="text-[9px] text-gray-500 font-semibold mt-0.5">Dé Aléatoire</span>
+                </div>
+                <img src="https://img.icons8.com/3d-fluency/250/dice.png" alt="Dice"
+                    class="absolute right-1 md:right-2 bottom-1.5 md:bottom-2 h-[80%] md:h-[100%] max-w-[45px] md:max-w-[55px] object-contain z-20 pointer-events-none drop-shadow-[-3px_5px_8px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-2 animate-bounce-slow" style="animation-delay: 1s;">
+            </button>
+
         </div>
+    
         <!-- 🕒 قسم آخر الألعاب (Récemment Joués) - يظهر آلياً إذا لعب المستخدم أي لعبة -->
         <div id="recent-games-container" class="hidden flex-col gap-3 mb-6 md:mb-8 w-full mt-2">
             <div class="flex justify-between items-center px-1">
@@ -1122,34 +1136,6 @@
             <span class="text-emerald font-bold text-xs">Alphabet216</span>
         </div>
         <iframe id="casino-iframe" class="w-full flex-grow border-0"></iframe>
-    </div>
-    <!-- 🎲 نرد الحظ السحري (تم رفعه أكثر على الهاتف لتفادي زر الشات) -->
-    <div id="magic-dice-container" class="fixed bottom-44 md:bottom-28 right-4 md:right-6 z-[700] cursor-pointer group"
-        onclick="rollMagicDice()">
-        <!-- هالة التوهج الخلفية -->
-        <div
-            class="absolute inset-0 bg-gradient-to-tr from-purple-600 via-pink-500 to-yellow-500 rounded-2xl blur-lg opacity-40 group-hover:opacity-100 transition-opacity duration-500">
-        </div>
-
-        <!-- النرد نفسه -->
-        <div
-            class="relative flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-tr from-purple-600/90 via-pink-500/90 to-yellow-500/90 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl transform transition-transform duration-300 group-hover:scale-110 animate-bounce-slow">
-            <img id="dice-img" src="https://img.icons8.com/3d-fluency/94/dice.png" alt="Magic Dice"
-                class="w-8 h-8 md:w-11 md:h-11 drop-shadow-xl pointer-events-none">
-            <!-- لمعة داخلية -->
-            <div
-                class="absolute inset-0 bg-white/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-            </div>
-        </div>
-
-        <!-- رسالة التلميح (Tooltip) -->
-        <div
-            class="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-[#12151d] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg border border-purple-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none shadow-xl flex items-center gap-1">
-            <i class="fas fa-sparkles text-yellow-400"></i> Jeu Chanceux
-        </div>
-    </div>
-    <!-- Toasts -->
-    <div id="toast-container" class="fixed top-5 right-5 z-[500] flex flex-col gap-2 w-full max-w-sm px-4">
     </div>
 
     <!-- ================= JAVASCRIPT (محرك الألفابت الشامل) ================= -->
