@@ -3711,10 +3711,9 @@
             connectBigWinsWebSocket();
         });
 
-        // ================= نظام نرد الحظ السحري (اختيار عشوائي ديناميكي 100%) =================
+        // ================= نظام نرد الحظ السحري (يفتح اللعبة فوراً وبصمت تام) =================
         async function rollMagicDice() {
             if (!playerSession) {
-                showNotification("Veuillez vous connecter pour lancer le dé magique ! 🎲", "error");
                 return openLoginModal();
             }
 
@@ -3734,10 +3733,10 @@
             }, 1200);
 
             try {
-                // 2. اختيار مزود عشوائي من قائمة المزودين الموجودة في الموقع
+                // 2. اختيار مزود عشوائي
                 const randomProvider = window.nexusProviders[Math.floor(Math.random() * window.nexusProviders.length)];
                 
-                // 3. جلب ألعاب هذا المزود من السيرفر بصمت في الخلفية
+                // 3. جلب ألعاب المزود بصمت في الخلفية
                 const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -3751,32 +3750,26 @@
                 else if (Array.isArray(data)) games = data;
 
                 if (games && games.length > 0) {
-                    // 4. اختيار لعبة عشوائية تماماً من هذا المزود
+                    // 4. اختيار لعبة عشوائية
                     const randomGame = games[Math.floor(Math.random() * games.length)];
-                    const gameName = randomGame.game_name || randomGame.name || "Jeu Magique";
                     const gameCode = randomGame.game_code || randomGame.id;
 
-                    // ننتظر قليلاً حتى ينتهي تأثير دوران النرد قبل فتح اللعبة
+                    // ننتظر ثانية واحدة (لينتهي النرد من الدوران) ثم نفتح اللعبة فوراً بدون أي رسالة
                     setTimeout(() => {
-                        showNotification(`🎲 Les esprits ont choisi : ${gameName} !`, "success");
                         playCasinoGame(randomProvider.code, gameCode);
                     }, 1000);
                 } else {
-                    throw new Error("Provider vide"); // في حال كان المزود لا يحتوي على ألعاب
+                    throw new Error("Provider vide");
                 }
             } catch (e) {
-                // 🛡️ خطة طوارئ (Fallback): إذا فشل الاتصال بالسيرفر، نختار لعبة عشوائية من الألعاب المعروضة حالياً أمام اللاعب
+                // 🛡️ خطة الطوارئ
                 if (window.currentProviderGames && window.currentProviderGames.length > 0) {
                     const fallbackGame = window.currentProviderGames[Math.floor(Math.random() * window.currentProviderGames.length)];
-                    const fName = fallbackGame.game_name || fallbackGame.name || "Jeu Surprise";
                     const fCode = fallbackGame.game_code || fallbackGame.id;
                     
                     setTimeout(() => {
-                        showNotification(`🎲 La chance a choisi : ${fName} !`, "success");
                         playCasinoGame(window.currentActiveProviderCode || 'PRAGMATIC', fCode);
                     }, 1000);
-                } else {
-                    showNotification("La magie a échoué, veuillez réessayer !", "error");
                 }
             }
         }
