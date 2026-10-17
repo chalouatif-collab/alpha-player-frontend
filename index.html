@@ -3781,23 +3781,7 @@
             }, 1400);
         })();
 
-        setInterval(() => {
-            if (window.innerWidth <= 768) {
-                // في الجوال: ندفعه للأعلى 80 بيكسل ليتجاوز الشريط السفلي
-                document.querySelectorAll('iframe[title*="chat widget"], iframe[src*="tawk.to"]').forEach(iframe => {
-                    if (iframe.style.bottom !== '80px') {
-                        iframe.style.setProperty('bottom', '80px', 'important');
-                    }
-                });
-            } else {
-                // في الحاسوب: نتركه في مكانه الطبيعي (20 بيكسل)
-                document.querySelectorAll('iframe[title*="chat widget"], iframe[src*="tawk.to"]').forEach(iframe => {
-                    if (iframe.style.bottom === '80px') {
-                        iframe.style.setProperty('bottom', '20px', 'important');
-                    }
-                });
-            }
-        }, 500);
+        
     </script>
 
 
@@ -4021,16 +4005,15 @@
         </div>
     </div>
 
-    <!-- 📱 شريط التنقل السفلي للهواتف (مع حماية منطقة زر الشات) -->
+    <!-- 📱 شريط التنقل السفلي للهواتف (تصميم Floating Glassmorphism احترافي) -->
     <div id="mobile-bottom-bar"
         class="md:hidden fixed bottom-0 left-0 w-full bg-[#12151d]/95 backdrop-blur-md border-t border-[#212631] z-[900] shadow-[0_-10px_20px_rgba(0,0,0,0.6)]">
-        
-        <!-- 🌟 استخدمنا justify-between مع px-3 لتوزيع الـ 5 عناصر بذكاء -->
-        <div class="flex justify-between items-center h-16 relative px-3">
+        <div class="flex justify-around items-center h-16 relative px-2">
             
             <!-- 1. الرئيسية -->
             <button onclick="setActiveMenuBtn('btn-nav-accueil'); switchSection('accueil'); updateBottomBar('nav-mob-accueil')" id="nav-mob-accueil"
-                class="mobile-nav-btn flex flex-col items-center justify-center w-14 h-full relative">
+                class="mobile-nav-btn flex flex-col items-center justify-center w-16 h-full relative">
+                <!-- 🌟 هذا الصندوق سيرتفع للأعلى ويضيء عندما يكون نشطاً -->
                 <div class="nav-icon-box w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 absolute -top-4 bg-emerald/20 text-emerald shadow-[0_0_15px_rgba(16,185,129,0.4)] border border-emerald/30">
                     <i class="fas fa-home text-lg"></i>
                 </div>
@@ -4039,7 +4022,7 @@
 
             <!-- 2. الكازينو -->
             <button onclick="setActiveMenuBtn('btn-nav-casino'); switchSection('casino'); initCasinoLobby(); updateBottomBar('nav-mob-casino')" id="nav-mob-casino"
-                class="mobile-nav-btn flex flex-col items-center justify-center w-14 h-full relative">
+                class="mobile-nav-btn flex flex-col items-center justify-center w-16 h-full relative">
                 <div class="nav-icon-box w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 absolute top-2 text-gray-500 bg-transparent">
                     <i class="fas fa-coins text-lg"></i>
                 </div>
@@ -4048,7 +4031,7 @@
 
             <!-- 3. كازينو لايف -->
             <button onclick="setActiveMenuBtn('btn-nav-live'); switchSection('live-casino'); openLiveCasino(); updateBottomBar('nav-mob-live')" id="nav-mob-live"
-                class="mobile-nav-btn flex flex-col items-center justify-center w-14 h-full relative">
+                class="mobile-nav-btn flex flex-col items-center justify-center w-16 h-full relative">
                 <div class="nav-icon-box w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 absolute top-2 text-gray-500 bg-transparent">
                     <div class="relative">
                         <i class="fas fa-video text-lg"></i>
@@ -4063,20 +4046,14 @@
 
             <!-- 4. الرياضة -->
             <button onclick="setActiveMenuBtn('btn-nav-sport'); openSportsbookForProvider('nexus'); updateBottomBar('nav-mob-sport')" id="nav-mob-sport"
-                class="mobile-nav-btn flex flex-col items-center justify-center w-14 h-full relative">
+                class="mobile-nav-btn flex flex-col items-center justify-center w-16 h-full relative">
                 <div class="nav-icon-box w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 absolute top-2 text-gray-500 bg-transparent">
                     <i class="fas fa-futbol text-lg"></i>
                 </div>
                 <span class="nav-text text-[9px] font-bold uppercase tracking-widest text-gray-500 absolute bottom-1.5 transition-all duration-300">Sport</span>
             </button>
 
-            <!-- 5. 🛡️ منطقة حماية وهمية (مساحة فارغة مخصصة لزر الشات Tawk.to) -->
-            <div class="w-12 h-full shrink-0 flex items-center justify-center pointer-events-none">
-                <!-- زر الشات سيجلس فوق هذه المساحة بأمان تام ولن يغطي الأزرار الأخرى -->
-            </div>
-
         </div>
-    </div>
     </div>
     <!-- 🎡 نافذة عجلة الحظ اليومية -->
     <div id="lucky-wheel-modal"
