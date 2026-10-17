@@ -1812,17 +1812,32 @@
                 grid.dataset.dragEnabled = 'true';
             }
         }
+        // ================= تشغيل الألعاب =================
         async function playCasinoGame(providerCode, gameCode) {
             closeChat();
             if (!playerSession) return openLoginModal();
 
-            // 🌟 === محرك اصطياد وحفظ آخر الألعاب آلياً === 🌟
+            // 🌟 === محرك اصطياد وحفظ آخر الألعاب آلياً (محدث وذكي جداً) === 🌟
             try {
                 let gameName = "Jeu de Casino";
                 let gameImg = "https://img.icons8.com/3d-fluency/94/slot-machine.png";
                 
-                // البحث بذكاء عن صورة واسم اللعبة في المصفوفة المعروضة حالياً
-                if (window.currentProviderGames && window.currentProviderGames.length > 0) {
+                // 1. الاصطياد البصري: استخراج الصورة والاسم من البطاقة المضغوطة مباشرة في الواجهة
+                if (window.event) {
+                    // البحث عن أقرب عنصر يحتوي على كلاس 'group' (وهو كلاس بطاقة اللعبة لدينا)
+                    const card = window.event.target.closest('.group') || window.event.currentTarget;
+                    if (card) {
+                        const imgEl = card.querySelector('img');
+                        // يبحث عن النص في العنصر الذي يحمل كلاس truncate (اسم اللعبة)
+                        const titleEl = card.querySelector('.truncate') || card.querySelector('div:last-child');
+                        
+                        if (imgEl && imgEl.src) gameImg = imgEl.src;
+                        if (titleEl && titleEl.innerText) gameName = titleEl.innerText.trim();
+                    }
+                }
+                
+                // 2. البحث البديل: إذا لم يجد الاسم في الواجهة (لأي سبب)، يبحث في المصفوفة
+                if (gameName === "Jeu de Casino" && window.currentProviderGames && window.currentProviderGames.length > 0) {
                     let found = window.currentProviderGames.find(g => String(g.game_code || g.id) === String(gameCode));
                     if (found) {
                         gameName = String(found.game_name || found.name);
@@ -1834,7 +1849,7 @@
                 // إزالة اللعبة إذا كانت موجودة مسبقاً لنقلها إلى أول القائمة
                 recent = recent.filter(g => String(g.gameCode) !== String(gameCode)); 
                 recent.unshift({ providerCode, gameCode, gameName, gameImg });
-                if (recent.length > 8) recent.pop(); // الاحتفاظ بآخر 8 ألعاب فقط
+                if (recent.length > 8) recent.pop(); // الاحتفاظ بآخر 8 ألعاب فقط لعدم إرهاق الواجهة
                 localStorage.setItem('alpha_recent_games', JSON.stringify(recent));
                 
                 // تحديث الواجهة فوراً
