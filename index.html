@@ -4086,8 +4086,26 @@
     </div>
 
     <!--Start of Tawk.to Script-->
+    <!--Start of Tawk.to Script-->
     <script type="text/javascript">
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    
+    // 🌟 برمجة موقع زر الشات (رفعه للأعلى في الهاتف فقط لكي لا يغطي الشريط السفلي)
+    Tawk_API.customStyle = {
+        visibility : {
+            desktop : {
+                position : 'br',
+                xOffset : 20,
+                yOffset : 20
+            },
+            mobile : {
+                position : 'br',
+                xOffset : 15,
+                yOffset : 80  /* رفعه 80 بيكسل للأعلى ليتجاوز شريط التنقل */
+            }
+        }
+    };
+
     (function(){
     var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
     s1.async=true;
@@ -4097,7 +4115,7 @@
     s0.parentNode.insertBefore(s1,s0);
     })();
     </script>
-    <!--End of Tawk.to Script-->
+    
 </body>
 </html>
 </body>
