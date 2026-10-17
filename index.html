@@ -1173,7 +1173,6 @@
         function showNotification(message, type = "success") {
             let container = document.getElementById('toast-container');
             
-            // 🌟 إذا لم يجد حاوية الإشعارات الأنيقة، سيصنعها بنفسه ولن يستخدم alert أبداً!
             if (!container) { 
                 container = document.createElement('div');
                 container.id = 'toast-container';
@@ -1182,14 +1181,17 @@
             }
 
             const toast = document.createElement('div');
-            // تصميم زجاجي أنيق للإشعار
-            toast.className = `px-4 py-3 rounded-xl font-bold text-sm shadow-2xl transform transition-all translate-x-full flex items-center gap-2 pointer-events-auto border ${type === 'error' ? 'bg-red-500/90 border-red-400 text-white backdrop-blur-md' : 'bg-emerald/90 border-emerald-400 text-black backdrop-blur-md'}`;
+            // 🌟 تم تغيير text-black إلى text-[#022c22] (أخضر غامق جداً وأنيق)
+            toast.className = `px-4 py-3 rounded-xl font-bold text-sm shadow-2xl transform transition-all translate-x-full flex items-center gap-2 pointer-events-auto border ${
+                type === 'error' 
+                ? 'bg-red-500/90 border-red-400 text-white backdrop-blur-md' 
+                : 'bg-emerald/90 border-emerald-400 text-[#022c22] backdrop-blur-md'
+            }`;
             
             toast.innerHTML = type === 'error' ? `<i class="fas fa-exclamation-circle text-lg"></i> ${message}` : `<i class="fas fa-sparkles text-lg"></i> ${message}`;
 
             container.appendChild(toast);
             
-            // حركة الظهور والاختفاء الناعمة
             setTimeout(() => toast.classList.remove('translate-x-full'), 10);
             setTimeout(() => {
                 toast.classList.add('translate-x-full');
