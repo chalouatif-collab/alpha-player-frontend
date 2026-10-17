@@ -2048,28 +2048,39 @@
 
 
         function updateBottomBar(activeId) {
-            // إرجاع كل الأزرار للوضع الرمادي
-            document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
-                btn.classList.remove('opacity-100');
-                btn.classList.add('opacity-50');
+            // تعريف الألوان والتوهجات الساحرة لكل زر عند التفعيل
+            const styles = {
+                'nav-mob-accueil': { bg: 'bg-emerald/20', text: 'text-emerald', border: 'border-emerald/30', shadow: 'shadow-[0_0_15px_rgba(16,185,129,0.4)]' },
+                'nav-mob-casino': { bg: 'bg-yellow-500/20', text: 'text-yellow-500', border: 'border-yellow-500/30', shadow: 'shadow-[0_0_15px_rgba(234,179,8,0.4)]' },
+                'nav-mob-live': { bg: 'bg-red-500/20', text: 'text-red-500', border: 'border-red-500/30', shadow: 'shadow-[0_0_15px_rgba(239,68,68,0.4)]' },
+                'nav-mob-sport': { bg: 'bg-blue-500/20', text: 'text-blue-500', border: 'border-blue-500/30', shadow: 'shadow-[0_0_15px_rgba(59,130,246,0.4)]' }
+            };
 
-                const textSpan = btn.querySelector('span:last-of-type');
+            document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+                const iconBox = btn.querySelector('.nav-icon-box');
+                const textSpan = btn.querySelector('.nav-text');
+
+                // 1. إعادة جميع الأزرار لحالة الخمول (تنزل للأسفل ويختفي التوهج)
+                if (iconBox) {
+                    iconBox.className = `nav-icon-box w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 absolute top-2 text-gray-500 bg-transparent`;
+                }
                 if (textSpan) {
-                    textSpan.classList.remove('text-white');
-                    textSpan.classList.add('text-gray-400');
+                    textSpan.className = `nav-text text-[9px] font-bold uppercase tracking-widest text-gray-500 absolute bottom-1.5 transition-all duration-300`;
                 }
             });
 
-            // إضاءة الزر النشط وتبييض نصه
+            // 2. تفعيل الزر المختار (يبرز خارج الشريط ويضيء بلونه الخاص)
             const activeBtn = document.getElementById(activeId);
             if (activeBtn) {
-                activeBtn.classList.remove('opacity-50');
-                activeBtn.classList.add('opacity-100');
+                const iconBox = activeBtn.querySelector('.nav-icon-box');
+                const textSpan = activeBtn.querySelector('.nav-text');
+                const st = styles[activeId];
 
-                const textSpan = activeBtn.querySelector('span:last-of-type');
+                if (iconBox && st) {
+                    iconBox.className = `nav-icon-box w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 absolute -top-4 ${st.bg} ${st.text} border ${st.border} ${st.shadow}`;
+                }
                 if (textSpan) {
-                    textSpan.classList.remove('text-gray-400');
-                    textSpan.classList.add('text-white');
+                    textSpan.className = `nav-text text-[9px] font-bold uppercase tracking-widest text-white absolute bottom-1.5 transition-all duration-300`;
                 }
             }
         }
@@ -3860,52 +3871,54 @@
         </div>
     </div>
 
-    <!-- 📱 شريط التنقل السفلي للهواتف (Mobile Bottom App-Bar) -->
+    <!-- 📱 شريط التنقل السفلي للهواتف (تصميم Floating Glassmorphism احترافي) -->
     <div id="mobile-bottom-bar"
-        class="md:hidden fixed bottom-0 left-0 w-full bg-[#161922] border-t border-[#212631] z-[900] shadow-[0_-5px_15px_rgba(0,0,0,0.5)]">
-        <div class="flex justify-around items-center px-2 py-2">
+        class="md:hidden fixed bottom-0 left-0 w-full bg-[#12151d]/95 backdrop-blur-md border-t border-[#212631] z-[900] shadow-[0_-10px_20px_rgba(0,0,0,0.6)]">
+        <div class="flex justify-around items-center h-16 relative px-2">
+            
             <!-- 1. الرئيسية -->
-            <button
-                onclick="setActiveMenuBtn('btn-nav-accueil'); switchSection('accueil'); updateBottomBar('nav-mob-accueil')"
-                id="nav-mob-accueil"
-                class="mobile-nav-btn flex flex-col items-center justify-center gap-1 w-16 transition-opacity duration-300 opacity-100">
-                <i class="fas fa-home text-lg text-emerald"></i>
-                <span class="text-[9px] font-bold uppercase tracking-widest text-white mt-0.5">Accueil</span>
+            <button onclick="setActiveMenuBtn('btn-nav-accueil'); switchSection('accueil'); updateBottomBar('nav-mob-accueil')" id="nav-mob-accueil"
+                class="mobile-nav-btn flex flex-col items-center justify-center w-16 h-full relative">
+                <!-- 🌟 هذا الصندوق سيرتفع للأعلى ويضيء عندما يكون نشطاً -->
+                <div class="nav-icon-box w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 absolute -top-4 bg-emerald/20 text-emerald shadow-[0_0_15px_rgba(16,185,129,0.4)] border border-emerald/30">
+                    <i class="fas fa-home text-lg"></i>
+                </div>
+                <span class="nav-text text-[9px] font-bold uppercase tracking-widest text-white absolute bottom-1.5 transition-all duration-300">Accueil</span>
             </button>
 
-            <!-- 2. الكازينو (بأيقونة العملات المضمونة والواضحة) -->
-            <button
-                onclick="setActiveMenuBtn('btn-nav-casino'); switchSection('casino'); initCasinoLobby(); updateBottomBar('nav-mob-casino')"
-                id="nav-mob-casino"
-                class="mobile-nav-btn flex flex-col items-center justify-center gap-1 w-16 transition-opacity duration-300 opacity-50">
-                <i class="fas fa-coins text-lg text-yellow-500"></i>
-                <span class="text-[9px] font-bold uppercase tracking-widest text-gray-400 mt-0.5">Casino</span>
+            <!-- 2. الكازينو -->
+            <button onclick="setActiveMenuBtn('btn-nav-casino'); switchSection('casino'); initCasinoLobby(); updateBottomBar('nav-mob-casino')" id="nav-mob-casino"
+                class="mobile-nav-btn flex flex-col items-center justify-center w-16 h-full relative">
+                <div class="nav-icon-box w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 absolute top-2 text-gray-500 bg-transparent">
+                    <i class="fas fa-coins text-lg"></i>
+                </div>
+                <span class="nav-text text-[9px] font-bold uppercase tracking-widest text-gray-500 absolute bottom-1.5 transition-all duration-300">Casino</span>
             </button>
 
             <!-- 3. كازينو لايف -->
-            <button
-                onclick="setActiveMenuBtn('btn-nav-live'); switchSection('live-casino'); openLiveCasino(); updateBottomBar('nav-mob-live')"
-                id="nav-mob-live"
-                class="mobile-nav-btn flex flex-col items-center justify-center gap-1 w-16 transition-opacity duration-300 opacity-50 relative">
-                <div class="relative">
-                    <i class="fas fa-video text-lg text-red-500"></i>
-                    <span class="absolute -top-1 -right-1.5 flex h-2 w-2">
-                        <span
-                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-                    </span>
+            <button onclick="setActiveMenuBtn('btn-nav-live'); switchSection('live-casino'); openLiveCasino(); updateBottomBar('nav-mob-live')" id="nav-mob-live"
+                class="mobile-nav-btn flex flex-col items-center justify-center w-16 h-full relative">
+                <div class="nav-icon-box w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 absolute top-2 text-gray-500 bg-transparent">
+                    <div class="relative">
+                        <i class="fas fa-video text-lg"></i>
+                        <span class="absolute -top-1 -right-2 flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                        </span>
+                    </div>
                 </div>
-                <span class="text-[9px] font-bold uppercase tracking-widest text-gray-400 mt-0.5">Live</span>
+                <span class="nav-text text-[9px] font-bold uppercase tracking-widest text-gray-500 absolute bottom-1.5 transition-all duration-300">Live</span>
             </button>
 
             <!-- 4. الرياضة -->
-            <button
-                onclick="setActiveMenuBtn('btn-nav-sport'); openSportsbookForProvider('nexus'); updateBottomBar('nav-mob-sport')"
-                id="nav-mob-sport"
-                class="mobile-nav-btn flex flex-col items-center justify-center gap-1 w-16 transition-opacity duration-300 opacity-50">
-                <i class="fas fa-futbol text-lg text-blue-500"></i>
-                <span class="text-[9px] font-bold uppercase tracking-widest text-gray-400 mt-0.5">Sport</span>
+            <button onclick="setActiveMenuBtn('btn-nav-sport'); openSportsbookForProvider('nexus'); updateBottomBar('nav-mob-sport')" id="nav-mob-sport"
+                class="mobile-nav-btn flex flex-col items-center justify-center w-16 h-full relative">
+                <div class="nav-icon-box w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 absolute top-2 text-gray-500 bg-transparent">
+                    <i class="fas fa-futbol text-lg"></i>
+                </div>
+                <span class="nav-text text-[9px] font-bold uppercase tracking-widest text-gray-500 absolute bottom-1.5 transition-all duration-300">Sport</span>
             </button>
+
         </div>
     </div>
     <!-- 🎡 نافذة عجلة الحظ اليومية -->
