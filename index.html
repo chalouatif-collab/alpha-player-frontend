@@ -4185,6 +4185,63 @@
     })();
     </script>
     
+    <!-- 🌟 تأثيرات التفاعل اللمسي وحساس الحركة ثلاثي الأبعاد 🌟 -->
+    <style>
+        /* إعداد البطاقات لتدعم البعد الثالث (العمق) */
+        .group {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        /* جعل الصور تبرز للأمام وتتحرك بناءً على ميلان الهاتف */
+        .group img {
+            /* استخدمنا المتغيرات القادمة من حساس الحركة، مع دفع الصورة للأمام بـ 20px */
+            transform: translateZ(20px) translateX(var(--gyro-x, 0px)) translateY(var(--gyro-y, 0px));
+            transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
+        }
+        
+        /* تأثير النبض البصري الخفيف عند لمس أي زر */
+        button:active, .mobile-nav-btn:active {
+            transform: scale(0.95);
+            transition: transform 0.05s ease;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // ================= 1. محرك التفاعل اللمسي (Haptic Engine) =================
+            // دالة لإطلاق اهتزاز ميكانيكي دقيق (15ms هي المدة المثالية لإحساس الضغطة الفخمة)
+            const triggerHaptic = () => { 
+                if (navigator.vibrate) navigator.vibrate(15); 
+            };
+            
+            // نستخدم 'pointerdown' لأنه يستجيب للمس أسرع من 'click' بـ 300 جزء من الثانية
+            document.querySelectorAll('button, .group, .mobile-nav-btn').forEach(element => {
+                element.addEventListener('pointerdown', triggerHaptic);
+            });
+
+
+            // ================= 2. محرك حساس الحركة (3D Gyroscope) =================
+            if (window.DeviceOrientationEvent) {
+                // مراقبة حركة الهاتف في يد اللاعب
+                window.addEventListener('deviceorientation', (event) => {
+                    // استخراج زوايا الميلان (يمين/يسار وأعلى/أسفل)
+                    const tiltX = Math.round(event.gamma || 0); 
+                    const tiltY = Math.round(event.beta || 0);  
+                    
+                    // تحجيم وتنعيم الحركة القصوى لكي لا تكون مزعجة (أقصى تحرك 12 بيكسل)
+                    const moveX = Math.max(-12, Math.min(12, tiltX / 3));
+                    const moveY = Math.max(-12, Math.min(12, (tiltY - 45) / 3)); // خصمنا 45 لأن الهاتف يمسك مائلاً عادة
+                    
+                    // حقن إحداثيات الميلان الحية في جذع الموقع كمتغيرات CSS
+                    document.documentElement.style.setProperty('--gyro-x', `${moveX}px`);
+                    document.documentElement.style.setProperty('--gyro-y', `${moveY}px`);
+                });
+            }
+        });
+    </script>
 </body>
 </html>
 </body>
