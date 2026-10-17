@@ -1181,14 +1181,14 @@
             }
 
             const toast = document.createElement('div');
-            // 🌟 تم تغيير text-black إلى text-[#022c22] (أخضر غامق جداً وأنيق)
-            toast.className = `px-4 py-3 rounded-xl font-bold text-sm shadow-2xl transform transition-all translate-x-full flex items-center gap-2 pointer-events-auto border ${
+            // 🌟 إزالة الشفافية تماماً واستخدام ألوان صلبة مع توهج خفيف
+            toast.className = `px-4 py-3 rounded-xl font-bold text-sm transform transition-all translate-x-full flex items-center gap-2 pointer-events-auto border ${
                 type === 'error' 
-                ? 'bg-red-500/90 border-red-400 text-white backdrop-blur-md' 
-                : 'bg-emerald/90 border-emerald-400 text-[#022c22] backdrop-blur-md'
+                ? 'bg-red-500 border-red-600 text-white shadow-[0_8px_20px_rgba(239,68,68,0.4)]' 
+                : 'bg-emerald-400 border-emerald-500 text-[#064e3b] shadow-[0_8px_20px_rgba(16,185,129,0.4)]'
             }`;
             
-            toast.innerHTML = type === 'error' ? `<i class="fas fa-exclamation-circle text-lg"></i> ${message}` : `<i class="fas fa-sparkles text-lg"></i> ${message}`;
+            toast.innerHTML = type === 'error' ? `<i class="fas fa-exclamation-circle text-lg"></i> ${message}` : `<i class="fas fa-sparkles text-lg text-[#064e3b]"></i> ${message}`;
 
             container.appendChild(toast);
             
