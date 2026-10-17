@@ -4185,69 +4185,68 @@
     })();
     </script>
     
-    <!-- 🌟 محرك التفاعل اللمسي وحساس الحركة ثلاثي الأبعاد المحدث -->
-    <style>
-        .group {
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-        .group img {
-            transform: translateZ(25px) translateX(var(--gyro-x, 0px)) translateY(var(--gyro-y, 0px));
-            transition: transform 0.1s ease-out;
-            will-change: transform;
-        }
-        button:active, .mobile-nav-btn:active {
-            transform: scale(0.95);
-            transition: transform 0.05s ease;
-        }
-    </style>
-
+    <!-- 🌟 محرك الـ 3D الذكي (للحاسوب والموبايل) والتفاعل اللمسي 🌟 -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. التفاعل اللمسي للأزرار
-            const triggerHaptic = () => { 
-                if (navigator.vibrate) navigator.vibrate(15); 
-            };
+            const cards = document.querySelectorAll('.group');
             
-            document.querySelectorAll('button, .group, .mobile-nav-btn').forEach(element => {
-                element.addEventListener('pointerdown', triggerHaptic);
+            // ================= 1. التفاعل اللمسي للأزرار =================
+            const triggerHaptic = () => { if (navigator.vibrate) navigator.vibrate(15); };
+            document.querySelectorAll('button, .group, .mobile-nav-btn').forEach(btn => {
+                btn.addEventListener('pointerdown', triggerHaptic);
             });
 
-            // 2. تفعيل حساس الحركة مع طلب الإذن للأنظمة الحديثة (iOS / Android)
-            const initGyroscope = () => {
-                if (window.DeviceOrientationEvent) {
-                    // للأنظمة التي تتطلب إذناً (مثل iOS 13+)
+            // ================= 2. حركة 3D بالماوس (لأجهزة الكمبيوتر) =================
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    // حساب زاوية الميلان بناءً على موقع الماوس داخل البطاقة
+                    const rotateX = ((y - centerY) / centerY) * -12; 
+                    const rotateY = ((x - centerX) / centerX) * 12;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`;
+                    card.style.transition = "none"; // إيقاف الانتقال لتتبع الماوس فورياً
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    // إعادة البطاقة لوضعها الطبيعي بنعومة عند خروج الماوس
+                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                    card.style.transition = "transform 0.5s ease"; 
+                });
+            });
+
+            // ================= 3. حركة 3D بحساس الهاتف (للموبايل) =================
+            const startGyro = () => {
+                window.addEventListener('deviceorientation', (e) => {
+                    if(!e.gamma || !e.beta) return; // تجاهل الأمر إذا لم يكن هناك حساس (كمبيوتر)
+                    
+                    let x = Math.max(-25, Math.min(25, e.gamma)); 
+                    let y = Math.max(-25, Math.min(25, e.beta - 40)); 
+                    
+                    cards.forEach(card => {
+                        card.style.transform = `perspective(1000px) rotateX(${-y/2}deg) rotateY(${x/2}deg)`;
+                        card.style.transition = "transform 0.1s ease-out";
+                    });
+                });
+            };
+
+            // تفعيل مستشعر الموبايل عند أول لمسة
+            if (window.DeviceOrientationEvent) {
+                window.addEventListener('pointerdown', () => {
                     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-                        DeviceOrientationEvent.requestPermission()
-                            .then(permissionState => {
-                                if (permissionState === 'granted') {
-                                    startListeningGyro();
-                                }
-                            })
-                            .catch(console.error);
+                        DeviceOrientationEvent.requestPermission().then(state => {
+                            if (state === 'granted') startGyro();
+                        }).catch(console.error);
                     } else {
-                        // لأجهزة الأندرويد وبقية المتصفحات
-                        startListeningGyro();
+                        startGyro();
                     }
-                }
-            };
-
-            const startListeningGyro = () => {
-                window.addEventListener('deviceorientation', (event) => {
-                    const tiltX = Math.round(event.gamma || 0); // ميلان يمين/يسار (-90 إلى 90)
-                    const tiltY = Math.round(event.beta || 0);  // ميلان للأعلى/الأسفل (-180 إلى 180)
-                    
-                    // حساب الحركة وتنعيمها
-                    const moveX = Math.max(-15, Math.min(15, tiltX / 2));
-                    const moveY = Math.max(-15, Math.min(15, (tiltY - 45) / 2));
-                    
-                    document.documentElement.style.setProperty('--gyro-x', `${moveX}px`);
-                    document.documentElement.style.setProperty('--gyro-y', `${moveY}px`);
-                }, true);
-            };
-
-            // تفعيل الاستشعار فوراً عند أول لمسة للشاشة من قبل اللاعب
-            window.addEventListener('pointerdown', initGyroscope, { once: true });
+                }, { once: true });
+            }
         });
     </script>
 </body>
