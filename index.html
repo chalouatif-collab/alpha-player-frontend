@@ -37,6 +37,13 @@
 
     <style>
 
+        /* 📱 منع التمرير الأفقي نهائياً ليعمل الموقع كتطبيق ثابت */
+        html, body {
+            max-width: 100vw !important;
+            overflow-x: hidden !important;
+            position: relative;
+        }
+
         /* 📱 إجبار زر Tawk.to على الارتفاع في الهواتف بالقوة لتفادي الشريط السفلي */
         @media (max-width: 768px) {
             iframe[title*="chat widget"], 
