@@ -1176,19 +1176,22 @@
             if (!container) { 
                 container = document.createElement('div');
                 container.id = 'toast-container';
-                container.className = 'fixed top-5 right-5 z-[9999] flex flex-col gap-2 w-full max-w-sm px-4 pointer-events-none';
+                container.className = 'fixed top-5 right-5 z-[9999] flex flex-col gap-2 w-full max-w-[280px] px-4 pointer-events-none';
                 document.body.appendChild(container);
             }
 
             const toast = document.createElement('div');
-            // 🌟 إزالة الشفافية تماماً واستخدام ألوان صلبة مع توهج خفيف
-            toast.className = `px-4 py-3 rounded-xl font-bold text-sm transform transition-all translate-x-full flex items-center gap-2 pointer-events-auto border ${
+            // 🌟 تصميم "فينو": خط ناعم (font-medium)، حجم صغير (text-xs)، هوامش أقل، وتباعد حروف أنيق
+            toast.className = `px-3 py-2.5 rounded-lg font-medium text-[11px] md:text-xs tracking-wide transform transition-all translate-x-full flex items-center gap-2 pointer-events-auto border ${
                 type === 'error' 
-                ? 'bg-red-500 border-red-600 text-white shadow-[0_8px_20px_rgba(239,68,68,0.4)]' 
-                : 'bg-emerald-400 border-emerald-500 text-[#064e3b] shadow-[0_8px_20px_rgba(16,185,129,0.4)]'
+                ? 'bg-red-500 border-red-600 text-white shadow-[0_5px_15px_rgba(239,68,68,0.3)]' 
+                : 'bg-emerald-400 border-emerald-500 text-[#022c22] shadow-[0_5px_15px_rgba(16,185,129,0.3)]'
             }`;
             
-            toast.innerHTML = type === 'error' ? `<i class="fas fa-exclamation-circle text-lg"></i> ${message}` : `<i class="fas fa-sparkles text-lg text-[#064e3b]"></i> ${message}`;
+            // 🌟 تصغير الأيقونات قليلاً لتتناسب مع حجم النص الرقيق
+            toast.innerHTML = type === 'error' 
+                ? `<i class="fas fa-exclamation-circle text-sm"></i> <span>${message}</span>` 
+                : `<i class="fas fa-sparkles text-sm text-[#022c22]"></i> <span>${message}</span>`;
 
             container.appendChild(toast);
             
