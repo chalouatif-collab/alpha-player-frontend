@@ -1809,55 +1809,48 @@
                 grid.dataset.dragEnabled = 'true';
             }
         }
-        // ================= تشغيل الألعاب =================
-        // إضافة المتغيرات forceName و forceImg لدعم النرد السحري
         async function playCasinoGame(providerCode, gameCode, forceName = null, forceImg = null) {
             closeChat();
             if (!playerSession) return openLoginModal();
 
-            // 🌟 === محرك اصطياد وحفظ آخر الألعاب آلياً (محدث وذكي جداً ليدعم النرد) === 🌟
             try {
-                // نعتمد الاسم والصورة الممررة من النرد، أو نضع قيماً افتراضية
                 let gameName = forceName || "Jeu de Casino";
                 let gameImg = forceImg || "https://img.icons8.com/3d-fluency/94/slot-machine.png";
                 
-                // 1. الاصطياد البصري: إذا لم يأتِ الطلب من النرد (اللاعب ضغط بيده)، نستخرج البيانات من الواجهة
-                if (!forceName && window.event) {
-                    // البحث عن أقرب عنصر يحتوي على كلاس 'group' (وهو كلاس بطاقة اللعبة لدينا)
-                    const card = window.event.target.closest('.group') || window.event.currentTarget;
-                    if (card) {
-                        const imgEl = card.querySelector('img');
-                        // يبحث عن النص في العنصر الذي يحمل كلاس truncate (اسم اللعبة)
-                        const titleEl = card.querySelector('.truncate') || card.querySelector('div:last-child');
+                // البحث العبقري: إذا لم يأتِ الاسم من النرد، سنبحث عن اللعبة في كامل الصفحة باستخدام كودها!
+                if (!forceName) {
+                    // يبحث عن أي زر أو عنصر يحتوي على دالة فتح هذه اللعبة بالذات
+                    const gameCard = document.querySelector(`[onclick*="${gameCode}"]`);
+                    
+                    if (gameCard) {
+                        const imgEl = gameCard.querySelector('img');
+                        // يبحث عن أي عنصر نصي داخل البطاقة
+                        const titleEl = gameCard.querySelector('.truncate') || gameCard.querySelector('h3') || gameCard.querySelector('span');
                         
                         if (imgEl && imgEl.src) gameImg = imgEl.src;
                         if (titleEl && titleEl.innerText) gameName = titleEl.innerText.trim();
                     }
-                }
-                
-                // 2. البحث البديل: إذا لم يجد الاسم في الواجهة (لأي سبب)، يبحث في المصفوفة
-                if (gameName === "Jeu de Casino" && window.currentProviderGames && window.currentProviderGames.length > 0) {
-                    let found = window.currentProviderGames.find(g => String(g.game_code || g.id) === String(gameCode));
-                    if (found) {
-                        gameName = String(found.game_name || found.name);
-                        gameImg = found.banner || found.image || found.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 10))}`;
+                    
+                    // خطة بديلة أخيرة: البحث في المصفوفة
+                    if (gameName === "Jeu de Casino" && window.currentProviderGames) {
+                        let found = window.currentProviderGames.find(g => String(g.game_code || g.id) === String(gameCode));
+                        if (found) {
+                            gameName = String(found.game_name || found.name);
+                            gameImg = found.banner || found.image || found.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 10))}`;
+                        }
                     }
                 }
                 
                 let recent = JSON.parse(localStorage.getItem('alpha_recent_games') || '[]');
-                // إزالة اللعبة إذا كانت موجودة مسبقاً لنقلها إلى أول القائمة
                 recent = recent.filter(g => String(g.gameCode) !== String(gameCode)); 
                 recent.unshift({ providerCode, gameCode, gameName, gameImg });
-                if (recent.length > 8) recent.pop(); // الاحتفاظ بآخر 8 ألعاب فقط لعدم إرهاق الواجهة
+                if (recent.length > 8) recent.pop();
                 localStorage.setItem('alpha_recent_games', JSON.stringify(recent));
                 
-                // تحديث الواجهة فوراً
                 if (typeof renderRecentGames === 'function') renderRecentGames();
             } catch(e) { console.error("Recent games tracking error", e); }
-            // 🌟 =========================================== 🌟
 
             addVipXp(25);
-            // تغيير شكل المؤشر لانتظار التحميل
             document.body.style.cursor = 'wait';
 
             try {
@@ -1878,7 +1871,6 @@
                 const data = await res.json();
 
                 if (data.launch_url) {
-                    // فتح اللعبة في نافذة/علامة تبويب جديدة
                     window.open(data.launch_url, '_blank');
                 } else {
                     showNotification(data.error || "Jeu non disponible", "error");
@@ -1886,7 +1878,6 @@
             } catch (error) {
                 showNotification("Erreur de connexion", "error");
             } finally {
-                // إعادة شكل المؤشر لطبيعته سواء نجح فتح اللعبة أم فشل
                 document.body.style.cursor = 'default';
             }
         }
@@ -3721,7 +3712,6 @@
             connectBigWinsWebSocket();
         });
 
-        // ================= نظام نرد الحظ السحري (محدث مع تمرير الصور والأم للائحة الألعاب) =================
         async function rollMagicDice() {
             if (!playerSession) {
                 showNotification("Veuillez vous connecter pour lancer le dé magique ! 🎲", "error");
@@ -3760,13 +3750,13 @@
                     const randomGame = games[Math.floor(Math.random() * games.length)];
                     const gameName = randomGame.game_name || randomGame.name || "Jeu Magique";
                     const gameCode = randomGame.game_code || randomGame.id;
-                    // استخراج الصورة الصحيحة للعبة العشوائية
+                    // استخراج الصورة
                     const gameImg = randomGame.banner || randomGame.image || randomGame.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 10))}`;
 
                     setTimeout(() => {
                         showNotification(`La magie a choisi : ${gameName} ✨`, "success");
                         setTimeout(() => {
-                            // 🌟 نمرر الاسم والصورة بقوة إلى دالة التشغيل ليتم حفظها في شريط Récemment Joués
+                            // 🌟 إرسال الاسم والصورة إجبارياً لدالة التشغيل
                             playCasinoGame(randomProvider.code, gameCode, gameName, gameImg);
                         }, 1200);
                     }, 1000);
