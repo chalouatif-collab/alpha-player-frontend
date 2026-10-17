@@ -1810,17 +1810,19 @@
             }
         }
         // ================= تشغيل الألعاب =================
-        async function playCasinoGame(providerCode, gameCode) {
+        // إضافة المتغيرات forceName و forceImg لدعم النرد السحري
+        async function playCasinoGame(providerCode, gameCode, forceName = null, forceImg = null) {
             closeChat();
             if (!playerSession) return openLoginModal();
 
-            // 🌟 === محرك اصطياد وحفظ آخر الألعاب آلياً (محدث وذكي جداً) === 🌟
+            // 🌟 === محرك اصطياد وحفظ آخر الألعاب آلياً (محدث وذكي جداً ليدعم النرد) === 🌟
             try {
-                let gameName = "Jeu de Casino";
-                let gameImg = "https://img.icons8.com/3d-fluency/94/slot-machine.png";
+                // نعتمد الاسم والصورة الممررة من النرد، أو نضع قيماً افتراضية
+                let gameName = forceName || "Jeu de Casino";
+                let gameImg = forceImg || "https://img.icons8.com/3d-fluency/94/slot-machine.png";
                 
-                // 1. الاصطياد البصري: استخراج الصورة والاسم من البطاقة المضغوطة مباشرة في الواجهة
-                if (window.event) {
+                // 1. الاصطياد البصري: إذا لم يأتِ الطلب من النرد (اللاعب ضغط بيده)، نستخرج البيانات من الواجهة
+                if (!forceName && window.event) {
                     // البحث عن أقرب عنصر يحتوي على كلاس 'group' (وهو كلاس بطاقة اللعبة لدينا)
                     const card = window.event.target.closest('.group') || window.event.currentTarget;
                     if (card) {
@@ -1888,7 +1890,6 @@
                 document.body.style.cursor = 'default';
             }
         }
-
         window.playSMPLGame = playCasinoGame;
         window.playNexusGame = playCasinoGame;
         // ================= إغلاق نافذة اللعبة =================
