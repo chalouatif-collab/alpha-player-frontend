@@ -329,74 +329,74 @@
                 </div>
             </div>
         </header>
-        <!-- 2. شريط التصنيفات السريع الذكي (ألوان ساطعة وتصميم واضح ومريح) -->
-        <div class="bg-[#12151d] border-b border-[#212631] py-3">
-            <div class="max-w-[1700px] mx-auto px-4 flex gap-2.5 md:gap-3 overflow-x-auto text-[11px] md:text-[13px] font-extrabold hide-scroll pb-1">
+        <!-- 2. شريط التصنيفات السريع الذكي (مضغوط جداً وصغير على الهاتف) -->
+        <div class="bg-[#12151d] border-b border-[#212631] py-2 md:py-3">
+            <div class="max-w-[1700px] mx-auto px-2 md:px-4 flex gap-1.5 md:gap-3 overflow-x-auto text-[9px] md:text-[13px] font-extrabold hide-scroll pb-1">
 
                 <!-- زر الرئيسية -->
                 <button id="btn-nav-accueil" onclick="setActiveMenuBtn('btn-nav-accueil'); switchSection('accueil')"
-                    class="main-nav-btn bg-emerald text-black shadow-[0_0_15px_rgba(16,185,129,0.4)] border border-emerald px-4 md:px-5 py-2 rounded-xl flex items-center gap-2 flex-shrink-0 transition-all duration-300 transform scale-105">
-                    <i class="fas fa-home text-lg"></i> Accueil
+                    class="main-nav-btn bg-emerald text-black shadow-[0_0_15px_rgba(16,185,129,0.4)] border border-emerald px-2.5 md:px-5 py-1.5 md:py-2 rounded-lg md:rounded-xl flex items-center gap-1 md:gap-2 flex-shrink-0 transition-all duration-300 transform scale-105">
+                    <i class="fas fa-home text-xs md:text-lg"></i> Accueil
                 </button>
 
                 <!-- زر الرياضة -->
                 <button id="btn-nav-sport" onclick="setActiveMenuBtn('btn-nav-sport'); openSportsbookForProvider('nexus')"
-                    class="main-nav-btn bg-[#1a1e29] text-white border border-[#2e3648] hover:bg-[#212631] hover:border-emerald hover:shadow-[0_0_10px_rgba(16,185,129,0.2)] px-4 md:px-5 py-2 rounded-xl flex items-center gap-2 flex-shrink-0 transition-all duration-300">
-                    <i class="fas fa-futbol text-emerald text-lg"></i> Sport
+                    class="main-nav-btn bg-[#1a1e29] text-white border border-[#2e3648] hover:bg-[#212631] hover:border-emerald hover:shadow-[0_0_10px_rgba(16,185,129,0.2)] px-2.5 md:px-5 py-1.5 md:py-2 rounded-lg md:rounded-xl flex items-center gap-1 md:gap-2 flex-shrink-0 transition-all duration-300">
+                    <i class="fas fa-futbol text-emerald text-xs md:text-lg"></i> Sport
                 </button>
 
                 <!-- زر الكازينو -->
                 <button id="btn-nav-casino" onclick="setActiveMenuBtn('btn-nav-casino'); switchSection('casino'); initCasinoLobby();"
-                    class="main-nav-btn bg-[#1a1e29] text-white border border-[#2e3648] hover:bg-[#212631] hover:border-emerald hover:shadow-[0_0_10px_rgba(16,185,129,0.2)] px-4 md:px-5 py-2 rounded-xl flex items-center gap-2 flex-shrink-0 transition-all duration-300">
-                    <i class="fas fa-slot-machine text-yellow-500 text-lg"></i> Casino
+                    class="main-nav-btn bg-[#1a1e29] text-white border border-[#2e3648] hover:bg-[#212631] hover:border-emerald hover:shadow-[0_0_10px_rgba(16,185,129,0.2)] px-2.5 md:px-5 py-1.5 md:py-2 rounded-lg md:rounded-xl flex items-center gap-1 md:gap-2 flex-shrink-0 transition-all duration-300">
+                    <i class="fas fa-slot-machine text-yellow-500 text-xs md:text-lg"></i> Casino
                 </button>
 
                 <!-- زر اللايف -->
                 <button id="btn-nav-live" onclick="setActiveMenuBtn('btn-nav-live'); switchSection('live-casino'); openLiveCasino();"
-                    class="main-nav-btn bg-[#1a1e29] text-white border border-[#2e3648] hover:bg-[#212631] hover:border-red-500 hover:shadow-[0_0_10px_rgba(239,68,68,0.2)] px-4 md:px-5 py-2 rounded-xl flex items-center gap-2 flex-shrink-0 transition-all duration-300">
-                    <i class="fas fa-video text-red-500 text-lg"></i> Casino Live
+                    class="main-nav-btn bg-[#1a1e29] text-white border border-[#2e3648] hover:bg-[#212631] hover:border-red-500 hover:shadow-[0_0_10px_rgba(239,68,68,0.2)] px-2.5 md:px-5 py-1.5 md:py-2 rounded-lg md:rounded-xl flex items-center gap-1 md:gap-2 flex-shrink-0 transition-all duration-300">
+                    <i class="fas fa-video text-red-500 text-xs md:text-lg"></i> Casino Live
                 </button>
 
                 <!-- الألعاب الافتراضية -->
                 <button id="btn-nav-virtuals" onclick="setActiveMenuBtn('btn-nav-virtuals'); switchSection('virtuals'); initVirtualsLobby();"
-                    class="main-nav-btn bg-[#1a1e29] text-white border border-[#2e3648] hover:bg-[#212631] hover:border-blue-400 hover:shadow-[0_0_10px_rgba(96,165,250,0.2)] px-4 md:px-5 py-2 rounded-xl flex items-center gap-2 flex-shrink-0 transition-all duration-300">
-                    <i class="fas fa-gamepad text-blue-400 text-lg"></i> Virtuels
+                    class="main-nav-btn bg-[#1a1e29] text-white border border-[#2e3648] hover:bg-[#212631] hover:border-blue-400 hover:shadow-[0_0_10px_rgba(96,165,250,0.2)] px-2.5 md:px-5 py-1.5 md:py-2 rounded-lg md:rounded-xl flex items-center gap-1 md:gap-2 flex-shrink-0 transition-all duration-300">
+                    <i class="fas fa-gamepad text-blue-400 text-xs md:text-lg"></i> Virtuels
                 </button>
 
                 <!-- أفياتور -->
                 <button id="btn-nav-aviator" onclick="setActiveMenuBtn('btn-nav-aviator'); playCasinoGame('SPRIBE', 'aviator')"
-                    class="main-nav-btn bg-[#1a1e29] text-white border border-[#2e3648] hover:bg-[#212631] hover:border-red-500 hover:shadow-[0_0_10px_rgba(239,68,68,0.2)] px-4 md:px-5 py-2 rounded-xl flex items-center gap-2 flex-shrink-0 transition-all duration-300">
-                    <i class="fas fa-plane text-red-500 text-lg"></i> Aviator
+                    class="main-nav-btn bg-[#1a1e29] text-white border border-[#2e3648] hover:bg-[#212631] hover:border-red-500 hover:shadow-[0_0_10px_rgba(239,68,68,0.2)] px-2.5 md:px-5 py-1.5 md:py-2 rounded-lg md:rounded-xl flex items-center gap-1 md:gap-2 flex-shrink-0 transition-all duration-300">
+                    <i class="fas fa-plane text-red-500 text-xs md:text-lg"></i> Aviator
                 </button>
 
                 <!-- ميني جو -->
                 <button id="btn-nav-mini-jeux" onclick="setActiveMenuBtn('btn-nav-mini-jeux'); loadMiniJeux();"
-                    class="main-nav-btn bg-[#1a1e29] text-white border border-[#2e3648] hover:bg-[#212631] hover:border-purple-400 hover:shadow-[0_0_10px_rgba(168,85,247,0.2)] px-4 md:px-5 py-2 rounded-xl flex items-center gap-2 flex-shrink-0 transition-all duration-300">
-                    <i class="fas fa-rocket text-purple-400 text-lg"></i> Mini Jeux
+                    class="main-nav-btn bg-[#1a1e29] text-white border border-[#2e3648] hover:bg-[#212631] hover:border-purple-400 hover:shadow-[0_0_10px_rgba(168,85,247,0.2)] px-2.5 md:px-5 py-1.5 md:py-2 rounded-lg md:rounded-xl flex items-center gap-1 md:gap-2 flex-shrink-0 transition-all duration-300">
+                    <i class="fas fa-rocket text-purple-400 text-xs md:text-lg"></i> Mini Jeux
                 </button>
 
                 <!-- إي سبورت -->
                 <button id="btn-nav-esports" onclick="setActiveMenuBtn('btn-nav-esports'); openSportsbookForProvider('nexus'); showNotification('E-Sports filtré', 'success');"
-                    class="main-nav-btn bg-[#1a1e29] text-white border border-[#2e3648] hover:bg-[#212631] hover:border-orange-500 hover:shadow-[0_0_10px_rgba(249,115,22,0.2)] px-4 md:px-5 py-2 rounded-xl flex items-center gap-2 flex-shrink-0 transition-all duration-300">
-                    <i class="fas fa-headset text-orange-500 text-lg"></i> E-Sports
+                    class="main-nav-btn bg-[#1a1e29] text-white border border-[#2e3648] hover:bg-[#212631] hover:border-orange-500 hover:shadow-[0_0_10px_rgba(249,115,22,0.2)] px-2.5 md:px-5 py-1.5 md:py-2 rounded-lg md:rounded-xl flex items-center gap-1 md:gap-2 flex-shrink-0 transition-all duration-300">
+                    <i class="fas fa-headset text-orange-500 text-xs md:text-lg"></i> E-Sports
                 </button>
 
                 <!-- ألعاب التي في -->
                 <button id="btn-nav-tvbet" onclick="setActiveMenuBtn('btn-nav-tvbet'); loadTVGames();"
-                    class="main-nav-btn bg-[#1a1e29] text-white border border-[#2e3648] hover:bg-[#212631] hover:border-blue-400 hover:shadow-[0_0_10px_rgba(96,165,250,0.2)] px-4 md:px-5 py-2 rounded-xl flex items-center gap-2 flex-shrink-0 transition-all duration-300">
-                    <i class="fas fa-tv text-blue-400 text-lg"></i> Jeux TV
+                    class="main-nav-btn bg-[#1a1e29] text-white border border-[#2e3648] hover:bg-[#212631] hover:border-blue-400 hover:shadow-[0_0_10px_rgba(96,165,250,0.2)] px-2.5 md:px-5 py-1.5 md:py-2 rounded-lg md:rounded-xl flex items-center gap-1 md:gap-2 flex-shrink-0 transition-all duration-300">
+                    <i class="fas fa-tv text-blue-400 text-xs md:text-lg"></i> Jeux TV
                 </button>
 
                 <!-- النتائج -->
                 <button id="btn-nav-resultats" onclick="window.open('https://www.flashscore.fr', '_blank');"
-                    class="main-nav-btn bg-[#1a1e29] text-white border border-[#2e3648] hover:bg-[#212631] hover:border-emerald hover:shadow-[0_0_10px_rgba(16,185,129,0.2)] px-4 md:px-5 py-2 rounded-xl flex items-center gap-2 flex-shrink-0 transition-all duration-300">
-                    <i class="fas fa-chart-bar text-emerald text-lg"></i> Résultats
+                    class="main-nav-btn bg-[#1a1e29] text-white border border-[#2e3648] hover:bg-[#212631] hover:border-emerald hover:shadow-[0_0_10px_rgba(16,185,129,0.2)] px-2.5 md:px-5 py-1.5 md:py-2 rounded-lg md:rounded-xl flex items-center gap-1 md:gap-2 flex-shrink-0 transition-all duration-300">
+                    <i class="fas fa-chart-bar text-emerald text-xs md:text-lg"></i> Résultats
                 </button>
 
                 <!-- زر المختبر 01 تاك -->
                 <button id="btn-nav-zeroone-test" onclick="setActiveMenuBtn('btn-nav-zeroone-test'); switchSection('zeroone-test');"
-                    class="main-nav-btn bg-[#1a1e29] text-yellow-400 border border-[#2e3648] hover:bg-[#212631] hover:border-yellow-400 hover:shadow-[0_0_10px_rgba(234,179,8,0.2)] px-4 md:px-5 py-2 rounded-xl flex items-center gap-2 flex-shrink-0 transition-all duration-300">
-                    <i class="fas fa-flask text-yellow-400 text-lg"></i> 01.TECH
+                    class="main-nav-btn bg-[#1a1e29] text-yellow-400 border border-[#2e3648] hover:bg-[#212631] hover:border-yellow-400 hover:shadow-[0_0_10px_rgba(234,179,8,0.2)] px-2.5 md:px-5 py-1.5 md:py-2 rounded-lg md:rounded-xl flex items-center gap-1 md:gap-2 flex-shrink-0 transition-all duration-300">
+                    <i class="fas fa-flask text-yellow-400 text-xs md:text-lg"></i> 01.TECH
                 </button>
 
             </div>
@@ -2158,7 +2158,7 @@
                 }
             }
         }
-        
+
         function generateLiveWinnersTicker() {
             const track = document.getElementById('winners-ticker-track');
             if (!track) return;
