@@ -4111,7 +4111,10 @@
                 </div>
                 <span class="nav-text text-[9px] font-bold uppercase tracking-widest text-gray-500 absolute bottom-1.5 transition-all duration-300">Sport</span>
             </button>
-
+       
+            <button onclick="openSwipeMode()" class="bg-gradient-to-r from-emerald-500 to-emerald-400 text-[#022c22] px-4 py-2 rounded-full font-bold shadow-[0_0_15px_rgba(16,185,129,0.4)] flex items-center gap-2 transform transition active:scale-95">
+    <i class="fas fa-fire"></i> Mode Tinder
+</button>
         </div>
     </div>
     <!-- 🎡 نافذة عجلة الحظ اليومية -->
@@ -4276,6 +4279,245 @@
             }
         });
     </script>
+<!-- ================= 🚀 وضع الاستكشاف (Swipe-to-Play) ================= -->
+    <style>
+        /* أنيميشن اليد التي تشرح السحب */
+        @keyframes swipeHand {
+            0% { transform: translateX(0) scale(1); }
+            25% { transform: translateX(-50px) scale(0.9) rotate(-15deg); }
+            50% { transform: translateX(0) scale(1); }
+            75% { transform: translateX(50px) scale(0.9) rotate(15deg); }
+            100% { transform: translateX(0) scale(1); }
+        }
+        .animate-swipe-hand { animation: swipeHand 2.5s infinite ease-in-out; }
+        
+        /* تصميم بطاقة اللعبة */
+        .swipe-card {
+            position: absolute; width: 100%; height: 100%;
+            background-size: cover; background-position: center;
+            border-radius: 1.5rem; box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            will-change: transform; transition: transform 0.3s ease-out;
+            user-select: none; display: flex; flex-direction: column; justify-content: flex-end;
+            overflow: hidden; touch-action: none;
+        }
+        .swipe-card::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+            height: 60%; background: linear-gradient(to top, rgba(15,17,23,1), transparent); z-index: 1;
+        }
+        .swipe-card-content { position: relative; z-index: 2; padding: 1.5rem; }
+        
+        /* أختام السحب (NOPE / JOUER) */
+        .swipe-badge-left {
+            position: absolute; top: 30px; right: 30px;
+            border: 4px solid #ef4444; color: #ef4444; font-size: 2rem; font-weight: 900;
+            padding: 0.2rem 0.8rem; border-radius: 0.5rem; opacity: 0; transform: rotate(15deg); z-index: 3;
+        }
+        .swipe-badge-right {
+            position: absolute; top: 30px; left: 30px;
+            border: 4px solid #10b981; color: #10b981; font-size: 2rem; font-weight: 900;
+            padding: 0.2rem 0.8rem; border-radius: 0.5rem; opacity: 0; transform: rotate(-15deg); z-index: 3;
+        }
+    </style>
+
+    <div id="swipe-mode-container" class="fixed inset-0 z-[99999] bg-[#090a0f] hidden flex-col items-center justify-center overflow-hidden">
+        
+        <!-- زر الإغلاق -->
+        <button onclick="closeSwipeMode()" class="absolute top-6 right-6 text-white bg-white/10 p-4 rounded-full hover:bg-white/20 transition-all z-50 backdrop-blur-md">
+            <i class="fas fa-times text-xl"></i>
+        </button>
+
+        <!-- 🌟 شاشة التوجيه التعليمي (Tutorial) 🌟 -->
+        <div id="swipe-tutorial" class="absolute inset-0 z-[100] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center text-white p-6 text-center">
+            <div class="relative w-40 h-40 mb-10 flex items-center justify-center">
+                <i class="fas fa-hand-pointer text-6xl text-emerald-400 absolute animate-swipe-hand drop-shadow-[0_0_15px_rgba(16,185,129,0.8)]"></i>
+            </div>
+            <h2 class="text-3xl font-extrabold mb-3">Découverte Rapide</h2>
+            <p class="text-gray-300 mb-8 text-lg leading-relaxed">
+                Glissez à <b>Gauche</b> pour ignorer le jeu ❌<br>
+                Glissez à <b>Droite</b> pour jouer immédiatement 🔥
+            </p>
+            <button onclick="startSwiping()" class="bg-emerald-400 text-[#022c22] font-bold py-3 px-10 rounded-full text-lg shadow-[0_0_20px_rgba(16,185,129,0.4)] active:scale-95 transition">
+                C'est parti !
+            </button>
+        </div>
+
+        <!-- منطقة تكديس البطاقات -->
+        <div id="swipe-cards-container" class="relative w-[320px] h-[450px] md:w-[400px] md:h-[550px] mt-8"></div>
+
+        <!-- أزرار التحكم السفلية (كبديل للسحب) -->
+        <div class="flex gap-10 mt-10 z-40">
+            <button onclick="swipeAction('left')" class="w-16 h-16 rounded-full bg-[#12151d] text-red-500 border border-red-500/50 flex items-center justify-center text-2xl shadow-lg active:scale-90 transition">
+                <i class="fas fa-times"></i>
+            </button>
+            <button onclick="swipeAction('right')" class="w-16 h-16 rounded-full bg-[#12151d] text-emerald-400 border border-emerald-500/50 flex items-center justify-center text-2xl shadow-lg active:scale-90 transition">
+                <i class="fas fa-play"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let swipeGames = [];
+        let currentCardIndex = 0;
+
+        function openSwipeMode() {
+            if (!window.currentProviderGames || window.currentProviderGames.length === 0) {
+                showNotification("Ouvrez d'abord un fournisseur de jeux (ex: Pragmatic)", "error");
+                return;
+            }
+            
+            const container = document.getElementById('swipe-mode-container');
+            container.classList.remove('hidden');
+            container.classList.add('flex');
+            
+            // إظهار التوجيه التعليمي
+            document.getElementById('swipe-tutorial').style.display = 'flex';
+            
+            // جلب الألعاب وخلطها عشوائياً
+            swipeGames = [...window.currentProviderGames].sort(() => 0.5 - Math.random());
+            currentCardIndex = 0;
+            renderSwipeCards();
+        }
+
+        function closeSwipeMode() {
+            document.getElementById('swipe-mode-container').classList.add('hidden');
+            document.getElementById('swipe-mode-container').classList.remove('flex');
+        }
+
+        function startSwiping() {
+            // إخفاء التوجيه التعليمي وبدء المتعة
+            document.getElementById('swipe-tutorial').style.display = 'none';
+        }
+
+        function renderSwipeCards() {
+            const container = document.getElementById('swipe-cards-container');
+            container.innerHTML = '';
+            
+            const cardsToRender = swipeGames.slice(currentCardIndex, currentCardIndex + 4);
+            
+            if (cardsToRender.length === 0) {
+                container.innerHTML = '<div class="text-white text-center mt-32 text-2xl font-bold">🎉 Fin de la liste !</div>';
+                return;
+            }
+
+            cardsToRender.reverse().forEach((game, i) => {
+                const isTopCard = i === cardsToRender.length - 1;
+                const gameName = game.game_name || game.name || 'Jeu de Casino';
+                const gameImg = game.banner || game.image || `https://placehold.co/400x600/12151d/10b981?text=${encodeURIComponent(gameName)}`;
+                
+                const card = document.createElement('div');
+                card.className = 'swipe-card border border-[#212631]';
+                card.style.backgroundImage = `url('${gameImg}')`;
+                
+                const scale = 1 - ((cardsToRender.length - 1 - i) * 0.05);
+                const translateY = (cardsToRender.length - 1 - i) * 15;
+                card.style.transform = `scale(${scale}) translateY(${translateY}px)`;
+                card.style.zIndex = i;
+                
+                card.innerHTML = `
+                    <div class="swipe-badge-left">NOPE</div>
+                    <div class="swipe-badge-right">JOUER</div>
+                    <div class="swipe-card-content">
+                        <h3 class="text-white font-extrabold text-3xl mb-1 truncate drop-shadow-md">${gameName}</h3>
+                        <p class="text-emerald-400 font-medium tracking-widest uppercase text-xs">${window.currentActiveProviderCode || 'CASINO'}</p>
+                    </div>
+                `;
+
+                if (isTopCard) addDragLogic(card, game);
+                container.appendChild(card);
+            });
+        }
+
+        function addDragLogic(card, game) {
+            let startX, isDragging = false;
+            const threshold = 100; // المسافة المطلوبة لتأكيد السحب
+            
+            const handleStart = (e) => {
+                if (e.target.closest('.swipe-badge-left, .swipe-badge-right')) return;
+                isDragging = true;
+                startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+                card.style.transition = 'none';
+            };
+            
+            const handleMove = (e) => {
+                if (!isDragging) return;
+                const currentX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+                const deltaX = currentX - startX;
+                const rotate = deltaX * 0.05;
+                
+                card.style.transform = `translate(${deltaX}px, 0px) rotate(${rotate}deg)`;
+                
+                const badgeLeft = card.querySelector('.swipe-badge-left');
+                const badgeRight = card.querySelector('.swipe-badge-right');
+                
+                if (deltaX > 0) {
+                    badgeRight.style.opacity = Math.min(deltaX / threshold, 1);
+                    badgeLeft.style.opacity = 0;
+                } else {
+                    badgeLeft.style.opacity = Math.min(Math.abs(deltaX) / threshold, 1);
+                    badgeRight.style.opacity = 0;
+                }
+            };
+            
+            const handleEnd = (e) => {
+                if (!isDragging) return;
+                isDragging = false;
+                card.style.transition = 'transform 0.3s ease-out';
+                
+                const currentX = e.type.includes('mouse') ? e.clientX : (e.changedTouches ? e.changedTouches[0].clientX : startX);
+                const deltaX = currentX - startX;
+                
+                if (deltaX > threshold) handleSwipe('right', card, game);
+                else if (deltaX < -threshold) handleSwipe('left', card, game);
+                else {
+                    card.style.transform = `translate(0px, 0px) rotate(0deg)`;
+                    card.querySelector('.swipe-badge-left').style.opacity = 0;
+                    card.querySelector('.swipe-badge-right').style.opacity = 0;
+                }
+            };
+            
+            card.addEventListener('mousedown', handleStart);
+            document.addEventListener('mousemove', handleMove);
+            document.addEventListener('mouseup', handleEnd);
+            
+            card.addEventListener('touchstart', handleStart, {passive: true});
+            document.addEventListener('touchmove', handleMove, {passive: true});
+            document.addEventListener('touchend', handleEnd);
+            
+            card.cleanup = () => {
+                document.removeEventListener('mousemove', handleMove);
+                document.removeEventListener('mouseup', handleEnd);
+                document.removeEventListener('touchmove', handleMove);
+                document.removeEventListener('touchend', handleEnd);
+            };
+        }
+
+        function handleSwipe(direction, card, game) {
+            if (card.cleanup) card.cleanup();
+            
+            const endX = direction === 'right' ? window.innerWidth : -window.innerWidth;
+            card.style.transform = `translate(${endX}px, 20px) rotate(${direction === 'right' ? 30 : -30}deg)`;
+            
+            setTimeout(() => {
+                if (direction === 'right') {
+                    const providerCode = window.currentActiveProviderCode || 'PRAGMATIC';
+                    const gameCode = game.game_code || game.id;
+                    const gameImg = game.banner || game.image || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(game.game_name)}`;
+                    playCasinoGame(providerCode, gameCode, game.game_name, gameImg);
+                }
+                
+                currentCardIndex++;
+                renderSwipeCards();
+            }, 300);
+        }
+
+        function swipeAction(direction) {
+            const cards = document.getElementById('swipe-cards-container').querySelectorAll('.swipe-card');
+            if (cards.length === 0) return;
+            const topCard = cards[cards.length - 1];
+            handleSwipe(direction, topCard, swipeGames[currentCardIndex]);
+        }
+    </script>
+
 </body>
 </html>
 </body>
