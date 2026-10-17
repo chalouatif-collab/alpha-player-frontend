@@ -1171,22 +1171,31 @@
         }
 
         function showNotification(message, type = "success") {
-            const container = document.getElementById('toast-container');
-            if (!container) { alert(message); return; }
+            let container = document.getElementById('toast-container');
+            
+            // 🌟 إذا لم يجد حاوية الإشعارات الأنيقة، سيصنعها بنفسه ولن يستخدم alert أبداً!
+            if (!container) { 
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                container.className = 'fixed top-5 right-5 z-[9999] flex flex-col gap-2 w-full max-w-sm px-4 pointer-events-none';
+                document.body.appendChild(container);
+            }
 
             const toast = document.createElement('div');
-            toast.className = `px-4 py-3 rounded-xl font-bold text-sm shadow-xl transform transition-all translate-x-full flex items-center gap-2 ${type === 'error' ? 'bg-red-500 text-white' : 'bg-emerald text-black'
-                }`;
-            toast.innerHTML = type === 'error' ? `<i class="fas fa-exclamation-circle"></i> ${message}` : `<i class="fas fa-check-circle"></i> ${message}`;
+            // تصميم زجاجي أنيق للإشعار
+            toast.className = `px-4 py-3 rounded-xl font-bold text-sm shadow-2xl transform transition-all translate-x-full flex items-center gap-2 pointer-events-auto border ${type === 'error' ? 'bg-red-500/90 border-red-400 text-white backdrop-blur-md' : 'bg-emerald/90 border-emerald-400 text-black backdrop-blur-md'}`;
+            
+            toast.innerHTML = type === 'error' ? `<i class="fas fa-exclamation-circle text-lg"></i> ${message}` : `<i class="fas fa-sparkles text-lg"></i> ${message}`;
 
             container.appendChild(toast);
+            
+            // حركة الظهور والاختفاء الناعمة
             setTimeout(() => toast.classList.remove('translate-x-full'), 10);
             setTimeout(() => {
                 toast.classList.add('translate-x-full');
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
-
         window.onload = () => {
             // 🚀 إخفاء شاشة التحميل بسلاسة بعد تجهيز الموقع
             const splash = document.getElementById('splash-screen');
@@ -3711,16 +3720,16 @@
             connectBigWinsWebSocket();
         });
 
-        // ================= نظام نرد الحظ السحري (يفتح اللعبة فوراً وبصمت تام) =================
+        // ================= نظام نرد الحظ السحري (إشعار أنيق ثم فتح اللعبة) =================
         async function rollMagicDice() {
             if (!playerSession) {
+                showNotification("Veuillez vous connecter pour lancer le dé magique ! 🎲", "error");
                 return openLoginModal();
             }
 
             const mainBody = document.body;
             const newDiceImg = document.querySelector('img[alt="Dice"]');
 
-            // منع الضغط المتكرر أثناء الدوران
             if (mainBody.classList.contains('shake-active')) return;
 
             // 1. تشغيل الحركة السحرية (دوران النرد ورجة الشاشة)
@@ -3733,10 +3742,8 @@
             }, 1200);
 
             try {
-                // 2. اختيار مزود عشوائي
                 const randomProvider = window.nexusProviders[Math.floor(Math.random() * window.nexusProviders.length)];
                 
-                // 3. جلب ألعاب المزود بصمت في الخلفية
                 const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -3750,25 +3757,34 @@
                 else if (Array.isArray(data)) games = data;
 
                 if (games && games.length > 0) {
-                    // 4. اختيار لعبة عشوائية
                     const randomGame = games[Math.floor(Math.random() * games.length)];
+                    const gameName = randomGame.game_name || randomGame.name || "Jeu Magique";
                     const gameCode = randomGame.game_code || randomGame.id;
 
-                    // ننتظر ثانية واحدة (لينتهي النرد من الدوران) ثم نفتح اللعبة فوراً بدون أي رسالة
                     setTimeout(() => {
-                        playCasinoGame(randomProvider.code, gameCode);
+                        // 🌟 1. إظهار الإشعار الأنيق في زاوية الشاشة
+                        showNotification(`La magie a choisi : ${gameName} ✨`, "success");
+                        
+                        // 🌟 2. الانتظار 1.2 ثانية (ليقرأ اللاعب اسم اللعبة بحماس) ثم فتحها تلقائياً
+                        setTimeout(() => {
+                            playCasinoGame(randomProvider.code, gameCode);
+                        }, 1200);
+                        
                     }, 1000);
                 } else {
                     throw new Error("Provider vide");
                 }
             } catch (e) {
-                // 🛡️ خطة الطوارئ
                 if (window.currentProviderGames && window.currentProviderGames.length > 0) {
                     const fallbackGame = window.currentProviderGames[Math.floor(Math.random() * window.currentProviderGames.length)];
+                    const fName = fallbackGame.game_name || fallbackGame.name || "Jeu Surprise";
                     const fCode = fallbackGame.game_code || fallbackGame.id;
                     
                     setTimeout(() => {
-                        playCasinoGame(window.currentActiveProviderCode || 'PRAGMATIC', fCode);
+                        showNotification(`La chance a choisi : ${fName} ✨`, "success");
+                        setTimeout(() => {
+                            playCasinoGame(window.currentActiveProviderCode || 'PRAGMATIC', fCode);
+                        }, 1200);
                     }, 1000);
                 }
             }
