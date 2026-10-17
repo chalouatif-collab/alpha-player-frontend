@@ -3711,49 +3711,74 @@
             connectBigWinsWebSocket();
         });
 
-        // ================= نظام نرد الحظ السحري (The 3D Magic Dice) =================
-        function rollMagicDice() {
+        // ================= نظام نرد الحظ السحري (اختيار عشوائي ديناميكي 100%) =================
+        async function rollMagicDice() {
             if (!playerSession) {
                 showNotification("Veuillez vous connecter pour lancer le dé magique ! 🎲", "error");
                 return openLoginModal();
             }
 
-            const diceImg = document.getElementById('dice-img');
             const mainBody = document.body;
+            const newDiceImg = document.querySelector('img[alt="Dice"]');
 
-            // منع اللاعب من الضغط المتكرر بينما النرد لا يزال يدور
-            if (diceImg.classList.contains('spin-active')) return;
+            // منع الضغط المتكرر أثناء الدوران
+            if (mainBody.classList.contains('shake-active')) return;
 
             // 1. تشغيل الحركة السحرية (دوران النرد ورجة الشاشة)
-            diceImg.classList.add('spin-active');
+            if (newDiceImg) newDiceImg.classList.add('spin-active');
             mainBody.classList.add('shake-active');
 
-            // إزالة حركات الـ CSS بعد انتهائها
             setTimeout(() => {
-                diceImg.classList.remove('spin-active');
+                if (newDiceImg) newDiceImg.classList.remove('spin-active');
                 mainBody.classList.remove('shake-active');
             }, 1200);
 
-            // 2. الذكاء الاصطناعي لاختيار اللعبة الساخنة (Hot Games Pool)
-            // يمكنك تغيير هذه الألعاب لأكثر الألعاب ربحاً في منصتك
-            const hotGames = [
-                { provider: 'PRAGMATIC', code: 'vs20olympus', name: 'Gates of Olympus ⚡' },
-                { provider: 'PRAGMATIC', code: 'vs20doghouse', name: 'The Dog House 🐶' },
-                { provider: 'SPRIBE', code: 'aviator', name: 'Aviator 🚀' },
-                { provider: 'HACKSAW', code: 'wanted_dead_or_a_wild', name: 'Wanted Dead or a Wild 🤠' },
-                { provider: 'PLAYNGO', code: 'book_of_dead', name: 'Book of Dead 📖' }
-            ];
+            try {
+                // 2. اختيار مزود عشوائي من قائمة المزودين الموجودة في الموقع
+                const randomProvider = window.nexusProviders[Math.floor(Math.random() * window.nexusProviders.length)];
+                
+                // 3. جلب ألعاب هذا المزود من السيرفر بصمت في الخلفية
+                const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider_code: randomProvider.code })
+                });
+                
+                const data = await res.json();
+                let games = [];
+                if (data.status === 1 && data.games) games = data.games;
+                else if (data.data) games = data.data;
+                else if (Array.isArray(data)) games = data;
 
-            // اختيار لعبة عشوائية من القائمة
-            const randomGame = hotGames[Math.floor(Math.random() * hotGames.length)];
+                if (games && games.length > 0) {
+                    // 4. اختيار لعبة عشوائية تماماً من هذا المزود
+                    const randomGame = games[Math.floor(Math.random() * games.length)];
+                    const gameName = randomGame.game_name || randomGame.name || "Jeu Magique";
+                    const gameCode = randomGame.game_code || randomGame.id;
 
-            // 3. تأخير فتح اللعبة قليلاً ليتمكن اللاعب من الاستمتاع بالتأثير البصري
-            setTimeout(() => {
-                showNotification(`🎲 Les esprits ont choisi : ${randomGame.name} !`, "success");
-
-                // إطلاق اللعبة فوراً
-                playCasinoGame(randomGame.provider, randomGame.code);
-            }, 1000);
+                    // ننتظر قليلاً حتى ينتهي تأثير دوران النرد قبل فتح اللعبة
+                    setTimeout(() => {
+                        showNotification(`🎲 Les esprits ont choisi : ${gameName} !`, "success");
+                        playCasinoGame(randomProvider.code, gameCode);
+                    }, 1000);
+                } else {
+                    throw new Error("Provider vide"); // في حال كان المزود لا يحتوي على ألعاب
+                }
+            } catch (e) {
+                // 🛡️ خطة طوارئ (Fallback): إذا فشل الاتصال بالسيرفر، نختار لعبة عشوائية من الألعاب المعروضة حالياً أمام اللاعب
+                if (window.currentProviderGames && window.currentProviderGames.length > 0) {
+                    const fallbackGame = window.currentProviderGames[Math.floor(Math.random() * window.currentProviderGames.length)];
+                    const fName = fallbackGame.game_name || fallbackGame.name || "Jeu Surprise";
+                    const fCode = fallbackGame.game_code || fallbackGame.id;
+                    
+                    setTimeout(() => {
+                        showNotification(`🎲 La chance a choisi : ${fName} !`, "success");
+                        playCasinoGame(window.currentActiveProviderCode || 'PRAGMATIC', fCode);
+                    }, 1000);
+                } else {
+                    showNotification("La magie a échoué, veuillez réessayer !", "error");
+                }
+            }
         }
 
         // تشغيل عداد الـ Jackpot Drop المتزايد حياً في القائمة الجانبية
