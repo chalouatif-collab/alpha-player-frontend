@@ -3780,6 +3780,24 @@
                 el.innerText = currentJp.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TND';
             }, 1400);
         })();
+
+        setInterval(() => {
+            if (window.innerWidth <= 768) {
+                // في الجوال: ندفعه للأعلى 80 بيكسل ليتجاوز الشريط السفلي
+                document.querySelectorAll('iframe[title*="chat widget"], iframe[src*="tawk.to"]').forEach(iframe => {
+                    if (iframe.style.bottom !== '80px') {
+                        iframe.style.setProperty('bottom', '80px', 'important');
+                    }
+                });
+            } else {
+                // في الحاسوب: نتركه في مكانه الطبيعي (20 بيكسل)
+                document.querySelectorAll('iframe[title*="chat widget"], iframe[src*="tawk.to"]').forEach(iframe => {
+                    if (iframe.style.bottom === '80px') {
+                        iframe.style.setProperty('bottom', '20px', 'important');
+                    }
+                });
+            }
+        }, 500);
     </script>
 
 
