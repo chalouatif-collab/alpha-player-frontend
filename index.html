@@ -36,6 +36,15 @@
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3132/3132634.png">
 
     <style>
+
+        /* 📱 إجبار زر Tawk.to على الارتفاع في الهواتف بالقوة لتفادي الشريط السفلي */
+        @media (max-width: 768px) {
+            iframe[title*="chat widget"], 
+            iframe[title*="Tawk"],
+            div[style*="2147483647"] {
+                bottom: 80px !important;
+            }
+        }
         /* 🌟 حركة الشعار ثلاثية الأبعاد (يمين يسار + طفو) */
         @keyframes logo-3d-swing {
             0%, 100% { transform: perspective(800px) rotateY(-20deg) translateY(0); }
@@ -4085,8 +4094,7 @@
         </div>
     </div>
 
-    <!--Start of Tawk.to Script-->
-    <!--Start of Tawk.to Script-->
+    
     <script type="text/javascript">
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
     
