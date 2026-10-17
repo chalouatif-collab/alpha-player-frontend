@@ -649,6 +649,18 @@
             </button>
 
         </div>
+        <!-- 🕒 قسم آخر الألعاب (Récemment Joués) - يظهر آلياً إذا لعب المستخدم أي لعبة -->
+        <div id="recent-games-container" class="hidden flex-col gap-3 mb-6 md:mb-8 w-full mt-2">
+            <div class="flex justify-between items-center px-1">
+                <h3 class="text-white font-extrabold text-xs md:text-sm uppercase flex items-center gap-2">
+                    <i class="fas fa-history text-emerald"></i> Récemment Joués
+                </h3>
+            </div>
+            <!-- شريط التمرير الأفقي للألعاب الأخيرة -->
+            <div id="recent-games-grid" class="flex overflow-x-auto hide-scroll gap-3 pb-2 w-full cursor-grab active:cursor-grabbing select-none">
+                <!-- سيتم حقن الألعاب هنا آلياً عبر الجافاسكريبت -->
+            </div>
+        </div>
         <!-- قسم أبرز المزودين -->
         <div id="dynamic-featured-providers" class="flex flex-col gap-6 mb-8 w-full mt-4">
         </div>
@@ -1748,10 +1760,88 @@
             }
             loadFeaturedProvidersBlocks();
         }
-        // ================= تشغيل الألعاب =================
+
+
+        // ================= رسم قسم آخر الألعاب =================
+        function renderRecentGames() {
+            const container = document.getElementById('recent-games-container');
+            const grid = document.getElementById('recent-games-grid');
+            if (!container || !grid) return;
+
+            let recent = JSON.parse(localStorage.getItem('alpha_recent_games') || '[]');
+            if (recent.length === 0) {
+                container.classList.add('hidden');
+                container.classList.remove('flex');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            container.classList.add('flex');
+            
+            grid.innerHTML = recent.map(g => `
+                <div onclick="playCasinoGame('${g.providerCode}', '${g.gameCode}')" 
+                    class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex items-center p-2 gap-3 group shadow-lg w-[180px] md:w-[220px] shrink-0 relative">
+                    
+                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-lg overflow-hidden shrink-0 relative bg-[#161922] border border-[#212631]">
+                        <img src="${g.gameImg}" class="w-full h-full object-cover" onerror="this.src='https://img.icons8.com/3d-fluency/94/slot-machine.png'">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                            <i class="fas fa-play text-emerald text-xs"></i>
+                        </div>
+                    </div>
+                    <div class="flex flex-col truncate flex-1">
+                        <span class="text-white text-[10px] md:text-[11px] font-bold truncate block w-full">${escapeHTML(g.gameName)}</span>
+                        <span class="text-emerald text-[8px] md:text-[9px] font-black uppercase tracking-widest mt-0.5">${escapeHTML(g.providerCode)}</span>
+                    </div>
+                </div>
+            `).join('');
+            
+            // تفعيل ميزة السحب والإفلات (Drag to Scroll) للحاسوب
+            if(!grid.dataset.dragEnabled) {
+                let isDown = false, startX, scrollLeft;
+                grid.addEventListener('mousedown', (e) => {
+                    isDown = true; grid.classList.add('cursor-grabbing');
+                    startX = e.pageX - grid.offsetLeft; scrollLeft = grid.scrollLeft;
+                });
+                grid.addEventListener('mouseleave', () => { isDown = false; grid.classList.remove('cursor-grabbing'); });
+                grid.addEventListener('mouseup', () => { isDown = false; grid.classList.remove('cursor-grabbing'); });
+                grid.addEventListener('mousemove', (e) => {
+                    if (!isDown) return; e.preventDefault();
+                    const x = e.pageX - grid.offsetLeft;
+                    grid.scrollLeft = scrollLeft - (x - startX) * 2;
+                });
+                grid.dataset.dragEnabled = 'true';
+            }
+        }
         async function playCasinoGame(providerCode, gameCode) {
             closeChat();
             if (!playerSession) return openLoginModal();
+
+            // 🌟 === محرك اصطياد وحفظ آخر الألعاب آلياً === 🌟
+            try {
+                let gameName = "Jeu de Casino";
+                let gameImg = "https://img.icons8.com/3d-fluency/94/slot-machine.png";
+                
+                // البحث بذكاء عن صورة واسم اللعبة في المصفوفة المعروضة حالياً
+                if (window.currentProviderGames && window.currentProviderGames.length > 0) {
+                    let found = window.currentProviderGames.find(g => String(g.game_code || g.id) === String(gameCode));
+                    if (found) {
+                        gameName = String(found.game_name || found.name);
+                        gameImg = found.banner || found.image || found.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 10))}`;
+                    }
+                }
+                
+                let recent = JSON.parse(localStorage.getItem('alpha_recent_games') || '[]');
+                // إزالة اللعبة إذا كانت موجودة مسبقاً لنقلها إلى أول القائمة
+                recent = recent.filter(g => String(g.gameCode) !== String(gameCode)); 
+                recent.unshift({ providerCode, gameCode, gameName, gameImg });
+                if (recent.length > 8) recent.pop(); // الاحتفاظ بآخر 8 ألعاب فقط
+                localStorage.setItem('alpha_recent_games', JSON.stringify(recent));
+                
+                // تحديث الواجهة فوراً
+                if (typeof renderRecentGames === 'function') renderRecentGames();
+            } catch(e) { console.error("Recent games tracking error", e); }
+            // 🌟 =========================================== 🌟
+
             addVipXp(25);
             // تغيير شكل المؤشر لانتظار التحميل
             document.body.style.cursor = 'wait';
@@ -1774,7 +1864,7 @@
                 const data = await res.json();
 
                 if (data.launch_url) {
-                    // 🌟 فتح اللعبة في نافذة/علامة تبويب جديدة
+                    // فتح اللعبة في نافذة/علامة تبويب جديدة
                     window.open(data.launch_url, '_blank');
                 } else {
                     showNotification(data.error || "Jeu non disponible", "error");
@@ -1782,7 +1872,7 @@
             } catch (error) {
                 showNotification("Erreur de connexion", "error");
             } finally {
-                // 🌟 إعادة شكل المؤشر لطبيعته سواء نجح فتح اللعبة أم فشل
+                // إعادة شكل المؤشر لطبيعته سواء نجح فتح اللعبة أم فشل
                 document.body.style.cursor = 'default';
             }
         }
