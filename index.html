@@ -3720,7 +3720,7 @@
             connectBigWinsWebSocket();
         });
 
-        // ================= نظام نرد الحظ السحري (إشعار أنيق ثم فتح اللعبة) =================
+        // ================= نظام نرد الحظ السحري (محدث مع تمرير الصور والأم للائحة الألعاب) =================
         async function rollMagicDice() {
             if (!playerSession) {
                 showNotification("Veuillez vous connecter pour lancer le dé magique ! 🎲", "error");
@@ -3732,7 +3732,6 @@
 
             if (mainBody.classList.contains('shake-active')) return;
 
-            // 1. تشغيل الحركة السحرية (دوران النرد ورجة الشاشة)
             if (newDiceImg) newDiceImg.classList.add('spin-active');
             mainBody.classList.add('shake-active');
 
@@ -3760,16 +3759,15 @@
                     const randomGame = games[Math.floor(Math.random() * games.length)];
                     const gameName = randomGame.game_name || randomGame.name || "Jeu Magique";
                     const gameCode = randomGame.game_code || randomGame.id;
+                    // استخراج الصورة الصحيحة للعبة العشوائية
+                    const gameImg = randomGame.banner || randomGame.image || randomGame.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 10))}`;
 
                     setTimeout(() => {
-                        // 🌟 1. إظهار الإشعار الأنيق في زاوية الشاشة
                         showNotification(`La magie a choisi : ${gameName} ✨`, "success");
-                        
-                        // 🌟 2. الانتظار 1.2 ثانية (ليقرأ اللاعب اسم اللعبة بحماس) ثم فتحها تلقائياً
                         setTimeout(() => {
-                            playCasinoGame(randomProvider.code, gameCode);
+                            // 🌟 نمرر الاسم والصورة بقوة إلى دالة التشغيل ليتم حفظها في شريط Récemment Joués
+                            playCasinoGame(randomProvider.code, gameCode, gameName, gameImg);
                         }, 1200);
-                        
                     }, 1000);
                 } else {
                     throw new Error("Provider vide");
@@ -3779,17 +3777,17 @@
                     const fallbackGame = window.currentProviderGames[Math.floor(Math.random() * window.currentProviderGames.length)];
                     const fName = fallbackGame.game_name || fallbackGame.name || "Jeu Surprise";
                     const fCode = fallbackGame.game_code || fallbackGame.id;
+                    const fImg = fallbackGame.banner || fallbackGame.image || fallbackGame.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(fName.substring(0, 10))}`;
                     
                     setTimeout(() => {
                         showNotification(`La chance a choisi : ${fName} ✨`, "success");
                         setTimeout(() => {
-                            playCasinoGame(window.currentActiveProviderCode || 'PRAGMATIC', fCode);
+                            playCasinoGame(window.currentActiveProviderCode || 'PRAGMATIC', fCode, fName, fImg);
                         }, 1200);
                     }, 1000);
                 }
             }
         }
-
         // تشغيل عداد الـ Jackpot Drop المتزايد حياً في القائمة الجانبية
         (function initLiveSidebarJackpot() {
             let currentJp = 124567.45;
