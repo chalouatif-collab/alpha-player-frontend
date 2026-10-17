@@ -340,7 +340,7 @@
         </header>
         <!-- 2. شريط التصنيفات السريع الذكي (مضغوط جداً وصغير على الهاتف) -->
         <div class="bg-[#12151d] border-b border-[#212631] py-2 md:py-3">
-            <div class="max-w-[1700px] mx-auto px-2 md:px-4 flex gap-1.5 md:gap-3 overflow-x-auto text-[9px] md:text-[13px] font-extrabold hide-scroll pb-1">
+            <div class="max-w-[1700px] mx-auto px-2 md:px-4 flex gap-1.5 md:gap-3 overflow-x-auto drag-scroll cursor-grab select-none text-[9px] md:text-[13px] font-extrabold hide-scroll pb-1">
 
                 <!-- زر الرئيسية -->
                 <button id="btn-nav-accueil" onclick="setActiveMenuBtn('btn-nav-accueil'); switchSection('accueil')"
@@ -3790,7 +3790,45 @@
             }, 1400);
         })();
 
-        
+        // ================= ميزة السحب بالماوس للقوائم الأفقية (Drag to Scroll) =================
+        document.addEventListener('DOMContentLoaded', () => {
+            const dragSliders = document.querySelectorAll('.drag-scroll');
+            
+            dragSliders.forEach(slider => {
+                let isDown = false;
+                let startX;
+                let scrollLeft;
+
+                slider.addEventListener('mousedown', (e) => {
+                    isDown = true;
+                    // تغيير شكل المؤشر ليد مغلقة عند الضغط
+                    slider.classList.add('cursor-grabbing');
+                    slider.classList.remove('cursor-grab');
+                    startX = e.pageX - slider.offsetLeft;
+                    scrollLeft = slider.scrollLeft;
+                });
+
+                slider.addEventListener('mouseleave', () => {
+                    isDown = false;
+                    slider.classList.remove('cursor-grabbing');
+                    slider.classList.add('cursor-grab');
+                });
+
+                slider.addEventListener('mouseup', () => {
+                    isDown = false;
+                    slider.classList.remove('cursor-grabbing');
+                    slider.classList.add('cursor-grab');
+                });
+
+                slider.addEventListener('mousemove', (e) => {
+                    if (!isDown) return;
+                    e.preventDefault(); // منع أي سلوك افتراضي مثل سحب الصور
+                    const x = e.pageX - slider.offsetLeft;
+                    const walk = (x - startX) * 1.5; // سرعة السحب (يمكنك زيادتها بجعل الرقم 2 أو 2.5)
+                    slider.scrollLeft = scrollLeft - walk;
+                });
+            });
+        });
     </script>
 
 
