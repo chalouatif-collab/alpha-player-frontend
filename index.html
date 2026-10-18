@@ -1964,101 +1964,8 @@
                 grid.dataset.dragEnabled = 'true';
             }
         }
-        // ================= فتح اللعبة (محدث ليدعم الشاشة المدمجة) =================
-        async function playCasinoGame(providerCode, gameCode, forceName = null, forceImg = null) {
-            closeChat();
-            if (!playerSession) return openLoginModal();
-
-            try {
-                let gameName = forceName || "Jeu de Casino";
-                let gameImg = forceImg || "https://img.icons8.com/3d-fluency/94/slot-machine.png";
-
-                if (!forceName) {
-                    const gameCard = document.querySelector(`[onclick*="${gameCode}"]`);
-                    if (gameCard) {
-                        const imgEl = gameCard.querySelector('img');
-                        const titleEl = gameCard.querySelector('.truncate') || gameCard.querySelector('h3') || gameCard.querySelector('span');
-                        if (imgEl && imgEl.src) gameImg = imgEl.src;
-                        if (titleEl && titleEl.innerText) gameName = titleEl.innerText.trim();
-                    } else if (window.currentProviderGames) {
-                        let found = window.currentProviderGames.find(g => String(g.game_code || g.id) === String(gameCode));
-                        if (found) {
-                            gameName = String(found.game_name || found.name);
-                            gameImg = found.banner || found.image || found.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 10))}`;
-                        }
-                    }
-                }
-
-                let recent = JSON.parse(localStorage.getItem('alpha_recent_games') || '[]');
-                recent = recent.filter(g => String(g.gameCode) !== String(gameCode));
-                recent.unshift({ providerCode, gameCode, gameName, gameImg });
-                if (recent.length > 8) recent.pop();
-                localStorage.setItem('alpha_recent_games', JSON.stringify(recent));
-
-                if (typeof renderRecentGames === 'function') renderRecentGames();
-            } catch (e) { console.error("Recent games tracking error", e); }
-
-            addVipXp(25);
-            document.body.style.cursor = 'wait';
-
-            try {
-                let endpointUrl = `${BACKEND_URL}/api/provider/launch-casino`;
-                let requestBody = { game_code: gameCode, provider_code: providerCode, user_code: playerSession.username };
-
-                if (providerCode === 'SMPL') {
-                    endpointUrl = `${BACKEND_URL}/api/smpl/launch`;
-                    requestBody = { game_uuid: gameCode, user_code: playerSession.username };
-                }
-
-                const res = await fetch(endpointUrl, {
-                    method: 'POST',
-                    headers: getAuthHeaders(),
-                    body: JSON.stringify(requestBody)
-                });
-
-                const data = await res.json();
-
-                if (data.launch_url) {
-                    // 🚀 توجيه الرابط إلى الـ Iframe بدلاً من window.open
-                    const container = document.getElementById('casino-iframe-container');
-                    const iframe = document.getElementById('casino-iframe');
-                    if (container && iframe) {
-                        container.classList.remove('hidden');
-                        container.classList.add('flex');
-                        iframe.src = data.launch_url;
-                    }
-                } else {
-                    showNotification(data.error || "Jeu non disponible", "error");
-                }
-            } catch (error) {
-                showNotification("Erreur de connexion", "error");
-            } finally {
-                document.body.style.cursor = 'default';
-            }
-        }
-        window.playSMPLGame = playCasinoGame;
-        window.playNexusGame = playCasinoGame;
-        window.playSMPLGame = playCasinoGame;
-        window.playNexusGame = playCasinoGame;
-        // ================= إغلاق نافذة اللعبة =================
-        function closeCasinoGame(fromPopState = false) {
-            const container = document.getElementById('casino-iframe-container');
-            if (container) {
-                container.classList.add('hidden');
-                container.classList.remove('flex');
-            }
-            const iframe = document.getElementById('casino-iframe');
-            if (iframe) iframe.src = '';
-
-            if (typeof refreshBalance === 'function') {
-                refreshBalance();
-            }
-
-            // 🌟 الرجوع خطوة للوراء في الهاتف إذا كان الإغلاق برمجياً وليس من زر الهاتف
-            if (!fromPopState && history.state && history.state.modalOpen) {
-                history.back();
-            }
-        }
+        
+        
 
 
 
@@ -3283,6 +3190,123 @@
         }
 
 
+        // ================= 1. فتح اللعبة العادية (مع إخفاء الشريط السفلي) =================
+        async function playCasinoGame(providerCode, gameCode, forceName = null, forceImg = null) {
+            closeChat();
+            if (!playerSession) return openLoginModal();
+
+            try {
+                let gameName = forceName || "Jeu de Casino";
+                let gameImg = forceImg || "https://img.icons8.com/3d-fluency/94/slot-machine.png";
+
+                if (!forceName) {
+                    const gameCard = document.querySelector(`[onclick*="${gameCode}"]`);
+                    if (gameCard) {
+                        const imgEl = gameCard.querySelector('img');
+                        const titleEl = gameCard.querySelector('.truncate') || gameCard.querySelector('h3') || gameCard.querySelector('span');
+                        if (imgEl && imgEl.src) gameImg = imgEl.src;
+                        if (titleEl && titleEl.innerText) gameName = titleEl.innerText.trim();
+                    } else if (window.currentProviderGames) {
+                        let found = window.currentProviderGames.find(g => String(g.game_code || g.id) === String(gameCode));
+                        if (found) {
+                            gameName = String(found.game_name || found.name);
+                            gameImg = found.banner || found.image || found.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 10))}`;
+                        }
+                    }
+                }
+
+                let recent = JSON.parse(localStorage.getItem('alpha_recent_games') || '[]');
+                recent = recent.filter(g => String(g.gameCode) !== String(gameCode));
+                recent.unshift({ providerCode, gameCode, gameName, gameImg });
+                if (recent.length > 8) recent.pop();
+                localStorage.setItem('alpha_recent_games', JSON.stringify(recent));
+
+                if (typeof renderRecentGames === 'function') renderRecentGames();
+            } catch (e) { console.error("Recent games tracking error", e); }
+
+            addVipXp(25);
+            document.body.style.cursor = 'wait';
+
+            try {
+                let endpointUrl = `${BACKEND_URL}/api/provider/launch-casino`;
+                let requestBody = { game_code: gameCode, provider_code: providerCode, user_code: playerSession.username };
+
+                if (providerCode === 'SMPL') {
+                    endpointUrl = `${BACKEND_URL}/api/smpl/launch`;
+                    requestBody = { game_uuid: gameCode, user_code: playerSession.username };
+                }
+
+                const res = await fetch(endpointUrl, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await res.json();
+
+                if (data.launch_url) {
+                    const container = document.getElementById('casino-iframe-container');
+                    const iframe = document.getElementById('casino-iframe');
+                    const bottomBar = document.getElementById('mobile-bottom-bar'); // 🌟 استدعاء الشريط السفلي
+
+                    if (container && iframe) {
+                        container.classList.remove('hidden');
+                        container.classList.add('flex');
+                        
+                        // 🚀 إخفاء الشريط السفلي فوراً لإعطاء مساحة 100% للعب
+                        if(bottomBar) bottomBar.classList.add('hidden'); 
+                        
+                        iframe.src = data.launch_url;
+                    }
+                } else {
+                    showNotification(data.error || "Jeu non disponible", "error");
+                }
+            } catch (error) {
+                showNotification("Erreur de connexion", "error");
+            } finally {
+                document.body.style.cursor = 'default';
+            }
+        }
+        window.playSMPLGame = playCasinoGame;
+        window.playNexusGame = playCasinoGame;
+
+        // ================= 2. فتح الألعاب الافتراضية (مع إخفاء الشريط السفلي) =================
+        async function launchSpecificVirtualGame(uuid) {
+            if (!playerSession) return openLoginModal();
+            document.body.style.cursor = 'wait';
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/provider/launch-eurovirtuals`, {
+                    method: 'POST', headers: getAuthHeaders(),
+                    body: JSON.stringify({ user_code: playerSession.username, game_uuid: uuid })
+                });
+                const data = await res.json();
+
+                if (data.launch_url) {
+                    const container = document.getElementById('casino-iframe-container');
+                    const iframe = document.getElementById('casino-iframe');
+                    const bottomBar = document.getElementById('mobile-bottom-bar'); // 🌟
+
+                    if (container && iframe) {
+                        container.classList.remove('hidden');
+                        container.classList.add('flex');
+                        
+                        // 🚀 إخفاء الشريط
+                        if(bottomBar) bottomBar.classList.add('hidden');
+                        
+                        iframe.src = data.launch_url;
+                    }
+                } else {
+                    showNotification("Jeu non disponible", "error");
+                }
+            } catch (e) {
+                showNotification("Erreur réseau", "error");
+            } finally {
+                document.body.style.cursor = 'default';
+            }
+        }
+
+        // ================= 3. فتح يورو فيرتوالز (مع إخفاء الشريط السفلي) =================
         async function launchEuroVirtuals(gameId) {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -3304,12 +3328,17 @@
                 const data = await res.json();
 
                 if (data.launch_url) {
-                    // 🚀 توجيه الرابط إلى الـ Iframe
                     const container = document.getElementById('casino-iframe-container');
                     const iframe = document.getElementById('casino-iframe');
+                    const bottomBar = document.getElementById('mobile-bottom-bar'); // 🌟
+
                     if (container && iframe) {
                         container.classList.remove('hidden');
                         container.classList.add('flex');
+                        
+                        // 🚀 إخفاء الشريط
+                        if(bottomBar) bottomBar.classList.add('hidden');
+                        
                         iframe.src = data.launch_url;
                     }
                 } else {
@@ -3323,6 +3352,36 @@
             }
         }
 
+        // ================= 4. إغلاق اللعبة (وإعادة إظهار الشريط السفلي) =================
+        function closeCasinoGame(fromPopState = false) {
+            const container = document.getElementById('casino-iframe-container');
+            const bottomBar = document.getElementById('mobile-bottom-bar'); // 🌟
+            
+            if (container) {
+                container.classList.add('hidden');
+                container.classList.remove('flex');
+            }
+            
+            // 🚀 إعادة إظهار الشريط السفلي بأناقة بعد انتهاء اللعب
+            if (bottomBar) {
+                bottomBar.classList.remove('hidden');
+            }
+            
+            const iframe = document.getElementById('casino-iframe');
+            if (iframe) iframe.src = '';
+
+            if (typeof closeSplitScreen === 'function') {
+                closeSplitScreen();
+            }
+
+            if (typeof refreshBalance === 'function') {
+                refreshBalance();
+            }
+
+            if (!fromPopState && history.state && history.state.modalOpen) {
+                history.back();
+            }
+        }
         // ================= نظام الألعاب المفضلة =================
         function isFavorite(gameCode) {
             let favs = JSON.parse(localStorage.getItem('alpha_favorites') || '[]');
