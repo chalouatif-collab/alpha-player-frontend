@@ -1247,7 +1247,7 @@
                 </button>
                 
                 <!-- 🌟 واجهة اللوبي المصغر لاختيار اللعبة الثانية -->
-                <div id="second-game-selector" class="absolute inset-0 flex flex-col bg-[#090a0f] z-40">
+                <div id="second-game-selector" class="absolute inset-0 flex flex-col bg-[#090a0f] z-40" style="display: none;">
                     
                     <!-- الهيدر المصغر (البحث وفلتر المزودين) -->
                     <div class="p-2 md:p-3 bg-[#12151d] border-b border-[#212631] flex flex-col gap-2 shrink-0 shadow-md">
@@ -1255,15 +1255,12 @@
                             <span class="text-white font-black text-[10px] md:text-xs uppercase tracking-widest"><i class="fas fa-layer-group text-blue-400"></i> Choisir le 2ème jeu</span>
                         </div>
                         <div class="flex gap-2">
-                            <!-- مربع البحث -->
                             <div class="relative flex-1">
                                 <i class="fas fa-search absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-500 text-[10px]"></i>
                                 <input type="text" id="split-search-input" onkeyup="filterSplitGames()" placeholder="Chercher un jeu..." class="w-full bg-[#1a1e29] border border-[#212631] rounded-lg py-1.5 pl-7 pr-2 text-white text-[10px] outline-none focus:border-blue-500 transition-colors">
                             </div>
-                            <!-- قائمة المزودين -->
                             <select id="split-provider-select" onchange="filterSplitGames()" class="bg-[#1a1e29] border border-[#212631] rounded-lg text-white text-[10px] px-2 outline-none focus:border-blue-500 max-w-[110px] font-bold">
                                 <option value="ALL">Récent & Populaire</option>
-                                <!-- سيتم جلب المزودين هنا برمجياً -->
                             </select>
                         </div>
                     </div>
@@ -1281,8 +1278,7 @@
             </div>
 
         </div>
-    </div>
-        <!-- تركنا الشريط العلوي لاسم المنصة فقط، وحذفنا زر الإغلاق -->
+    </div>        <!-- تركنا الشريط العلوي لاسم المنصة فقط، وحذفنا زر الإغلاق -->
         <div class="h-10 bg-[#12151d] flex justify-center items-center px-4">
             <span class="text-emerald font-bold text-xs">Alphabet216</span>
         </div>
@@ -4732,7 +4728,8 @@
             screen2.classList.remove('hidden');
             divider.classList.remove('hidden');
             
-            document.getElementById('second-game-selector').classList.remove('hidden');
+            // 🌟 الإظهار الإجباري متجاوزاً خصائص Tailwind
+            document.getElementById('second-game-selector').style.display = 'flex';
             document.getElementById('casino-iframe-2').classList.add('hidden');
             
             initSplitLobby(); // تشغيل اللوبي المصغر
@@ -4750,19 +4747,17 @@
                 screen2.classList.add('hidden');
                 divider.classList.add('hidden');
                 document.getElementById('casino-iframe-2').src = ''; 
+                document.getElementById('second-game-selector').style.display = 'none';
             }, 300); 
         }
 
         async function initSplitLobby() {
-            // 1. تعبئة قائمة المزودين إذا كانت فارغة
             const select = document.getElementById('split-provider-select');
             if (select && select.options.length <= 1 && window.nexusProviders) {
                 window.nexusProviders.forEach(p => {
                     select.innerHTML += `<option value="${p.code}">${p.name}</option>`;
                 });
             }
-            
-            // 2. تصفية وعرض الألعاب الأولية
             filterSplitGames();
         }
 
@@ -4776,7 +4771,6 @@
             
             let gamesToDisplay = [];
             
-            // إذا اختار اللاعب مزوداً محدداً
             if (prov !== 'ALL') {
                 grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-6 text-[10px] font-bold"><i class="fas fa-spinner fa-spin text-lg mb-2"></i><br>Chargement des jeux...</div>';
                 try {
@@ -4792,7 +4786,6 @@
                     return;
                 }
             } else {
-                // إذا اختار "الكل"، نعرض له آخر ما لعب + الألعاب الحالية (بسرعة البرق بدون تحميل)
                 try {
                    let recent = JSON.parse(localStorage.getItem('alpha_recent_games') || '[]');
                    let current = window.currentProviderGames || [];
@@ -4800,11 +4793,10 @@
                 } catch(e) {}
             }
 
-            // تطبيق البحث على الألعاب المستخرجة
             gamesToDisplay = splitLobbyGames.filter(g => {
                 const name = String(g.game_name || g.gameName || g.name || "").toLowerCase();
                 return name.includes(term);
-            }).slice(0, 48); // نكتفي بـ 48 لعبة للحفاظ على سرعة الهاتف
+            }).slice(0, 48); 
             
             renderSplitGamesGrid(gamesToDisplay, prov);
         }
@@ -4820,7 +4812,7 @@
 
             grid.innerHTML = games.map(g => {
                 const gameName = escapeHTML(g.gameName || g.game_name || g.name || "Jeu");
-                const gameCode = g.gameCode || g.game_code || g.id;
+                const gameCode = g.gameCode || g.game_code || g.id || g.uuid;
                 const pCode = g.providerCode || g.provider || (currentProvCode === 'ALL' ? (window.currentActiveProviderCode || 'PRAGMATIC') : currentProvCode);
                 const gameImg = g.gameImg || g.banner || g.image || `https://placehold.co/400x400/12151d/3b82f6?text=${encodeURIComponent(gameName.substring(0, 10))}`;
 
@@ -4847,8 +4839,12 @@
                 let endpointUrl = `${BACKEND_URL}/api/provider/launch-casino`;
                 let requestBody = { game_code: gameCode, provider_code: providerCode, user_code: playerSession.username };
 
+                // 🌟 دعم ديناميكي يوجه اللعبة لمسارها الصحيح حتى في الشاشة المنقسمة!
                 if (providerCode === 'SMPL') {
                     endpointUrl = `${BACKEND_URL}/api/smpl/launch`;
+                    requestBody = { game_uuid: gameCode, user_code: playerSession.username };
+                } else if (String(providerCode).toLowerCase().includes('euro')) {
+                    endpointUrl = `${BACKEND_URL}/api/provider/launch-eurovirtuals`;
                     requestBody = { game_uuid: gameCode, user_code: playerSession.username };
                 }
 
@@ -4861,7 +4857,8 @@
                 const data = await res.json();
 
                 if (data.launch_url) {
-                    selector.classList.add('hidden');
+                    // 🌟 الإخفاء الجذري للوبي وإظهار اللعبة
+                    selector.style.display = 'none';
                     iframe2.classList.remove('hidden');
                     iframe2.src = data.launch_url;
                 } else {
