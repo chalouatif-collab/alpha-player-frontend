@@ -1229,10 +1229,14 @@
             
             <!-- 📱 الشاشة الأولى (العلوية / الرئيسية) -->
             <div id="screen-1" class="w-full h-full relative transition-all duration-300">
+                <!-- زر إغلاق الشاشة الأولى المستقل (يظهر فقط عند القسمة) -->
+                <button id="btn-close-screen-1" onclick="closeSpecificScreen(1)" class="absolute top-2 right-2 z-50 bg-black/80 text-white w-7 h-7 rounded-full items-center justify-center shadow-lg border border-red-500/50 hover:bg-red-500 transition" style="display: none;">
+                    <i class="fas fa-times text-xs"></i>
+                </button>
                 <iframe id="casino-iframe" class="w-full h-full border-0 bg-black"></iframe>
             </div>
 
-            <!-- الفاصل المضيء (يظهر فقط عند القسمة) -->
+            <!-- الفاصل المضيء -->
             <div id="split-divider" class="hidden w-full h-1 bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)] z-40 flex items-center justify-center relative">
                 <div class="absolute w-12 h-2.5 bg-[#12151d] border border-blue-500/50 rounded-full flex items-center justify-center gap-1">
                     <div class="w-1 h-1 bg-white rounded-full"></div><div class="w-1 h-1 bg-white rounded-full"></div><div class="w-1 h-1 bg-white rounded-full"></div>
@@ -1241,21 +1245,16 @@
 
             <!-- 📱 الشاشة الثانية (السفلية) -->
             <div id="screen-2" class="w-full h-0 hidden relative transition-all duration-300 bg-[#090a0f]">
-                <!-- زر إغلاق الشاشة الثانية فقط -->
-                <button onclick="closeSplitScreen()" class="absolute top-2 right-2 z-50 bg-black/80 text-white w-7 h-7 rounded-full flex items-center justify-center shadow-lg border border-red-500/50 hover:bg-red-500 transition">
+                <!-- زر إغلاق الشاشة الثانية المستقل -->
+                <button id="btn-close-screen-2" onclick="closeSpecificScreen(2)" class="absolute top-2 right-2 z-50 bg-black/80 text-white w-7 h-7 rounded-full items-center justify-center shadow-lg border border-red-500/50 hover:bg-red-500 transition" style="display: none;">
                     <i class="fas fa-times text-xs"></i>
                 </button>
                 
                 <!-- 🌟 واجهة اللوبي المصغر لاختيار اللعبة الثانية -->
                 <div id="second-game-selector" class="absolute inset-0 flex flex-col bg-[#090a0f] z-40" style="display: none;">
-                    
-                    <!-- الهيدر المصغر (البحث وفلتر المزودين) -->
                     <div class="p-2 md:p-3 bg-[#12151d] border-b border-[#212631] flex flex-col gap-2 shrink-0 shadow-md">
                         <div class="flex items-center justify-between">
-                            <div class="flex flex-col">
-                        <span class="text-white font-black text-[10px] md:text-xs uppercase tracking-widest"><i class="fas fa-layer-group text-blue-400"></i> Choisir le 2ème jeu</span>
-                        <span class="text-[8px] text-gray-400 mt-0.5">💡 Astuce: Choisissez un jeu d'un autre fournisseur pour une meilleure expérience.</span>
-                        </div>
+                            <span class="text-white font-black text-[10px] md:text-xs uppercase tracking-widest"><i class="fas fa-layer-group text-blue-400"></i> Choisir le 2ème jeu</span>
                         </div>
                         <div class="flex gap-2">
                             <div class="relative flex-1">
@@ -1267,12 +1266,9 @@
                             </select>
                         </div>
                     </div>
-
                     <!-- شبكة الألعاب المصغرة -->
                     <div class="flex-1 overflow-y-auto hide-scroll p-2">
-                        <div id="split-games-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 pb-6">
-                            <!-- الألعاب ستظهر هنا -->
-                        </div>
+                        <div id="split-games-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 pb-6"></div>
                     </div>
                 </div>
 
@@ -1281,12 +1277,6 @@
             </div>
 
         </div>
-    </div>        <!-- تركنا الشريط العلوي لاسم المنصة فقط، وحذفنا زر الإغلاق -->
-        <div class="h-10 bg-[#12151d] flex justify-center items-center px-4">
-            <span class="text-emerald font-bold text-xs">Alphabet216</span>
-        </div>
-        <iframe id="casino-iframe" class="w-full flex-grow border-0"></iframe>
-    </div>
 
     <!-- ================= JAVASCRIPT (محرك الألفابت الشامل) ================= -->
     <script>
@@ -3351,35 +3341,46 @@
             }
         }
 
-        // ================= 4. إغلاق اللعبة (وإعادة إظهار الشريط السفلي) =================
+        // ================= 4. إغلاق اللعبة (الزر الرئيسي العلوي) =================
         function closeCasinoGame(fromPopState = false) {
             const container = document.getElementById('casino-iframe-container');
-            const bottomBar = document.getElementById('mobile-bottom-bar'); // 🌟
+            const bottomBar = document.getElementById('mobile-bottom-bar'); 
             
             if (container) {
                 container.classList.add('hidden');
                 container.classList.remove('flex');
             }
             
-            // 🚀 إعادة إظهار الشريط السفلي بأناقة بعد انتهاء اللعب
             if (bottomBar) {
                 bottomBar.classList.remove('hidden');
             }
             
-            const iframe = document.getElementById('casino-iframe');
-            if (iframe) iframe.src = '';
+            // مسح الروابط لإيقاف اللعبتين
+            document.getElementById('casino-iframe').src = '';
+            document.getElementById('casino-iframe-2').src = '';
 
-            if (typeof closeSplitScreen === 'function') {
-                closeSplitScreen();
+            // إعادة ضبط الشاشة المنقسمة للوضع الطبيعي (شاشة واحدة 100%)
+            const s1 = document.getElementById('screen-1');
+            const s2 = document.getElementById('screen-2');
+            const divider = document.getElementById('split-divider');
+            const btn1 = document.getElementById('btn-close-screen-1');
+            const btn2 = document.getElementById('btn-close-screen-2');
+            const selector = document.getElementById('second-game-selector');
+
+            if(s1) { s1.style.height = '100%'; s1.classList.remove('hidden'); document.getElementById('casino-iframe').classList.remove('hidden'); }
+            if(s2) { s2.style.height = '0'; s2.classList.add('hidden'); document.getElementById('casino-iframe-2').classList.add('hidden'); }
+            if(divider) divider.classList.add('hidden');
+            if(btn1) btn1.style.display = 'none';
+            if(btn2) btn2.style.display = 'none';
+
+            // إرجاع اللوبي المصغر لمكانه
+            if(selector && s2) {
+                s2.appendChild(selector);
+                selector.style.display = 'none';
             }
 
-            if (typeof refreshBalance === 'function') {
-                refreshBalance();
-            }
-
-            if (!fromPopState && history.state && history.state.modalOpen) {
-                history.back();
-            }
+            if (typeof refreshBalance === 'function') refreshBalance();
+            if (!fromPopState && history.state && history.state.modalOpen) history.back();
         }
         // ================= نظام الألعاب المفضلة =================
         function isFavorite(gameCode) {
@@ -4714,44 +4715,82 @@
 
        // ================= 📱 محرك الشاشة المنقسمة الذكي (Mini-Lobby) =================
         let splitLobbyGames = [];
+        let activeSplitScreen = 2; // يحدد أي شاشة ستستقبل اللعبة الجديدة
 
         function toggleSplitScreen() {
             const screen1 = document.getElementById('screen-1');
             const screen2 = document.getElementById('screen-2');
             const divider = document.getElementById('split-divider');
+            const btn1 = document.getElementById('btn-close-screen-1');
+            const btn2 = document.getElementById('btn-close-screen-2');
+            const selector = document.getElementById('second-game-selector');
             
-            if (!screen2.classList.contains('hidden')) {
-                closeSplitScreen();
+            // إذا كانت كلتا الشاشتين تعملان فعلاً
+            if (!screen1.classList.contains('hidden') && !screen2.classList.contains('hidden')) {
+                showNotification("L'écran est déjà divisé", "info");
                 return;
             }
 
-            // قسمة الشاشة 50% / 50%
-            screen1.style.height = '50%';
-            screen2.style.height = '50%';
-            screen2.classList.remove('hidden');
+            // إظهار أزرار الإغلاق الفردية للعبتين
+            if(btn1) btn1.style.display = 'flex';
+            if(btn2) btn2.style.display = 'flex';
             divider.classList.remove('hidden');
+
+            if (screen2.classList.contains('hidden')) {
+                // الحالة العادية: الشاشة الثانية هي المخفية
+                activeSplitScreen = 2;
+                screen1.style.height = '50%';
+                screen2.style.height = '50%';
+                screen2.classList.remove('hidden');
+                
+                screen2.appendChild(selector);
+                selector.style.display = 'flex';
+                document.getElementById('casino-iframe-2').classList.add('hidden');
+            } else if (screen1.classList.contains('hidden')) {
+                // الحالة المعكوسة: اللاعب أغلق الشاشة العلوية ويريد فتح لعبة جديدة فيها
+                activeSplitScreen = 1;
+                screen1.style.height = '50%';
+                screen2.style.height = '50%';
+                screen1.classList.remove('hidden');
+                
+                screen1.appendChild(selector);
+                selector.style.display = 'flex';
+                document.getElementById('casino-iframe').classList.add('hidden');
+            }
             
-            // 🌟 الإظهار الإجباري متجاوزاً خصائص Tailwind
-            document.getElementById('second-game-selector').style.display = 'flex';
-            document.getElementById('casino-iframe-2').classList.add('hidden');
-            
-            initSplitLobby(); // تشغيل اللوبي المصغر
+            initSplitLobby(); 
         }
 
-        function closeSplitScreen() {
+        // 🌟 الدالة الجديدة لإغلاق شاشة محددة وتمديد الأخرى 🌟
+        function closeSpecificScreen(num) {
             const screen1 = document.getElementById('screen-1');
             const screen2 = document.getElementById('screen-2');
             const divider = document.getElementById('split-divider');
-            
-            screen1.style.height = '100%';
-            screen2.style.height = '0';
-            
-            setTimeout(() => {
+            const btn1 = document.getElementById('btn-close-screen-1');
+            const btn2 = document.getElementById('btn-close-screen-2');
+
+            if (num === 1) {
+                document.getElementById('casino-iframe').src = '';
+                screen1.classList.add('hidden');
+                screen1.style.height = '0';
+                screen2.style.height = '100%';
+            } else {
+                document.getElementById('casino-iframe-2').src = '';
                 screen2.classList.add('hidden');
-                divider.classList.add('hidden');
-                document.getElementById('casino-iframe-2').src = ''; 
-                document.getElementById('second-game-selector').style.display = 'none';
-            }, 300); 
+                screen2.style.height = '0';
+                screen1.style.height = '100%';
+            }
+
+            divider.classList.add('hidden');
+            if(btn1) btn1.style.display = 'none';
+            if(btn2) btn2.style.display = 'none';
+            
+            // إعادة اللوبي للشاشة الثانية احتياطياً
+            const selector = document.getElementById('second-game-selector');
+            if(selector) {
+                screen2.appendChild(selector);
+                selector.style.display = 'none';
+            }
         }
 
         async function initSplitLobby() {
@@ -4833,7 +4872,8 @@
         }
 
         async function playSecondGame(providerCode, gameCode) {
-            const iframe2 = document.getElementById('casino-iframe-2');
+            const iframeId = activeSplitScreen === 1 ? 'casino-iframe' : 'casino-iframe-2';
+            const iframe = document.getElementById(iframeId);
             const selector = document.getElementById('second-game-selector');
             
             selector.innerHTML = '<div class="flex flex-col items-center justify-center h-full w-full text-blue-400 bg-[#090a0f]"><i class="fas fa-spinner fa-spin text-3xl mb-3"></i><span class="text-[10px] font-black tracking-widest uppercase">Connexion au serveur...</span></div>';
@@ -4842,7 +4882,6 @@
                 let endpointUrl = `${BACKEND_URL}/api/provider/launch-casino`;
                 let requestBody = { game_code: gameCode, provider_code: providerCode, user_code: playerSession.username };
 
-                // 🌟 دعم ديناميكي يوجه اللعبة لمسارها الصحيح حتى في الشاشة المنقسمة!
                 if (providerCode === 'SMPL') {
                     endpointUrl = `${BACKEND_URL}/api/smpl/launch`;
                     requestBody = { game_uuid: gameCode, user_code: playerSession.username };
@@ -4860,20 +4899,40 @@
                 const data = await res.json();
 
                 if (data.launch_url) {
-                    // 🌟 الإخفاء الجذري للوبي وإظهار اللعبة
                     selector.style.display = 'none';
-                    iframe2.classList.remove('hidden');
-                    iframe2.src = data.launch_url;
+                    iframe.classList.remove('hidden');
+                    iframe.src = data.launch_url;
+                    
+                    // استرجاع اللوبي لشكله الأصلي بهدوء خلف الكواليس للمرة القادمة
+                    setTimeout(() => {
+                        selector.innerHTML = `
+                        <div class="p-2 md:p-3 bg-[#12151d] border-b border-[#212631] flex flex-col gap-2 shrink-0 shadow-md">
+                            <div class="flex items-center justify-between">
+                                <span class="text-white font-black text-[10px] md:text-xs uppercase tracking-widest"><i class="fas fa-layer-group text-blue-400"></i> Choisir le 2ème jeu</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="relative flex-1">
+                                    <i class="fas fa-search absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-500 text-[10px]"></i>
+                                    <input type="text" id="split-search-input" onkeyup="filterSplitGames()" placeholder="Chercher un jeu..." class="w-full bg-[#1a1e29] border border-[#212631] rounded-lg py-1.5 pl-7 pr-2 text-white text-[10px] outline-none focus:border-blue-500 transition-colors">
+                                </div>
+                                <select id="split-provider-select" onchange="filterSplitGames()" class="bg-[#1a1e29] border border-[#212631] rounded-lg text-white text-[10px] px-2 outline-none focus:border-blue-500 max-w-[110px] font-bold">
+                                    <option value="ALL">Récent & Populaire</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="flex-1 overflow-y-auto hide-scroll p-2">
+                            <div id="split-games-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 pb-6"></div>
+                        </div>`;
+                    }, 1000);
                 } else {
                     showNotification(data.error || "Jeu non disponible", "error");
-                    closeSplitScreen();
+                    closeSpecificScreen(activeSplitScreen);
                 }
             } catch (error) {
                 showNotification("Erreur de connexion", "error");
-                closeSplitScreen();
+                closeSpecificScreen(activeSplitScreen);
             }
-        }
-    </script>
+        }    </script>
 
 </body>
 
