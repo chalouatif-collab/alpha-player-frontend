@@ -309,12 +309,22 @@
                 <!-- أزرار الدخول أو رصيد اللاعب -->
                 <div class="flex items-center gap-2 md:gap-3">
 
+                    <!-- أزرار الدخول وإنشاء حساب (تظهر للزوار فقط) -->
                     <div id="auth-buttons-container" class="flex items-center gap-2">
                         <button onclick="openLoginModal()"
                             class="bg-[#1a1e29] hover:bg-emerald text-emerald hover:text-black font-extrabold text-[10px] md:text-xs uppercase px-3 md:px-4 py-1.5 md:py-2 rounded-lg border border-emerald/50 hover:border-emerald transition-all shadow-md">
                             Connexion
                         </button>
+                        <button onclick="openRegisterModal()"
+                            class="bg-emerald hover:bg-emerald-400 text-black font-extrabold text-[10px] md:text-xs uppercase px-3 md:px-4 py-1.5 md:py-2 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all transform hover:scale-105">
+                            S'inscrire
+                        </button>
                     </div>
+
+                    <!-- 🌟 زر الشحن السريع (مخفي افتراضياً، يظهر فقط لمن سجل بنفسه) -->
+                    <button id="top-recharge-btn" onclick="toggleCashier()" class="hidden bg-emerald hover:bg-emerald-400 text-black font-extrabold text-[10px] md:text-xs uppercase px-3 py-1.5 md:py-2 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all items-center gap-1.5 md:gap-2 shrink-0 ml-1">
+                        <i class="fas fa-plus"></i> <span class="hidden md:inline">Dépôt</span>
+                    </button>
 
                     <!-- 1️⃣ بروفايل الرصيد مع هالة الـ VIP 🌟 -->
                     <div id="top-user-profile" class="hidden items-center gap-2 md:gap-3 cursor-pointer group shrink-0"
@@ -1250,6 +1260,20 @@
                 class="w-full bg-emerald text-black font-bold p-3 rounded-xl">Entrer</button>
         </div>
     </div>
+    <!-- 🌟 Register Modal (نافذة إنشاء حساب) -->
+    <div id="player-register-modal" class="fixed inset-0 z-[200] bg-black/80 hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="w-full max-w-md bg-[#161922] border border-emerald/50 rounded-2xl p-8 relative shadow-2xl">
+            <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl transition-colors">&times;</button>
+            <h2 class="text-white text-2xl font-black mb-1 text-center uppercase tracking-wider">Créer un compte</h2>
+            <p class="text-gray-400 text-xs text-center mb-6">Rejoignez-nous et commencez à gagner !</p>
+            
+            <input type="text" id="p-reg-username" placeholder="Nom d'utilisateur" class="w-full mb-3 p-3 rounded-xl bg-[#0f1117] border border-[#212631] text-white outline-none focus:border-emerald transition-colors font-bold text-sm">
+            <input type="tel" id="p-reg-phone" placeholder="Numéro de téléphone" class="w-full mb-3 p-3 rounded-xl bg-[#0f1117] border border-[#212631] text-white outline-none focus:border-emerald transition-colors font-bold text-sm">
+            <input type="password" id="p-reg-password" placeholder="Mot de passe" class="w-full mb-4 p-3 rounded-xl bg-[#0f1117] border border-[#212631] text-white outline-none focus:border-emerald transition-colors font-bold text-sm">
+            
+            <button onclick="handlePlayerRegister()" class="w-full bg-emerald hover:bg-emerald-400 text-black font-black uppercase tracking-wider p-3 rounded-xl shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all">S'inscrire</button>
+        </div>
+    </div>
     <!-- 🌟 نافذة الشروط والأحكام (Policy Modal) -->
     <div id="policy-modal"
         class="fixed inset-0 z-[200] bg-black/90 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
@@ -1555,6 +1579,7 @@
             } catch (e) { showNotification("Erreur serveur", 'error'); }
         }
 
+        // ================= دوال تسجيل الدخول وواجهة المستخدم =================
         function setupLoggedInUI() {
             closeLoginModal();
             const authBtns = document.getElementById('auth-buttons-container');
@@ -1563,9 +1588,25 @@
             const userProfile = document.getElementById('top-user-profile');
             if (userProfile) { userProfile.classList.remove('hidden'); userProfile.classList.add('flex'); }
 
-            // 🔔 إظهار جرس الإشعارات
             const notifBell = document.getElementById('top-notification-bell');
             if (notifBell) { notifBell.classList.remove('hidden'); notifBell.classList.add('flex'); }
+
+            // 🌟 المنطق الذكي: إظهار زر الشحن فقط لمن أنشأ حسابه بنفسه
+            // ملاحظة للباك إند: يجب أن يرسل السيرفر متغيراً يحدد نوع الحساب (مثلاً: is_self_registered أو role)
+            // هنا نفترض أن الحساب المنشأ ذاتياً يحمل قيمة true أو نوع 'player' مباشر
+            const isSelfRegistered = playerSession.is_self_registered === true || playerSession.created_by === 'self';
+            
+            const rechargeBtn = document.getElementById('top-recharge-btn');
+            if (rechargeBtn) {
+                if (isSelfRegistered) {
+                    rechargeBtn.classList.remove('hidden');
+                    rechargeBtn.classList.add('flex');
+                } else {
+                    // إذا كان الحساب منشأ من الإدارة، يخفى الزر
+                    rechargeBtn.classList.add('hidden');
+                    rechargeBtn.classList.remove('flex');
+                }
+            }
 
             const nameDisplay = document.getElementById('player-name-display');
             if (nameDisplay) nameDisplay.innerText = playerSession.username;
@@ -1576,8 +1617,52 @@
             refreshBalance();
             setInterval(refreshBalance, 5000);
 
-            // جلب الإشعارات مباشرة عند الدخول
             if (typeof fetchNotifications === 'function') fetchNotifications();
+        }
+
+        // ================= دوال إنشاء الحساب (Register) =================
+        function openRegisterModal() {
+            const modal = document.getElementById('player-register-modal');
+            if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+        }
+
+        function closeRegisterModal() {
+            const modal = document.getElementById('player-register-modal');
+            if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+        }
+
+        async function handlePlayerRegister() {
+            const username = document.getElementById('p-reg-username').value.trim();
+            const phone = document.getElementById('p-reg-phone').value.trim();
+            const password = document.getElementById('p-reg-password').value;
+            
+            if (!username || !password || !phone) return showNotification("Veuillez remplir tous les champs", "error");
+            
+            // تغيير المؤشر دلالة على التحميل
+            document.body.style.cursor = 'wait';
+
+            try {
+                // إرسال طلب التسجيل للباك إند
+                const res = await fetch(`${BACKEND_URL}/api/register`, {
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, phone, is_self_registered: true })
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    showNotification("Compte créé avec succès ! 🎉", "success");
+                    closeRegisterModal();
+                    // فتح نافذة الدخول تلقائياً بعد نجاح التسجيل
+                    setTimeout(openLoginModal, 500);
+                } else {
+                    showNotification(data.detail || "Erreur d'inscription", "error");
+                }
+            } catch (e) { 
+                showNotification("Erreur de connexion au serveur", "error"); 
+            } finally {
+                document.body.style.cursor = 'default';
+            }
         }
 
         function logoutPlayer() {
