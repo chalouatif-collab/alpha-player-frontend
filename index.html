@@ -659,111 +659,75 @@
                             </div>
                         </div>
                     </div>
-                    <!-- 🌟 بطاقات التصنيفات السريعة العريضة (6 بطاقات متوازنة تماماً) -->
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-3 gap-y-4 md:gap-y-5 w-full my-6">
-
+                    <!-- 🌟 بطاقات التصنيفات السريعة العريضة (6 بطاقات متوازنة 3x2 على الهاتف) -->
+                    <div class="grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-3 px-2">
+                        
                         <!-- 1. السلوتس (Slots) -->
                         <button onclick="switchSection('casino'); initCasinoLobby();"
-                            class="group relative overflow-visible bg-gradient-to-br from-[#161922] via-[#161922] to-emerald-500/15 border border-[#212631] hover:border-emerald rounded-2xl p-3 md:p-4 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(16,185,129,0.25)] text-left min-h-[75px] md:min-h-[85px]">
-                            <div class="flex flex-col z-10 w-[70%] md:w-3/4">
-                                <span
-                                    class="text-[8px] md:text-[9px] font-black text-emerald uppercase tracking-widest mb-0.5">●
-                                    Populaire</span>
-                                <span
-                                    class="text-white font-black text-[11px] md:text-[13px] uppercase tracking-wide group-hover:text-emerald transition-colors leading-tight">Slots
-                                    & Casino</span>
-                                <span class="text-[9px] text-gray-500 font-semibold mt-0.5">+1,500 Jeux</span>
-                            </div>
+                            class="group relative bg-gradient-to-b from-[#161922] to-emerald-500/10 border border-[#212631] hover:border-emerald rounded-xl p-2 md:p-3 flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_15px_-5px_rgba(16,185,129,0.25)] text-center min-h-[90px] md:min-h-[110px]">
                             <img src="https://img.icons8.com/3d-fluency/250/slot-machine.png" alt="Slots"
-                                class="absolute right-1 md:right-2 bottom-1.5 md:bottom-2 h-[85%] md:h-[105%] max-w-[45px] md:max-w-[55px] object-contain z-20 pointer-events-none drop-shadow-[-3px_5px_8px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-2 animate-bounce-slow"
-                                style="animation-delay: 0s;">
+                                class="h-9 md:h-12 w-auto object-contain z-20 pointer-events-none drop-shadow-md transition-transform duration-300 group-hover:scale-110 mb-1.5 animate-bounce-slow" style="animation-delay: 0s;">
+                            <div class="flex flex-col z-10 w-full items-center">
+                                <span class="text-white font-black text-[9.5px] md:text-xs uppercase tracking-wide group-hover:text-emerald transition-colors w-full truncate">Slots & Casino</span>
+                                <span class="text-[7.5px] md:text-[9px] text-gray-500 font-semibold mt-0.5 w-full truncate">+1,500 Jeux</span>
+                            </div>
                         </button>
 
                         <!-- 2. الكازينو المباشر (Live Casino) -->
                         <button onclick="switchSection('live-casino'); openLiveCasino();"
-                            class="group relative overflow-visible bg-gradient-to-br from-[#161922] via-[#161922] to-red-500/15 border border-[#212631] hover:border-red-500 rounded-2xl p-3 md:p-4 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(239,68,68,0.25)] text-left min-h-[75px] md:min-h-[85px]">
-                            <div class="flex flex-col z-10 w-[70%] md:w-3/4">
-                                <span
-                                    class="text-[8px] md:text-[9px] font-black text-red-400 uppercase tracking-widest mb-0.5 flex items-center gap-1">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span> En Direct
-                                </span>
-                                <span
-                                    class="text-white font-black text-[11px] md:text-[13px] uppercase tracking-wide group-hover:text-red-400 transition-colors leading-tight">Live
-                                    Casino</span>
-                                <span class="text-[9px] text-gray-500 font-semibold mt-0.5">Tables VIP</span>
-                            </div>
+                            class="group relative bg-gradient-to-b from-[#161922] to-red-500/10 border border-[#212631] hover:border-red-500 rounded-xl p-2 md:p-3 flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_15px_-5px_rgba(239,68,68,0.25)] text-center min-h-[90px] md:min-h-[110px]">
+                            <!-- نقطة حمراء تنبض للبث المباشر -->
+                            <div class="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-red-500 animate-ping z-30"></div>
                             <img src="https://img.icons8.com/3d-fluency/250/roulette.png" alt="Live"
-                                class="absolute right-1 md:right-2 bottom-1.5 md:bottom-2 h-[80%] md:h-[100%] max-w-[45px] md:max-w-[55px] object-contain z-20 pointer-events-none drop-shadow-[-3px_5px_8px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-2 animate-bounce-slow"
-                                style="animation-delay: 0.2s;">
+                                class="h-9 md:h-12 w-auto object-contain z-20 pointer-events-none drop-shadow-md transition-transform duration-300 group-hover:scale-110 mb-1.5 animate-bounce-slow" style="animation-delay: 0.2s;">
+                            <div class="flex flex-col z-10 w-full items-center">
+                                <span class="text-white font-black text-[9.5px] md:text-xs uppercase tracking-wide group-hover:text-red-400 transition-colors w-full truncate">Live Casino</span>
+                                <span class="text-[7.5px] md:text-[9px] text-gray-500 font-semibold mt-0.5 w-full truncate">Tables VIP</span>
+                            </div>
                         </button>
 
                         <!-- 3. ألعاب الكراش (Crash) -->
                         <button onclick="loadMiniJeux();"
-                            class="group relative overflow-visible bg-gradient-to-br from-[#161922] via-[#161922] to-purple-500/15 border border-[#212631] hover:border-purple-500 rounded-2xl p-3 md:p-4 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(168,85,247,0.25)] text-left min-h-[75px] md:min-h-[85px]">
-                            <div class="flex flex-col z-10 w-[70%] md:w-3/4">
-                                <span
-                                    class="text-[8px] md:text-[9px] font-black text-purple-400 uppercase tracking-widest mb-0.5">⚡
-                                    Gains Rapides</span>
-                                <span
-                                    class="text-white font-black text-[11px] md:text-[13px] uppercase tracking-wide group-hover:text-purple-400 transition-colors leading-tight">Crash
-                                    Games</span>
-                                <span class="text-[9px] text-gray-500 font-semibold mt-0.5">Aviator & Mines</span>
-                            </div>
+                            class="group relative bg-gradient-to-b from-[#161922] to-purple-500/10 border border-[#212631] hover:border-purple-500 rounded-xl p-2 md:p-3 flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_15px_-5px_rgba(168,85,247,0.25)] text-center min-h-[90px] md:min-h-[110px]">
                             <img src="https://img.icons8.com/3d-fluency/250/rocket.png" alt="Crash"
-                                class="absolute right-1 md:right-2 bottom-0 h-[100%] md:h-[120%] max-w-[40px] md:max-w-[50px] object-contain z-20 pointer-events-none drop-shadow-[-3px_5px_8px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-2 animate-bounce-slow"
-                                style="animation-delay: 0.4s;">
+                                class="h-9 md:h-12 w-auto object-contain z-20 pointer-events-none drop-shadow-md transition-transform duration-300 group-hover:scale-110 mb-1.5 animate-bounce-slow" style="animation-delay: 0.4s;">
+                            <div class="flex flex-col z-10 w-full items-center">
+                                <span class="text-white font-black text-[9.5px] md:text-xs uppercase tracking-wide group-hover:text-purple-400 transition-colors w-full truncate">Crash Games</span>
+                                <span class="text-[7.5px] md:text-[9px] text-gray-500 font-semibold mt-0.5 w-full truncate">Aviator & Mines</span>
+                            </div>
                         </button>
 
                         <!-- 4. البلاك جاك (Blackjack) -->
-                        <button
-                            onclick="switchSection('casino'); initCasinoLobby(); setTimeout(() => { document.getElementById('game-search-input').value = 'blackjack'; filterGames(); }, 500);"
-                            class="group relative overflow-visible bg-gradient-to-br from-[#161922] via-[#161922] to-blue-500/15 border border-[#212631] hover:border-blue-500 rounded-2xl p-3 md:p-4 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(59,130,246,0.25)] text-left min-h-[75px] md:min-h-[85px]">
-                            <div class="flex flex-col z-10 w-[70%] md:w-3/4">
-                                <span
-                                    class="text-[8px] md:text-[9px] font-black text-blue-400 uppercase tracking-widest mb-0.5">♠️
-                                    Classique</span>
-                                <span
-                                    class="text-white font-black text-[11px] md:text-[13px] uppercase tracking-wide group-hover:text-blue-400 transition-colors leading-tight">Blackjack
-                                    21</span>
-                                <span class="text-[9px] text-gray-500 font-semibold mt-0.5">Haute Limite</span>
-                            </div>
+                        <button onclick="switchSection('casino'); initCasinoLobby(); setTimeout(() => { document.getElementById('game-search-input').value = 'blackjack'; filterGames(); }, 500);"
+                            class="group relative bg-gradient-to-b from-[#161922] to-blue-500/10 border border-[#212631] hover:border-blue-500 rounded-xl p-2 md:p-3 flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_15px_-5px_rgba(59,130,246,0.25)] text-center min-h-[90px] md:min-h-[110px]">
                             <img src="https://img.icons8.com/3d-fluency/250/cards.png" alt="Blackjack"
-                                class="absolute right-1 md:right-2 bottom-1.5 md:bottom-2 h-[80%] md:h-[100%] max-w-[45px] md:max-w-[55px] object-contain z-20 pointer-events-none drop-shadow-[-3px_5px_8px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-2 animate-bounce-slow"
-                                style="animation-delay: 0.6s;">
+                                class="h-9 md:h-12 w-auto object-contain z-20 pointer-events-none drop-shadow-md transition-transform duration-300 group-hover:scale-110 mb-1.5 animate-bounce-slow" style="animation-delay: 0.6s;">
+                            <div class="flex flex-col z-10 w-full items-center">
+                                <span class="text-white font-black text-[9.5px] md:text-xs uppercase tracking-wide group-hover:text-blue-400 transition-colors w-full truncate">Blackjack 21</span>
+                                <span class="text-[7.5px] md:text-[9px] text-gray-500 font-semibold mt-0.5 w-full truncate">Haute Limite</span>
+                            </div>
                         </button>
 
                         <!-- 5. الألعاب الافتراضية (Virtuels) -->
                         <button onclick="switchSection('virtuals'); initVirtualsLobby();"
-                            class="group relative overflow-visible bg-gradient-to-br from-[#161922] via-[#161922] to-yellow-500/15 border border-[#212631] hover:border-yellow-500 rounded-2xl p-3 md:p-4 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(234,179,8,0.25)] text-left min-h-[75px] md:min-h-[85px]">
-                            <div class="flex flex-col z-10 w-[70%] md:w-3/4">
-                                <span
-                                    class="text-[8px] md:text-[9px] font-black text-yellow-400 uppercase tracking-widest mb-0.5">🏆
-                                    24/7 Matchs</span>
-                                <span
-                                    class="text-white font-black text-[11px] md:text-[13px] uppercase tracking-wide group-hover:text-yellow-400 transition-colors leading-tight">Virtuels</span>
-                                <span class="text-[9px] text-gray-500 font-semibold mt-0.5">Foot & Courses</span>
-                            </div>
+                            class="group relative bg-gradient-to-b from-[#161922] to-yellow-500/10 border border-[#212631] hover:border-yellow-500 rounded-xl p-2 md:p-3 flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_15px_-5px_rgba(234,179,8,0.25)] text-center min-h-[90px] md:min-h-[110px]">
                             <img src="https://img.icons8.com/3d-fluency/250/controller.png" alt="Virtuels"
-                                class="absolute right-1 md:right-2 bottom-1.5 md:bottom-2 h-[80%] md:h-[100%] max-w-[45px] md:max-w-[55px] object-contain z-20 pointer-events-none drop-shadow-[-3px_5px_8px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-2 animate-bounce-slow"
-                                style="animation-delay: 0.8s;">
+                                class="h-9 md:h-12 w-auto object-contain z-20 pointer-events-none drop-shadow-md transition-transform duration-300 group-hover:scale-110 mb-1.5 animate-bounce-slow" style="animation-delay: 0.8s;">
+                            <div class="flex flex-col z-10 w-full items-center">
+                                <span class="text-white font-black text-[9.5px] md:text-xs uppercase tracking-wide group-hover:text-yellow-400 transition-colors w-full truncate">Virtuels</span>
+                                <span class="text-[7.5px] md:text-[9px] text-gray-500 font-semibold mt-0.5 w-full truncate">Foot & Courses</span>
+                            </div>
                         </button>
 
-                        <!-- 6. نرد الحظ السحري (Magic Dice - تمت إضافته كبطاقة سادسة) -->
+                        <!-- 6. نرد الحظ السحري (Magic Dice) -->
                         <button onclick="rollMagicDice()"
-                            class="group relative overflow-visible bg-gradient-to-br from-[#161922] via-[#161922] to-pink-500/15 border border-[#212631] hover:border-pink-500 rounded-2xl p-3 md:p-4 flex items-center justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(236,72,153,0.25)] text-left min-h-[75px] md:min-h-[85px]">
-                            <div class="flex flex-col z-10 w-[70%] md:w-3/4">
-                                <span
-                                    class="text-[8px] md:text-[9px] font-black text-pink-400 uppercase tracking-widest mb-0.5 flex items-center gap-1">
-                                    <i class="fas fa-sparkles text-yellow-400"></i> Chance
-                                </span>
-                                <span
-                                    class="text-white font-black text-[11px] md:text-[13px] uppercase tracking-wide group-hover:text-pink-400 transition-colors leading-tight">Jeu
-                                    Magique</span>
-                                <span class="text-[9px] text-gray-500 font-semibold mt-0.5">Dé Aléatoire</span>
-                            </div>
+                            class="group relative bg-gradient-to-b from-[#161922] to-pink-500/10 border border-[#212631] hover:border-pink-500 rounded-xl p-2 md:p-3 flex flex-col items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_15px_-5px_rgba(236,72,153,0.25)] text-center min-h-[90px] md:min-h-[110px]">
                             <img src="https://img.icons8.com/3d-fluency/250/dice.png" alt="Dice"
-                                class="absolute right-1 md:right-2 bottom-1.5 md:bottom-2 h-[80%] md:h-[100%] max-w-[45px] md:max-w-[55px] object-contain z-20 pointer-events-none drop-shadow-[-3px_5px_8px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-2 animate-bounce-slow"
-                                style="animation-delay: 1s;">
+                                class="h-9 md:h-12 w-auto object-contain z-20 pointer-events-none drop-shadow-md transition-transform duration-300 group-hover:scale-110 mb-1.5 animate-bounce-slow" style="animation-delay: 1s;">
+                            <div class="flex flex-col z-10 w-full items-center">
+                                <span class="text-white font-black text-[9.5px] md:text-xs uppercase tracking-wide group-hover:text-pink-400 transition-colors w-full truncate">Jeu Magique</span>
+                                <span class="text-[7.5px] md:text-[9px] text-gray-500 font-semibold mt-0.5 w-full truncate">Dé Aléatoire</span>
+                            </div>
                         </button>
 
                     </div>
