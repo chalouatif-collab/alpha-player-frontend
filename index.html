@@ -1246,13 +1246,33 @@
                     <i class="fas fa-times text-xs"></i>
                 </button>
                 
-                <!-- واجهة اختيار اللعبة الثانية -->
-                <div id="second-game-selector" class="absolute inset-0 flex flex-col p-4 overflow-y-auto hide-scroll z-40 bg-gradient-to-b from-[#0f1117] to-[#161922]">
-                    <h3 class="text-white font-black text-xs md:text-sm mb-3 flex items-center gap-2 uppercase tracking-wide">
-                        <i class="fas fa-plus-circle text-blue-400 animate-pulse"></i> Ajouter un 2ème jeu
-                    </h3>
-                    <div id="split-games-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
-                        <!-- سيتم تعبئتها برمجياً -->
+                <!-- 🌟 واجهة اللوبي المصغر لاختيار اللعبة الثانية -->
+                <div id="second-game-selector" class="absolute inset-0 flex flex-col bg-[#090a0f] z-40">
+                    
+                    <!-- الهيدر المصغر (البحث وفلتر المزودين) -->
+                    <div class="p-2 md:p-3 bg-[#12151d] border-b border-[#212631] flex flex-col gap-2 shrink-0 shadow-md">
+                        <div class="flex items-center justify-between">
+                            <span class="text-white font-black text-[10px] md:text-xs uppercase tracking-widest"><i class="fas fa-layer-group text-blue-400"></i> Choisir le 2ème jeu</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <!-- مربع البحث -->
+                            <div class="relative flex-1">
+                                <i class="fas fa-search absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-500 text-[10px]"></i>
+                                <input type="text" id="split-search-input" onkeyup="filterSplitGames()" placeholder="Chercher un jeu..." class="w-full bg-[#1a1e29] border border-[#212631] rounded-lg py-1.5 pl-7 pr-2 text-white text-[10px] outline-none focus:border-blue-500 transition-colors">
+                            </div>
+                            <!-- قائمة المزودين -->
+                            <select id="split-provider-select" onchange="filterSplitGames()" class="bg-[#1a1e29] border border-[#212631] rounded-lg text-white text-[10px] px-2 outline-none focus:border-blue-500 max-w-[110px] font-bold">
+                                <option value="ALL">Récent & Populaire</option>
+                                <!-- سيتم جلب المزودين هنا برمجياً -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- شبكة الألعاب المصغرة -->
+                    <div class="flex-1 overflow-y-auto hide-scroll p-2">
+                        <div id="split-games-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 pb-6">
+                            <!-- الألعاب ستظهر هنا -->
+                        </div>
                     </div>
                 </div>
 
@@ -4630,30 +4650,29 @@
             handleSwipe(direction, topCard, swipeGames[currentCardIndex]);
         }
 
-        // ================= 📱 محرك الشاشة المنقسمة (Split-Screen Engine) =================
+       // ================= 📱 محرك الشاشة المنقسمة الذكي (Mini-Lobby) =================
+        let splitLobbyGames = [];
 
         function toggleSplitScreen() {
             const screen1 = document.getElementById('screen-1');
             const screen2 = document.getElementById('screen-2');
             const divider = document.getElementById('split-divider');
             
-            // التحقق مما إذا كانت الشاشة مقسومة بالفعل
             if (!screen2.classList.contains('hidden')) {
                 closeSplitScreen();
                 return;
             }
 
-            // تفعيل القسمة (50% لكل شاشة)
+            // قسمة الشاشة 50% / 50%
             screen1.style.height = '50%';
             screen2.style.height = '50%';
             screen2.classList.remove('hidden');
             divider.classList.remove('hidden');
             
-            // إظهار قائمة اختيار اللعبة الثانية وتوليد الألعاب
             document.getElementById('second-game-selector').classList.remove('hidden');
             document.getElementById('casino-iframe-2').classList.add('hidden');
             
-            renderSplitGamesSelector();
+            initSplitLobby(); // تشغيل اللوبي المصغر
         }
 
         function closeSplitScreen() {
@@ -4661,50 +4680,96 @@
             const screen2 = document.getElementById('screen-2');
             const divider = document.getElementById('split-divider');
             
-            // إرجاع الشاشة الأولى للحجم الكامل وإخفاء الثانية
             screen1.style.height = '100%';
             screen2.style.height = '0';
             
             setTimeout(() => {
                 screen2.classList.add('hidden');
                 divider.classList.add('hidden');
-                document.getElementById('casino-iframe-2').src = ''; // إيقاف اللعبة الثانية
-            }, 300); // انتظار انتهاء الأنيميشن
+                document.getElementById('casino-iframe-2').src = ''; 
+            }, 300); 
         }
 
-        function renderSplitGamesSelector() {
+        async function initSplitLobby() {
+            // 1. تعبئة قائمة المزودين إذا كانت فارغة
+            const select = document.getElementById('split-provider-select');
+            if (select && select.options.length <= 1 && window.nexusProviders) {
+                window.nexusProviders.forEach(p => {
+                    select.innerHTML += `<option value="${p.code}">${p.name}</option>`;
+                });
+            }
+            
+            // 2. تصفية وعرض الألعاب الأولية
+            filterSplitGames();
+        }
+
+        async function filterSplitGames() {
+            const searchInput = document.getElementById('split-search-input');
+            const selectProv = document.getElementById('split-provider-select');
             const grid = document.getElementById('split-games-grid');
             
-            // دمج الألعاب الأخيرة مع ألعاب المزود الحالي لتقديم خيارات سريعة
-            let gamesList = [];
-            try {
-                let recent = JSON.parse(localStorage.getItem('alpha_recent_games') || '[]');
-                gamesList = [...recent, ...(window.currentProviderGames || [])].slice(0, 18);
-                
-                // إزالة التكرار
-                gamesList = gamesList.filter((v, i, a) => a.findIndex(t => (t.gameCode || t.game_code || t.id) === (v.gameCode || v.game_code || v.id)) === i);
-            } catch(e) {}
+            const term = searchInput ? searchInput.value.toLowerCase() : '';
+            const prov = selectProv ? selectProv.value : 'ALL';
+            
+            let gamesToDisplay = [];
+            
+            // إذا اختار اللاعب مزوداً محدداً
+            if (prov !== 'ALL') {
+                grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-6 text-[10px] font-bold"><i class="fas fa-spinner fa-spin text-lg mb-2"></i><br>Chargement des jeux...</div>';
+                try {
+                    const res = await fetch(`${BACKEND_URL}/api/get-providers`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ provider_code: prov })
+                    });
+                    const data = await res.json();
+                    splitLobbyGames = data.games || data.data || [];
+                } catch(e) {
+                    grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-6 text-[10px]">Erreur de connexion</div>';
+                    return;
+                }
+            } else {
+                // إذا اختار "الكل"، نعرض له آخر ما لعب + الألعاب الحالية (بسرعة البرق بدون تحميل)
+                try {
+                   let recent = JSON.parse(localStorage.getItem('alpha_recent_games') || '[]');
+                   let current = window.currentProviderGames || [];
+                   splitLobbyGames = [...recent, ...current].filter((v,i,a) => a.findIndex(t=>(t.gameCode||t.game_code||t.id)===(v.gameCode||v.game_code||v.id))===i);
+                } catch(e) {}
+            }
 
-            if (gamesList.length === 0) {
-                grid.innerHTML = '<div class="col-span-full text-gray-500 text-[10px] text-center mt-4">Aucun jeu disponible. Retournez au lobby.</div>';
+            // تطبيق البحث على الألعاب المستخرجة
+            gamesToDisplay = splitLobbyGames.filter(g => {
+                const name = String(g.game_name || g.gameName || g.name || "").toLowerCase();
+                return name.includes(term);
+            }).slice(0, 48); // نكتفي بـ 48 لعبة للحفاظ على سرعة الهاتف
+            
+            renderSplitGamesGrid(gamesToDisplay, prov);
+        }
+
+        function renderSplitGamesGrid(games, currentProvCode) {
+            const grid = document.getElementById('split-games-grid');
+            if (!grid) return;
+            
+            if (games.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-gray-500 text-[10px] font-bold text-center mt-6">Aucun jeu trouvé.</div>';
                 return;
             }
 
-            grid.innerHTML = gamesList.map(g => {
+            grid.innerHTML = games.map(g => {
                 const gameName = escapeHTML(g.gameName || g.game_name || g.name || "Jeu");
                 const gameCode = g.gameCode || g.game_code || g.id;
-                const providerCode = g.providerCode || window.currentActiveProviderCode || 'PRAGMATIC';
+                const pCode = g.providerCode || g.provider || (currentProvCode === 'ALL' ? (window.currentActiveProviderCode || 'PRAGMATIC') : currentProvCode);
                 const gameImg = g.gameImg || g.banner || g.image || `https://placehold.co/400x400/12151d/3b82f6?text=${encodeURIComponent(gameName.substring(0, 10))}`;
 
                 return `
-                <div onclick="playSecondGame('${providerCode}', '${gameCode}')" class="bg-[#0f1117] border border-[#212631] rounded-lg overflow-hidden cursor-pointer hover:border-blue-500 transition-all flex flex-col group relative">
+                <div onclick="playSecondGame('${pCode}', '${gameCode}')" class="bg-[#161922] border border-[#212631] rounded-lg overflow-hidden cursor-pointer hover:border-blue-500 transition-all flex flex-col group relative shadow-md">
                     <div class="relative w-full aspect-square overflow-hidden bg-black">
                         <img src="${gameImg}" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                            <i class="fas fa-play text-blue-400"></i>
+                            <span class="bg-blue-500 text-white text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded shadow">Jouer</span>
                         </div>
                     </div>
-                    <div class="p-1.5 text-[8px] md:text-[9px] text-white font-bold truncate text-center">${gameName}</div>
+                    <div class="p-1.5 text-[8.5px] text-white font-bold truncate text-center">${gameName}</div>
                 </div>`;
             }).join('');
         }
@@ -4713,7 +4778,7 @@
             const iframe2 = document.getElementById('casino-iframe-2');
             const selector = document.getElementById('second-game-selector');
             
-            selector.innerHTML = '<div class="flex flex-col items-center justify-center h-full w-full text-blue-400"><i class="fas fa-spinner fa-spin text-2xl mb-2"></i><span class="text-[10px] font-bold tracking-widest uppercase">Chargement...</span></div>';
+            selector.innerHTML = '<div class="flex flex-col items-center justify-center h-full w-full text-blue-400 bg-[#090a0f]"><i class="fas fa-spinner fa-spin text-3xl mb-3"></i><span class="text-[10px] font-black tracking-widest uppercase">Connexion au serveur...</span></div>';
             
             try {
                 let endpointUrl = `${BACKEND_URL}/api/provider/launch-casino`;
