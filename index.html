@@ -1202,8 +1202,66 @@
         </div>
     </div>
 
-    <!-- 🎰 Casino Iframe Container -->
-    <div id="casino-iframe-container" class="fixed inset-0 z-[300] bg-black hidden flex-col">
+    <!-- 🎰 Casino Iframe Container (المطور مع ميزة الشاشة المنقسمة) -->
+    <div id="casino-iframe-container" class="fixed inset-0 z-[600] bg-[#0f1117] hidden flex-col transition-all">
+        
+        <!-- الشريط العلوي الذكي (Top Bar) -->
+        <div class="h-10 md:h-12 bg-[#12151d] border-b border-[#212631] flex justify-between items-center px-3 md:px-4 shrink-0 z-50 shadow-md">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-dice-d20 text-emerald text-sm md:text-base"></i>
+                <span class="text-white font-black text-[10px] md:text-xs tracking-widest uppercase">Alphabet<span class="text-emerald">216</span></span>
+            </div>
+            <div class="flex items-center gap-2 md:gap-3">
+                <!-- زر تشغيل الشاشة المنقسمة -->
+                <button id="btn-split-screen" onclick="toggleSplitScreen()" class="text-blue-400 hover:text-white transition flex items-center gap-1.5 bg-blue-500/10 hover:bg-blue-500/20 px-2.5 md:px-3 py-1 md:py-1.5 rounded-lg border border-blue-500/30">
+                    <i class="fas fa-pause rotate-90 text-[10px]"></i> 
+                    <span class="text-[9px] font-bold uppercase tracking-widest hidden sm:inline">Multi-Jeux</span>
+                </button>
+                <!-- زر الإغلاق الكلي -->
+                <button onclick="closeCasinoGame()" class="text-red-500 hover:text-white transition w-7 h-7 md:w-8 md:h-8 flex items-center justify-center bg-red-500/10 hover:bg-red-500/20 rounded-lg border border-red-500/30">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- منطقة اللعب المزدوجة -->
+        <div id="game-screens-wrapper" class="flex flex-col w-full flex-grow overflow-hidden relative">
+            
+            <!-- 📱 الشاشة الأولى (العلوية / الرئيسية) -->
+            <div id="screen-1" class="w-full h-full relative transition-all duration-300">
+                <iframe id="casino-iframe" class="w-full h-full border-0 bg-black"></iframe>
+            </div>
+
+            <!-- الفاصل المضيء (يظهر فقط عند القسمة) -->
+            <div id="split-divider" class="hidden w-full h-1 bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.8)] z-40 flex items-center justify-center relative">
+                <div class="absolute w-12 h-2.5 bg-[#12151d] border border-blue-500/50 rounded-full flex items-center justify-center gap-1">
+                    <div class="w-1 h-1 bg-white rounded-full"></div><div class="w-1 h-1 bg-white rounded-full"></div><div class="w-1 h-1 bg-white rounded-full"></div>
+                </div>
+            </div>
+
+            <!-- 📱 الشاشة الثانية (السفلية) -->
+            <div id="screen-2" class="w-full h-0 hidden relative transition-all duration-300 bg-[#090a0f]">
+                <!-- زر إغلاق الشاشة الثانية فقط -->
+                <button onclick="closeSplitScreen()" class="absolute top-2 right-2 z-50 bg-black/80 text-white w-7 h-7 rounded-full flex items-center justify-center shadow-lg border border-red-500/50 hover:bg-red-500 transition">
+                    <i class="fas fa-times text-xs"></i>
+                </button>
+                
+                <!-- واجهة اختيار اللعبة الثانية -->
+                <div id="second-game-selector" class="absolute inset-0 flex flex-col p-4 overflow-y-auto hide-scroll z-40 bg-gradient-to-b from-[#0f1117] to-[#161922]">
+                    <h3 class="text-white font-black text-xs md:text-sm mb-3 flex items-center gap-2 uppercase tracking-wide">
+                        <i class="fas fa-plus-circle text-blue-400 animate-pulse"></i> Ajouter un 2ème jeu
+                    </h3>
+                    <div id="split-games-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                        <!-- سيتم تعبئتها برمجياً -->
+                    </div>
+                </div>
+
+                <!-- إطار اللعبة الثانية -->
+                <iframe id="casino-iframe-2" class="w-full h-full border-0 hidden z-30 relative bg-black"></iframe>
+            </div>
+
+        </div>
+    </div>
         <!-- تركنا الشريط العلوي لاسم المنصة فقط، وحذفنا زر الإغلاق -->
         <div class="h-10 bg-[#12151d] flex justify-center items-center px-4">
             <span class="text-emerald font-bold text-xs">Alphabet216</span>
@@ -4570,6 +4628,122 @@
             if (cards.length === 0) return;
             const topCard = cards[cards.length - 1];
             handleSwipe(direction, topCard, swipeGames[currentCardIndex]);
+        }
+
+        // ================= 📱 محرك الشاشة المنقسمة (Split-Screen Engine) =================
+
+        function toggleSplitScreen() {
+            const screen1 = document.getElementById('screen-1');
+            const screen2 = document.getElementById('screen-2');
+            const divider = document.getElementById('split-divider');
+            
+            // التحقق مما إذا كانت الشاشة مقسومة بالفعل
+            if (!screen2.classList.contains('hidden')) {
+                closeSplitScreen();
+                return;
+            }
+
+            // تفعيل القسمة (50% لكل شاشة)
+            screen1.style.height = '50%';
+            screen2.style.height = '50%';
+            screen2.classList.remove('hidden');
+            divider.classList.remove('hidden');
+            
+            // إظهار قائمة اختيار اللعبة الثانية وتوليد الألعاب
+            document.getElementById('second-game-selector').classList.remove('hidden');
+            document.getElementById('casino-iframe-2').classList.add('hidden');
+            
+            renderSplitGamesSelector();
+        }
+
+        function closeSplitScreen() {
+            const screen1 = document.getElementById('screen-1');
+            const screen2 = document.getElementById('screen-2');
+            const divider = document.getElementById('split-divider');
+            
+            // إرجاع الشاشة الأولى للحجم الكامل وإخفاء الثانية
+            screen1.style.height = '100%';
+            screen2.style.height = '0';
+            
+            setTimeout(() => {
+                screen2.classList.add('hidden');
+                divider.classList.add('hidden');
+                document.getElementById('casino-iframe-2').src = ''; // إيقاف اللعبة الثانية
+            }, 300); // انتظار انتهاء الأنيميشن
+        }
+
+        function renderSplitGamesSelector() {
+            const grid = document.getElementById('split-games-grid');
+            
+            // دمج الألعاب الأخيرة مع ألعاب المزود الحالي لتقديم خيارات سريعة
+            let gamesList = [];
+            try {
+                let recent = JSON.parse(localStorage.getItem('alpha_recent_games') || '[]');
+                gamesList = [...recent, ...(window.currentProviderGames || [])].slice(0, 18);
+                
+                // إزالة التكرار
+                gamesList = gamesList.filter((v, i, a) => a.findIndex(t => (t.gameCode || t.game_code || t.id) === (v.gameCode || v.game_code || v.id)) === i);
+            } catch(e) {}
+
+            if (gamesList.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-gray-500 text-[10px] text-center mt-4">Aucun jeu disponible. Retournez au lobby.</div>';
+                return;
+            }
+
+            grid.innerHTML = gamesList.map(g => {
+                const gameName = escapeHTML(g.gameName || g.game_name || g.name || "Jeu");
+                const gameCode = g.gameCode || g.game_code || g.id;
+                const providerCode = g.providerCode || window.currentActiveProviderCode || 'PRAGMATIC';
+                const gameImg = g.gameImg || g.banner || g.image || `https://placehold.co/400x400/12151d/3b82f6?text=${encodeURIComponent(gameName.substring(0, 10))}`;
+
+                return `
+                <div onclick="playSecondGame('${providerCode}', '${gameCode}')" class="bg-[#0f1117] border border-[#212631] rounded-lg overflow-hidden cursor-pointer hover:border-blue-500 transition-all flex flex-col group relative">
+                    <div class="relative w-full aspect-square overflow-hidden bg-black">
+                        <img src="${gameImg}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                            <i class="fas fa-play text-blue-400"></i>
+                        </div>
+                    </div>
+                    <div class="p-1.5 text-[8px] md:text-[9px] text-white font-bold truncate text-center">${gameName}</div>
+                </div>`;
+            }).join('');
+        }
+
+        async function playSecondGame(providerCode, gameCode) {
+            const iframe2 = document.getElementById('casino-iframe-2');
+            const selector = document.getElementById('second-game-selector');
+            
+            selector.innerHTML = '<div class="flex flex-col items-center justify-center h-full w-full text-blue-400"><i class="fas fa-spinner fa-spin text-2xl mb-2"></i><span class="text-[10px] font-bold tracking-widest uppercase">Chargement...</span></div>';
+            
+            try {
+                let endpointUrl = `${BACKEND_URL}/api/provider/launch-casino`;
+                let requestBody = { game_code: gameCode, provider_code: providerCode, user_code: playerSession.username };
+
+                if (providerCode === 'SMPL') {
+                    endpointUrl = `${BACKEND_URL}/api/smpl/launch`;
+                    requestBody = { game_uuid: gameCode, user_code: playerSession.username };
+                }
+
+                const res = await fetch(endpointUrl, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await res.json();
+
+                if (data.launch_url) {
+                    selector.classList.add('hidden');
+                    iframe2.classList.remove('hidden');
+                    iframe2.src = data.launch_url;
+                } else {
+                    showNotification(data.error || "Jeu non disponible", "error");
+                    closeSplitScreen();
+                }
+            } catch (error) {
+                showNotification("Erreur de connexion", "error");
+                closeSplitScreen();
+            }
         }
     </script>
 
