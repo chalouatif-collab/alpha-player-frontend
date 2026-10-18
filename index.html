@@ -1964,6 +1964,7 @@
                 grid.dataset.dragEnabled = 'true';
             }
         }
+        // ================= فتح اللعبة (محدث ليدعم الشاشة المدمجة) =================
         async function playCasinoGame(providerCode, gameCode, forceName = null, forceImg = null) {
             closeChat();
             if (!playerSession) return openLoginModal();
@@ -1972,22 +1973,14 @@
                 let gameName = forceName || "Jeu de Casino";
                 let gameImg = forceImg || "https://img.icons8.com/3d-fluency/94/slot-machine.png";
 
-                // البحث العبقري: إذا لم يأتِ الاسم من النرد، سنبحث عن اللعبة في كامل الصفحة باستخدام كودها!
                 if (!forceName) {
-                    // يبحث عن أي زر أو عنصر يحتوي على دالة فتح هذه اللعبة بالذات
                     const gameCard = document.querySelector(`[onclick*="${gameCode}"]`);
-
                     if (gameCard) {
                         const imgEl = gameCard.querySelector('img');
-                        // يبحث عن أي عنصر نصي داخل البطاقة
                         const titleEl = gameCard.querySelector('.truncate') || gameCard.querySelector('h3') || gameCard.querySelector('span');
-
                         if (imgEl && imgEl.src) gameImg = imgEl.src;
                         if (titleEl && titleEl.innerText) gameName = titleEl.innerText.trim();
-                    }
-
-                    // خطة بديلة أخيرة: البحث في المصفوفة
-                    if (gameName === "Jeu de Casino" && window.currentProviderGames) {
+                    } else if (window.currentProviderGames) {
                         let found = window.currentProviderGames.find(g => String(g.game_code || g.id) === String(gameCode));
                         if (found) {
                             gameName = String(found.game_name || found.name);
@@ -2026,7 +2019,14 @@
                 const data = await res.json();
 
                 if (data.launch_url) {
-                    window.open(data.launch_url, '_blank');
+                    // 🚀 توجيه الرابط إلى الـ Iframe بدلاً من window.open
+                    const container = document.getElementById('casino-iframe-container');
+                    const iframe = document.getElementById('casino-iframe');
+                    if (container && iframe) {
+                        container.classList.remove('hidden');
+                        container.classList.add('flex');
+                        iframe.src = data.launch_url;
+                    }
                 } else {
                     showNotification(data.error || "Jeu non disponible", "error");
                 }
@@ -2036,6 +2036,8 @@
                 document.body.style.cursor = 'default';
             }
         }
+        window.playSMPLGame = playCasinoGame;
+        window.playNexusGame = playCasinoGame;
         window.playSMPLGame = playCasinoGame;
         window.playNexusGame = playCasinoGame;
         // ================= إغلاق نافذة اللعبة =================
@@ -2135,8 +2137,6 @@
 
         async function launchSpecificVirtualGame(uuid) {
             if (!playerSession) return openLoginModal();
-
-            // تغيير شكل المؤشر لانتظار التحميل
             document.body.style.cursor = 'wait';
 
             try {
@@ -2147,15 +2147,20 @@
                 const data = await res.json();
 
                 if (data.launch_url) {
-                    // فتح اللعبة في نافذة جديدة
-                    window.open(data.launch_url, '_blank');
+                    // 🚀 توجيه الرابط إلى الـ Iframe
+                    const container = document.getElementById('casino-iframe-container');
+                    const iframe = document.getElementById('casino-iframe');
+                    if (container && iframe) {
+                        container.classList.remove('hidden');
+                        container.classList.add('flex');
+                        iframe.src = data.launch_url;
+                    }
                 } else {
                     showNotification("Jeu non disponible", "error");
                 }
             } catch (e) {
                 showNotification("Erreur réseau", "error");
             } finally {
-                // إعادة المؤشر لطبيعته
                 document.body.style.cursor = 'default';
             }
         }
@@ -3290,24 +3295,23 @@
 
             try {
                 document.body.style.cursor = 'wait';
-
-                // 🌟 إرسال الطلب بنفس طريقة قسم Virtuels الناجحة
                 const res = await fetch(`${BACKEND_URL}/api/provider/launch-eurovirtuals`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    },
-                    body: JSON.stringify({
-                        user_code: userCode,
-                        game_uuid: gameId
-                    })
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                    body: JSON.stringify({ user_code: userCode, game_uuid: gameId })
                 });
 
                 const data = await res.json();
 
                 if (data.launch_url) {
-                    window.open(data.launch_url, '_blank');
+                    // 🚀 توجيه الرابط إلى الـ Iframe
+                    const container = document.getElementById('casino-iframe-container');
+                    const iframe = document.getElementById('casino-iframe');
+                    if (container && iframe) {
+                        container.classList.remove('hidden');
+                        container.classList.add('flex');
+                        iframe.src = data.launch_url;
+                    }
                 } else {
                     showNotification("Jeu non disponible: " + (data.error || 'Erreur inconnue'), "error");
                 }
