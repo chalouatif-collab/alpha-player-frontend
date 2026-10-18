@@ -1095,99 +1095,104 @@
                     class="flex-1 text-gray-400 hover:text-white font-bold py-2 rounded-lg text-xs transition-all">Retrait</button>
             </div>
 
-            <!-- SECTION DÉPÔT -->
+            <!-- SECTION DÉPÔT (محدثة لتطابق الشريط السفلي) -->
             <div id="deposit-section" class="space-y-4">
                 <label class="text-xs text-gray-400 font-bold">Choisissez la méthode:</label>
+                
+                <!-- شبكة أزرار طرق الدفع -->
                 <div id="payment-methods-grid" class="grid grid-cols-2 gap-3">
-                    <button onclick="showForm('form-voucher')"
-                        class="bg-[#0f1117] border border-[#212631] hover:border-emerald p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
-                        <span class="text-2xl text-yellow-500">🎟️</span><span
-                            class="text-[10px] font-bold text-white">Code Voucher</span>
-                    </button>
                     <button onclick="showForm('form-usdt')"
                         class="bg-[#0f1117] border border-[#212631] hover:border-emerald p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
-                        <span class="text-2xl text-green-400">💎</span><span
-                            class="text-[10px] font-bold text-white">USDT (Crypto)</span>
+                        <i class="fab fa-bitcoin text-2xl text-emerald-400"></i>
+                        <span class="text-[10px] font-bold text-white">USDT (TRC20)</span>
                     </button>
-                    <button onclick="showForm('form-ooredoo')"
+                    <button onclick="showForm('form-binance')"
+                        class="bg-[#0f1117] border border-[#212631] hover:border-yellow-500 p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
+                        <img src="https://cryptologos.cc/logos/bnb-bnb-logo.png" class="w-6 h-6 object-contain filter drop-shadow-md">
+                        <span class="text-[10px] font-bold text-white">Binance Pay</span>
+                    </button>
+                    <button onclick="showForm('form-redotpay')"
                         class="bg-[#0f1117] border border-[#212631] hover:border-red-500 p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
-                        <span class="text-2xl text-red-500 font-black">Ooredoo</span><span
-                            class="text-[10px] font-bold text-white">Recharge</span>
+                        <i class="fas fa-credit-card text-2xl text-red-500"></i>
+                        <span class="text-[10px] font-bold text-white">RedotPay</span>
                     </button>
-                    <button onclick="showForm('form-orange')"
+                    <button onclick="showForm('form-local')"
                         class="bg-[#0f1117] border border-[#212631] hover:border-orange-500 p-3 rounded-xl flex flex-col items-center gap-2 transition-all">
-                        <span class="text-2xl text-orange-500 font-black">Orange</span><span
-                            class="text-[10px] font-bold text-white">Recharge</span>
+                        <i class="fas fa-mobile-alt text-2xl text-orange-500"></i>
+                        <span class="text-[10px] font-bold text-white">D17 / Recharge</span>
                     </button>
                 </div>
 
-                <div id="form-voucher" class="hidden space-y-3 mt-4">
-                    <input type="text" id="voucher-code" placeholder="Entrez le code Voucher"
-                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-3 text-white text-sm outline-none focus:border-emerald font-mono text-center tracking-widest">
-                    <div class="flex gap-2 mt-2">
-                        <button onclick="backToMethods()"
-                            class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2">Retour</button>
-                        <button onclick="submitDeposit('voucher')"
-                            class="flex-1 bg-emerald text-black font-bold rounded-lg py-2">Valider</button>
-                    </div>
-                </div>
-
+                <!-- 1. نموذج USDT -->
                 <div id="form-usdt" class="hidden space-y-3 mt-4">
                     <div class="bg-[#0f1117] p-3 rounded-lg border border-emerald/30 text-center">
                         <p class="text-xs text-gray-400 mb-1">Adresse USDT (TRC20) :</p>
-                        <p class="text-xs font-bold text-emerald break-all font-mono">
-                            TVXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-                        </p>
+                        <p class="text-[11px] font-bold text-emerald break-all font-mono select-all">TVXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</p>
                     </div>
-                    <label
-                        class="block w-full bg-[#0f1117] border border-[#212631] border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-emerald transition-all">
-                        <span class="text-sm text-gray-300">📸 Importer le reçu</span>
-                        <input type="file" id="usdt-file" accept="image/*" class="hidden"
-                            onchange="updateFileName('usdt')">
+                    <input type="text" id="usdt-code" placeholder="ID de transaction (TxID) - Optionnel" class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-3 text-white text-sm outline-none focus:border-emerald font-mono">
+                    <label class="block w-full bg-[#0f1117] border border-[#212631] border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-emerald transition-all">
+                        <span class="text-sm text-gray-300">📸 Importer la capture (Requis)</span>
+                        <input type="file" id="usdt-file" accept="image/*" class="hidden" onchange="updateFileName('usdt')">
                     </label>
                     <div class="flex gap-2 mt-2">
-                        <button onclick="backToMethods()"
-                            class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2">Retour</button>
-                        <button onclick="submitDeposit('usdt')"
-                            class="flex-1 bg-emerald text-black font-bold rounded-lg py-2">Confirmer</button>
+                        <button onclick="backToMethods()" class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2 hover:bg-[#212631]">Retour</button>
+                        <button onclick="submitDeposit('usdt')" class="flex-1 bg-emerald text-black font-bold rounded-lg py-2 hover:opacity-90 shadow-[0_0_10px_rgba(16,185,129,0.3)]">Confirmer</button>
                     </div>
                 </div>
 
-                <div id="form-ooredoo" class="hidden space-y-3 mt-4">
-                    <input type="number" id="ooredoo-code" placeholder="Code Ooredoo (14 chiffres)"
-                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-3 text-white text-sm outline-none focus:border-red-500">
-                    <label
-                        class="block w-full bg-[#0f1117] border border-[#212631] border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-red-500 transition-all">
-                        <span class="text-sm text-gray-300">📸 Capture d'écran</span>
-                        <input type="file" id="ooredoo-file" accept="image/*" class="hidden"
-                            onchange="updateFileName('ooredoo')">
+                <!-- 2. نموذج Binance Pay -->
+                <div id="form-binance" class="hidden space-y-3 mt-4">
+                    <div class="bg-[#0f1117] p-3 rounded-lg border border-yellow-500/30 text-center">
+                        <p class="text-xs text-gray-400 mb-1">Binance Pay ID :</p>
+                        <p class="text-sm font-bold text-yellow-500 font-mono select-all tracking-widest">123456789</p>
+                    </div>
+                    <input type="text" id="binance-code" placeholder="ID de transaction / Pseudo" class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-3 text-white text-sm outline-none focus:border-yellow-500">
+                    <label class="block w-full bg-[#0f1117] border border-[#212631] border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-yellow-500 transition-all">
+                        <span class="text-sm text-gray-300">📸 Importer le reçu (Requis)</span>
+                        <input type="file" id="binance-file" accept="image/*" class="hidden" onchange="updateFileName('binance')">
                     </label>
                     <div class="flex gap-2 mt-2">
-                        <button onclick="backToMethods()"
-                            class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2">Retour</button>
-                        <button onclick="submitDeposit('ooredoo')"
-                            class="flex-1 bg-red-600 text-white font-bold rounded-lg py-2">Confirmer</button>
+                        <button onclick="backToMethods()" class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2 hover:bg-[#212631]">Retour</button>
+                        <button onclick="submitDeposit('binance')" class="flex-1 bg-yellow-500 text-black font-bold rounded-lg py-2 hover:opacity-90 shadow-[0_0_10px_rgba(234,179,8,0.3)]">Confirmer</button>
                     </div>
                 </div>
 
-                <div id="form-orange" class="hidden space-y-3 mt-4">
-                    <input type="number" id="orange-code" placeholder="Code Orange (14 chiffres)"
-                        class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-3 text-white text-sm outline-none focus:border-orange-500">
-                    <label
-                        class="block w-full bg-[#0f1117] border border-[#212631] border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-orange-500 transition-all">
-                        <span class="text-sm text-gray-300">📸 Capture d'écran</span>
-                        <input type="file" id="orange-file" accept="image/*" class="hidden"
-                            onchange="updateFileName('orange')">
+                <!-- 3. نموذج RedotPay -->
+                <div id="form-redotpay" class="hidden space-y-3 mt-4">
+                    <div class="bg-[#0f1117] p-3 rounded-lg border border-red-500/30 text-center">
+                        <p class="text-xs text-gray-400 mb-1">RedotPay ID :</p>
+                        <p class="text-sm font-bold text-red-500 font-mono select-all tracking-widest">987654321</p>
+                    </div>
+                    <input type="text" id="redotpay-code" placeholder="Numéro d'expéditeur / TxID" class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-3 text-white text-sm outline-none focus:border-red-500">
+                    <label class="block w-full bg-[#0f1117] border border-[#212631] border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-red-500 transition-all">
+                        <span class="text-sm text-gray-300">📸 Capture d'écran (Requis)</span>
+                        <input type="file" id="redotpay-file" accept="image/*" class="hidden" onchange="updateFileName('redotpay')">
                     </label>
                     <div class="flex gap-2 mt-2">
-                        <button onclick="backToMethods()"
-                            class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2">Retour</button>
-                        <button onclick="submitDeposit('orange')"
-                            class="flex-1 bg-orange-500 text-white font-bold rounded-lg py-2">Confirmer</button>
+                        <button onclick="backToMethods()" class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2 hover:bg-[#212631]">Retour</button>
+                        <button onclick="submitDeposit('redotpay')" class="flex-1 bg-red-500 text-white font-bold rounded-lg py-2 hover:opacity-90 shadow-[0_0_10px_rgba(239,68,68,0.3)]">Confirmer</button>
+                    </div>
+                </div>
+
+                <!-- 4. نموذج الدفع المحلي (مُجمع وذكي) -->
+                <div id="form-local" class="hidden space-y-3 mt-4">
+                    <select id="local-type" class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-3 text-white text-sm outline-none focus:border-orange-500 font-bold">
+                        <option value="D17">📱 Transfert D17</option>
+                        <option value="OOREDOO">🔴 Code Ooredoo (14 chiffres)</option>
+                        <option value="ORANGE">🟠 Code Orange (14 chiffres)</option>
+                        <option value="TELECOM">🔵 Code Tunisie Telecom</option>
+                    </select>
+                    <input type="text" id="local-code" placeholder="Entrez le code ou numéro d'expéditeur" class="w-full bg-[#0f1117] border border-[#212631] rounded-lg p-3 text-white text-sm outline-none focus:border-orange-500 font-mono">
+                    <label class="block w-full bg-[#0f1117] border border-[#212631] border-dashed rounded-lg p-3 text-center cursor-pointer hover:border-orange-500 transition-all">
+                        <span class="text-sm text-gray-300">📸 Reçu (Obligatoire pour D17)</span>
+                        <input type="file" id="local-file" accept="image/*" class="hidden" onchange="updateFileName('local')">
+                    </label>
+                    <div class="flex gap-2 mt-2">
+                        <button onclick="backToMethods()" class="flex-1 bg-transparent border border-[#212631] text-white font-bold rounded-lg py-2 hover:bg-[#212631]">Retour</button>
+                        <button onclick="submitDeposit('local')" class="flex-1 bg-orange-500 text-white font-bold rounded-lg py-2 hover:opacity-90 shadow-[0_0_10px_rgba(249,115,22,0.3)]">Confirmer</button>
                     </div>
                 </div>
             </div>
-
             <!-- SECTION RETRAIT -->
             <div id="withdraw-section" class="hidden space-y-4">
                 <div class="bg-[#0f1117] border border-[#212631] p-3 rounded-xl flex justify-between items-center mb-2">
@@ -2162,9 +2167,65 @@
 
         function backToMethods() {
             document.getElementById('payment-methods-grid').classList.remove('hidden');
-            ['form-voucher', 'form-usdt', 'form-ooredoo', 'form-orange'].forEach(id => {
-                if (document.getElementById(id)) document.getElementById(id).classList.add('hidden');
+            // إخفاء النماذج الجديدة
+            ['form-usdt', 'form-binance', 'form-redotpay', 'form-local'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
             });
+        }
+
+        async function submitDeposit(method) {
+            if (!playerSession) return;
+            const codeInput = document.getElementById(method + "-code");
+            const fileInput = document.getElementById(method + "-file");
+            let pinCode = codeInput ? codeInput.value.trim() : "";
+
+            // استخراج نوع الدفع المحلي إذا كان المستخدم في نافذة (Local)
+            let subType = "";
+            if (method === 'local') {
+                const typeSelect = document.getElementById('local-type');
+                if(typeSelect) subType = typeSelect.value + "-";
+            }
+
+            if (!pinCode && (!fileInput || fileInput.files.length === 0)) {
+                return showNotification("Veuillez remplir les données ou joindre une image", "error");
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append("target_username", playerSession.username);
+                formData.append("action", "deposit_request");
+                formData.append("amount", 1); // قيمة افتراضية لتخطي فحص السيرفر، الإدارة ستراجع المبلغ من الصورة
+
+                // صياغة تفاصيل العملية (مثال: LOCAL-D17-12345678 أو BINANCE-FILE)
+                const details = pinCode ? `${method.toUpperCase()}-${subType}${pinCode}` : `${method.toUpperCase()}-${subType}FILE`;
+                formData.append("tx_id", details);
+
+                if (fileInput && fileInput.files.length > 0) {
+                    formData.append("file", fileInput.files[0]);
+                }
+
+                const response = await fetch(`${BACKEND_URL}/api/admin/request-transaction`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    showNotification("Demande envoyée avec succès ! ⏳");
+                    toggleCashier();
+                    if (codeInput) codeInput.value = "";
+                    if (fileInput) fileInput.value = "";
+                    // إعادة تعيين اسم الملف الظاهر
+                    const labelSpan = fileInput.previousElementSibling;
+                    if(labelSpan) labelSpan.innerHTML = `📸 Image jointe avec succès`;
+                } else {
+                    const err = await response.json();
+                    showNotification(err.detail || "Erreur lors de l'envoi", "error");
+                }
+            } catch (error) {
+                showNotification("Erreur réseau", "error");
+            }
         }
 
         function updateFileName(method) {
@@ -2196,51 +2257,7 @@
             });
         }
 
-        async function submitDeposit(method) {
-            if (!playerSession) return;
-            const codeInput = document.getElementById(method + "-code");
-            const fileInput = document.getElementById(method + "-file");
-            let pinCode = codeInput ? codeInput.value : "";
-
-            if (!pinCode && (!fileInput || fileInput.files.length === 0)) {
-                return showNotification("Données manquantes", "error");
-            }
-
-            try {
-                // استخدام FormData لدعم رفع الصور والنصوص معاً إلى مسار SQL الموحد
-                const formData = new FormData();
-                formData.append("target_username", playerSession.username);
-                formData.append("action", "deposit_request");
-                formData.append("amount", 1); // قيمة مؤقتة لتخطي شرط (المبلغ > 0) في الباك إند، المالك سيحدد المبلغ الحقيقي لاحقاً
-
-                // دمج نوع الطريقة مع الكود (أو كلمة FILE إذا كان صورة فقط) في حقل tx_id
-                const details = pinCode ? `${method.toUpperCase()}-${pinCode}` : `${method.toUpperCase()}-FILE`;
-                formData.append("tx_id", details);
-
-                if (fileInput && fileInput.files.length > 0) {
-                    formData.append("file", fileInput.files[0]);
-                }
-
-                const response = await fetch(`${BACKEND_URL}/api/admin/request-transaction`, {
-                    method: 'POST',
-                    // لا نستخدم getAuthHeaders() هنا لأن FormData يحتاج أن يحدد المتصفح الـ Content-Type بنفسه
-                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-                    body: formData
-                });
-
-                if (response.ok) {
-                    showNotification("Demande envoyée ! ⏳");
-                    toggleCashier();
-                    if (codeInput) codeInput.value = "";
-                } else {
-                    const err = await response.json();
-                    showNotification(err.detail || "Erreur", "error");
-                }
-            } catch (error) {
-                showNotification("Erreur réseau", "error");
-            }
-        }
-
+        
         function showWithdrawForm(formId) {
             document.querySelectorAll('.withdraw-form').forEach(f => f.classList.add('hidden'));
             document.getElementById(formId).classList.remove('hidden');
