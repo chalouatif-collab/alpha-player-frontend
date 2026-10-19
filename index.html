@@ -2100,97 +2100,64 @@
         }
 
 
-        // ================= رسم شريط أبرز المباريات (Mock Data) =================
-        function renderTopMatches() {
+        // ================= رسم شريط أبرز المباريات (Real Data from Backend) =================
+        async function renderTopMatches() {
             const grid = document.getElementById('top-matches-grid');
             if (!grid) return;
 
-            // بيانات وهمية لأبرز المباريات (سنستبدلها لاحقاً بـ API حقيقي)
-            const mockMatches = [
-                {
-                    league: "Champions League",
-                    time: "Aujourd'hui, 20:45",
-                    teamA: { name: "Real Madrid", logo: "https://media.api-sports.io/football/teams/541.png" },
-                    teamB: { name: "Man City", logo: "https://media.api-sports.io/football/teams/50.png" },
-                    isLive: false
-                },
-                {
-                    league: "Premier League",
-                    time: "En Direct",
-                    teamA: { name: "Arsenal", logo: "https://media.api-sports.io/football/teams/42.png" },
-                    teamB: { name: "Chelsea", logo: "https://media.api-sports.io/football/teams/49.png" },
-                    isLive: true
-                },
-                {
-                    league: "La Liga",
-                    time: "Demain, 19:30",
-                    teamA: { name: "Barcelona", logo: "https://media.api-sports.io/football/teams/529.png" },
-                    teamB: { name: "Atlético", logo: "https://media.api-sports.io/football/teams/530.png" },
-                    isLive: false
-                },
-                {
-                    league: "Ligue 1",
-                    time: "Aujourd'hui, 21:00",
-                    teamA: { name: "PSG", logo: "https://media.api-sports.io/football/teams/85.png" },
-                    teamB: { name: "Marseille", logo: "https://media.api-sports.io/football/teams/81.png" },
-                    isLive: false
+            grid.innerHTML = '<div class="text-blue-500 text-xs font-bold py-4 animate-pulse"><i class="fas fa-futbol fa-spin mr-2"></i>Chargement des matchs...</div>';
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/top-matches`);
+                const data = await res.json();
+                
+                let matchesToRender = data.matches || [];
+
+                // إذا لم يتم جلب مباريات (لأن اليوم لا توجد مباريات أو المفتاح غير مفعل بعد)
+                if (matchesToRender.length === 0) {
+                    matchesToRender = [
+                        { league: "Champions League", time: "Prochainement", teamA: { name: "Real Madrid", logo: "https://media.api-sports.io/football/teams/541.png" }, teamB: { name: "Man City", logo: "https://media.api-sports.io/football/teams/50.png" }, isLive: false },
+                        { league: "Premier League", time: "Bientôt", teamA: { name: "Arsenal", logo: "https://media.api-sports.io/football/teams/42.png" }, teamB: { name: "Chelsea", logo: "https://media.api-sports.io/football/teams/49.png" }, isLive: false }
+                    ];
                 }
-            ];
 
-            grid.innerHTML = mockMatches.map(match => {
-                // شارة الوقت (إذا كانت مباشر تتلون بالأحمر وتنبض)
-                const timeBadge = match.isLive 
-                    ? `<span class="bg-red-500/10 text-red-500 border border-red-500/30 text-[9px] px-2 py-0.5 rounded flex items-center gap-1 font-bold"><span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span> ${match.time}</span>`
-                    : `<span class="bg-[#0f1117] text-gray-300 text-[9px] px-2 py-0.5 rounded border border-[#212631] font-mono">${match.time}</span>`;
+                grid.innerHTML = matchesToRender.map(match => {
+                    const timeBadge = match.isLive 
+                        ? `<span class="bg-red-500/10 text-red-500 border border-red-500/30 text-[9px] px-2 py-0.5 rounded flex items-center gap-1 font-bold shadow-[0_0_8px_rgba(239,68,68,0.4)]"><span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span> ${match.time}</span>`
+                        : `<span class="bg-[#0f1117] text-gray-300 text-[9px] px-2 py-0.5 rounded border border-[#212631] font-mono shadow-inner">${match.time}</span>`;
 
-                return `
-                <div class="bg-gradient-to-b from-[#161922] to-[#12151d] border border-[#212631] hover:border-blue-500/50 rounded-2xl p-3 min-w-[260px] md:min-w-[280px] shrink-0 shadow-lg relative group overflow-hidden transition-all duration-300 cursor-pointer" onclick="openSportsbookForProvider('nexus')">
-                    
-                    <!-- تأثير لوني خفيف في الخلفية -->
-                    <div class="absolute top-0 right-0 w-20 h-20 bg-blue-500/5 rounded-bl-full z-0 pointer-events-none"></div>
-
-                    <!-- اسم الدوري والوقت -->
-                    <div class="flex justify-between items-center mb-3 relative z-10">
-                        <span class="text-[9px] font-black uppercase tracking-widest text-blue-400 flex items-center gap-1">
-                            <i class="fas fa-trophy"></i> ${match.league}
-                        </span>
-                        ${timeBadge}
+                    return `
+                    <div class="bg-gradient-to-b from-[#161922] to-[#12151d] border border-[#212631] hover:border-blue-500/50 rounded-2xl p-3 min-w-[260px] md:min-w-[280px] shrink-0 shadow-lg relative group overflow-hidden transition-all duration-300 cursor-pointer" onclick="openSportsbookForProvider('nexus')">
+                        <div class="absolute top-0 right-0 w-20 h-20 bg-blue-500/5 rounded-bl-full z-0 pointer-events-none"></div>
+                        <div class="flex justify-between items-center mb-3 relative z-10">
+                            <span class="text-[9px] font-black uppercase tracking-widest text-blue-400 flex items-center gap-1">
+                                <i class="fas fa-trophy"></i> ${match.league}
+                            </span>
+                            ${timeBadge}
+                        </div>
+                        <div class="flex justify-between items-center mb-4 relative z-10">
+                            <div class="flex flex-col items-center gap-1.5 w-20">
+                                <img src="${match.teamA.logo}" class="w-10 h-10 object-contain drop-shadow-md group-hover:scale-110 transition-transform">
+                                <span class="text-white font-bold text-[10px] text-center truncate w-full">${match.teamA.name}</span>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <span class="text-gray-500 font-black text-xs italic opacity-50">VS</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-1.5 w-20">
+                                <img src="${match.teamB.logo}" class="w-10 h-10 object-contain drop-shadow-md group-hover:scale-110 transition-transform">
+                                <span class="text-white font-bold text-[10px] text-center truncate w-full">${match.teamB.name}</span>
+                            </div>
+                        </div>
+                        <button class="w-full bg-[#1a1e29] group-hover:bg-blue-500 text-blue-400 group-hover:text-white border border-[#2e3648] group-hover:border-blue-500 font-bold text-[10px] uppercase py-2 rounded-xl transition-all shadow-md flex justify-center items-center gap-1">
+                            Parier Maintenant <i class="fas fa-bolt text-[9px]"></i>
+                        </button>
                     </div>
-
-                    <!-- الفرق والشعارات -->
-                    <div class="flex justify-between items-center mb-4 relative z-10">
-                        <!-- الفريق الأول -->
-                        <div class="flex flex-col items-center gap-1.5 w-20">
-                            <img src="${match.teamA.logo}" class="w-10 h-10 object-contain drop-shadow-md group-hover:scale-110 transition-transform">
-                            <span class="text-white font-bold text-[10px] text-center truncate w-full">${match.teamA.name}</span>
-                        </div>
-                        
-                        <!-- علامة VS -->
-                        <div class="flex flex-col items-center">
-                            <span class="text-gray-500 font-black text-xs italic opacity-50">VS</span>
-                        </div>
-                        
-                        <!-- الفريق الثاني -->
-                        <div class="flex flex-col items-center gap-1.5 w-20">
-                            <img src="${match.teamB.logo}" class="w-10 h-10 object-contain drop-shadow-md group-hover:scale-110 transition-transform">
-                            <span class="text-white font-bold text-[10px] text-center truncate w-full">${match.teamB.name}</span>
-                        </div>
-                    </div>
-
-                    <!-- زر المراهنة -->
-                    <button class="w-full bg-[#1a1e29] group-hover:bg-blue-500 text-blue-400 group-hover:text-white border border-[#2e3648] group-hover:border-blue-500 font-bold text-[10px] uppercase py-2 rounded-xl transition-all shadow-md flex justify-center items-center gap-1">
-                        Parier Maintenant <i class="fas fa-bolt text-[9px]"></i>
-                    </button>
-                </div>
-                `;
-            }).join('');
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error("Error fetching matches:", error);
+            }
         }
-
-        // تشغيل الدالة فور تحميل الصفحة
-        window.addEventListener('DOMContentLoaded', () => {
-            renderTopMatches();
-        });
-        
         // ================= رسم قسم آخر الألعاب =================
         function renderRecentGames() {
             const container = document.getElementById('recent-games-container');
