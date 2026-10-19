@@ -2101,9 +2101,45 @@
         }
 
 
-       // رسم البطاقات في الواجهة بتصميم (VIP Stadium Glow)
+       // ==========================================
+        // ⚽ دالة جلب وعرض المباريات المباشرة (كاملة مع التصميم المضيء)
+        // ==========================================
+        async function renderTopMatches() {
+            const grid = document.getElementById('topMatchesGrid');
+            if (!grid) return;
+
+            // مباريات احتياطية تظهر فقط في حال انقطاع الاتصال بالسيرفر
+            const fallbackMatches = [
+                {
+                    league: "CHAMPIONS LEAGUE",
+                    time: "Prochainement",
+                    teamA: { name: "Real Madrid", logo: "https://media.api-sports.io/football/teams/541.png" },
+                    teamB: { name: "Man City", logo: "https://media.api-sports.io/football/teams/50.png" },
+                    isLive: false
+                },
+                {
+                    league: "PREMIER LEAGUE",
+                    time: "Bientôt",
+                    teamA: { name: "Arsenal", logo: "https://media.api-sports.io/football/teams/42.png" },
+                    teamB: { name: "Chelsea", logo: "https://media.api-sports.io/football/teams/49.png" },
+                    isLive: false
+                }
+            ];
+
+            let matchesToRender = fallbackMatches;
+
+            try {
+                const res = await fetch('https://alpha-backend-server.onrender.com/api/top-matches');
+                const data = await res.json();
+                if (data && data.status === "success" && Array.isArray(data.matches) && data.matches.length > 0) {
+                    matchesToRender = data.matches;
+                }
+            } catch (err) {
+                console.warn("⚠️ تعذر جلب المباريات الحية، يتم عرض المباريات الافتراضية:", err);
+            }
+
+            // رسم البطاقات في الواجهة بتصميم (VIP Stadium Glow)
             grid.innerHTML = matchesToRender.map(match => {
-                // تخصيص الألوان والإضاءة حسب حالة المباراة (مباشر = أحمر ناري / قادم = أزرق نيون)
                 const cardBorder = match.isLive 
                     ? "border-red-500/40 hover:border-red-500 shadow-[0_4px_20px_-2px_rgba(239,68,68,0.2)]" 
                     : "border-blue-500/30 hover:border-blue-400 shadow-[0_4px_20px_-2px_rgba(59,130,246,0.15)]";
@@ -2127,7 +2163,7 @@
                 return `
                 <div class="bg-gradient-to-b from-[#1e2436] via-[#171b29] to-[#121520] border ${cardBorder} rounded-2xl p-3.5 min-w-[270px] md:min-w-[290px] shrink-0 relative group overflow-hidden transition-all duration-300 hover:-translate-y-1 cursor-pointer" onclick="openSportsbookForProvider('nexus')">
                     
-                    <!-- 💡 إضاءة الملعب العلوية (Ambient Stadium Spotlight) -->
+                    <!-- 💡 إضاءة الملعب العلوية -->
                     <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-48 h-24 bg-gradient-to-b ${ambientGlow} blur-xl pointer-events-none"></div>
                     
                     <!-- 🏆 رأس البطاقة: الدوري والوقت -->
@@ -2175,6 +2211,8 @@
                 </div>
                 `;
             }).join('');
+        }
+        
         // ================= رسم قسم آخر الألعاب =================
         function renderRecentGames() {
             const container = document.getElementById('recent-games-container');
