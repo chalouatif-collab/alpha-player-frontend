@@ -756,7 +756,7 @@
                     <div id="top-matches-container" class="flex flex-col gap-3 mb-6 w-full mt-4">
                         <div class="flex justify-between items-center px-1">
                             <h3 class="text-white font-extrabold text-xs md:text-sm uppercase flex items-center gap-2">
-                                <i class="fas fa-fire text-blue-500 animate-pulse"></i> Choc du Jour (Sport)
+                                <i class="fas fa-fire text-blue-500 animate-pulse"></i>   Sport du Jour
                             </h3>
                             <button onclick="openSportsbookForProvider('nexus')" class="text-[9px] md:text-[10px] font-bold text-gray-400 hover:text-white transition bg-[#161922] px-3 py-1 rounded-full border border-[#212631]">
                                 Tout voir <i class="fas fa-chevron-right ml-1"></i>
@@ -2105,11 +2105,10 @@
         // ⚽ دالة جلب وعرض المباريات المباشرة (كاملة مع التصميم المضيء)
         // ==========================================
         async function renderTopMatches() {
-            const grid = document.getElementById('topMatchesGrid');
+            const grid = document.getElementById('top-matches-grid') || document.getElementById('topMatchesGrid');
             if (!grid) return;
 
-            // مباريات احتياطية تظهر فقط في حال انقطاع الاتصال بالسيرفر
-            const fallbackMatches = [
+             const fallbackMatches = [
                 {
                     league: "CHAMPIONS LEAGUE",
                     time: "Prochainement",
@@ -2148,63 +2147,70 @@
                     ? "from-red-600/20 via-orange-500/5 to-transparent"
                     : "from-blue-600/20 via-indigo-500/5 to-transparent";
 
-                const timeBadge = match.isLive 
-                    ? `<span class="bg-gradient-to-r from-red-600 to-red-500 text-white text-[10px] px-2.5 py-0.5 rounded-full flex items-center gap-1.5 font-extrabold shadow-[0_0_12px_rgba(239,68,68,0.8)] tracking-wider uppercase">
-                         <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span> ${match.time}
-                       </span>`
+                // شارة الحالة (مباشر أو قادم) + التوقيت دائماً
+                const statusBadge = match.isLive 
+                    ? `<div class="flex items-center gap-1.5">
+                         <span class="text-[10px] text-gray-300 font-mono font-semibold bg-white/5 px-2 py-0.5 rounded border border-white/10">
+                            <i class="far fa-clock text-amber-400 mr-1"></i>${match.time}
+                         </span>
+                         <span class="bg-gradient-to-r from-red-600 to-red-500 text-white text-[9px] px-2 py-0.5 rounded-full flex items-center gap-1 font-extrabold shadow-[0_0_10px_rgba(239,68,68,0.8)] uppercase">
+                            <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span> LIVE
+                         </span>
+                       </div>`
                     : `<span class="bg-[#23293a] text-blue-300 text-[10px] px-2.5 py-0.5 rounded-full border border-blue-400/30 font-mono font-bold shadow-sm">
-                         <i class="far fa-clock mr-1 text-blue-400"></i>${match.time}
+                         <i class="far fa-calendar-alt mr-1 text-blue-400"></i>${match.time}
                        </span>`;
+
+                // وسط البطاقة: يعرض النتيجة الحية (مثلاً 1 - 0) إذا كانت مباشرة، أو VS إذا لم تبدأ بعد
+                const centerDisplay = match.isLive && match.score && match.score !== "VS"
+                    ? `<div class="px-2.5 py-1 rounded-lg bg-red-500/10 border border-red-500/30 text-white font-black text-xs tracking-widest shadow-inner">
+                         ${match.score}
+                       </div>`
+                    : `<div class="w-8 h-8 rounded-full bg-[#23293a] border border-white/15 flex items-center justify-center shadow-inner">
+                         <span class="text-[10px] font-black italic bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">VS</span>
+                       </div>`;
 
                 const btnStyle = match.isLive
                     ? "bg-gradient-to-r from-red-600 via-red-500 to-orange-500 hover:from-red-500 hover:to-orange-400 text-white shadow-[0_4px_15px_rgba(239,68,68,0.4)]"
                     : "bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-[0_4px_15px_rgba(59,130,246,0.4)]";
 
                 return `
-                <div class="bg-gradient-to-b from-[#1e2436] via-[#171b29] to-[#121520] border ${cardBorder} rounded-2xl p-3.5 min-w-[270px] md:min-w-[290px] shrink-0 relative group overflow-hidden transition-all duration-300 hover:-translate-y-1 cursor-pointer" onclick="openSportsbookForProvider('nexus')">
-                    
-                    <!-- 💡 إضاءة الملعب العلوية -->
+                <div class="bg-gradient-to-b from-[#1e2436] via-[#171b29] to-[#121520] border ${cardBorder} rounded-2xl p-3.5 min-w-[280px] md:min-w-[300px] shrink-0 relative group overflow-hidden transition-all duration-300 hover:-translate-y-1 cursor-pointer" onclick="openSportsbookForProvider('nexus')">
                     <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-48 h-24 bg-gradient-to-b ${ambientGlow} blur-xl pointer-events-none"></div>
                     
-                    <!-- 🏆 رأس البطاقة: الدوري والوقت -->
-                    <div class="flex justify-between items-center mb-4 relative z-10 border-b border-white/10 pb-2.5">
-                        <span class="text-[10px] font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5 truncate max-w-[150px] drop-shadow">
-                            <i class="fas fa-trophy text-amber-500"></i> ${match.league}
+                    <!-- 🏆 رأس البطاقة: الدوري + الموعد والتوقيت -->
+                    <div class="flex justify-between items-center mb-4 relative z-10 border-b border-white/10 pb-2.5 gap-1">
+                        <span class="text-[10px] font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5 truncate max-w-[115px] drop-shadow" title="${match.league}">
+                            <i class="fas fa-trophy text-amber-500 shrink-0"></i> <span class="truncate">${match.league}</span>
                         </span>
-                        ${timeBadge}
+                        ${statusBadge}
                     </div>
 
-                    <!-- ⚽ وسط البطاقة: الفرق والشعارات -->
+                    <!-- ⚽ وسط البطاقة: الفرق والنتيجة/VS -->
                     <div class="flex justify-between items-center mb-4 relative z-10 px-1">
-                        <!-- الفريق الأول -->
                         <div class="flex flex-col items-center gap-2 w-24">
-                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-b from-white/15 to-white/5 p-2 flex items-center justify-center border border-white/15 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] group-hover:scale-110 group-hover:border-white/30 transition-all duration-300">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-b from-white/15 to-white/5 p-2 flex items-center justify-center border border-white/15 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] group-hover:scale-110 transition-all duration-300">
                                 <img src="${match.teamA.logo}" 
                                      onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(match.teamA.name)}&background=2563eb&color=fff&bold=true';" 
                                      class="w-10 h-10 object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                             </div>
-                            <span class="text-white font-extrabold text-[11px] text-center truncate w-full drop-shadow-sm">${match.teamA.name}</span>
+                            <span class="text-white font-extrabold text-[11px] text-center truncate w-full">${match.teamA.name}</span>
                         </div>
 
-                        <!-- علامة VS المضيئة -->
                         <div class="flex flex-col items-center justify-center">
-                            <div class="w-8 h-8 rounded-full bg-[#23293a] border border-white/15 flex items-center justify-center shadow-inner">
-                                <span class="text-[10px] font-black italic bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">VS</span>
-                            </div>
+                            ${centerDisplay}
                         </div>
 
-                        <!-- الفريق الثاني -->
                         <div class="flex flex-col items-center gap-2 w-24">
-                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-b from-white/15 to-white/5 p-2 flex items-center justify-center border border-white/15 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] group-hover:scale-110 group-hover:border-white/30 transition-all duration-300">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-b from-white/15 to-white/5 p-2 flex items-center justify-center border border-white/15 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] group-hover:scale-110 transition-all duration-300">
                                 <img src="${match.teamB.logo}" 
                                      onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(match.teamB.name)}&background=2563eb&color=fff&bold=true';" 
                                      class="w-10 h-10 object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                             </div>
-                            <span class="text-white font-extrabold text-[11px] text-center truncate w-full drop-shadow-sm">${match.teamB.name}</span>
+                            <span class="text-white font-extrabold text-[11px] text-center truncate w-full">${match.teamB.name}</span>
                         </div>
                     </div>
 
-                    <!-- ⚡ زر الرهان الساطع -->
                     <button class="w-full ${btnStyle} font-extrabold text-[11px] uppercase py-2.5 rounded-xl transition-all duration-300 flex justify-center items-center gap-1.5 tracking-wide group-hover:brightness-110">
                         <span>Parier Maintenant</span> <i class="fas fa-bolt text-amber-300 animate-bounce"></i>
                     </button>
@@ -2212,7 +2218,7 @@
                 `;
             }).join('');
         }
-        
+
         // ================= رسم قسم آخر الألعاب =================
         function renderRecentGames() {
             const container = document.getElementById('recent-games-container');
