@@ -4840,20 +4840,29 @@
         function handleSwipe(direction, card, game) {
             if (card.cleanup) card.cleanup();
 
+            // تحريك البطاقة يميناً أو يساراً
             const endX = direction === 'right' ? window.innerWidth : -window.innerWidth;
             card.style.transform = `translate(${endX}px, 20px) rotate(${direction === 'right' ? 30 : -30}deg)`;
 
             setTimeout(() => {
                 if (direction === 'right') {
+                    // 1. استخراج بيانات اللعبة
                     const providerCode = window.currentActiveProviderCode || 'PRAGMATIC';
                     const gameCode = game.game_code || game.id;
-                    const gameImg = game.banner || game.image || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(game.game_name)}`;
-                    playCasinoGame(providerCode, gameCode, game.game_name, gameImg);
+                    const gameName = game.game_name || game.name || 'Jeu de Casino';
+                    const gameImg = game.banner || game.image || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName)}`;
+                    
+                    // 🌟 2. إغلاق واجهة تندر فوراً لكي يظهر الآيفرام
+                    closeSwipeMode();
+                    
+                    // 🚀 3. إطلاق اللعبة في الآيفرام المطور (دالتك الحالية ستتكفل بإخفاء الشريط السفلي وكل شيء)
+                    playCasinoGame(providerCode, gameCode, gameName, gameImg);
+                } else {
+                    // في حال السحب لليسار (NOPE)، نعرض البطاقة التالية فقط
+                    currentCardIndex++;
+                    renderSwipeCards();
                 }
-
-                currentCardIndex++;
-                renderSwipeCards();
-            }, 300);
+            }, 300); // الانتظار 300 ملي ثانية حتى تنتهي حركة البطاقة
         }
 
         function swipeAction(direction) {
