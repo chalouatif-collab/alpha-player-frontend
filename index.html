@@ -985,108 +985,100 @@
         <iframe id="sportsbook-iframe" class="w-full h-full border-0 block m-0 p-0" allowfullscreen></iframe>
     </div>
 <!-- ================= 🛡️ شريط الثقة وطرق الدفع (Trust & Payments) ================= -->
-    <div class="w-full bg-gradient-to-b from-[#0f1117] to-[#12151d] border-t border-[#212631] py-8 mt-10 relative overflow-hidden shadow-[0_-15px_30px_-15px_rgba(0,0,0,0.5)]">
+    <div class="w-full bg-gradient-to-b from-[#0f1117] to-[#12151d] border-t border-[#212631] py-6 mt-10 relative overflow-hidden shadow-[0_-15px_30px_-15px_rgba(0,0,0,0.5)]">
         
         <!-- تأثير توهج خلفي خفيف -->
         <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-3/4 h-1 bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent blur-sm"></div>
 
-        <div class="max-w-[1700px] mx-auto px-4 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
+        <div class="max-w-[1700px] mx-auto px-4 flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-10">
             
-            <!-- 1. طرق الدفع المتاحة -->
-            <div class="flex flex-col items-center lg:items-start gap-3 w-full lg:w-auto">
-                <span class="text-[9px] text-gray-500 font-black uppercase tracking-widest flex items-center gap-2">
+            <!-- 1. طرق الدفع المتاحة (بحجم صغير ومضغوط) -->
+            <div class="flex flex-col items-center lg:items-start gap-2.5 w-full lg:w-auto">
+                <span class="text-[8px] text-gray-500 font-black uppercase tracking-widest flex items-center gap-1.5">
                     <i class="fas fa-wallet text-gray-600"></i> Méthodes de Paiement Sécurisées
                 </span>
-                <div class="flex flex-wrap justify-center lg:justify-start gap-2 md:gap-3">
+                <div class="flex flex-wrap justify-center lg:justify-start gap-1.5 md:gap-2">
                     <!-- USDT -->
-                    <div class="bg-[#161922] border border-[#212631] px-3 md:px-4 py-2 rounded-xl flex items-center gap-2 hover:border-emerald/50 hover:shadow-[0_0_15px_rgba(16,185,129,0.15)] transition-all cursor-default group">
-                        <i class="fab fa-bitcoin text-emerald-400 text-lg group-hover:scale-110 transition-transform"></i>
-                        <span class="text-gray-300 font-bold text-[10px] md:text-xs font-mono">USDT (TRC20)</span>
+                    <div class="bg-[#161922] border border-[#212631] px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 hover:border-emerald-500/50 hover:shadow-[0_0_10px_rgba(16,185,129,0.15)] transition-all cursor-default group">
+                        <i class="fab fa-bitcoin text-emerald-400 text-sm group-hover:scale-110 transition-transform"></i>
+                        <span class="text-gray-300 font-bold text-[9px] font-mono">USDT (TRC20)</span>
                     </div>
                     <!-- Binance Pay -->
-                    <div class="bg-[#161922] border border-[#212631] px-3 md:px-4 py-2 rounded-xl flex items-center gap-2 hover:border-yellow-500/50 hover:shadow-[0_0_15px_rgba(234,179,8,0.15)] transition-all cursor-default group">
-                        <img src="https://cryptologos.cc/logos/bnb-bnb-logo.png" class="w-4 h-4 md:w-5 md:h-5 object-contain group-hover:scale-110 transition-transform">
-                        <span class="text-gray-300 font-bold text-[10px] md:text-xs">Binance Pay</span>
+                    <div class="bg-[#161922] border border-[#212631] px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 hover:border-yellow-500/50 hover:shadow-[0_0_10px_rgba(234,179,8,0.15)] transition-all cursor-default group">
+                        <img src="https://cryptologos.cc/logos/bnb-bnb-logo.png" class="w-3.5 h-3.5 object-contain group-hover:scale-110 transition-transform">
+                        <span class="text-gray-300 font-bold text-[9px]">Binance Pay</span>
                     </div>
                     <!-- RedotPay -->
-                    <div class="bg-[#161922] border border-[#212631] px-3 md:px-4 py-2 rounded-xl flex items-center gap-2 hover:border-red-500/50 hover:shadow-[0_0_15px_rgba(239,68,68,0.15)] transition-all cursor-default group">
-                        <i class="fas fa-credit-card text-red-500 text-lg group-hover:scale-110 transition-transform"></i>
-                        <span class="text-gray-300 font-bold text-[10px] md:text-xs">RedotPay</span>
+                    <div class="bg-[#161922] border border-[#212631] px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 hover:border-red-500/50 hover:shadow-[0_0_10px_rgba(239,68,68,0.15)] transition-all cursor-default group">
+                        <i class="fas fa-credit-card text-red-500 text-sm group-hover:scale-110 transition-transform"></i>
+                        <span class="text-gray-300 font-bold text-[9px]">RedotPay</span>
                     </div>
                     <!-- Local Mobile -->
-                    <div class="bg-[#161922] border border-[#212631] px-3 md:px-4 py-2 rounded-xl flex items-center gap-2 hover:border-orange-500/50 hover:shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all cursor-default group">
-                        <i class="fas fa-mobile-alt text-orange-500 text-lg group-hover:scale-110 transition-transform"></i>
-                        <span class="text-gray-300 font-bold text-[10px] md:text-xs">Local (D17 / Recharge)</span>
+                    <div class="bg-[#161922] border border-[#212631] px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 hover:border-orange-500/50 hover:shadow-[0_0_10px_rgba(249,115,22,0.15)] transition-all cursor-default group">
+                        <i class="fas fa-mobile-alt text-orange-500 text-sm group-hover:scale-110 transition-transform"></i>
+                        <span class="text-gray-300 font-bold text-[9px]">Local (D17 / Recharge)</span>
                     </div>
                 </div>
             </div>
 
             <!-- 2. مزودي الألعاب الرسميين -->
-            <div class="flex flex-col items-center gap-3 w-full lg:w-auto hidden md:flex border-l border-r border-[#212631] px-8">
-                <span class="text-[9px] text-gray-500 font-black uppercase tracking-widest flex items-center gap-2">
+            <div class="flex flex-col items-center gap-2.5 w-full lg:w-auto hidden md:flex border-l border-r border-[#212631] px-6">
+                <span class="text-[8px] text-gray-500 font-black uppercase tracking-widest flex items-center gap-1.5">
                     <i class="fas fa-handshake text-gray-600"></i> Partenaires Officiels
                 </span>
-                <div class="flex items-center justify-center gap-4 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-                    <span class="text-white font-black text-xs tracking-wider">PRAGMATIC<span class="text-emerald">PLAY</span></span>
-                    <span class="text-[#212631]">|</span>
-                    <span class="text-white font-black text-xs tracking-wider">HACKSAW</span>
-                    <span class="text-[#212631]">|</span>
-                    <span class="text-white font-black text-xs tracking-wider">SPRIBE</span>
+                <div class="flex items-center justify-center gap-3 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+                    <span class="text-white font-black text-[10px] tracking-wider">PRAGMATIC<span class="text-emerald-500">PLAY</span></span>
+                    <span class="text-[#212631] text-[10px]">|</span>
+                    <span class="text-white font-black text-[10px] tracking-wider">HACKSAW</span>
+                    <span class="text-[#212631] text-[10px]">|</span>
+                    <span class="text-white font-black text-[10px] tracking-wider">SPRIBE</span>
                 </div>
             </div>
 
-            <!-- 3. شارات الأمان والثقة (Trust Seals) -->
-            <div class="flex flex-col items-center lg:items-end gap-3 w-full lg:w-auto">
-                <span class="text-[9px] text-gray-500 font-black uppercase tracking-widest flex items-center gap-2">
+            <!-- 3. شارات الأمان والثقة (تم تصغيرها للتناسق مع الدفع) -->
+            <div class="flex flex-col items-center lg:items-end gap-2.5 w-full lg:w-auto">
+                <span class="text-[8px] text-gray-500 font-black uppercase tracking-widest flex items-center gap-1.5">
                     <i class="fas fa-shield-check text-gray-600"></i> Sécurité & Jeu Responsable
                 </span>
-                <div class="flex flex-wrap justify-center lg:justify-end gap-2 md:gap-3">
+                <div class="flex flex-wrap justify-center lg:justify-end gap-1.5 md:gap-2">
                     <!-- +18 -->
-                    <div class="w-9 h-9 md:w-10 md:h-10 rounded-full bg-[#161922] border border-[#212631] flex items-center justify-center text-red-500 font-black text-[11px] md:text-xs shadow-md">
+                    <div class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#161922] border border-[#212631] flex items-center justify-center text-red-500 font-black text-[9px] md:text-[10px] shadow-sm">
                         18+
                     </div>
                     <!-- Provably Fair -->
-                    <div class="h-9 md:h-10 px-3 md:px-4 rounded-xl bg-[#161922] border border-[#212631] flex items-center justify-center text-gray-400 font-bold text-[9px] md:text-[10px] shadow-md gap-1.5 md:gap-2 uppercase tracking-wider">
-                        <i class="fas fa-balance-scale text-purple-400 text-sm"></i> Provably Fair
+                    <div class="h-7 md:h-8 px-2.5 md:px-3 rounded-lg bg-[#161922] border border-[#212631] flex items-center justify-center text-gray-400 font-bold text-[8px] md:text-[9px] shadow-sm gap-1 md:gap-1.5 uppercase tracking-wider">
+                        <i class="fas fa-balance-scale text-purple-400 text-[10px]"></i> Provably Fair
                     </div>
                     <!-- SSL -->
-                    <div class="h-9 md:h-10 px-3 md:px-4 rounded-xl bg-[#161922] border border-[#212631] flex items-center justify-center text-gray-400 font-bold text-[9px] md:text-[10px] shadow-md gap-1.5 md:gap-2 uppercase tracking-wider">
-                        <i class="fas fa-lock text-emerald-400 text-sm"></i> SSL Secure
+                    <div class="h-7 md:h-8 px-2.5 md:px-3 rounded-lg bg-[#161922] border border-[#212631] flex items-center justify-center text-gray-400 font-bold text-[8px] md:text-[9px] shadow-sm gap-1 md:gap-1.5 uppercase tracking-wider">
+                        <i class="fas fa-lock text-emerald-400 text-[10px]"></i> SSL Secure
                     </div>
                 </div>
             </div>
 
         </div>
     </div>
-    <!-- 🌟 تذييل الصفحة (الذي تم حذفه بالخطأ) -->
-    <div
-        class="mt-8 pt-6 border-t border-[#212631] flex flex-col items-center justify-center text-center space-y-4 pb-24 w-full">
-        <div class="flex flex-wrap justify-center gap-3 md:gap-6 text-xs font-bold text-gray-400">
-            <button onclick="openPolicyModal('termes')"
-                class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Termes &
-                Conditions</button>
-            <span class="text-[#212631]">|</span>
-            <button onclick="openPolicyModal('confidentialite')"
-                class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Politique de
-                Confidentialité</button>
-            <span class="text-[#212631]">|</span>
-            <button onclick="openPolicyModal('responsable')"
-                class="hover:text-emerald transition uppercase tracking-wider text-[9px] md:text-xs">Jeu
-                Responsable</button>
+
+    <!-- 🌟 تذييل الصفحة (النص القانوني منسق ومضغوط) -->
+    <div class="pt-5 pb-16 border-t border-[#212631] w-full flex flex-col items-center justify-center text-center space-y-3 bg-[#0f1117]">
+        <div class="flex flex-wrap justify-center gap-3 md:gap-5 text-gray-400">
+            <button onclick="openPolicyModal('termes')" class="hover:text-emerald-500 transition uppercase tracking-wider text-[8px] md:text-[9px] font-bold">Termes & Conditions</button>
+            <span class="text-[#212631] text-[9px]">|</span>
+            <button onclick="openPolicyModal('confidentialite')" class="hover:text-emerald-500 transition uppercase tracking-wider text-[8px] md:text-[9px] font-bold">Politique de Confidentialité</button>
+            <span class="text-[#212631] text-[9px]">|</span>
+            <button onclick="openPolicyModal('responsable')" class="hover:text-emerald-500 transition uppercase tracking-wider text-[8px] md:text-[9px] font-bold">Jeu Responsable</button>
         </div>
-        <p class="text-[9px] text-gray-600 max-w-2xl mx-auto leading-relaxed px-4">
-            Alphabet216 est une plateforme de divertissement. En utilisant ce site, vous acceptez nos conditions
-            générales d'utilisation. Les jeux d'argent sont strictement interdits aux personnes de moins de 18 ans.
-            Jouez avec modération.
+        
+        <p class="text-[8px] text-gray-600 max-w-2xl mx-auto leading-relaxed px-4">
+            Alphabet216 est une plateforme de divertissement. En utilisant ce site, vous acceptez nos conditions générales d'utilisation. Les jeux d'argent sont strictement interdits aux personnes de moins de 18 ans. Jouez avec modération.
             <br>
-            <span class="text-gray-700 mt-1 block">* Note légale : Le gain et le retrait maximum autorisés par joueur
-                sont limités à 30 000 TND par mois.</span>
+            <span class="text-gray-700/80 mt-1 block italic">* Note légale : Le gain et le retrait maximum autorisés par joueur sont limités à 30 000 TND par mois.</span>
         </p>
-        <div class="text-gray-500 text-[10px] font-black mt-1 tracking-widest uppercase flex items-center gap-2">
-            <i class="fas fa-bolt text-emerald/50"></i> © 2026 Alphabet216. Tous droits réservés.
+        
+        <div class="text-gray-500 text-[9px] font-black mt-2 tracking-widest uppercase flex items-center gap-1.5">
+            <i class="fas fa-bolt text-emerald-500/50"></i> © 2026 Alphabet216. Tous droits réservés.
         </div>
     </div>
-
     <!-- ================= CAISSE (DÉPÔT & RETRAIT) MODAL ================= -->
     <div id="cashier-modal"
         class="fixed inset-0 z-[400] hidden bg-black/80 backdrop-blur-md items-center justify-center p-4">
