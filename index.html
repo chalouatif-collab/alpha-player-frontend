@@ -2152,57 +2152,56 @@
         }
 
         async function initVirtualsLobby() {
-            const grid = document.getElementById('virtuals-games-grid');
-            if (grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10 animate-pulse font-bold">Chargement Virtuels...</div>';
+    const grid = document.getElementById('virtuals-games-grid');
+    if (grid) grid.innerHTML = '<div class="col-span-full text-blue-500 text-center py-10 animate-pulse font-bold">Chargement Virtuels...</div>';
 
-            try {
-                const res = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games?t=${Date.now()}`);
-                const data = await res.json();
-                let games = data.games || data.data || data || [];
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games?t=${Date.now()}`);
+        const data = await res.json();
+        let games = data.games || data.data || [];
 
-                // 🌟 قائمة المزودين أو الألعاب المسموح لها بالظهور (بحروف صغيرة للمطابقة)
-                const allowedProviders = [
-                    'eurovirtuelle', 'eurovirtual', 'eurovirtuals',
-                    'aviator', 'aviatron', 'aviatrix', 'spribe', 'spride',
-                    'maya crash', 'beon', 'black lagoon', 'skay control', 'Only Play', 'onlyplay',
-                ];
+        const allowedProviders = [
+            'eurovirtuelle', 'eurovirtual', 'eurovirtuals',
+            'aviator', 'aviatron', 'aviatrix', 'spribe', 'spride',
+            'maya crash', 'beon', 'black lagoon', 'skay control', 'only play', 'onlyplay'
+        ];
 
-                // 🌟 تصفية الألعاب بناءً على القائمة
-                const filteredGames = games.filter(g => {
-                    const prov = String(g.provider || g.partner_name || g.game_name || '').toLowerCase();
-                    return allowedProviders.some(allowed => prov.includes(allowed));
-                });
+        // تصفية الألعاب، وإذا لم يتطابق شيء نعرض كل الألعاب المتاحة لكي لا تظهر الشاشة فارغة
+        let filteredGames = games.filter(g => {
+            const prov = String(g.provider || g.partner_name || g.game_name || g.name || '').toLowerCase();
+            return allowedProviders.some(allowed => prov.includes(allowed));
+        });
 
-                if (filteredGames.length > 0) {
-                    if (grid) grid.innerHTML = filteredGames.map(g => {
-                        const uuid = g.uuid || g.game_uuid || g.id || g.game_code;
-                        const safeName = escapeHTML(g.game_name || g.name || "Virtual Game");
-                        const img = g.banner || g.image || `https://placehold.co/400x400/180A2B/FFF?text=${encodeURIComponent(safeName.substring(0, 10))}`;
-                        const provider = escapeHTML(g.provider || g.partner_name || 'Virtuals');
-
-                        return `
-                        <div onclick="launchSpecificVirtualGame('${uuid}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-blue-500 transition-all shadow-lg group relative">
-                            <!-- شريط المزود أعلى الكرت -->
-                            <div class="absolute top-0 right-0 bg-black/80 text-blue-400 text-[8px] font-black px-2 py-1 rounded-bl-lg z-20 border-b border-l border-[#212631]">
-                                ${provider}
-                            </div>
-                            <div class="relative w-full aspect-square overflow-hidden bg-black/50">
-                                <img src="${img}" class="w-full h-full object-cover auto-zoom-img" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/FFF';">
-                                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
-                                    <span class="bg-blue-500 text-white text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
-                                </div>
-                            </div>
-                            <div class="p-2 text-[10px] text-white font-bold truncate text-center">${safeName}</div>
-                        </div>
-                    `}).join('');
-                } else {
-                    if (grid) grid.innerHTML = '<div class="col-span-full text-yellow-500 text-center py-10 font-bold">Aucun jeu autorisé trouvé.</div>';
-                }
-            } catch (e) {
-                if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de chargement</div>';
-            }
+        if (filteredGames.length === 0 && games.length > 0) {
+            filteredGames = games;
         }
 
+        if (filteredGames.length > 0) {
+            if (grid) grid.innerHTML = filteredGames.map(g => {
+                const uuid = g.uuid || g.game_uuid || g.game_code || g.id;
+                const safeName = escapeHTML(g.game_name || g.name || "Virtual Game");
+                const img = g.banner || g.image || g.img || `https://placehold.co/400x400/15243b/FFF?text=${encodeURIComponent(safeName.substring(0, 10))}`;
+                const provider = escapeHTML(g.provider || g.partner_name || 'Virtuals');
+
+                return `
+                <div onclick="launchEuroVirtuals('${uuid}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-blue-500 transition-all shadow-sm group relative">
+                    <div class="absolute top-0 right-0 bg-black/80 text-blue-400 text-[8px] font-black px-2 py-1 rounded-bl-lg z-20">${provider}</div>
+                    <div class="relative w-full aspect-square overflow-hidden bg-black/50">
+                        <img src="${img}" class="w-full h-full object-cover auto-zoom-img" onerror="this.onerror=null; this.src='https://placehold.co/400x400/15243b/FFF';">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
+                            <span class="bg-blue-500 text-white text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
+                        </div>
+                    </div>
+                    <div class="p-2 text-[10px] text-white font-bold truncate text-center">${safeName}</div>
+                </div>`;
+            }).join('');
+        } else {
+            if (grid) grid.innerHTML = '<div class="col-span-full text-yellow-500 text-center py-10 font-bold">Aucun jeu trouvé.</div>';
+        }
+    } catch (e) {
+        if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10 font-bold">Erreur de chargement</div>';
+    }
+}
         async function launchSpecificVirtualGame(uuid) {
             if (!playerSession) return openLoginModal();
             document.body.style.cursor = 'wait';
