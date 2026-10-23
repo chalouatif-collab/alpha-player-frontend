@@ -909,14 +909,57 @@
         </div>
 
         <!-- PANE: VIRTUALS -->
-        <div id="pane-virtuals" class="player-view-section hidden w-full">
-            <div class="flex items-center gap-2 mb-4">
-                <i class="fas fa-gamepad text-xl text-blue-400"></i>
-                <h2 class="text-white font-bold text-lg">Jeux Virtuels</h2>
+            <div id="pane-virtuals" class="player-view-section hidden w-full">
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fas fa-gamepad text-2xl text-blue-400"></i>
+                    <h2 class="text-white font-extrabold text-xl">Jeux Virtuels</h2>
+                </div>
+
+                <!-- محرك البحث وقائمة مزودي الألعاب الافتراضية المنسدلة -->
+                <div class="flex flex-col md:flex-row gap-3 mb-6 relative z-20">
+                    <!-- 1. البحث عن لعبة افتراضية -->
+                    <div class="relative flex-1">
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="virtual-game-search-input" onkeyup="filterVirtualGames()"
+                            placeholder="Rechercher un jeu virtuel..."
+                            class="w-full bg-[#161922] border border-[#212631] rounded-xl py-3 pl-11 pr-4 text-white text-sm outline-none focus:border-blue-400 transition-all shadow-md font-bold">
+                    </div>
+
+                    <!-- 2. زر وقائمة مزودي Virtuels -->
+                    <div class="relative">
+                        <button onclick="toggleVirtualProviderDropdown()"
+                            class="w-full md:w-auto bg-[#161922] border border-[#212631] hover:border-blue-400 px-6 py-3 rounded-xl text-sm font-bold text-gray-300 hover:text-white flex items-center justify-between gap-4 transition-all shadow-md">
+                            <span class="flex items-center gap-2">
+                                <i class="fas fa-filter text-blue-400"></i> 
+                                <span id="current-virtual-provider-label">Tous les fournisseurs</span>
+                            </span>
+                            <i class="fas fa-chevron-down text-xs text-gray-500"></i>
+                        </button>
+
+                        <!-- القائمة المنسدلة (Dropdown) -->
+                        <div id="virtual-provider-dropdown"
+                            class="absolute right-0 top-full mt-2 w-full md:w-72 bg-[#161922] border border-[#212631] rounded-xl shadow-2xl hidden flex-col overflow-hidden z-50">
+                            <!-- بحث المزودين -->
+                            <div class="p-3 border-b border-[#212631] bg-[#0f1117]">
+                                <div class="relative">
+                                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs"></i>
+                                    <input type="text" id="virtual-provider-search-input" onkeyup="filterVirtualProvidersList()"
+                                        placeholder="Chercher un fournisseur..."
+                                        class="w-full bg-[#1a1e29] border border-[#212631] rounded-lg py-2 pl-9 pr-3 text-white text-xs outline-none focus:border-blue-400">
+                                </div>
+                            </div>
+                            <!-- قائمة المزودين تُرسم هنا برمجياً -->
+                            <div id="virtual-provider-dropdown-list"
+                                class="max-h-[300px] overflow-y-auto hide-scroll p-2 flex flex-col gap-1 bg-[#161922]">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- شبكة الألعاب الافتراضية -->
+                <div id="virtuals-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-6 gap-3 pb-10"></div>
             </div>
-            <div id="virtuals-games-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pb-10">
-            </div>
-        </div>
+
         <!-- PANE: EUROVIRTUALS CASINO -->
         <div id="pane-euro-casino" class="player-view-section hidden w-full">
             <div class="flex items-center justify-between mb-3">
@@ -2153,6 +2196,10 @@
 
         window.allEuroVirtualsGames = [];
 
+        window.allEuroVirtualsGames = [];
+        window.euroVirtualsProviders = [];
+        window.activeVirtualProvider = 'ALL';
+
         async function initVirtualsLobby() {
             const grid = document.getElementById('virtuals-games-grid');
             if (!grid) return;
@@ -2169,34 +2216,18 @@
                 }
 
                 window.allEuroVirtualsGames = games;
+                window.activeVirtualProvider = 'ALL';
 
-                // استخراج أسماء المزودين الفريدة من الألعاب
+                // استخراج أسماء المزودين وترتيبها أبجدياً
                 const providersSet = new Set();
                 games.forEach(g => {
                     const pName = g.provider || g.partner_name || g.studio || "EuroVirtuals";
                     providersSet.add(pName);
                 });
-                const uniqueProviders = Array.from(providersSet);
+                window.euroVirtualsProviders = Array.from(providersSet).sort();
 
-                // إنشاء شريط أزرار المزودين في الأعلى + حاوية الألعاب في الأسفل
-                let buttonsHtml = `
-                <div class="col-span-full flex gap-2 overflow-x-auto hide-scroll py-2 mb-3 border-b border-[#212631]">
-                    <button onclick="filterVirtualsByProvider('ALL', this)" class="virtual-prov-btn bg-emerald text-black font-extrabold text-xs px-4 py-2 rounded-xl transition-all shadow shrink-0">
-                        Tous (${games.length})
-                    </button>
-                `;
-
-                uniqueProviders.forEach(pName => {
-                    const safePName = escapeHTML(pName);
-                    const jsSafeName = String(pName).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-                    buttonsHtml += `
-                    <button onclick="filterVirtualsByProvider('${jsSafeName}', this)" class="virtual-prov-btn bg-[#1a1e29] hover:bg-[#212631] text-gray-300 hover:text-white border border-[#2e3648] font-bold text-xs px-4 py-2 rounded-xl transition-all shrink-0">
-                        <i class="fas fa-gamepad text-blue-400 mr-1"></i> ${safePName}
-                    </button>`;
-                });
-
-                buttonsHtml += `</div><div id="virtuals-subgrid" class="col-span-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>`;
-                grid.innerHTML = buttonsHtml;
+                // رسم المزودين داخل القائمة المنسدلة
+                filterVirtualProvidersList();
 
                 // عرض جميع الألعاب افتراضياً
                 renderVirtualsCards(games);
@@ -2206,6 +2237,104 @@
             }
         }
 
+        // فتح وإغلاق القائمة المنسدلة للمزودين
+        function toggleVirtualProviderDropdown() {
+            const dropdown = document.getElementById('virtual-provider-dropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('hidden');
+                dropdown.classList.toggle('flex');
+            }
+        }
+
+        // رسم وفلترة أسماء المزودين داخل القائمة المنسدلة
+        function filterVirtualProvidersList() {
+            const input = document.getElementById('virtual-provider-search-input');
+            const list = document.getElementById('virtual-provider-dropdown-list');
+            if (!list) return;
+
+            const term = input ? input.value.toLowerCase() : "";
+            const filtered = window.euroVirtualsProviders.filter(p => p.toLowerCase().includes(term));
+
+            let html = `
+                <button onclick="selectVirtualProvider('ALL')" class="text-left px-4 py-3 text-xs font-bold text-blue-400 hover:bg-[#212631] rounded-xl transition-all border border-transparent hover:border-[#2e3648] flex justify-between items-center">
+                    <span>Tous les fournisseurs</span>
+                    <span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">${window.allEuroVirtualsGames.length}</span>
+                </button>
+            `;
+
+            html += filtered.map(pName => {
+                const count = window.allEuroVirtualsGames.filter(g => (g.provider || g.partner_name || g.studio || "EuroVirtuals") === pName).length;
+                const safePName = escapeHTML(pName);
+                const jsSafeName = String(pName).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                return `
+                <button onclick="selectVirtualProvider('${jsSafeName}')" class="text-left px-4 py-3 text-xs font-bold text-gray-300 hover:text-blue-400 hover:bg-[#212631] rounded-xl transition-all border border-transparent hover:border-[#2e3648] flex justify-between items-center">
+                    <span>${safePName}</span>
+                    <span class="text-[10px] bg-[#0f1117] text-gray-400 px-2 py-0.5 rounded-full border border-[#212631]">${count}</span>
+                </button>`;
+            }).join('');
+
+            list.innerHTML = html;
+        }
+
+        // اختيار مزود معين من القائمة المنسدلة
+        function selectVirtualProvider(providerName) {
+            window.activeVirtualProvider = providerName;
+            const label = document.getElementById('current-virtual-provider-label');
+            if (label) {
+                label.innerText = providerName === 'ALL' ? 'Tous les fournisseurs' : providerName;
+            }
+            toggleVirtualProviderDropdown();
+            filterVirtualGames();
+        }
+
+        // البحث وفلترة الألعاب حسب الاسم والمزود المختار
+        function filterVirtualGames() {
+            const searchInput = document.getElementById('virtual-game-search-input');
+            const term = searchInput ? searchInput.value.toLowerCase() : "";
+
+            const filtered = window.allEuroVirtualsGames.filter(g => {
+                const pName = g.provider || g.partner_name || g.studio || "EuroVirtuals";
+                const gName = String(g.game_name || g.name || "").toLowerCase();
+                const matchProvider = (window.activeVirtualProvider === 'ALL') || (pName === window.activeVirtualProvider);
+                const matchSearch = gName.includes(term);
+                return matchProvider && matchSearch;
+            });
+
+            renderVirtualsCards(filtered);
+        }
+
+        // رسم بطاقات الألعاب
+        function renderVirtualsCards(gamesList) {
+            const grid = document.getElementById('virtuals-games-grid');
+            if (!grid) return;
+
+            if (gamesList.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-10 font-bold">Aucun jeu trouvé.</div>';
+                return;
+            }
+
+            grid.innerHTML = gamesList.map(g => {
+                const uuid = g.uuid || g.game_uuid || g.id || g.game_code;
+                const safeName = escapeHTML(g.game_name || g.name || "Virtual Game");
+                const provName = escapeHTML(g.provider || g.partner_name || g.studio || "EuroVirtuals");
+                const img = g.banner || g.image || g.img || g.logo || g.thumbnail || `https://placehold.co/400x400/180A2B/FFF?text=${encodeURIComponent(safeName.substring(0, 12))}`;
+
+                return `
+                <div onclick="launchSpecificVirtualGame('${uuid}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-blue-500 transition-all shadow-lg group relative flex flex-col">
+                    <div class="relative w-full aspect-square overflow-hidden bg-black/50">
+                        <div class="absolute top-0 right-0 bg-black/80 text-blue-400 text-[8px] font-black px-2 py-0.5 rounded-bl-lg z-20 border-b border-l border-[#212631] uppercase">
+                            ${provName}
+                        </div>
+                        <img src="${img}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/FFF?text=${encodeURIComponent(safeName.substring(0, 12))}';">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
+                            <span class="bg-blue-500 text-white text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
+                        </div>
+                    </div>
+                    <div class="p-2 text-[10px] text-white font-bold truncate text-center">${safeName}</div>
+                </div>`;
+            }).join('');
+        }
+        
         function filterVirtualsByProvider(providerName, btnEl) {
             // تحديث ألوان الأزرار عند الضغط
             document.querySelectorAll('.virtual-prov-btn').forEach(btn => {
@@ -2251,7 +2380,7 @@
                 </div>`;
             }).join('');
         }
-        
+
         async function launchSpecificVirtualGame(uuid) {
             if (!playerSession) return openLoginModal();
             document.body.style.cursor = 'wait';
