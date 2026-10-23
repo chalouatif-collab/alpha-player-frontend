@@ -2152,56 +2152,57 @@
         }
 
         async function initVirtualsLobby() {
-    const grid = document.getElementById('virtuals-games-grid');
-    if (grid) grid.innerHTML = '<div class="col-span-full text-blue-500 text-center py-10 animate-pulse font-bold">Chargement Virtuels...</div>';
+            const grid = document.getElementById('virtuals-games-grid');
+            if (grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10 animate-pulse font-bold">Chargement Virtuels...</div>';
 
-    try {
-        const res = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games?t=${Date.now()}`);
-        const data = await res.json();
-        let games = data.games || data.data || [];
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games?t=${Date.now()}`);
+                const data = await res.json();
+                let games = data.games || data.data || data || [];
 
-        const allowedProviders = [
-            'eurovirtuelle', 'eurovirtual', 'eurovirtuals',
-            'aviator', 'aviatron', 'aviatrix', 'spribe', 'spride',
-            'maya crash', 'beon', 'black lagoon', 'skay control', 'only play', 'onlyplay'
-        ];
+                // 🌟 قائمة المزودين أو الألعاب المسموح لها بالظهور (بحروف صغيرة للمطابقة)
+                const allowedProviders = [
+                    'eurovirtuelle', 'eurovirtual', 'eurovirtuals',
+                    'aviator', 'aviatron', 'aviatrix', 'spribe', 'spride',
+                    'maya crash', 'beon', 'black lagoon', 'skay control', 'Only Play', 'onlyplay',
+                ];
 
-        // تصفية الألعاب، وإذا لم يتطابق شيء نعرض كل الألعاب المتاحة لكي لا تظهر الشاشة فارغة
-        let filteredGames = games.filter(g => {
-            const prov = String(g.provider || g.partner_name || g.game_name || g.name || '').toLowerCase();
-            return allowedProviders.some(allowed => prov.includes(allowed));
-        });
+                // 🌟 تصفية الألعاب بناءً على القائمة
+                const filteredGames = games.filter(g => {
+                    const prov = String(g.provider || g.partner_name || g.game_name || '').toLowerCase();
+                    return allowedProviders.some(allowed => prov.includes(allowed));
+                });
 
-        if (filteredGames.length === 0 && games.length > 0) {
-            filteredGames = games;
-        }
+                if (filteredGames.length > 0) {
+                    if (grid) grid.innerHTML = filteredGames.map(g => {
+                        const uuid = g.uuid || g.game_uuid || g.id || g.game_code;
+                        const safeName = escapeHTML(g.game_name || g.name || "Virtual Game");
+                        const img = g.banner || g.image || `https://placehold.co/400x400/180A2B/FFF?text=${encodeURIComponent(safeName.substring(0, 10))}`;
+                        const provider = escapeHTML(g.provider || g.partner_name || 'Virtuals');
 
-        if (filteredGames.length > 0) {
-            if (grid) grid.innerHTML = filteredGames.map(g => {
-                const uuid = g.uuid || g.game_uuid || g.game_code || g.id;
-                const safeName = escapeHTML(g.game_name || g.name || "Virtual Game");
-                const img = g.banner || g.image || g.img || `https://placehold.co/400x400/15243b/FFF?text=${encodeURIComponent(safeName.substring(0, 10))}`;
-                const provider = escapeHTML(g.provider || g.partner_name || 'Virtuals');
-
-                return `
-                <div onclick="launchEuroVirtuals('${uuid}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-blue-500 transition-all shadow-sm group relative">
-                    <div class="absolute top-0 right-0 bg-black/80 text-blue-400 text-[8px] font-black px-2 py-1 rounded-bl-lg z-20">${provider}</div>
-                    <div class="relative w-full aspect-square overflow-hidden bg-black/50">
-                        <img src="${img}" class="w-full h-full object-cover auto-zoom-img" onerror="this.onerror=null; this.src='https://placehold.co/400x400/15243b/FFF';">
-                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
-                            <span class="bg-blue-500 text-white text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
+                        return `
+                        <div onclick="launchSpecificVirtualGame('${uuid}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-blue-500 transition-all shadow-lg group relative">
+                            <!-- شريط المزود أعلى الكرت -->
+                            <div class="absolute top-0 right-0 bg-black/80 text-blue-400 text-[8px] font-black px-2 py-1 rounded-bl-lg z-20 border-b border-l border-[#212631]">
+                                ${provider}
+                            </div>
+                            <div class="relative w-full aspect-square overflow-hidden bg-black/50">
+                                <img src="${img}" class="w-full h-full object-cover auto-zoom-img" onerror="this.onerror=null; this.src='https://placehold.co/400x400/180A2B/FFF';">
+                                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
+                                    <span class="bg-blue-500 text-white text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
+                                </div>
+                            </div>
+                            <div class="p-2 text-[10px] text-white font-bold truncate text-center">${safeName}</div>
                         </div>
-                    </div>
-                    <div class="p-2 text-[10px] text-white font-bold truncate text-center">${safeName}</div>
-                </div>`;
-            }).join('');
-        } else {
-            if (grid) grid.innerHTML = '<div class="col-span-full text-yellow-500 text-center py-10 font-bold">Aucun jeu trouvé.</div>';
+                    `}).join('');
+                } else {
+                    if (grid) grid.innerHTML = '<div class="col-span-full text-yellow-500 text-center py-10 font-bold">Aucun jeu autorisé trouvé.</div>';
+                }
+            } catch (e) {
+                if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de chargement</div>';
+            }
         }
-    } catch (e) {
-        if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10 font-bold">Erreur de chargement</div>';
-    }
-}
+
         async function launchSpecificVirtualGame(uuid) {
             if (!playerSession) return openLoginModal();
             document.body.style.cursor = 'wait';
@@ -3205,91 +3206,77 @@
         let allEuroGamesData = [];
         let currentEuroProvider = 'Tous';
 
-        async function loadEuroVirtualsStudios(categoryFilter, targetGridId, providersBarId) {
-            const container = document.getElementById(targetGridId);
-            const providersBar = document.getElementById(providersBarId);
-
-            if (!container) return;
-
-            container.innerHTML = '<div class="col-span-full text-emerald text-center py-10 animate-pulse text-lg font-bold"><i class="fas fa-spinner fa-spin mr-2"></i>Chargement des jeux EuroVirtuals... 🎰</div>';
-            if (providersBar) providersBar.innerHTML = '';
+        async function loadEurovirtualsGamesOnly() {
+            switchSection('virtuals');
+            const grid = document.getElementById('virtuals-games-grid');
+            if (grid) grid.innerHTML = '<div class="col-span-full text-blue-400 text-center py-10 animate-pulse text-lg font-bold">Chargement des jeux EuroVirtuals... 🎮</div>';
 
             try {
-                const res = await fetch('https://alpha-backend-server.onrender.com/api/get-eurovirtuals-games?t=' + Date.now());
+                const res = await fetch(`${BACKEND_URL}/api/get-eurovirtuals-games?t=${Date.now()}`);
                 const data = await res.json();
+                let games = data.games || data.data || data || [];
 
-                allEuroGamesData = data.games || data.data || [];
-
-                if (allEuroGamesData.length > 0) {
-                    const providersSet = new Set();
-                    allEuroGamesData.forEach(g => {
-                        providersSet.add(g.provider || g.partner_name || 'EuroVirtuals');
-                    });
-                    const providers = ['Tous', ...Array.from(providersSet)];
-
-                    if (providersBar) {
-                        providersBar.innerHTML = `
-                            <div class="w-full flex flex-col md:flex-row gap-3 mb-4">
-                                <!-- محرك البحث الفوري -->
-                                <div class="relative flex-1">
-                                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                                    <input type="text" id="euro-search-input" onkeyup="filterEuroGamesLocally('${targetGridId}')"
-                                        placeholder="Rechercher un jeu EuroVirtuals..."
-                                        class="w-full bg-[#161922] border border-[#212631] rounded-xl py-3 pl-11 pr-4 text-white text-sm outline-none focus:border-emerald transition-all shadow-md font-bold">
-                                </div>
-                            </div>
-                            <!-- أزرار فلاتر المزودين مع ميزة السحب بالماوس -->
-                            <div class="flex overflow-x-auto hide-scroll gap-2 pb-2 w-full cursor-grab active:cursor-grabbing select-none" id="euro-chips-container">
-                                ${providers.map((p, idx) => `
-                                    <button onclick="filterEuroByProvider('${p}', '${targetGridId}')" 
-                                        class="euro-provider-chip px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border shrink-0 ${idx === 0 ? 'bg-emerald text-black border-emerald shadow' : 'bg-[#161922] text-gray-300 border-[#212631] hover:border-emerald'}">
-                                        ${p}
-                                    </button>
-                                `).join('')}
-                            </div>
-                        `;
-
-                        // 🌟 تفعيل خاصية السحب والإفلات بالماوس (Drag to Scroll) للشريط الأفقي على الحاسوب
-                        const slider = document.getElementById('euro-chips-container');
-                        let isDown = false;
-                        let startX, scrollLeft;
-
-                        slider.addEventListener('mousedown', (e) => {
-                            isDown = true;
-                            slider.classList.add('cursor-grabbing');
-                            startX = e.pageX - slider.offsetLeft;
-                            scrollLeft = slider.scrollLeft;
-                        });
-
-                        slider.addEventListener('mouseleave', () => {
-                            isDown = false;
-                            slider.classList.remove('cursor-grabbing');
-                        });
-
-                        slider.addEventListener('mouseup', () => {
-                            isDown = false;
-                            slider.classList.remove('cursor-grabbing');
-                        });
-
-                        slider.addEventListener('mousemove', (e) => {
-                            if (!isDown) return;
-                            e.preventDefault();
-                            const x = e.pageX - slider.offsetLeft;
-                            const walk = (x - startX) * 2; // سرعة وسلاسة التحريك
-                            slider.scrollLeft = scrollLeft - walk;
-                        });
-                    }
-
-                    renderEuroGridFiltered(allEuroGamesData, targetGridId);
-
-                } else {
-                    container.innerHTML = '<div class="col-span-full text-yellow-500 text-center py-10 font-bold">Aucun jeu trouvé.</div>';
+                if (games.length === 0) {
+                     if (grid) grid.innerHTML = '<div class="col-span-full text-yellow-500 text-center py-10 font-bold">Aucun jeu trouvé.</div>';
+                     return;
                 }
+
+                // حفظ الألعاب لفلترتها لاحقاً
+                window.currentProviderGames = games.map(g => ({...g, provider: 'EUROVIRTUALS'}));
+                currentActiveProviderCode = "EUROVIRTUALS";
+
+                // استخراج أسماء المزودين بدون تكرار
+                const providersSet = new Set();
+                games.forEach(g => {
+                    if (g.partner_name) providersSet.add(g.partner_name);
+                    else if (g.provider) providersSet.add(g.provider);
+                });
+                const uniqueProviders = Array.from(providersSet);
+
+                // رسم أزرار المزودين + زر "الكل" (Tous)
+                const btnHtml = `<div class="col-span-full flex gap-2 overflow-x-auto hide-scroll pb-2 mb-4 w-full">` + 
+                    uniqueProviders.map(pName => {
+                        return `<button onclick="filterEuroVirtualsByProvider('${pName}')" class="bg-[#0f1117] border border-[#212631] text-xs font-bold text-gray-300 hover:text-blue-400 hover:border-blue-400 px-4 py-2 rounded-xl transition-all shadow shrink-0">${pName}</button>`;
+                    }).join('') + 
+                    `<button onclick="renderEuroVirtualsGrid(window.currentProviderGames)" class="bg-blue-500/10 border border-blue-500/30 text-xs font-bold text-blue-400 hover:bg-blue-500 hover:text-white px-4 py-2 rounded-xl transition-all shadow shrink-0">Tous</button>` +
+                    `</div>`;
+
+                grid.innerHTML = btnHtml;
+                
+                // إنشاء حاوية جديدة تحت الأزرار لوضع الألعاب فيها
+                const gamesContainer = document.createElement('div');
+                gamesContainer.id = "euro-games-subgrid";
+                gamesContainer.className = "col-span-full games-grid";
+                grid.appendChild(gamesContainer);
+
+                // رسم الألعاب لأول مرة
+                renderEuroVirtualsGrid(games);
+
             } catch (e) {
-                console.error("Fetch Error:", e);
-                container.innerHTML = '<div class="col-span-full text-red-500 text-center py-10 font-bold">Erreur de chargement des jeux.</div>';
+                if (grid) grid.innerHTML = '<div class="col-span-full text-red-500 text-center py-10">Erreur de chargement</div>';
             }
         }
+
+
+        function filterEuroVirtualsByProvider(providerName) {
+            // تصفية الألعاب بناءً على اسم المزود
+            const filtered = window.currentProviderGames.filter(g => 
+                (g.partner_name === providerName) || (g.provider === providerName)
+            );
+            // إرسال الألعاب المصفاة للرسم
+            renderEuroVirtualsGrid(filtered);
+        }
+
+        function renderEuroVirtualsGrid(gamesArray) {
+            // البحث عن الحاوية التي أنشأناها تحت الأزرار
+            const grid = document.getElementById('euro-games-subgrid') || document.getElementById('virtuals-games-grid');
+            if(!grid) return;
+
+            // استخدام الدالة المركزية لرسم البطاقات
+            grid.innerHTML = gamesArray.map(g => generateCardHTML(g, 'EUROVIRTUALS', g.partner_name || g.provider || 'EuroVirtuals', false, true)).join('');
+        }
+
+        
         // دالة تصفية الألعاب حسب المزود عند النقر على الزر
         function filterEuroByProvider(providerName, targetGridId) {
             currentEuroProvider = providerName;
