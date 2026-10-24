@@ -283,27 +283,31 @@
         }
         .magic-ball {
             position: absolute;
-            color: rgba(16, 185, 129, 0.10); /* لون أخضر زمردي شفاف جداً (3%) */
+            /* نسبة الشفافية: 0.12 تعني 12% لتبدو الكرة واضحة وواقعية دون إزعاج */
+            opacity: 0.12; 
             animation: roll-ball linear infinite;
+            /* منع اللاعب من سحب الصورة بالخطأ */
+            user-select: none;
+            -webkit-user-drag: none;
         }
-        /* أحجام وسرعات وأماكن مختلفة لكل كرة */
-        .b-1 { top: 15%; font-size: 150px; animation-duration: 45s; animation-delay: 0s; }
-        .b-2 { top: 55%; font-size: 300px; animation-duration: 65s; animation-delay: -20s; }
-        .b-3 { top: 75%; font-size: 200px; animation-duration: 55s; animation-delay: -10s; }
-        .b-4 { top: 30%; font-size: 100px; animation-duration: 35s; animation-delay: -35s; }
+        
+        /* أحجام وسرعات وأماكن مختلفة لكل صورة */
+        .b-1 { top: 15%; width: 150px; animation-duration: 45s; animation-delay: 0s; }
+        .b-2 { top: 55%; width: 300px; animation-duration: 65s; animation-delay: -20s; }
+        .b-3 { top: 75%; width: 200px; animation-duration: 55s; animation-delay: -10s; }
+        .b-4 { top: 30%; width: 100px; animation-duration: 35s; animation-delay: -35s; }
     </style>
 </head>
 
 <body class="antialiased text-sm flex flex-col min-h-screen">
 
-    <!-- ⚽ حاوية كرات القدم السحرية في الخلفية -->
+    <!-- ⚽ حاوية كرات القدم الحقيقية في الخلفية -->
     <div class="magic-bg-balls">
-        <i class="fas fa-futbol magic-ball b-1"></i>
-        <i class="fas fa-futbol magic-ball b-2"></i>
-        <i class="fas fa-futbol magic-ball b-3"></i>
-        <i class="fas fa-futbol magic-ball b-4"></i>
+        <img src="https://em-content.zobj.net/source/apple/391/soccer-ball_26bd.png" class="magic-ball b-1" alt="Ball">
+        <img src="https://em-content.zobj.net/source/apple/391/soccer-ball_26bd.png" class="magic-ball b-2" alt="Ball">
+        <img src="https://em-content.zobj.net/source/apple/391/soccer-ball_26bd.png" class="magic-ball b-3" alt="Ball">
+        <img src="https://em-content.zobj.net/source/apple/391/soccer-ball_26bd.png" class="magic-ball b-4" alt="Ball">
     </div>
-    <div>
         <!-- 🚀 شاشة التحميل الابتدائية (Splash Screen) -->
         <div id="splash-screen"
             class="fixed inset-0 z-[9999] bg-[#0f1117] flex flex-col items-center justify-center transition-opacity duration-700 ease-out">
