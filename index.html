@@ -3775,29 +3775,30 @@
         function toggleFavorite(event, code, title, img, providerName, providerCode) {
             event.stopPropagation(); // منع تشغيل اللعبة عند الضغط على القلب
             
-            // البحث عن اللعبة في المفضلة باستخدام الكود
-            const index = favoriteGames.findIndex(g => g.code === code);
+            // التقاط زر القلب الذي تم الضغط عليه لتلوينه فوراً
+            const btn = event.currentTarget;
+            
+            const index = favoriteGames.findIndex(g => String(g.code) === String(code));
             
             if (index > -1) {
                 // إزالتها إذا كانت موجودة
                 favoriteGames.splice(index, 1);
                 showNotification("Retiré des favoris", "success");
+                if (btn) btn.classList.remove('active'); // إزالة اللون الأحمر فوراً
             } else {
                 // إضافتها إذا لم تكن موجودة
                 favoriteGames.push({ code, title, img, providerName, providerCode });
                 showNotification("Ajouté aux favoris", "success");
+                if (btn) btn.classList.add('active'); // إضاءة القلب باللون الأحمر فوراً
             }
             
             // حفظ التحديثات في المتصفح
             localStorage.setItem('alpha_favorite_games', JSON.stringify(favoriteGames));
             
-            // تحديث الواجهة اللحظي ليعكس تغير لون القلب
-            if (document.getElementById('pane-favoris') && document.getElementById('pane-favoris').classList.contains('block')) {
-                renderFavorites(); // إعادة رسم صفحة المفضلة
-            } else if (document.getElementById('pane-casino') && document.getElementById('pane-casino').classList.contains('block')) {
-                renderCasinoGrid(); // إعادة رسم الكازينو
-            } else if (document.getElementById('pane-virtuals') && document.getElementById('pane-virtuals').classList.contains('block')) {
-                filterVirtualGames(); // إعادة رسم الألعاب الافتراضية
+            // إذا كان اللاعب داخل قسم المفضلة، أعد رسمها ليختفي الكارت المحذوف
+            const favPane = document.getElementById('pane-favoris');
+            if (favPane && favPane.classList.contains('block')) {
+                renderFavorites(); 
             }
         }
 
@@ -3805,12 +3806,15 @@
             const grid = document.getElementById('dedicated-favorite-games-grid');
             if (!grid) return;
 
+            // تحديث القائمة من المتصفح لضمان ظهور الألعاب الجديدة دائماً
+            favoriteGames = JSON.parse(localStorage.getItem('alpha_favorite_games')) || [];
+
             if (favoriteGames.length === 0) {
                 grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-10 font-bold">Aucun favori ajouté. Cliquez sur le cœur ❤️ d\'un jeu pour l\'ajouter ici.</div>';
                 return;
             }
 
-            // رسم الألعاب المفضلة باستخدام كود البطاقات الموحد
+            // رسم الألعاب المفضلة
             grid.innerHTML = favoriteGames.map(g => {
                 const isLive = g.providerCode === 'PP_LIVE_PRO';
                 const isEuro = String(g.providerName).toLowerCase().includes('eurovirtual');
@@ -3818,7 +3822,7 @@
             }).join('');
         }
 
-        
+
         // ================= نظام شريط تقدم مستوى اللاعب (VIP System) =================
         function initVipSystem() {
             let vipData = JSON.parse(localStorage.getItem('alpha_vip_data') || '{"level": 1, "xp": 350, "nextXp": 1000, "rank": "Bronze"}');
