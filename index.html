@@ -519,7 +519,7 @@
                 <a href="javascript:void(0)" onclick="switchSection('casino'); initCasinoLobby();"
                     class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
                         class="fas fa-slot-machine text-emerald text-lg"></i> Casino & Slots</a>
-                <a href="javascript:void(0)" onclick="renderFavorites();"
+                <a href="javascript:void(0)" onclick="Favorites();"
                     class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
                         class="fas fa-heart text-red-500 text-lg"></i> Mes Favoris</a>
                 <a href="javascript:void(0)" onclick="switchSection('live-casino'); openLiveCasino();"
@@ -4482,7 +4482,7 @@
         <!-- روابط القائمة -->
         <div class="p-3 space-y-1">
             <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2 ml-2 mt-2">Mon Compte</div>
-            <a href="javascript:void(0)" onclick="toggleProfileSidebar(); renderFavorites();"
+            <a href="javascript:void(0)" onclick="toggleProfileSidebar(); Favorites();"
                 class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
                 <i class="fas fa-heart text-gray-500 group-hover:text-red-500 w-5 text-center transition"></i>
                 <span class="text-sm font-semibold">Mes Favoris</span>
@@ -5324,7 +5324,7 @@
         }
 
         function renderFavorites() {
-            switchSection('favoris');
+            
             const grid = document.getElementById('dedicated-favorite-games-grid');
             if (!grid) return;
 
