@@ -3769,56 +3769,56 @@
             return favs.some(f => f.gameCode === gameCode);
         }
 
-        function toggleFavorite(event, providerCode, gameCode, title, img) {
-            event.stopPropagation(); // منع فتح اللعبة عند الضغط على القلب
-            let favs = JSON.parse(localStorage.getItem('alpha_favorites') || '[]');
-            const index = favs.findIndex(f => f.gameCode === gameCode);
+        // ================= نظام المفضلة (Favoris) =================
+        let favoriteGames = JSON.parse(localStorage.getItem('alpha_favorite_games')) || [];
 
-            const heartIcon = event.currentTarget.querySelector('i');
-
+        function toggleFavorite(event, code, title, img, providerName, providerCode) {
+            event.stopPropagation(); // منع تشغيل اللعبة عند الضغط على القلب
+            
+            // البحث عن اللعبة في المفضلة باستخدام الكود
+            const index = favoriteGames.findIndex(g => g.code === code);
+            
             if (index > -1) {
-                // حذف من المفضلة
-                favs.splice(index, 1);
-                heartIcon.classList.remove('fas', 'text-red-500');
-                heartIcon.classList.add('far', 'text-white');
-                showNotification("Retiré des favoris", "info");
+                // إزالتها إذا كانت موجودة
+                favoriteGames.splice(index, 1);
+                showNotification("Retiré des favoris", "success");
             } else {
-                // إضافة للمفضلة
-                favs.push({ providerCode, gameCode, title, img });
-                heartIcon.classList.remove('far', 'text-white');
-                heartIcon.classList.add('fas', 'text-red-500');
-                showNotification("Ajouté aux favoris ❤️", "success");
+                // إضافتها إذا لم تكن موجودة
+                favoriteGames.push({ code, title, img, providerName, providerCode });
+                showNotification("Ajouté aux favoris", "success");
             }
-            localStorage.setItem('alpha_favorites', JSON.stringify(favs));
+            
+            // حفظ التحديثات في المتصفح
+            localStorage.setItem('alpha_favorite_games', JSON.stringify(favoriteGames));
+            
+            // تحديث الواجهة اللحظي ليعكس تغير لون القلب
+            if (document.getElementById('pane-favoris') && document.getElementById('pane-favoris').classList.contains('block')) {
+                renderFavorites(); // إعادة رسم صفحة المفضلة
+            } else if (document.getElementById('pane-casino') && document.getElementById('pane-casino').classList.contains('block')) {
+                renderCasinoGrid(); // إعادة رسم الكازينو
+            } else if (document.getElementById('pane-virtuals') && document.getElementById('pane-virtuals').classList.contains('block')) {
+                filterVirtualGames(); // إعادة رسم الألعاب الافتراضية
+            }
         }
 
-        function loadFavorites() {
-            switchSection('favoris');
-            const grid = document.getElementById('favoris-games-grid');
-            let favs = JSON.parse(localStorage.getItem('alpha_favorites') || '[]');
+        function renderFavorites() {
+            const grid = document.getElementById('dedicated-favorite-games-grid');
+            if (!grid) return;
 
-            if (favs.length === 0) {
-                grid.innerHTML = '<div class="col-span-full text-gray-500 text-center py-16"><i class="far fa-heart text-4xl mb-3 block"></i>Aucun jeu favori pour le moment.</div>';
+            if (favoriteGames.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-10 font-bold">Aucun favori ajouté. Cliquez sur le cœur ❤️ d\'un jeu pour l\'ajouter ici.</div>';
                 return;
             }
 
-            grid.innerHTML = favs.map(g => `
-                <div onclick="playCasinoGame('${g.providerCode}', '${g.gameCode}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg relative">
-                    <button onclick="toggleFavorite(event, '${g.providerCode}', '${g.gameCode}', '${g.title}', '${g.img}'); renderFavorites();" 
-                        class="absolute top-2 left-2 z-30 bg-black/60 rounded-full w-7 h-7 flex items-center justify-center hover:bg-black/90 border border-[#212631] transition-all">
-                        <i class="fas fa-heart text-red-500 text-sm"></i>
-                    </button>
-                    <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
-                        <img src="${g.img}" alt="${g.title}" loading="lazy" class="w-full h-full object-cover auto-zoom-img">
-                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
-                            <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
-                        </div>
-                    </div>
-                    <div class="p-2 text-[10px] text-white font-bold truncate text-center">${g.title}</div>
-                </div>
-            `).join('');
+            // رسم الألعاب المفضلة باستخدام كود البطاقات الموحد
+            grid.innerHTML = favoriteGames.map(g => {
+                const isLive = g.providerCode === 'PP_LIVE_PRO';
+                const isEuro = String(g.providerName).toLowerCase().includes('eurovirtual');
+                return generateCardHTML(g, g.providerCode, g.providerName, isLive, isEuro);
+            }).join('');
         }
 
+        
         // ================= نظام شريط تقدم مستوى اللاعب (VIP System) =================
         function initVipSystem() {
             let vipData = JSON.parse(localStorage.getItem('alpha_vip_data') || '{"level": 1, "xp": 350, "nextXp": 1000, "rank": "Bronze"}');
@@ -5287,82 +5287,7 @@
             }
         }  
         
-        // ================= نظام المفضلة القوي (Favoris) =================
-        let favoriteGames = JSON.parse(localStorage.getItem('alpha_favorite_games')) || [];
-
-        function toggleFavorite(event, gameStr) {
-            event.stopPropagation();
-            let gameData;
-            try {
-                // فك التشفير واسترجاع بيانات اللعبة بأمان
-                gameData = JSON.parse(decodeURIComponent(gameStr));
-            } catch(e) {
-                console.error("Erreur de favoris", e);
-                return;
-            }
-            
-            const code = gameData.game_code || gameData.id || gameData.uuid;
-            const index = favoriteGames.findIndex(g => (g.game_code || g.id || g.uuid) === code);
-            
-            if (index > -1) {
-                favoriteGames.splice(index, 1);
-                showNotification("Retiré des favoris", "success");
-            } else {
-                favoriteGames.push(gameData);
-                showNotification("Ajouté aux favoris", "success");
-            }
-            
-            localStorage.setItem('alpha_favorite_games', JSON.stringify(favoriteGames));
-            
-            // تحديث العرض اللحظي إذا كان اللاعب داخل صفحة المفضلة
-            if(document.getElementById('pane-favoris') && document.getElementById('pane-favoris').classList.contains('block')) {
-                renderFavorites();
-            } else {
-                // إعادة رسم الكازينو لتحديث أيقونة القلب فوراً
-                if(document.getElementById('pane-casino').classList.contains('block')) renderCasinoGrid();
-            }
-        }
-
-        function renderFavorites() {
-            
-            const grid = document.getElementById('dedicated-favorite-games-grid');
-            if (!grid) return;
-
-            if (favoriteGames.length === 0) {
-                grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-10 font-bold">Aucun favori ajouté. Cliquez sur le cœur ❤️ d\'un jeu pour l\'ajouter ici.</div>';
-                return;
-            }
-
-            grid.innerHTML = favoriteGames.map(game => {
-                const gameName = escapeHTML(String(game.game_name || game.name || "Game"));
-                const imageUrl = game.banner || game.image || game.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
-                const gameCode = game.game_code || game.id || game.uuid;
-                const pCode = game.provider || game.providerCode || 'PRAGMATIC';
-                const isEuro = pCode === 'EUROVIRTUALS' || (game.partner_name && game.partner_name !== "");
-
-                const safeGameStr = encodeURIComponent(JSON.stringify(game));
-
-                let clickAction = `playCasinoGame('${pCode}', '${gameCode}')`;
-                if(isEuro) {
-                    clickAction = `launchSpecificVirtualGame('${gameCode}')`;
-                }
-
-                return `
-                <div class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-red-500 transition-all flex flex-col group shadow-lg relative" onclick="${clickAction}">
-                    <button onclick="toggleFavorite(event, '${safeGameStr}')" class="absolute top-2 left-2 z-20 bg-black/60 rounded-full w-8 h-8 flex items-center justify-center border border-white/10 hover:bg-black/90 transition-all">
-                        <i class="fas fa-heart text-red-500 text-sm"></i>
-                    </button>
-                    
-                    <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
-                        <img src="${imageUrl}" alt="${gameName}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}';">
-                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
-                            <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
-                        </div>
-                    </div>
-                    <div class="p-2 text-[10px] text-white font-bold truncate text-center">${gameName}</div>
-                </div>`;
-            }).join('');
-        }
+       
         
         </script>
 
