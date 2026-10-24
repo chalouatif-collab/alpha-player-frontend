@@ -519,7 +519,7 @@
                 <a href="javascript:void(0)" onclick="switchSection('casino'); initCasinoLobby();"
                     class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
                         class="fas fa-slot-machine text-emerald text-lg"></i> Casino & Slots</a>
-                <a href="javascript:void(0)" onclick="loadFavorites();"
+                <a href="javascript:void(0)" onclick="renderFavorites();"
                     class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1c212d] text-gray-300 transition"><i
                         class="fas fa-heart text-red-500 text-lg"></i> Mes Favoris</a>
                 <a href="javascript:void(0)" onclick="switchSection('live-casino'); openLiveCasino();"
@@ -1637,7 +1637,7 @@
             else if (sectionId === 'euro-casino' && typeof loadEuroVirtualsStudios === 'function') loadEuroVirtualsStudios('casino', 'euro-casino-grid', 'euro-casino-providers');
             else if (sectionId === 'euro-live' && typeof loadEuroVirtualsStudios === 'function') loadEuroVirtualsStudios('live', 'euro-live-grid', 'euro-live-providers');
             else if (sectionId === 'leaderboard' && typeof initLeaderboard === 'function') initLeaderboard();
-            else if (sectionId === 'favoris' && typeof loadFavorites === 'function') loadFavorites();
+            else if (sectionId === 'favoris' && typeof renderFavorites === 'function') renderFavorites();
         }
 
         async function handlePlayerAuth() {
@@ -3804,7 +3804,7 @@
 
             grid.innerHTML = favs.map(g => `
                 <div onclick="playCasinoGame('${g.providerCode}', '${g.gameCode}')" class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-emerald transition-all flex flex-col group shadow-lg relative">
-                    <button onclick="toggleFavorite(event, '${g.providerCode}', '${g.gameCode}', '${g.title}', '${g.img}'); loadFavorites();" 
+                    <button onclick="toggleFavorite(event, '${g.providerCode}', '${g.gameCode}', '${g.title}', '${g.img}'); renderFavorites();" 
                         class="absolute top-2 left-2 z-30 bg-black/60 rounded-full w-7 h-7 flex items-center justify-center hover:bg-black/90 border border-[#212631] transition-all">
                         <i class="fas fa-heart text-red-500 text-sm"></i>
                     </button>
@@ -4482,7 +4482,7 @@
         <!-- روابط القائمة -->
         <div class="p-3 space-y-1">
             <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-2 ml-2 mt-2">Mon Compte</div>
-            <a href="javascript:void(0)" onclick="toggleProfileSidebar(); loadFavorites();"
+            <a href="javascript:void(0)" onclick="toggleProfileSidebar(); renderFavorites();"
                 class="flex items-center gap-3 text-gray-300 hover:text-white hover:bg-[#1a1d24] p-3 rounded-lg transition group cursor-pointer">
                 <i class="fas fa-heart text-gray-500 group-hover:text-red-500 w-5 text-center transition"></i>
                 <span class="text-sm font-semibold">Mes Favoris</span>
@@ -5285,7 +5285,86 @@
                 showNotification("Erreur de connexion", "error");
                 closeSpecificScreen(activeSplitScreen);
             }
-        }    </script>
+        }  
+        
+        // ================= نظام المفضلة القوي (Favoris) =================
+        let favoriteGames = JSON.parse(localStorage.getItem('alpha_favorite_games')) || [];
+
+        function toggleFavorite(event, gameStr) {
+            event.stopPropagation();
+            let gameData;
+            try {
+                // فك التشفير واسترجاع بيانات اللعبة بأمان
+                gameData = JSON.parse(decodeURIComponent(gameStr));
+            } catch(e) {
+                console.error("Erreur de favoris", e);
+                return;
+            }
+            
+            const code = gameData.game_code || gameData.id || gameData.uuid;
+            const index = favoriteGames.findIndex(g => (g.game_code || g.id || g.uuid) === code);
+            
+            if (index > -1) {
+                favoriteGames.splice(index, 1);
+                showNotification("Retiré des favoris", "success");
+            } else {
+                favoriteGames.push(gameData);
+                showNotification("Ajouté aux favoris", "success");
+            }
+            
+            localStorage.setItem('alpha_favorite_games', JSON.stringify(favoriteGames));
+            
+            // تحديث العرض اللحظي إذا كان اللاعب داخل صفحة المفضلة
+            if(document.getElementById('pane-favoris') && document.getElementById('pane-favoris').classList.contains('block')) {
+                renderFavorites();
+            } else {
+                // إعادة رسم الكازينو لتحديث أيقونة القلب فوراً
+                if(document.getElementById('pane-casino').classList.contains('block')) renderCasinoGrid();
+            }
+        }
+
+        function renderFavorites() {
+            switchSection('favoris');
+            const grid = document.getElementById('dedicated-favorite-games-grid');
+            if (!grid) return;
+
+            if (favoriteGames.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-10 font-bold">Aucun favori ajouté. Cliquez sur le cœur ❤️ d\'un jeu pour l\'ajouter ici.</div>';
+                return;
+            }
+
+            grid.innerHTML = favoriteGames.map(game => {
+                const gameName = escapeHTML(String(game.game_name || game.name || "Game"));
+                const imageUrl = game.banner || game.image || game.thumb || `https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}`;
+                const gameCode = game.game_code || game.id || game.uuid;
+                const pCode = game.provider || game.providerCode || 'PRAGMATIC';
+                const isEuro = pCode === 'EUROVIRTUALS' || (game.partner_name && game.partner_name !== "");
+
+                const safeGameStr = encodeURIComponent(JSON.stringify(game));
+
+                let clickAction = `playCasinoGame('${pCode}', '${gameCode}')`;
+                if(isEuro) {
+                    clickAction = `launchSpecificVirtualGame('${gameCode}')`;
+                }
+
+                return `
+                <div class="bg-[#0f1117] border border-[#212631] rounded-xl overflow-hidden cursor-pointer hover:border-red-500 transition-all flex flex-col group shadow-lg relative" onclick="${clickAction}">
+                    <button onclick="toggleFavorite(event, '${safeGameStr}')" class="absolute top-2 left-2 z-20 bg-black/60 rounded-full w-8 h-8 flex items-center justify-center border border-white/10 hover:bg-black/90 transition-all">
+                        <i class="fas fa-heart text-red-500 text-sm"></i>
+                    </button>
+                    
+                    <div class="relative w-full aspect-square overflow-hidden bg-[#161922]">
+                        <img src="${imageUrl}" alt="${gameName}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/400x400/12151d/10b981?text=${encodeURIComponent(gameName.substring(0, 15))}';">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 z-10">
+                            <span class="bg-emerald text-black text-[10px] font-bold px-4 py-2 rounded-full shadow-lg">JOUER</span>
+                        </div>
+                    </div>
+                    <div class="p-2 text-[10px] text-white font-bold truncate text-center">${gameName}</div>
+                </div>`;
+            }).join('');
+        }
+        
+        </script>
 
 </body>
 
